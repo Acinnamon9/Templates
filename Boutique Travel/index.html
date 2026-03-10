@@ -813,51 +813,135 @@
         letter-spacing: -1px;
       }
 
-      /* The Art of Concierge - Services */
+      /* The Art of Concierge - Services Upgrade */
       .services-grid {
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 2rem;
+        grid-template-columns: 1fr;
+        gap: 0; /* Flush for a seamless editorial look */
       }
 
-      @media (min-width: 768px) {
+      @media (min-width: 900px) {
         .services-grid {
           grid-template-columns: repeat(3, 1fr);
         }
       }
 
       .service-card {
+        position: relative;
+        height: 600px;
         background: var(--white);
-        padding: 3rem 2rem;
-        text-align: center;
-        border: 1px solid var(--light-gray);
-        transition:
-          transform 0.4s ease,
-          box-shadow 0.4s ease;
+        overflow: hidden;
+        border-right: 1px solid var(--light-gray);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 4rem 3rem;
+        cursor: pointer;
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
-      .service-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
-        border-color: var(--gold);
+      .service-card:last-child {
+        border-right: none;
       }
 
-      .service-card i {
-        font-size: 3rem;
+      /* Editorial Numbers */
+      .service-number {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        font-size: 8rem;
+        font-weight: 700;
+        color: var(--off-white);
+        line-height: 1;
+        z-index: 1;
+        transition: all 0.6s ease;
+      }
+
+      /* [AI-Logic]: Hover Reveal Image */
+      .service-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0;
+        transform: scale(1.1);
+        transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .service-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .service-card:hover .service-bg {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .service-card:hover .service-number {
+        color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-20px);
+      }
+
+      /* Content Panel with Glassmorphism */
+      .service-info {
+        position: relative;
+        z-index: 2;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transform: translateY(20px);
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .service-card:hover .service-info {
+        background: rgba(26, 26, 26, 0.8);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(0);
+      }
+
+      .service-info i {
+        font-size: 2.5rem;
         color: var(--gold);
         margin-bottom: 1.5rem;
-        display: inline-block;
+        display: block;
       }
 
-      .service-card h3 {
-        font-size: 1.5rem;
+      .service-info h3 {
+        font-size: 1.75rem;
         margin-bottom: 1rem;
+        transition: color 0.4s ease;
       }
 
-      .service-card p {
+      .service-card:hover .service-info h3 {
+        color: var(--white);
+      }
+
+      .service-info p {
         font-size: 0.95rem;
-        line-height: 1.7;
+        line-height: 1.6;
         margin: 0;
+        transition: color 0.4s ease;
+      }
+
+      .service-card:hover .service-info p {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      @media (max-width: 900px) {
+        .service-card {
+          height: 450px;
+          border-right: none;
+          border-bottom: 1px solid var(--light-gray);
+        }
+        .service-info {
+          transform: translateY(0);
+        }
       }
 
       /* Curated Horizons - Expeirences */
@@ -1168,10 +1252,10 @@
           <div class="signature reveal">
             <!-- Using a placeholder signature that is inverted via CSS for a dark ink look on the off-white background -->
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f4/Signature_of_John_Hancock.svg"
+              src="https://images.unsplash.com/photo-1650619112959-7e1340365ce2?q=80&w=871&auto=format&fit=crop"
               alt="Signature"
               class="sig-image"
-              style="filter: invert(1); opacity: 0.5"
+              style="opacity: 0.7"
             />
             <span>Founding Partner</span>
           </div>
@@ -1221,35 +1305,61 @@
 
     <!-- Services Section -->
     <section id="services">
-      <div class="container">
-        <div class="section-header reveal">
+      <div class="container" style="max-width: 100%; padding: 0">
+        <div
+          class="section-header reveal"
+          style="padding-top: 6rem; margin-bottom: 0"
+        >
           <span class="kicker">At Your Service</span>
-          <h2>The Art of Concierge</h2>
+          <h2 style="margin-bottom: 4rem">The Art of Concierge</h2>
         </div>
         <div class="services-grid">
           <div class="service-card reveal">
-            <i class="ion-ios-wineglass-outline"></i>
-            <h3>Gastronomy & Nightlife</h3>
-            <p>
-              Securing prime tables at fully-booked Michelin-star restaurants
-              and VIP access to the world's most exclusive members-only clubs.
-            </p>
+            <div class="service-number text-serif">01</div>
+            <div class="service-bg">
+              <img
+                src="https://images.unsplash.com/photo-1772479020020-9bd8d2f577d0?q=80&w=870&auto=format&fit=crop"
+                alt="Fine Dining"
+              />
+            </div>
+            <div class="service-info">
+              <i class="ion-ios-wineglass-outline"></i>
+              <h3>Gastronomy & Nightlife</h3>
+            </div>
           </div>
           <div class="service-card reveal" style="transition-delay: 0.1s">
-            <i class="ion-ios-home-outline"></i>
-            <h3>Property Procurement</h3>
-            <p>
-              Sourcing off-market luxury real estate and orchestrating long-term
-              private estate rentals for your seasonal retreats.
-            </p>
+            <div class="service-number text-serif">02</div>
+            <div class="service-bg">
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
+                alt="Luxury Real Estate"
+              />
+            </div>
+            <div class="service-info">
+              <i class="ion-ios-home-outline"></i>
+              <h3>Property Procurement</h3>
+              <p>
+                Sourcing off-market luxury real estate and orchestrating
+                long-term private estate rentals for your seasonal retreats.
+              </p>
+            </div>
           </div>
           <div class="service-card reveal" style="transition-delay: 0.2s">
-            <i class="ion-ios-star-outline"></i>
-            <h3>Elite Access</h3>
-            <p>
-              Front-row seats at fashion weeks, backstage passes to sold-out
-              arenas, and invitations to coveted red-carpet galas.
-            </p>
+            <div class="service-number text-serif">03</div>
+            <div class="service-bg">
+              <img
+                src="https://images.unsplash.com/photo-1762430815537-e140755eedf9?q=80&w=871&auto=format&fit=crop"
+                alt="Fashion Week"
+              />
+            </div>
+            <div class="service-info">
+              <i class="ion-ios-star-outline"></i>
+              <h3>Elite Access</h3>
+              <p>
+                Front-row seats at fashion weeks, backstage passes to sold-out
+                arenas, and invitations to coveted red-carpet galas.
+              </p>
+            </div>
           </div>
         </div>
       </div>
