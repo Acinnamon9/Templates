@@ -1,0 +1,1670 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura | Boutique Travel & Concierge</title>
+    <link
+      rel="stylesheet"
+      href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
+    />
+
+    <!-- [AI-Vision]: Design Language is 'Aura Luxury'. 
+       Core Palette: Gold (#C7A554), Cream (hsla(40, 30%, 96%, 0.9)), and Off-White (#faf9f6).
+       Style Identity: Glassmorphism (blur: 15px), 12-column grid, and IntersectionObserver-based entry animations. 
+       Maintain high whitespace and 'Editorial' typography (Light/Italic serif vibes). -->
+
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Barlow:300,400,500,600,700");
+
+      :root {
+        --white: #ffffff;
+        --off-white: #faf9f6;
+        --black: #1a1a1a;
+        --gray: #6b6b6b;
+        --light-gray: #e5e5e5;
+        --gold: #c7a554; /* Sophisticated gold for luxury feel */
+        --cream: hsla(40, 30%, 96%, 0.9);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Barlow", sans-serif;
+        font-size: 1.125rem;
+        font-weight: 300;
+        line-height: 1.6;
+        color: var(--gray);
+        background: var(--off-white);
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+        margin: 0;
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--off-white);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--gold);
+      }
+
+      a {
+        color: var(--black);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      a:hover {
+        color: var(--gold);
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-weight: 500;
+        color: var(--black);
+        margin-top: 0;
+      }
+
+      /* Grid System */
+      .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -1rem;
+        margin-right: -1rem;
+      }
+
+      [class*="column-"] {
+        padding: 0 1rem;
+        flex-basis: 100%;
+      }
+
+      @media (min-width: 768px) {
+        .column-md-3 {
+          flex-basis: 25%;
+          max-width: 25%;
+        }
+        .column-md-4 {
+          flex-basis: 33.333%;
+          max-width: 33.333%;
+        }
+        .column-md-6 {
+          flex-basis: 50%;
+          max-width: 50%;
+        }
+        .column-md-8 {
+          flex-basis: 66.666%;
+          max-width: 66.666%;
+        }
+        .column-md-12 {
+          flex-basis: 100%;
+          max-width: 100%;
+        }
+      }
+
+      /* Scroll Reveal Animation Classes */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* [AI-Constraint]: Navigation MUST stay fixed with Glassmorphism. 
+       Padding and background-opacity transition on 'nav.scrolled' class 
+       to ensure readability over mixed-color content. */
+      nav {
+        position: fixed; /* Fixed for a more premium floating feel */
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: 1.5rem 0;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.4s ease;
+      }
+
+      nav.scrolled {
+        padding: 1rem 0;
+        background: rgba(
+          26,
+          26,
+          26,
+          0.9
+        ); /* Darken slightly on scroll for readability */
+      }
+
+      nav .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #logo {
+        color: var(--white);
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin: 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      #logo span {
+        color: var(--gold);
+      }
+
+      nav ul {
+        display: none;
+        gap: 3rem;
+      }
+
+      nav ul li a {
+        color: var(--white);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+      }
+
+      nav ul li a:hover {
+        color: var(--gold);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .toggle-nav {
+        color: var(--white);
+        font-size: 1.5rem;
+      }
+
+      @media (min-width: 768px) {
+        nav ul {
+          display: flex;
+        }
+        .toggle-nav {
+          display: none;
+        }
+      }
+
+      /* Hero Slider */
+      .intro-section {
+        position: relative;
+        height: 100vh;
+        min-height: 600px;
+        overflow: hidden;
+        background: var(--black);
+      }
+
+      .slider {
+        height: 100%;
+      }
+      .slider-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+        pointer-events: none;
+      }
+      .slider-item.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .image-holder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .image-holder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1.05);
+        transition: transform 6s ease-out;
+      }
+
+      .slider-item.active .image-holder img {
+        transform: scale(1);
+      }
+
+      /* Gradient overlay for text readability */
+      .image-holder::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(0, 0, 0, 0) 60%
+        );
+      }
+
+      .slider-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 5%;
+      }
+
+      .intro {
+        position: relative;
+        z-index: 2;
+        max-width: 700px;
+        padding: 3rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+        transform: translateY(2rem);
+        opacity: 0;
+        transition: all 1s ease 0.3s;
+      }
+
+      .slider-item.active .intro {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .intro .kicker {
+        color: var(--gold);
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .intro .title {
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        font-weight: 300;
+        line-height: 1.1;
+        color: var(--white);
+        margin: 0 0 1.5rem 0;
+      }
+
+      .intro .title i {
+        font-style: italic;
+        color: var(--gold);
+        font-weight: 400;
+      }
+
+      .intro .description {
+        font-size: clamp(1rem, 1.5vw, 1.25rem);
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 500px;
+      }
+
+      /* Slider Controls - Upgraded Classical Style */
+      .controls {
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 10;
+        display: flex;
+        gap: 0;
+      }
+
+      .controls button {
+        background: var(--cream);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        width: 80px;
+        height: 60px;
+        display: grid;
+        place-items: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        padding: 0;
+        color: var(--black);
+      }
+
+      .controls .next {
+        border-left: none;
+      }
+
+      .controls button:hover {
+        background: var(--gold);
+        color: var(--white);
+      }
+
+      .controls .icon {
+        position: relative;
+        width: 24px;
+        height: 1px;
+        background-color: currentColor;
+        display: block;
+      }
+
+      .controls .icon.arrow-left::before {
+        content: "";
+        position: absolute;
+        left: 1px;
+        top: -4px;
+        width: 9px;
+        height: 9px;
+        border-top: solid 1px currentColor;
+        border-right: solid 1px currentColor;
+        transform: rotate(-135deg);
+      }
+
+      .controls .icon.arrow-right::before {
+        content: "";
+        position: absolute;
+        right: 1px;
+        top: -4px;
+        width: 9px;
+        height: 9px;
+        border-top: solid 1px currentColor;
+        border-right: solid 1px currentColor;
+        transform: rotate(45deg);
+      }
+
+      /* [AI-Logic]: Marquee Animation */
+      .marquee-section {
+        background: var(--white);
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--light-gray);
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+      }
+
+      .marquee-content {
+        display: inline-block;
+        animation: marquee 30s linear infinite;
+      }
+
+      .marquee-content span {
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 4px;
+        color: var(--gray);
+        padding-right: 2rem;
+      }
+
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* [AI-Logic]: Split-Scroll Philosophy */
+      .philosophy-section {
+        background: var(--off-white);
+        padding: 8rem 0;
+      }
+
+      .philosophy-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 4rem;
+      }
+
+      @media (min-width: 900px) {
+        .philosophy-grid {
+          grid-template-columns: 5fr 7fr;
+          gap: 6rem;
+          align-items: start; /* Critical for sticky to work */
+        }
+      }
+
+      .sticky-wrapper {
+        position: sticky;
+        top: 120px; /* Offset for nav */
+        height: calc(100vh - 160px);
+        min-height: 500px;
+        overflow: hidden;
+      }
+
+      .sticky-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(20%) contrast(1.1);
+      }
+
+      .philosophy-content {
+        padding: 2rem 0;
+      }
+
+      .philosophy-content h2 {
+        font-size: clamp(2.5rem, 4vw, 4.5rem);
+        line-height: 1.1;
+        margin-bottom: 2.5rem;
+        letter-spacing: -1px;
+      }
+
+      .philosophy-content h2 i {
+        color: var(--gold);
+        font-style: italic;
+        font-weight: 400;
+      }
+
+      .philosophy-content p {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: var(--gray);
+        margin-bottom: 2rem;
+      }
+
+      .philosophy-content p:first-of-type {
+        font-size: 1.5rem;
+        color: var(--black);
+        font-weight: 400;
+      }
+
+      .signature {
+        margin-top: 4rem;
+        border-top: 1px solid var(--light-gray);
+        padding-top: 2rem;
+      }
+
+      .sig-image {
+        width: 150px;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .signature span {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+        color: var(--gray);
+        font-weight: 500;
+      }
+
+      /* [AI-Logic]: Stats Section */
+      .stats-section {
+        background: var(--black);
+        color: var(--white);
+        padding: 6rem 0;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem 2rem;
+        text-align: center;
+      }
+
+      @media (min-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .stat-number {
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 300;
+        color: var(--gold);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+        font-feature-settings: "tnum";
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat-label {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      /* [AI-Logic]: Parallax Testimonial */
+      .testimonial-parallax {
+        position: relative;
+        background-image: url("https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop");
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: 12rem 0;
+        text-align: center;
+        color: var(--white);
+      }
+
+      .testimonial-parallax::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      .testimonial-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .testimonial-content h2 {
+        font-family: inherit;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 300;
+        font-style: italic;
+        line-height: 1.4;
+        margin-bottom: 2rem;
+        color: var(--white);
+      }
+
+      .testimonial-author {
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 0.9rem;
+        color: var(--gold);
+        font-weight: 600;
+        display: block;
+      }
+
+      /* [AI-Logic]: Journey Timeline */
+      .journey-section {
+        background: var(--off-white);
+      }
+
+      .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 0;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 1px;
+        background: var(--light-gray);
+        transform: translateX(-50%);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 4rem;
+        width: 50%;
+        padding-right: 3rem;
+      }
+
+      .timeline-item:nth-child(even) {
+        margin-left: 50%;
+        padding-right: 0;
+        padding-left: 3rem;
+        text-align: left;
+      }
+
+      .timeline-item:nth-child(odd) {
+        text-align: right;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        top: 0;
+        right: -6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 0 0 0 4px var(--off-white);
+      }
+
+      .timeline-item:nth-child(even) .timeline-dot {
+        left: -6px;
+        right: auto;
+      }
+
+      .timeline-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .timeline-content p {
+        font-size: 1rem;
+        color: var(--gray);
+        margin: 0;
+      }
+
+      @media (max-width: 768px) {
+        .timeline::before {
+          left: 20px;
+        }
+        .timeline-item {
+          width: 100%;
+          padding-left: 3rem;
+          padding-right: 0;
+          text-align: left;
+        }
+        .timeline-item:nth-child(even) {
+          margin-left: 0;
+        }
+        .timeline-dot {
+          left: 14px;
+          right: auto;
+        }
+        .timeline-item:nth-child(odd) .timeline-dot {
+          left: 14px;
+        }
+      }
+
+      /* [AI-Logic]: Press Grid */
+      .press-section {
+        background: var(--white);
+        padding: 6rem 0;
+        border-top: 1px solid var(--light-gray);
+      }
+
+      .press-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 4rem;
+      }
+
+      .press-logo {
+        height: 30px;
+        filter: grayscale(100%) opacity(0.5);
+        transition: all 0.4s ease;
+        cursor: pointer;
+      }
+
+      .press-logo:hover {
+        filter: grayscale(0%) opacity(1);
+      }
+
+      /* [AI-Logic]: Whisper Form */
+      .whisper-section {
+        background: var(--black);
+        color: var(--white);
+        padding: 8rem 0;
+        text-align: center;
+      }
+
+      .whisper-form {
+        max-width: 600px;
+        margin: 4rem auto 0;
+        text-align: left;
+      }
+
+      .form-group {
+        position: relative;
+        margin-bottom: 3rem;
+      }
+
+      .whisper-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 1rem 0;
+        color: var(--white);
+        font-family: inherit;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+      }
+
+      .whisper-input:focus {
+        outline: none;
+        border-bottom-color: var(--gold);
+      }
+
+      .whisper-input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+      }
+
+      .whisper-submit {
+        background: transparent;
+        color: var(--gold);
+        border: 1px solid var(--gold);
+        padding: 1rem 3rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: block;
+        margin: 0 auto;
+      }
+
+      .whisper-submit:hover {
+        background: var(--gold);
+        color: var(--white);
+      }
+
+      /* Generic Section Styles */
+      section {
+        padding: 6rem 0;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+
+      .section-header .kicker {
+        color: var(--gold);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 1rem;
+      }
+
+      .section-header h2 {
+        font-size: 3rem;
+        font-weight: 300;
+        letter-spacing: -1px;
+      }
+
+      /* The Art of Concierge - Services */
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 2rem;
+      }
+
+      @media (min-width: 768px) {
+        .services-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .service-card {
+        background: var(--white);
+        padding: 3rem 2rem;
+        text-align: center;
+        border: 1px solid var(--light-gray);
+        transition:
+          transform 0.4s ease,
+          box-shadow 0.4s ease;
+      }
+
+      .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+        border-color: var(--gold);
+      }
+
+      .service-card i {
+        font-size: 3rem;
+        color: var(--gold);
+        margin-bottom: 1.5rem;
+        display: inline-block;
+      }
+
+      .service-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .service-card p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin: 0;
+      }
+
+      /* Curated Horizons - Expeirences */
+      .experiences-wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 768px) {
+        .experiences-wrapper {
+          grid-template-columns: repeat(12, 1fr);
+        }
+        .exp-large {
+          grid-column: span 8;
+        }
+        .exp-small {
+          grid-column: span 4;
+        }
+      }
+
+      .experience-card {
+        position: relative;
+        height: 450px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .experience-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+      }
+
+      .experience-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.8) 0%,
+          rgba(0, 0, 0, 0.2) 50%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 2.5rem;
+        color: var(--white);
+      }
+
+      .experience-card:hover .experience-img {
+        transform: scale(1.05);
+      }
+
+      .experience-overlay h3 {
+        color: var(--white);
+        font-size: 2rem;
+        margin: 0 0 0.5rem 0;
+        transform: translateY(20px);
+        transition: transform 0.4s ease;
+      }
+
+      .experience-overlay p {
+        margin: 0;
+        color: var(--gold);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+      }
+
+      .experience-card:hover .experience-overlay h3 {
+        transform: translateY(0);
+      }
+      .experience-card:hover .experience-overlay p {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.1s;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        background: var(--black);
+        color: var(--white);
+        text-align: center;
+        padding: 8rem 2rem;
+      }
+
+      .cta-section h2 {
+        color: var(--white);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 300;
+        margin-bottom: 2rem;
+      }
+
+      .btn-gold {
+        display: inline-block;
+        background: var(--gold);
+        color: var(--white);
+        padding: 1.25rem 3rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 600;
+        border: 1px solid var(--gold);
+        transition: all 0.3s ease;
+      }
+
+      .btn-gold:hover {
+        background: transparent;
+        color: var(--gold);
+      }
+
+      /* Footer */
+      footer {
+        background: var(--white);
+        padding: 4rem 0 2rem 0;
+        text-align: center;
+        border-top: 1px solid var(--light-gray);
+      }
+
+      .footer-logo {
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        color: var(--black);
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+      }
+      .footer-logo span {
+        color: var(--gold);
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .footer-links a {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .copyright {
+        font-size: 0.85rem;
+        color: var(--gray);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="container">
+        <p id="logo">Aura<span>.</span></p>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#destinations">Destinations</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#" class="toggle-nav"><i class="ion-navicon-round"></i></a>
+      </div>
+    </nav>
+
+    <!-- Hero Slider -->
+    <header class="intro-section">
+      <ul class="slider">
+        <li class="slider-item active">
+          <div class="image-holder">
+            <img
+              src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?q=80&w=2070&auto=format&fit=crop"
+              alt="Luxury Resort"
+            />
+          </div>
+          <div class="slider-content">
+            <div class="intro">
+              <span class="kicker">The Aura Collection</span>
+              <h1 class="title">Bespoke <i>Escapes</i></h1>
+              <p class="description">
+                Curated journeys tailored to your most extravagant desires,
+                granting you access to the world's hidden sanctuaries.
+              </p>
+            </div>
+          </div>
+        </li>
+        <li class="slider-item">
+          <div class="image-holder">
+            <img
+              src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2070&auto=format&fit=crop"
+              alt="Private Villa"
+            />
+          </div>
+          <div class="slider-content">
+            <div class="intro">
+              <span class="kicker">Unrivaled Privacy</span>
+              <h1 class="title">Exclusive <i>Villas</i></h1>
+              <p class="description">
+                Step into hand-selected private estates that redefine luxury
+                living, complete with dedicated staff and unparalleled views.
+              </p>
+            </div>
+          </div>
+        </li>
+        <li class="slider-item">
+          <div class="image-holder">
+            <img
+              src="https://images.unsplash.com/photo-1772190576393-a840ac3a8e81?q=80&w=870&auto=format&fit=crop"
+              alt="Yacht Charter"
+            />
+          </div>
+          <div class="slider-content">
+            <div class="intro">
+              <span class="kicker">Ocean Reverie</span>
+              <h1 class="title">Private <i>Charters</i></h1>
+              <p class="description">
+                Command the horizon aboard fully-crewed superyachts, charting
+                courses through pristine, untouched waters.
+              </p>
+            </div>
+          </div>
+        </li>
+        <li class="slider-item">
+          <div class="image-holder">
+            <img
+              src="https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?q=80&w=2069&auto=format&fit=crop"
+              alt="Aviation"
+            />
+          </div>
+          <div class="slider-content">
+            <div class="intro">
+              <span class="kicker">Seamless Logistics</span>
+              <h1 class="title">Elevated <i>Transit</i></h1>
+              <p class="description">
+                From private jet charters to tarmac helicopter transfers, we
+                ensure your journey is as magnificent as the destination.
+              </p>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Classical Navigation Controls -->
+      <div class="controls">
+        <button class="previous" aria-label="Previous Slide">
+          <span class="icon arrow-left" aria-hidden="true"></span>
+        </button>
+        <button class="next" aria-label="Next Slide">
+          <span class="icon arrow-right" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Partner Marquee -->
+    <div class="marquee-section">
+      <div class="marquee-content">
+        <span
+          >AMAN RESORTS ✦ VISTAJET ✦ RELAIS & CHÂTEAUX ✦ THE RITZ-CARLTON ✦
+          KEMPINSKI ✦ ROLEX ✦
+        </span>
+        <span
+          >AMAN RESORTS ✦ VISTAJET ✦ RELAIS & CHÂTEAUX ✦ THE RITZ-CARLTON ✦
+          KEMPINSKI ✦ ROLEX ✦
+        </span>
+      </div>
+    </div>
+
+    <!-- The Philosophy (Split Scroll) -->
+    <section id="philosophy" class="philosophy-section">
+      <div class="container philosophy-grid">
+        <div class="philosophy-image">
+          <div class="sticky-wrapper">
+            <img
+              src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2080&auto=format&fit=crop"
+              alt="Luxury Hospitality"
+            />
+          </div>
+        </div>
+        <div class="philosophy-content">
+          <span class="kicker reveal">The Manifesto</span>
+          <h2 class="reveal">
+            We don't just book trips. We architect <i>legacies</i>.
+          </h2>
+          <p class="reveal">
+            True luxury is not defined by excess, but by the absence of
+            friction. At Aura, we believe that your time is the ultimate
+            non-renewable resource.
+          </p>
+          <p class="reveal">
+            Our network of fixers, tastemakers, and insiders operates in the
+            shadows, ensuring that from the moment your jet touches down to the
+            second you return home, every variable is controlled, every desire
+            anticipated.
+          </p>
+          <p class="reveal">
+            We do not offer brochures. We offer a blank canvas, and the world's
+            finest artisans to paint it for you.
+          </p>
+
+          <div class="signature reveal">
+            <!-- Using a placeholder signature that is inverted via CSS for a dark ink look on the off-white background -->
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f4/Signature_of_John_Hancock.svg"
+              alt="Signature"
+              class="sig-image"
+              style="filter: invert(1); opacity: 0.5"
+            />
+            <span>Founding Partner</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Network (Stats) -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item reveal">
+            <div class="stat-number" data-target="7">0</div>
+            <div class="stat-label">Continents Mastered</div>
+          </div>
+          <div class="stat-item reveal" style="transition-delay: 0.1s">
+            <div class="stat-number" data-target="150" data-suffix="+">0</div>
+            <div class="stat-label">Elite Partners</div>
+          </div>
+          <div class="stat-item reveal" style="transition-delay: 0.2s">
+            <div class="stat-number" data-target="24" data-suffix="/7">0</div>
+            <div class="stat-label">Dedicated Support</div>
+          </div>
+          <div class="stat-item reveal" style="transition-delay: 0.3s">
+            <div class="stat-number" data-target="100" data-suffix="%">0</div>
+            <div class="stat-label">Discretion Guaranteed</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Parallax Testimonial -->
+    <section class="testimonial-parallax">
+      <div class="container reveal">
+        <div class="testimonial-content">
+          <h2>
+            "Aura doesn't just open doors; they build new ones. Our month-long
+            retreat across Asia was executed with a precision that bordered on
+            clairvoyance."
+          </h2>
+          <span class="testimonial-author"
+            >J.D. — Founding Partner, Global Vision Fund</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="kicker">At Your Service</span>
+          <h2>The Art of Concierge</h2>
+        </div>
+        <div class="services-grid">
+          <div class="service-card reveal">
+            <i class="ion-ios-wineglass-outline"></i>
+            <h3>Gastronomy & Nightlife</h3>
+            <p>
+              Securing prime tables at fully-booked Michelin-star restaurants
+              and VIP access to the world's most exclusive members-only clubs.
+            </p>
+          </div>
+          <div class="service-card reveal" style="transition-delay: 0.1s">
+            <i class="ion-ios-home-outline"></i>
+            <h3>Property Procurement</h3>
+            <p>
+              Sourcing off-market luxury real estate and orchestrating long-term
+              private estate rentals for your seasonal retreats.
+            </p>
+          </div>
+          <div class="service-card reveal" style="transition-delay: 0.2s">
+            <i class="ion-ios-star-outline"></i>
+            <h3>Elite Access</h3>
+            <p>
+              Front-row seats at fashion weeks, backstage passes to sold-out
+              arenas, and invitations to coveted red-carpet galas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured In (Press Grid) -->
+    <section class="press-section">
+      <div class="container">
+        <div class="section-header reveal" style="margin-bottom: 2rem">
+          <span class="kicker" style="color: var(--gray)"
+            >Trusted By The Best</span
+          >
+        </div>
+        <div class="press-grid reveal">
+          <svg
+            class="press-logo"
+            viewBox="0 0 200 40"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <text
+              x="50%"
+              y="50%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              font-family="serif"
+              font-size="24"
+              fill="#1a1a1a"
+            >
+              VOGUE
+            </text>
+          </svg>
+          <svg
+            class="press-logo"
+            viewBox="0 0 200 40"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <text
+              x="50%"
+              y="50%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-weight="bold"
+              font-size="22"
+              fill="#1a1a1a"
+            >
+              FORBES
+            </text>
+          </svg>
+          <svg
+            class="press-logo"
+            viewBox="0 0 200 40"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <text
+              x="50%"
+              y="50%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              font-family="serif"
+              font-style="italic"
+              font-size="24"
+              fill="#1a1a1a"
+            >
+              Robb Report
+            </text>
+          </svg>
+          <svg
+            class="press-logo"
+            viewBox="0 0 200 40"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <text
+              x="50%"
+              y="50%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              font-family="sans-serif"
+              font-weight="300"
+              font-size="22"
+              fill="#1a1a1a"
+            >
+              Condé Nast
+            </text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Journey (Timeline) -->
+    <section class="journey-section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="kicker">The Process</span>
+          <h2>Architecting the Extraordinary</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>I. The Consultation</h3>
+              <p>
+                We begin with a private dialogue to understand your cadence,
+                preferences, and ultimate vision for the escape.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item reveal" style="transition-delay: 0.1s">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>II. The Blueprint</h3>
+              <p>
+                Our specialists tap into closed networks to draft a bespoke
+                itinerary, securing access to otherwise unavailable locations.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>III. The Execution</h3>
+              <p>
+                From private aviation to white-glove ground transport, every
+                logistical variable is managed silently in the background.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item reveal" style="transition-delay: 0.1s">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>IV. The Immersion</h3>
+              <p>
+                You arrive. The champagne is poured. The staff anticipates your
+                needs. You simply exist in the moment.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experiences Section -->
+    <section id="destinations" style="background: var(--white)">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="kicker">Portfolio</span>
+          <h2>Curated Horizons</h2>
+        </div>
+        <div class="experiences-wrapper">
+          <div class="experience-card exp-large reveal">
+            <img
+              class="experience-img"
+              src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
+              alt="Mountain Retreat"
+            />
+            <div class="experience-overlay">
+              <h3>Alpine Seclusion</h3>
+              <p>Switzerland &middot; 7 Days</p>
+            </div>
+          </div>
+          <div
+            class="experience-card exp-small reveal"
+            style="transition-delay: 0.1s"
+          >
+            <img
+              class="experience-img"
+              src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop"
+              alt="Alpine Landscape"
+            />
+            <div class="experience-overlay">
+              <h3>Heli-Skiing Passes</h3>
+              <p>Courchevel</p>
+            </div>
+          </div>
+          <div class="experience-card exp-small reveal">
+            <img
+              class="experience-img"
+              src="https://images.unsplash.com/photo-1764096535241-165165d43ae9?q=80&w=1031&auto=format&fit=crop"
+              alt="Parisian Suite"
+            />
+            <div class="experience-overlay">
+              <h3>Palace Suites</h3>
+              <p>Paris &middot; Fashion Week</p>
+            </div>
+          </div>
+          <div
+            class="experience-card exp-large reveal"
+            style="transition-delay: 0.1s"
+          >
+            <img
+              class="experience-img"
+              src="https://images.unsplash.com/photo-1772436756280-b54a10a64971?q=80&w=1032&auto=format&fit=crop"
+              alt="Tropical Islands"
+            />
+            <div class="experience-overlay">
+              <h3>Private Atolls</h3>
+              <p>Maldives &middot; 14 Days</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -> Whisper Form -->
+    <section id="contact" class="whisper-section">
+      <div class="container reveal">
+        <span
+          class="kicker"
+          style="
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 1rem;
+          "
+          >Invitation Only</span
+        >
+        <h2
+          style="
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+          "
+        >
+          Begin the Dialogue
+        </h2>
+        <p
+          style="
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 500px;
+            margin: 0 auto;
+          "
+        >
+          Membership at Aura is strictly limited to ensure uncompromising
+          service. Please introduce yourself below.
+        </p>
+
+        <form class="whisper-form">
+          <div class="form-group reveal">
+            <input
+              type="text"
+              class="whisper-input"
+              placeholder="Your Full Name"
+              required
+            />
+          </div>
+          <div class="form-group reveal" style="transition-delay: 0.1s">
+            <input
+              type="email"
+              class="whisper-input"
+              placeholder="Private Email Address"
+              required
+            />
+          </div>
+          <div class="form-group reveal" style="transition-delay: 0.2s">
+            <input
+              type="text"
+              class="whisper-input"
+              placeholder="Referred By (Optional)"
+            />
+          </div>
+          <div
+            class="form-group reveal"
+            style="transition-delay: 0.3s; margin-bottom: 4rem"
+          >
+            <textarea
+              class="whisper-input"
+              placeholder="Your Desired Experience"
+              rows="1"
+              style="resize: none"
+              oninput="
+                this.style.height = '';
+                this.style.height = this.scrollHeight + 'px';
+              "
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="whisper-submit reveal"
+            style="transition-delay: 0.4s"
+          >
+            Request Consideration
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container reveal">
+        <div class="footer-logo">Aura<span>.</span></div>
+        <div class="footer-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Press</a>
+        </div>
+        <p class="copyright">
+          &copy; 2026 Aura Concierge. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Slider Logic
+      const items = document.querySelectorAll(".slider-item");
+      const nextItem = document.querySelector(".next");
+      const previousItem = document.querySelector(".previous");
+      let count = 0;
+
+      function showNextItem() {
+        items[count].classList.remove("active");
+        count = count < items.length - 1 ? count + 1 : 0;
+        items[count].classList.add("active");
+      }
+
+      function showPreviousItem() {
+        items[count].classList.remove("active");
+        count = count > 0 ? count - 1 : items.length - 1;
+        items[count].classList.add("active");
+      }
+
+      nextItem.addEventListener("click", showNextItem);
+      previousItem.addEventListener("click", showPreviousItem);
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") showPreviousItem();
+        else if (e.key === "ArrowRight") showNextItem();
+      });
+
+      // Auto-advance slider every 7 seconds
+      let slideInterval = setInterval(showNextItem, 7000);
+
+      // Pause on hover over controls
+      document
+        .querySelector(".controls")
+        .addEventListener("mouseenter", () => clearInterval(slideInterval));
+      document.querySelector(".controls").addEventListener("mouseleave", () => {
+        slideInterval = setInterval(showNextItem, 7000);
+      });
+
+      // Scroll Reveal Animation Builder
+      // [AI-Logic]: IntersectionObserver-based 'fadeInUp' reveals.
+      // threshold: 0.15 is tuned to prevent premature triggers on mobile.
+      // Clean-up: observer.unobserve(entry.target) ensures performance
+      // as it only fires once per session.
+      const revealElements = document.querySelectorAll(".reveal");
+
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          root: null,
+          threshold: 0.15,
+          rootMargin: "0px 0px -50px 0px",
+        },
+      );
+
+      revealElements.forEach((el) => revealObserver.observe(el));
+
+      // [AI-Warning]: Scroll Header Logic handles the 'nav.scrolled' CSS hook.
+      // y > 50 is the anchor point to clear the Hero gradient.
+      const headerNav = document.querySelector("nav");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          headerNav.classList.add("scrolled");
+        } else {
+          headerNav.classList.remove("scrolled");
+        }
+      });
+
+      // [AI-Logic]: Animated Number Counters
+      const statNumbers = document.querySelectorAll(".stat-number");
+      let hasCounted = false;
+
+      const statsObserver = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !hasCounted) {
+            hasCounted = true;
+            statNumbers.forEach((stat) => {
+              const target = +stat.getAttribute("data-target");
+              const suffix = stat.getAttribute("data-suffix") || "";
+              const duration = 2000; // 2 seconds
+              const step = 30; // 30ms per frame
+              const increment = target / (duration / step);
+              let current = 0;
+
+              const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                  clearInterval(timer);
+                  stat.innerText = target + suffix;
+                } else {
+                  stat.innerText = Math.ceil(current) + suffix;
+                }
+              }, step);
+            });
+          }
+        },
+        { threshold: 0.5 },
+      ); // Trigger when 50% of the section is visible
+
+      const statsSection = document.querySelector(".stats-section");
+      if (statsSection) {
+        statsObserver.observe(statsSection);
+      }
+    </script>
+  </body>
+</html>
