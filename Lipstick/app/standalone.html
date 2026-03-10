@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lipstick Queen - Dare to Wear</title>
+
+    <!-- Tailwind CSS (CDN for standalone file) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            theme: {
+                extend: {
+                    colors: {
+                        background: "hsl(0 0% 95%)",
+                        foreground: "hsl(0 0% 7%)",
+                        accent: {
+                            DEFAULT: "#FF2D8F",
+                            foreground: "hsl(0 0% 100%)",
+                        },
+                        'lipstick-pink': '#FF2D8F',
+                        'lipstick-black': '#111111',
+                        'lipstick-grey': '#F2F2F2',
+                        'lipstick-text-secondary': '#6E6E6E',
+                    },
+                    fontFamily: {
+                        heading: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['IBM Plex Mono', 'monospace'],
+                    },
+                    keyframes: {
+                        "pulse-scale": {
+                            "0%, 100%": { transform: "scale(1)" },
+                            "50%": { transform: "scale(1.06)" },
+                        },
+                    },
+                    animation: {
+                        "pulse-scale": "pulse-scale 2.2s ease-in-out infinite",
+                    },
+                },
+            },
+        }
+    </script>
+
+    <!-- Base Styles (extracted from App.css and index.css) -->
+    <style type="text/tailwindcss">
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+        @layer base {
+            :root {
+                --color-bg-primary: #F2F2F2;
+                --color-bg-secondary: #111111;
+                --color-accent: #FF2D8F;
+                --color-text-primary: #111111;
+                --color-text-secondary: #6E6E6E;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            body {
+                @apply bg-[#F2F2F2] text-foreground;
+                font-family: 'Inter', sans-serif;
+                overflow-x: hidden;
+            }
+        }
+
+        /* Typography */
+        .font-heading {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .font-mono-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Grid System */
+        .grid-checkerboard {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .grid-tile {
+            position: relative;
+            border: 1px solid rgba(17, 17, 17, 0.65);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s ease;
+        }
+
+        .grid-tile:hover {
+            border-color: rgba(17, 17, 17, 0.9);
+        }
+
+        .grid-tile-accent {
+            background-color: var(--color-accent);
+            border: 1px solid var(--color-accent);
+        }
+
+        .grid-tile-accent:hover {
+            border-color: #FF2D8F;
+        }
+
+        /* Accent tile pulse animation */
+        .grid-tile-accent::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            opacity: 0;
+            animation: accentPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes accentPulse {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.1;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Tile Content */
+        .tile-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(28px, 3.5vw, 56px);
+            text-transform: uppercase;
+            line-height: 0.9;
+            color: var(--color-text-primary);
+        }
+
+        .text-tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Image Slices */
+        .image-slice {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.15);
+            transition: transform 0.4s ease;
+        }
+
+        .grid-tile:hover .image-slice {
+            transform: scale(1.03);
+        }
+
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* CTA Button */
+        .cta-button {
+            background-color: var(--color-accent);
+            color: white;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.03);
+            background-color: #e6007a;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Navigation */
+        .nav-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .nav-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 14px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.7;
+        }
+
+        /* Section Base */
+        .section-pinned {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            will-change: transform;
+        }
+        
+        .pin-spacer {
+            pointer-events: none !important;
+        }
+
+        .pin-spacer > * {
+            pointer-events: auto !important;
+        }
+
+        /* Extra Elements */
+        .shade-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .shade-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-tile {
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .contact-tile:hover {
+            transform: translateX(4px);
+        }
+
+        input:focus {
+            box-shadow: 0 0 0 2px rgba(255, 45, 143, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-checkerboard {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            .tile-text {
+                font-size: clamp(22px, 4vw, 42px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-checkerboard {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(8, 1fr);
+            }
+            .tile-text {
+                font-size: clamp(16px, 5vw, 32px);
+            }
+            .nav-links {
+                display: none;
+            }
+            .nav-fixed {
+                padding: 16px 20px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-text-secondary);
+        }
+        ::selection {
+            background-color: var(--color-accent);
+            color: white;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .grid-tile-accent::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#F2F2F2] text-foreground font-body overflow-x-hidden">
+
+    <div class="relative">
+
+        <!-- Navigation Component -->
+        <nav class="nav-fixed">
+            <div class="nav-logo">Lipstick Queen</div>
+            <div class="nav-links">
+                <a href="#shop" class="nav-link">Shop</a>
+                <a href="#shades" class="nav-link">Shades</a>
+                <a href="#story" class="nav-link">Story</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </nav>
+
+        <!-- Grain Overlay Component -->
+        <div class="grain-overlay"></div>
+
+        <main class="relative">
+
+            <!-- Hero Section -->
+            <section id="heroSection" class="section-pinned bg-lipstick-grey z-10">
+                <div class="grid-checkerboard">
+                    <!-- Row 1 -->
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+
+                    <!-- Row 2 -->
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile relative">
+                        <img src="./public/images/hero_face.jpg" alt=""
+                            class="hero-image-slice image-slice absolute inset-0" style="object-position: 20% 20%;">
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <img src="./public/images/hero_face.jpg" alt=""
+                            class="hero-image-slice image-slice absolute inset-0" style="object-position: 40% 20%;">
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">T</div>
+                    </div>
+                    <div class="grid-tile hero-tile hero-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile hero-tile">
+                        <span class="font-mono-label text-lipstick-black">New Season Drop</span>
+                    </div>
+                    <div class="grid-tile hero-tile"></div>
+
+                    <!-- Row 3 -->
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">D</div>
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">A</div>
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <img src="./public/images/hero_face.jpg" alt=""
+                            class="hero-image-slice image-slice absolute inset-0" style="object-position: 60% 40%;">
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <img src="./public/images/hero_face.jpg" alt=""
+                            class="hero-image-slice image-slice absolute inset-0" style="object-position: 80% 40%;">
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">O</div>
+                    </div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+
+                    <!-- Row 4 -->
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">R</div>
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">E</div>
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <img src="./public/images/hero_face.jpg" alt=""
+                            class="hero-image-slice image-slice absolute inset-0" style="object-position: 30% 60%;">
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <img src="./public/images/hero_face.jpg" alt=""
+                            class="hero-image-slice image-slice absolute inset-0" style="object-position: 50% 60%;">
+                    </div>
+                    <div class="grid-tile hero-tile hero-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+
+                    <!-- Row 5 -->
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">W</div>
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">E</div>
+                    </div>
+                    <div class="grid-tile hero-tile">
+                        <button class="cta-button">Shop the Drop</button>
+                    </div>
+                    <div class="grid-tile hero-tile"></div>
+
+                    <!-- Row 6 -->
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">A</div>
+                    </div>
+                    <div class="grid-tile hero-tile relative">
+                        <div class="hero-text-tile tile-text">R</div>
+                    </div>
+                    <div class="grid-tile hero-tile"></div>
+                    <div class="grid-tile hero-tile"></div>
+                </div>
+            </section>
+
+            <!-- Manifesto Section -->
+            <section id="manifestoSection" class="section-pinned bg-lipstick-grey z-20">
+                <div class="grid-checkerboard">
+                    <!-- Row 1 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 2 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile m-image-tile relative overflow-hidden">
+                        <img src="./public/images/manifesto_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 10% 20%;">
+                    </div>
+                    <div class="grid-tile m-image-tile relative overflow-hidden">
+                        <img src="./public/images/manifesto_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 20%;">
+                    </div>
+                    <div class="grid-tile m-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">IT'S</span></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">YOUR</span></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">LIPS</span></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">(AND</span></div>
+
+                    <!-- Row 3 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile m-image-tile relative overflow-hidden">
+                        <img src="./public/images/manifesto_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 10% 50%;">
+                    </div>
+                    <div class="grid-tile m-image-tile relative overflow-hidden">
+                        <img src="./public/images/manifesto_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 50%;">
+                    </div>
+                    <div class="grid-tile m-image-tile relative overflow-hidden">
+                        <img src="./public/images/manifesto_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 50% 50%;">
+                    </div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">YOUR</span></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">LIFE)</span></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 4 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile m-image-tile relative overflow-hidden">
+                        <img src="./public/images/manifesto_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 20% 80%;">
+                    </div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile m-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">DARE</span></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">TO</span></div>
+                    <div class="grid-tile m-text-tile text-tile"><span class="tile-text">WEAR</span></div>
+
+                    <!-- Row 5 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile m-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-lipstick-black">
+                            <path d="M8 4L16 12L8 20" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 6 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                </div>
+            </section>
+
+            <!-- Product Spotlight Section -->
+            <section id="spotlightSection" class="section-pinned bg-lipstick-grey z-30">
+                <div class="grid-checkerboard">
+                    <!-- Row 1 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 2 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile s-product-tile relative overflow-hidden">
+                        <img src="./public/images/product_lipstick.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 30%;">
+                    </div>
+                    <div class="grid-tile s-product-tile relative overflow-hidden">
+                        <img src="./public/images/product_lipstick.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 60% 30%;">
+                    </div>
+                    <div class="grid-tile s-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/spotlight_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 20% 20%;">
+                    </div>
+                    <div class="grid-tile s-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/spotlight_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 50% 20%;">
+                    </div>
+                    <div class="grid-tile s-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile s-text-tile text-tile"><span class="tile-text">THE</span></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 3 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile s-product-tile relative overflow-hidden">
+                        <img src="./public/images/product_lipstick.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 60%;">
+                    </div>
+                    <div class="grid-tile s-product-tile relative overflow-hidden">
+                        <img src="./public/images/product_lipstick.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 60% 60%;">
+                    </div>
+                    <div class="grid-tile s-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/spotlight_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 20% 50%;">
+                    </div>
+                    <div class="grid-tile s-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/spotlight_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 50% 50%;">
+                    </div>
+                    <div class="grid-tile s-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/spotlight_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 80% 50%;">
+                    </div>
+                    <div class="grid-tile s-text-tile text-tile"><span class="tile-text">ICON</span></div>
+                    <div class="grid-tile s-text-tile text-tile"><span class="tile-text">SHADE</span></div>
+
+                    <!-- Row 4 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile s-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/spotlight_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 80%;">
+                    </div>
+                    <div class="grid-tile s-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/spotlight_face.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 60% 80%;">
+                    </div>
+                    <div class="grid-tile s-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile s-text-tile text-tile"><span class="tile-text">THAT</span></div>
+                    <div class="grid-tile s-text-tile text-tile"><span class="tile-text">NEVER</span></div>
+                    <div class="grid-tile s-text-tile text-tile"><span class="tile-text">SLEEPS</span></div>
+
+                    <!-- Row 5 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile s-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 6 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile flex items-center justify-center">
+                        <button class="cta-button">Add to Bag</button>
+                    </div>
+                    <div class="grid-tile flex items-center justify-center">
+                        <span class="font-mono-label text-lipstick-black">$28</span>
+                    </div>
+                    <div class="grid-tile"></div>
+                </div>
+            </section>
+
+            <!-- Texture Study Section -->
+            <section id="textureSection" class="section-pinned bg-lipstick-grey z-40">
+                <div class="grid-checkerboard">
+                    <!-- Row 1 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 2 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile t-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/texture_face_side.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 20% 30%;">
+                    </div>
+                    <div class="grid-tile t-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/texture_face_side.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 50% 30%;">
+                    </div>
+                    <div class="grid-tile t-macro-tile relative overflow-hidden">
+                        <img src="./public/images/texture_lips.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 30%;">
+                    </div>
+                    <div class="grid-tile t-macro-tile relative overflow-hidden">
+                        <img src="./public/images/texture_lips.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 60% 30%;">
+                    </div>
+                    <div class="grid-tile t-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile t-text-tile text-tile"><span class="tile-text">FEEL</span></div>
+                    <div class="grid-tile t-text-tile text-tile"><span class="tile-text">THE</span></div>
+
+                    <!-- Row 3 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile t-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/texture_face_side.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 20% 60%;">
+                    </div>
+                    <div class="grid-tile t-portrait-tile relative overflow-hidden">
+                        <img src="./public/images/texture_face_side.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 50% 60%;">
+                    </div>
+                    <div class="grid-tile t-macro-tile relative overflow-hidden">
+                        <img src="./public/images/texture_lips.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 60%;">
+                    </div>
+                    <div class="grid-tile t-macro-tile relative overflow-hidden">
+                        <img src="./public/images/texture_lips.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 60% 60%;">
+                    </div>
+                    <div class="grid-tile t-macro-tile relative overflow-hidden">
+                        <img src="./public/images/texture_lips.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 80% 60%;">
+                    </div>
+                    <div class="grid-tile t-text-tile text-tile"><span class="tile-text">COLOR</span></div>
+                    <div class="grid-tile t-text-tile text-tile"><span class="tile-text">OWN</span></div>
+
+                    <!-- Row 4 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile t-macro-tile relative overflow-hidden">
+                        <img src="./public/images/texture_lips.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 40% 80%;">
+                    </div>
+                    <div class="grid-tile t-macro-tile relative overflow-hidden">
+                        <img src="./public/images/texture_lips.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 70% 80%;">
+                    </div>
+                    <div class="grid-tile t-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile t-text-tile text-tile"><span class="tile-text">THE</span></div>
+                    <div class="grid-tile t-text-tile text-tile"><span class="tile-text">ROOM</span></div>
+                    <div class="grid-tile t-accent-tile grid-tile-accent"></div>
+
+                    <!-- Row 5 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile flex items-center justify-center">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="text-lipstick-black">
+                            <path d="M10 0V20M0 10H20" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 6 -->
+                    <div class="grid-tile col-span-8 flex items-center justify-center">
+                        <span class="font-mono-label text-lipstick-text-secondary">Velvet matte. All day. No
+                            apologies.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shade Range Section -->
+            <section id="shadeRangeSection" class="relative bg-lipstick-grey z-50 py-20 min-h-screen">
+                <div class="max-w-7xl mx-auto px-8">
+                    <div class="shade-heading mb-16">
+                        <h2 class="font-heading text-5xl md:text-7xl text-lipstick-black mb-4">CHOOSE</h2>
+                        <h2 class="font-heading text-5xl md:text-7xl text-lipstick-black mb-4">YOUR</h2>
+                        <h2 class="font-heading text-5xl md:text-7xl text-lipstick-pink">TRUTH</h2>
+                    </div>
+
+                    <div id="shadesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Shades injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final Statement Section -->
+            <section id="finalStatementSection" class="section-pinned bg-lipstick-grey z-[60]">
+                <div class="grid-checkerboard">
+                    <!-- Row 1 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 2 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_1.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 20% 30%;">
+                    </div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_1.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 50% 30%;">
+                    </div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_2.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 30%;">
+                    </div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_2.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 60% 30%;">
+                    </div>
+                    <div class="grid-tile f-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile f-text-tile text-tile"><span class="tile-text">LIFE</span></div>
+                    <div class="grid-tile f-text-tile text-tile"><span class="tile-text">IS</span></div>
+
+                    <!-- Row 3 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_1.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 20% 60%;">
+                    </div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_1.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 50% 60%;">
+                    </div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_2.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 30% 60%;">
+                    </div>
+                    <div class="grid-tile f-image-tile relative overflow-hidden">
+                        <img src="./public/images/closing_face_2.jpg" alt="" class="image-slice absolute inset-0"
+                            style="object-position: 60% 60%;">
+                    </div>
+                    <div class="grid-tile f-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile f-text-tile text-tile"><span class="tile-text">TOO</span></div>
+                    <div class="grid-tile f-text-tile text-tile"><span class="tile-text">SHORT</span></div>
+
+                    <!-- Row 4 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile f-accent-tile grid-tile-accent"></div>
+                    <div class="grid-tile f-text-tile text-tile"><span class="tile-text">FOR</span></div>
+                    <div class="grid-tile f-text-tile text-tile"><span class="tile-text">NUDE</span></div>
+                    <div class="grid-tile f-text-tile text-tile"><span class="tile-text">LIPS</span></div>
+
+                    <!-- Row 5 -->
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+                    <div class="grid-tile"></div>
+
+                    <!-- Row 6 -->
+                    <div class="grid-tile col-span-8 flex items-center justify-center">
+                        <span class="font-mono-label text-lipstick-text-secondary">Go bold. Stay bold.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contactSection" class="relative bg-lipstick-black z-[70] py-20 min-h-[60vh]">
+                <div class="max-w-7xl mx-auto px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                        <!-- Left Links -->
+                        <div class="flex flex-col gap-4 contact-links-1">
+                            <div
+                                class="contact-tile p-6 border border-white/20 hover:border-lipstick-pink transition-colors cursor-pointer">
+                                <span class="font-heading text-white text-xl">STOCKISTS</span>
+                            </div>
+                            <div
+                                class="contact-tile p-6 border border-white/20 hover:border-lipstick-pink transition-colors cursor-pointer">
+                                <span class="font-heading text-white text-xl">PRESS</span>
+                            </div>
+                            <div
+                                class="contact-tile p-6 border border-white/20 hover:border-lipstick-pink transition-colors cursor-pointer">
+                                <span class="font-heading text-white text-xl">CARE</span>
+                            </div>
+                        </div>
+
+                        <!-- Center Form -->
+                        <div class="form-block lg:col-span-1">
+                            <h2 class="font-heading text-4xl text-white mb-2">GET</h2>
+                            <h2 class="font-heading text-4xl text-white mb-2">THE</h2>
+                            <h2 class="font-heading text-4xl text-lipstick-pink mb-8">DROP</h2>
+                            <p class="font-body text-white/70 mb-8 text-sm">
+                                New shades, restocks, and behind-the-scenes—once a week, zero spam.
+                            </p>
+                            <form class="flex flex-col gap-4">
+                                <input type="email" placeholder="YOUR EMAIL"
+                                    class="bg-transparent border border-white/30 px-4 py-3 text-white font-mono text-sm focus:border-lipstick-pink focus:outline-none transition-colors">
+                                <button type="button" class="cta-button w-full">Subscribe</button>
+                            </form>
+                        </div>
+
+                        <!-- Right Social -->
+                        <div class="flex flex-col gap-4 contact-links-2">
+                            <div
+                                class="contact-tile p-6 border border-white/20 hover:border-lipstick-pink transition-colors cursor-pointer">
+                                <span class="font-heading text-white text-xl">IG</span>
+                            </div>
+                            <div
+                                class="contact-tile p-6 border border-white/20 hover:border-lipstick-pink transition-colors cursor-pointer">
+                                <span class="font-heading text-white text-xl">TK</span>
+                            </div>
+                            <div
+                                class="contact-tile p-6 border border-white/20 hover:border-lipstick-pink transition-colors cursor-pointer">
+                                <span class="font-heading text-white text-xl">PIN</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <span class="font-mono-label text-white/40">© 2026 LIPSTICK QUEEN</span>
+                        <span class="font-mono-label text-white/40">DARE TO WEAR</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- App Logic -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Populate Shades
+            const shadesData = [
+                { name: 'Stage Red', image: './public/images/shade_swatch_1.jpg' },
+                { name: 'Afterhours Plum', image: './public/images/shade_swatch_2.jpg' },
+                { name: 'Riot Pink', image: './public/images/shade_swatch_3.jpg' },
+                { name: 'Bare Threat', image: './public/images/shade_swatch_4.jpg' },
+                { name: 'Midnight Merlot', image: './public/images/shade_swatch_5.jpg' },
+                { name: 'Neon Confession', image: './public/images/shade_swatch_6.jpg' },
+            ];
+
+            const shadesContainer = document.getElementById("shadesContainer");
+            shadesData.forEach(shade => {
+                const html = `
+                    <div class="shade-card group relative bg-white border border-lipstick-black/20 overflow-hidden">
+                        <div class="aspect-square relative overflow-hidden h-[350px]">
+                            <img src="${shade.image}" alt="${shade.name}" class="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500" />
+                            <div class="absolute inset-0 bg-lipstick-pink/0 group-hover:bg-lipstick-pink/10 transition-colors duration-300"></div>
+                        </div>
+                        <div class="p-6 flex items-center justify-between">
+                            <div>
+                                <h3 class="font-heading text-xl text-lipstick-black">${shade.name}</h3>
+                                <span class="font-mono-label text-lipstick-text-secondary">$28</span>
+                            </div>
+                            <div class="w-10 h-10 bg-lipstick-pink animate-pulse-scale rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">+</span>
+                            </div>
+                        </div>
+                        <button class="w-full cta-button" style="padding:16px;">Add to Bag</button>
+                    </div>
+                `;
+                shadesContainer.insertAdjacentHTML('beforeend', html);
+            });
+
+
+            // GSAP Animations
+            // 1. Hero Section
+            const heroSection = document.getElementById("heroSection");
+            const heroTiles = heroSection.querySelectorAll(".hero-tile");
+            const heroImages = heroSection.querySelectorAll(".hero-image-slice");
+            const heroTextTiles = heroSection.querySelectorAll(".hero-text-tile");
+            const heroAccentTiles = heroSection.querySelectorAll(".hero-accent-tile");
+
+            const heroLoadTl = gsap.timeline({ delay: 0.3 });
+
+            heroLoadTl.fromTo(heroTiles,
+                { scaleY: 0, opacity: 0 },
+                { scaleY: 1, opacity: 1, duration: 0.9, ease: 'power2.out', stagger: { amount: 0.6, from: 'start' } }
+            );
+            heroLoadTl.fromTo(heroImages,
+                { clipPath: 'inset(100% 0 0 0)' },
+                { clipPath: 'inset(0% 0 0 0)', duration: 0.7, ease: 'power2.out', stagger: 0.06 },
+                "-=0.5"
+            );
+            heroLoadTl.fromTo(heroTextTiles,
+                { scale: 0.85, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.05 },
+                "-=0.4"
+            );
+            heroLoadTl.fromTo(heroAccentTiles,
+                { opacity: 0, scale: 0.9 },
+                { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.08 },
+                "-=0.3"
+            );
+
+            const heroScrollTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: heroSection,
+                    start: 'top top',
+                    end: '+=130%',
+                    pin: true,
+                    scrub: 0.6,
+                    onLeaveBack: () => {
+                        gsap.set(heroTiles, { opacity: 1, x: 0, y: 0, scale: 1 });
+                        gsap.set(heroImages, { opacity: 1, x: 0, y: 0 });
+                        gsap.set(heroTextTiles, { opacity: 1, x: 0, y: 0 });
+                        gsap.set(heroAccentTiles, { opacity: 1, scale: 1 });
+                    }
+                }
+            });
+            heroScrollTl.fromTo(heroTiles,
+                { x: 0, y: 0, opacity: 1 },
+                { x: '-18vw', y: '-18vh', opacity: 0, ease: 'power2.in', stagger: { amount: 0.2, from: 'random' } },
+                0.7
+            );
+            heroScrollTl.fromTo(heroAccentTiles,
+                { scale: 1, opacity: 1 },
+                { scale: 1.15, opacity: 0, ease: 'power2.in' },
+                0.7
+            );
+
+            // 2. Manifesto Section
+            const manifestoSection = document.getElementById("manifestoSection");
+            const mTextTiles = manifestoSection.querySelectorAll('.m-text-tile');
+            const mImageTiles = manifestoSection.querySelectorAll('.m-image-tile');
+            const mAccentTiles = manifestoSection.querySelectorAll('.m-accent-tile');
+
+            const mScrollTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: manifestoSection,
+                    start: 'top top',
+                    end: '+=130%',
+                    pin: true,
+                    scrub: 0.6,
+                }
+            });
+
+            mScrollTl.fromTo(mTextTiles, { y: '12vh', opacity: 0 }, { y: 0, opacity: 1, stagger: 0.02, ease: 'power2.out' }, 0);
+            mScrollTl.fromTo(mImageTiles, { x: '-18vw', clipPath: 'inset(0 100% 0 0)' }, { x: 0, clipPath: 'inset(0 0% 0 0)', stagger: 0.03, ease: 'power2.out' }, 0);
+            mScrollTl.fromTo(mAccentTiles, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.05, ease: 'back.out(1.4)' }, 0.12);
+
+            mScrollTl.fromTo(mTextTiles, { x: 0, opacity: 1 }, { x: '10vw', opacity: 0, ease: 'power2.in' }, 0.7);
+            mScrollTl.fromTo(mImageTiles, { x: 0, opacity: 1 }, { x: '-10vw', opacity: 0, ease: 'power2.in' }, 0.7);
+            mScrollTl.fromTo(mAccentTiles, { scale: 1, opacity: 1 }, { scale: 1.2, opacity: 0, ease: 'power2.in' }, 0.7);
+
+            // 3. Spotlight Section
+            const spotlightSection = document.getElementById("spotlightSection");
+            const sProductTiles = spotlightSection.querySelectorAll('.s-product-tile');
+            const sPortraitTiles = spotlightSection.querySelectorAll('.s-portrait-tile');
+            const sTextTiles = spotlightSection.querySelectorAll('.s-text-tile');
+            const sAccentTiles = spotlightSection.querySelectorAll('.s-accent-tile');
+
+            const sScrollTl = gsap.timeline({
+                scrollTrigger: { trigger: spotlightSection, start: 'top top', end: '+=140%', pin: true, scrub: 0.6 }
+            });
+
+            sScrollTl.fromTo(sProductTiles, { x: '-30vw', rotate: -6, opacity: 0 }, { x: 0, rotate: 0, opacity: 1, stagger: 0.02, ease: 'power2.out' }, 0);
+            sScrollTl.fromTo(sPortraitTiles, { y: '35vh', opacity: 0 }, { y: 0, opacity: 1, stagger: 0.03, ease: 'power2.out' }, 0.06);
+            sScrollTl.fromTo(sTextTiles, { x: '12vw', opacity: 0 }, { x: 0, opacity: 1, stagger: 0.02, ease: 'power2.out' }, 0.1);
+            sScrollTl.fromTo(sAccentTiles, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.05, ease: 'back.out(1.4)' }, 0.15);
+
+            sScrollTl.fromTo([...sProductTiles, ...sPortraitTiles], { y: 0, opacity: 1 }, { y: '-18vh', opacity: 0, ease: 'power2.in' }, 0.7);
+            sScrollTl.fromTo(sTextTiles, { x: 0, opacity: 1 }, { x: '14vw', opacity: 0, ease: 'power2.in' }, 0.7);
+
+            // 4. Texture Section
+            const textureSection = document.getElementById("textureSection");
+            const tMacroTiles = textureSection.querySelectorAll('.t-macro-tile');
+            const tPortraitTiles = textureSection.querySelectorAll('.t-portrait-tile');
+            const tTextTiles = textureSection.querySelectorAll('.t-text-tile');
+            const tAccentTiles = textureSection.querySelectorAll('.t-accent-tile');
+
+            const tScrollTl = gsap.timeline({
+                scrollTrigger: { trigger: textureSection, start: 'top top', end: '+=130%', pin: true, scrub: 0.6 }
+            });
+
+            tScrollTl.fromTo(tMacroTiles, { scale: 1.25, x: '10vw', opacity: 0 }, { scale: 1, x: 0, opacity: 1, stagger: 0.02, ease: 'power2.out' }, 0);
+            tScrollTl.fromTo(tPortraitTiles, { x: '-22vw', opacity: 0 }, { x: 0, opacity: 1, stagger: 0.03, ease: 'power2.out' }, 0.05);
+            tScrollTl.fromTo(tTextTiles, { y: '10vh', opacity: 0 }, { y: 0, opacity: 1, stagger: 0.02, ease: 'power2.out' }, 0.1);
+            tScrollTl.fromTo(tAccentTiles, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.05, ease: 'back.out(1.4)' }, 0.15);
+
+            tScrollTl.fromTo(tMacroTiles, { x: 0, opacity: 1 }, { x: '-12vw', opacity: 0, ease: 'power2.in' }, 0.7);
+            tScrollTl.fromTo(tTextTiles, { y: 0, opacity: 1 }, { y: '-10vh', opacity: 0, ease: 'power2.in' }, 0.7);
+            tScrollTl.fromTo(tAccentTiles, { scale: 1, opacity: 1 }, { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.7);
+
+            // 5. Shade Range Section
+            const shadeRangeSection = document.getElementById("shadeRangeSection");
+            const shadeHeading = shadeRangeSection.querySelector('.shade-heading');
+            gsap.fromTo(shadeHeading, { y: '8vh', opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', scrollTrigger: { trigger: shadeHeading, start: 'top 80%', toggleActions: 'play none none reverse' } });
+
+            const shadeCards = shadeRangeSection.querySelectorAll('.shade-card');
+            shadeCards.forEach((card, i) => {
+                gsap.fromTo(card, { y: '10vh', rotate: -1.5, opacity: 0 }, { y: 0, rotate: 0, opacity: 1, duration: 0.7, delay: i * 0.08, ease: 'power2.out', scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' } });
+            });
+
+            // 6. Final Statement
+            const finalSection = document.getElementById("finalStatementSection");
+            const fImageTiles = finalSection.querySelectorAll(".f-image-tile");
+            const fTextTiles = finalSection.querySelectorAll(".f-text-tile");
+            const fAccentTiles = finalSection.querySelectorAll(".f-accent-tile");
+
+            const fScrollTl = gsap.timeline({
+                scrollTrigger: { trigger: finalSection, start: 'top top', end: '+=120%', pin: true, scrub: 0.6 }
+            });
+
+            fScrollTl.fromTo(fImageTiles, { x: (i) => (i < 4 ? '-18vw' : '18vw'), opacity: 0 }, { x: 0, opacity: 1, stagger: 0.02, ease: 'power2.out' }, 0);
+            fScrollTl.fromTo(fTextTiles, { y: '12vh', opacity: 0 }, { y: 0, opacity: 1, stagger: 0.02, ease: 'power2.out' }, 0.08);
+            fScrollTl.fromTo(fAccentTiles, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.05, ease: 'back.out(1.4)' }, 0.15);
+
+            fScrollTl.fromTo([...fImageTiles, ...fTextTiles], { opacity: 1 }, { opacity: 0, ease: 'power2.in' }, 0.7);
+
+            // 7. Contact Section
+            const contactSection = document.getElementById("contactSection");
+            const formBlock = contactSection.querySelector('.form-block');
+            const contactTiles = contactSection.querySelectorAll('.contact-tile');
+
+            gsap.fromTo(formBlock, { y: '6vh', opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', scrollTrigger: { trigger: formBlock, start: 'top 80%', toggleActions: 'play none none reverse' } });
+            gsap.fromTo(contactTiles, { y: '4vh', opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 0.6, ease: 'power2.out', scrollTrigger: { trigger: contactSection, start: 'top 70%', toggleActions: 'play none none reverse' } });
+
+            // Global Snapping logic
+            const setupSnap = () => {
+                const pinned = ScrollTrigger.getAll().filter(st => st.vars.pin).sort((a, b) => a.start - b.start);
+                const maxScroll = ScrollTrigger.maxScroll(window);
+                if (!maxScroll || pinned.length === 0) return;
+
+                const pinnedRanges = pinned.map(st => ({
+                    start: st.start / maxScroll,
+                    end: (st.end ?? st.start) / maxScroll,
+                    center: (st.start + ((st.end ?? st.start) - st.start) * 0.5) / maxScroll,
+                }));
+
+                ScrollTrigger.create({
+                    snap: {
+                        snapTo: (value) => {
+                            const inPinned = pinnedRanges.some(r => value >= r.start - 0.02 && value <= r.end + 0.02);
+                            if (!inPinned) return value;
+                            return pinnedRanges.reduce((closest, r) => Math.abs(r.center - value) < Math.abs(closest - value) ? r.center : closest, pinnedRanges[0]?.center ?? 0);
+                        },
+                        duration: { min: 0.15, max: 0.35 },
+                        delay: 0,
+                        ease: 'power2.out',
+                    }
+                });
+            };
+
+            setTimeout(setupSnap, 500);
+        });
+    </script>
+</body>
+
+</html>

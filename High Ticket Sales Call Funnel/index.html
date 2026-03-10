@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oxygen — Growth Systems for Agencies</title>
+    <meta name="description"
+        content="We build the acquisition system that turns strangers into $10k+ clients. For agencies doing $20k+/mo who are done winging it.">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons for the menu -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* ============================================
+           ROOT VARIABLES — BRAND IDENTITY
+           ============================================
+           [TEMPLATE] Swap these to match your client's brand.
+           The current palette is warm/editorial — intentionally 
+           NOT the generic gold-on-black "premium" look.
+        */
+        :root {
+            --bg: #0C0B09;
+            /* Warm off-black (not pure #000) */
+            --surface: #151412;
+            /* Card / raised surfaces */
+            --border: #2A2724;
+            /* Subtle warm borders */
+            --text: #E8E0D0;
+            /* Cream — primary text */
+            --text-muted: #8A8377;
+            /* Warm gray — secondary text */
+            --pop: #C4653A;
+            /* Terracotta — used ONLY on CTA */
+            --pop-hover: #D4764B;
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        /* Reset */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+            /* Space for sticky nav */
+        }
+
+        /* ---- FILM GRAIN TEXTURE ---- 
+           Adds subtle noise so the background isn't perfectly flat.
+           An AI would never add imperfection on purpose. */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            background-size: 200px;
+        }
+
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        h1,
+        h2,
+        h3 {
+            line-height: 1.05;
+        }
+
+        .headline {
+            font-family: var(--serif);
+            /* Fluid type: 3rem on mobile → 6.5rem on desktop */
+            font-size: clamp(3rem, 6vw + 1rem, 6.5rem);
+            font-weight: 400;
+            /* Serifs look better at normal weight */
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .headline em {
+            font-style: italic;
+            /* Italic serif = a human choice. AI would just make it bold. */
+        }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 4vw, 48px);
+        }
+
+        /* ---- STICKY NAV ---- */
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(12, 11, 9, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            transition: padding 0.3s;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-btn-apply {
+            background: var(--pop);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-btn-apply:hover {
+            background: var(--pop-hover);
+        }
+
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            width: 24px;
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--text);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        /* ============================================
+           HERO — Left-aligned, asymmetric
+           ============================================
+           Not centered. A real designer picks a side. */
+        .hero {
+            padding: 100px 0 60px;
+            max-width: 800px;
+            /* Doesn't stretch full width — intentional constraint */
+        }
+
+        /* [TEMPLATE] The small eyebrow badge above the headline */
+        .eyebrow {
+            display: inline-block;
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--pop);
+            margin-bottom: 32px;
+            /* No border, no pill shape — just raw text. Cleaner. */
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-top: 28px;
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           VSL VIDEO — Overlapping, not centered
+           ============================================ */
+        .vsl-section {
+            padding: 20px 0 80px;
+        }
+
+        .vsl-player {
+            position: relative;
+            max-width: 900px;
+            /* Offset to the right — asymmetry */
+            margin-left: auto;
+            margin-right: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+
+        .vsl-player:hover .play-icon {
+            transform: scale(1.08);
+        }
+
+        .vsl-bg {
+            position: absolute;
+            inset: 0;
+            /* [TEMPLATE] Swap this URL for your VSL thumbnail */
+            background:
+                linear-gradient(to top, rgba(12, 11, 9, 0.9) 0%, rgba(12, 11, 9, 0.2) 50%, rgba(12, 11, 9, 0.4) 100%),
+                url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=2000') center/cover;
+        }
+
+        .play-icon {
+            position: relative;
+            z-index: 2;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 2px solid rgba(232, 224, 208, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .play-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--text);
+            margin-left: 3px;
+        }
+
+        .vsl-caption {
+            position: absolute;
+            bottom: 28px;
+            left: 32px;
+            z-index: 2;
+        }
+
+        /* [TEMPLATE] Video title and host name */
+        .vsl-caption h3 {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .vsl-caption p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================
+           CTA — One loud button, nothing else
+           ============================================ */
+        .cta-row {
+            padding: 0 0 40px;
+        }
+
+        .btn-apply {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            /* [TEMPLATE] The ONLY place the pop color appears */
+            background: var(--pop);
+            color: #fff;
+            padding: 18px 40px;
+            font-family: var(--sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: background 0.3s, letter-spacing 0.3s;
+        }
+
+        .btn-apply:hover {
+            background: var(--pop-hover);
+            letter-spacing: 1.5px;
+            /* Letter-space out on hover — unusual, tactile */
+        }
+
+        .btn-apply svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            transition: transform 0.3s;
+        }
+
+        .btn-apply:hover svg {
+            transform: translateX(3px);
+        }
+
+        .scarcity {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: #6DBF6D;
+            border-radius: 50%;
+            animation: softpulse 3s infinite;
+        }
+
+        @keyframes softpulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ============================================
+           STAT STRIP — Replaces fake logo cloud
+           ============================================
+           Real numbers > fake brand names. Always. 
+           [TEMPLATE] Swap with your actual client results. */
+        .stats {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 48px 0;
+        }
+
+        .stats-inner {
+            display: flex;
+            justify-content: flex-start;
+            gap: clamp(32px, 6vw, 80px);
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-family: var(--serif);
+            font-size: clamp(2rem, 3vw, 3rem);
+            font-weight: 400;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           QUALIFICATION CARDS — Staggered, not gridded
+           ============================================ */
+        .qualify {
+            padding: 120px 0;
+        }
+
+        .qualify-header {
+            max-width: 500px;
+            margin-bottom: 64px;
+        }
+
+        .qualify-header h2 {
+            font-family: var(--serif);
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .qualify-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* Third card spans only one column but is offset right */
+        .card:nth-child(3) {
+            grid-column: 2;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 40px 36px;
+            /* Left border glow on hover — asymmetric, intentional */
+            border-left: 2px solid transparent;
+            transition: border-left-color 0.4s;
+        }
+
+        .card:hover {
+            border-left-color: var(--pop);
+        }
+
+        .card-num {
+            font-family: var(--serif);
+            font-size: 2.5rem;
+            color: var(--border);
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .card h3 {
+            font-family: var(--sans);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           FOOTER — Sparse, left-aligned
+           ============================================ */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        footer p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        /* ============================================
+           CHATBOT MODAL
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(12, 11, 9, 0.85);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .chat-box {
+            width: 100%;
+            max-width: 420px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            height: 580px;
+            max-height: 88vh;
+            transform: translateY(16px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .chat-box {
+            transform: translateY(0);
+        }
+
+        .chat-head {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-identity {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--pop);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .chat-identity span {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .chat-identity small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+
+        .close-chat:hover {
+            color: var(--text);
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            animation: slideUp 0.3s ease forwards;
+        }
+
+        .bubble-bot {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            align-self: flex-start;
+            border-bottom-left-radius: 3px;
+        }
+
+        .bubble-user {
+            background: var(--pop);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 3px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-foot {
+            padding: 16px 24px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px 14px;
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--text-muted);
+        }
+
+        .chat-send {
+            background: var(--pop);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-send:hover {
+            background: var(--pop-hover);
+        }
+
+        .typing {
+            display: none;
+            gap: 5px;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            border-bottom-left-radius: 3px;
+            align-self: flex-start;
+        }
+
+        .typing i {
+            width: 5px;
+            height: 5px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typedot 1.4s infinite ease-in-out;
+        }
+
+        .typing i:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing i:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes typedot {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Calendar button inside chat */
+        .btn-book {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            padding: 14px;
+            background: var(--pop);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            animation: slideUp 0.3s ease forwards;
+        }
+
+        .btn-book:hover {
+            background: var(--pop-hover);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                /* Exact height of nav */
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                flex-direction: column;
+                padding: 40px;
+                gap: 24px;
+                border-bottom: 1px solid var(--border);
+                transform: translateY(-120%);
+                transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 99;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .mobile-toggle.active span:nth-child(1) {
+                transform: translateY(7px) rotate(45deg);
+            }
+
+            .mobile-toggle.active span:nth-child(2) {
+                transform: rotate(-45deg);
+            }
+
+            .hero {
+                padding: 60px 0 40px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .card:nth-child(3) {
+                grid-column: 1;
+            }
+
+            .stats-inner {
+                gap: 24px;
+            }
+
+            .vsl-caption {
+                display: none;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sticky-nav">
+        <div class="wrap nav-content">
+            <a href="#" class="logo">Oxygen</a>
+            <div class="nav-links" id="navLinks">
+                <a href="#strategy">Strategy</a>
+                <a href="#proof">Proof</a>
+                <a href="#qualify">Criteria</a>
+            </div>
+            <div class="nav-cta">
+                <button class="nav-btn-apply" id="navApplyBtn">Apply Now</button>
+                <div class="mobile-toggle" id="mobileToggle">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- ============================================
+             HERO — Left-aligned, constrained width
+             [TEMPLATE] Rewrite headline & subtitle.
+             ============================================ -->
+        <div class="wrap">
+            <section class="hero">
+                <div class="eyebrow">Not for everyone</div>
+                <h1 class="headline">Most agencies are <em>winging it.</em> You're not most agencies.</h1>
+                <p class="subtitle">We build the system that turns strangers into $10k+ clients. Watch the 14-minute
+                    breakdown below, then apply if it makes sense.</p>
+            </section>
+        </div>
+
+        <!-- ============================================
+             VSL VIDEO
+             [TEMPLATE] Swap the thumbnail URL and caption.
+             ============================================ -->
+        <div class="wrap" id="strategy">
+            <section class="vsl-section">
+                <div class="vsl-player" id="videoTrigger">
+                    <div class="vsl-bg"></div>
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </div>
+                    <div class="vsl-caption">
+                        <h3>The Predictable Growth Framework</h3>
+                        <p>14 min · hosted by Alex Mercer</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ============================================
+             CTA ROW
+             [TEMPLATE] Change button text and scarcity line.
+             ============================================ -->
+        <div class="wrap">
+            <div class="cta-row">
+                <button class="btn-apply" id="applyBtn">
+                    See if you qualify
+                    <svg viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+                <div class="scarcity">
+                    <span class="pulse-dot"></span>
+                    We take on 3 businesses per month. No exceptions.
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             STAT STRIP
+             [TEMPLATE] Replace with YOUR actual numbers.
+             Real data > fake brand logos. Every time.
+             ============================================ -->
+        <div class="wrap" id="proof">
+            <section class="stats">
+                <div class="stats-inner">
+                    <div class="stat">
+                        <div class="stat-number">$47M+</div>
+                        <div class="stat-label">Client revenue generated</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">312</div>
+                        <div class="stat-label">Systems deployed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">96%</div>
+                        <div class="stat-label">Show-up rate</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ============================================
+             QUALIFICATION SECTION
+             [TEMPLATE] Rewrite card titles + descriptions 
+             to match your ideal client profile.
+             ============================================ -->
+        <div class="wrap" id="qualify">
+            <section class="qualify">
+                <div class="qualify-header">
+                    <h2>Who this is actually for</h2>
+                    <p>We don't work with everyone. If you can't check these three boxes, we'll point you somewhere
+                        better.</p>
+                </div>
+
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-num">01</div>
+                        <h3>You're doing $20k+/mo</h3>
+                        <p>You've got market validation. People buy your service, you've got the case studies, and you
+                            know your offer works. You're past the guessing phase.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-num">02</div>
+                        <h3>You have capital to deploy</h3>
+                        <p>Scaling costs money upfront. You need margins and cash flow to invest in paid acquisition and
+                            infrastructure. If that's not you yet, that's fine — come back later.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-num">03</div>
+                        <h3>You can actually fulfill</h3>
+                        <p>If we send you 15 new high-ticket clients next month, your business won't implode. Operations
+                            are dialed. You just need the pipeline.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ============================================
+         FOOTER
+         [TEMPLATE] Update copyright name and links.
+         ============================================ -->
+    <div class="wrap">
+        <footer>
+            <p>&copy; 2026 Oxygen Systems</p>
+            <div class="footer-links">
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Contact</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ============================================
+         CHATBOT QUALIFICATION MODAL
+         ============================================ -->
+    <div class="modal-overlay" id="chatModal">
+        <div class="chat-box">
+            <div class="chat-head">
+                <div class="chat-identity">
+                    <!-- [TEMPLATE] Change avatar initials and name -->
+                    <div class="chat-avatar">MR</div>
+                    <div>
+                        <span>Mia Reeves</span>
+                        <small>Growth Team</small>
+                    </div>
+                </div>
+                <button class="close-chat" id="closeModal">&times;</button>
+            </div>
+
+            <div class="chat-body" id="messagesArea">
+                <!-- [TEMPLATE] Intro messages — make them sound like YOUR team -->
+                <div class="bubble bubble-bot">Hey — I'm Mia from the growth team. Quick chat before we book you in?
+                </div>
+                <div class="bubble bubble-bot" style="animation-delay: 0.4s;">What's your business doing in monthly
+                    recurring revenue right now? Ballpark is fine.</div>
+            </div>
+
+            <div class="typing" id="typingIndicator">
+                <i></i><i></i><i></i>
+            </div>
+
+            <div class="chat-foot">
+                <input type="text" class="chat-input" id="userInput" placeholder="Type here..." autocomplete="off">
+                <button class="chat-send" id="sendBtn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        /**
+         * ============================================
+         * TEMPLATE CONFIGURATION
+         * ============================================
+         * Business owners: ONLY edit this object.
+         * Everything below drives the entire funnel.
+         */
+        const FUNNEL_CONFIG = {
+
+            // --- BRAND ---
+            // [TEMPLATE] Your business name (used in chatbot greeting)
+            businessName: "Oxygen",
+
+            // --- QUALIFICATION THRESHOLDS ---
+            // [TEMPLATE] Minimum MRR (as a number) for a lead to pass Step 1
+            minQualifiedMRR: 10000,
+            // [TEMPLATE] Investment range shown in the capital question
+            investmentRequired: "$5k–$10k",
+
+            // --- LINKS ---
+            // [TEMPLATE] Your Calendly / scheduler link (shown after qualification)
+            calendarLink: "https://calendly.com/your-link",
+            // [TEMPLATE] URL for disqualified leads (free resource, YouTube, etc.)
+            disqualificationRedirect: "https://youtube.com/your-free-content",
+
+            // --- BOT PERSONALITY ---
+            // [TEMPLATE] Name of the person the chatbot impersonates
+            botName: "Mia",
+
+            // --- QUALIFICATION QUESTIONS ---
+            // [TEMPLATE] Customize the text and pass/fail logic.
+            // `process` receives the user's text and returns true (pass) or false (fail).
+            questions: [
+                {
+                    id: "mrr",
+                    text: "What's your business doing in monthly recurring revenue right now? Ballpark is fine.",
+                    process: (val) => {
+                        const num = parseInt(val.replace(/[^0-9]/g, ''));
+                        return !isNaN(num) && num >= FUNNEL_CONFIG.minQualifiedMRR;
+                    }
+                },
+                {
+                    id: "bottleneck",
+                    text: "Got it. What's the one thing stopping you from doubling that in 90 days — lead flow, sales, or fulfillment?",
+                    process: () => true  // Open-ended, always passes
+                },
+                {
+                    id: "capital",
+                    text: `Last one. Scaling requires upfront investment — at minimum ${FUNNEL_CONFIG.investmentRequired} liquid. Is that realistic for you right now?`,
+                    process: (val) => {
+                        const v = val.toLowerCase();
+                        return !(v.includes('no') || v.includes("can't") || v.includes('cant') || v.includes("don't") || v.includes('dont'));
+                    }
+                }
+            ]
+        };
+
+
+        /* ---- DOM REFS ---- */
+        const modal = document.getElementById('chatModal');
+        const messagesArea = document.getElementById('messagesArea');
+        const inputField = document.getElementById('userInput');
+        const typingEl = document.getElementById('typingIndicator');
+        let step = 0;
+
+        /* ---- OPEN / CLOSE ---- */
+        const open = () => { modal.classList.add('active'); setTimeout(() => inputField.focus(), 400); };
+        const close = () => modal.classList.remove('active');
+
+        document.getElementById('applyBtn').addEventListener('click', open);
+        document.getElementById('navApplyBtn').addEventListener('click', open);
+        document.getElementById('videoTrigger').addEventListener('click', open);
+        document.getElementById('closeModal').addEventListener('click', close);
+        modal.addEventListener('click', e => { if (e.target === modal) close(); });
+
+        /* ---- MOBILE NAV ---- */
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking links
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        /* ---- MESSAGING HELPERS ---- */
+        const say = (text, who) => {
+            const el = document.createElement('div');
+            el.className = `bubble bubble-${who}`;
+            el.textContent = text;
+            messagesArea.appendChild(el);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        };
+
+        const showTyping = () => { typingEl.style.display = 'inline-flex'; messagesArea.appendChild(typingEl); messagesArea.scrollTop = messagesArea.scrollHeight; };
+        const hideTyping = () => { typingEl.style.display = 'none'; };
+
+        /* ---- BOT BRAIN ---- */
+        const respond = (userText) => {
+            showTyping();
+
+            setTimeout(() => {
+                hideTyping();
+
+                const q = FUNNEL_CONFIG.questions[step];
+                const passed = q.process(userText);
+
+                if (!passed) {
+                    say(`Appreciate the honesty. We're probably not the right fit just yet — but I've got a free resource that'll help you get there.`, 'bot');
+                    setTimeout(() => {
+                        say('Sending you over now ↗', 'bot');
+                        setTimeout(() => window.location.href = FUNNEL_CONFIG.disqualificationRedirect, 2000);
+                    }, 1200);
+                    return;
+                }
+
+                step++;
+
+                if (step < FUNNEL_CONFIG.questions.length) {
+                    // Transitional acknowledgment — varies to feel human
+                    const acks = ["Makes sense.", "Got it, that's solid.", "Okay, good.", "Nice."];
+                    say(acks[Math.floor(Math.random() * acks.length)], 'bot');
+
+                    setTimeout(() => {
+                        showTyping();
+                        setTimeout(() => {
+                            hideTyping();
+                            say(FUNNEL_CONFIG.questions[step].text, 'bot');
+                        }, 900 + Math.random() * 400); // Slightly varied timing
+                    }, 500);
+                } else {
+                    // SUCCESS — they passed all questions
+                    say(`You sound like exactly who we built this for. Let me get you on the calendar.`, 'bot');
+                    setTimeout(() => {
+                        showTyping();
+                        setTimeout(() => {
+                            hideTyping();
+                            say(`Pick a time below — it's a 15-min call with ${FUNNEL_CONFIG.botName}, no fluff.`, 'bot');
+
+                            const btn = document.createElement('button');
+                            btn.className = 'btn-book';
+                            btn.textContent = 'Book your call →';
+                            btn.onclick = () => window.open(FUNNEL_CONFIG.calendarLink, '_blank');
+                            messagesArea.appendChild(btn);
+                            messagesArea.scrollTop = messagesArea.scrollHeight;
+                        }, 1200);
+                    }, 800);
+                }
+            }, 1200 + Math.random() * 600); // Randomized thinking time
+        };
+
+        /* ---- SEND ---- */
+        const send = () => {
+            const text = inputField.value.trim();
+            if (!text) return;
+            say(text, 'user');
+            inputField.value = '';
+            respond(text);
+        };
+
+        document.getElementById('sendBtn').addEventListener('click', send);
+        inputField.addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
+    </script>
+
+</body>
+
+</html>
