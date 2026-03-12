@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Dog Training | 8-Week Obedience for Busy Professionals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-card: rgba(255,255,255,0.05);
+            --bg-elevated: rgba(255,255,255,0.08);
+            --fg: #f1f5f9;
+            --fg-muted: #94a3b8;
+            --border: rgba(255,255,255,0.1);
+            --accent: #eab308;
+            --accent-rgb: 234, 179, 8;
+            --glow: rgba(var(--accent-rgb), 0.15);
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .satoshi {
+            font-family: 'Satoshi', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb),0.05), transparent, rgba(var(--accent-rgb),0.05));
+            pointer-events: none;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--accent), rgba(var(--accent-rgb), 0.6));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            animation: float-orb 25s ease-in-out infinite;
+        }
+        .orb--primary { width: 700px; height: 700px; background: radial-gradient(circle, var(--accent), transparent 70%); opacity: 0.15; top: 10%; left: -10%; }
+        .orb--secondary { width: 600px; height: 600px; background: radial-gradient(circle, var(--success), transparent 70%); opacity: 0.1; bottom: 10%; right: -10%; }
+        
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+
+        .rotating-cta {
+            position: relative;
+            display: inline-flex;
+            padding: 2px;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.3);
+            animation: pulse-scale 3s ease-in-out infinite;
+        }
+        .rotating-cta__gradient {
+            position: absolute;
+            inset: -100%;
+            background: conic-gradient(from 90deg, transparent 0%, transparent 50%, var(--accent) 50%, transparent 55%, transparent 100%);
+            animation: spin 4s linear infinite;
+        }
+        .rotating-cta__face {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 48px;
+            font-weight: 900;
+            font-size: 18px;
+            border-radius: 18px;
+            background: #111;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.3s;
+        }
+        .rotating-cta:hover .rotating-cta__face {
+            background: var(--accent);
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 1px solid rgba(var(--accent-rgb), 0.2);
+            color: var(--accent);
+            background: rgba(var(--accent-rgb), 0.05);
+            margin-bottom: 24px;
+        }
+
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            gap: 40px;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee__content {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-around;
+            min-width: 100%;
+            gap: 40px;
+            animation: scroll 30s linear infinite;
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        .nav-scrolled {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 200px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: var(--border);
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-orbs" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
+        <div class="orb orb--primary"></div>
+        <div class="orb orb--secondary"></div>
+    </div>
+
+    <!-- 7.1 Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-[999] transition-all duration-300 py-6">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="text-2xl font-black satoshi tracking-tighter">CANINE<span class="text-yellow-500">CORE</span></div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#problem" class="hover:text-white transition">The Problem</a>
+                <a href="#solution" class="hover:text-white transition">8-Week Roadmap</a>
+                <a href="#roi" class="hover:text-white transition">Potential Results</a>
+                <a href="#faq" class="hover:text-white transition">FAQ</a>
+            </div>
+            <a href="#final-cta" class="text-xs font-bold uppercase tracking-widest bg-white text-black px-6 py-3 rounded-full hover:bg-yellow-500 transition">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- 7.2 Hero -->
+    <section id="hero" class="relative min-height-[100vh] pt-32 pb-20 px-6 flex flex-col items-center justify-center text-center z-10">
+        <div id="hero-content" class="max-w-4xl">
+            <div class="badge">Limited Intake: 12 Spots Left</div>
+            <h1 class="text-5xl sm:text-7xl md:text-8xl font-black mb-8 leading-[1.05]">
+                An Obedient Dog for the <span class="gradient-text">Busy Professional</span>
+            </h1>
+            <p class="text-xl sm:text-2xl text-slate-400 mb-12 max-w-2xl mx-auto">
+                Go from chaos to calm in 8-weeks. Science-based training tailored for your high-performance lifestyle.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                <div class="rotating-cta" onclick="document.getElementById('final-cta').scrollIntoView({behavior: 'smooth'})">
+                    <span class="rotating-cta__gradient"></span>
+                    <span class="rotating-cta__face">Secure Your Spot — $997</span>
+                </div>
+                <div class="text-sm font-bold text-slate-500 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    30-Day Money-Back Guarantee
+                </div>
+            </div>
+            
+            <div class="marquee py-12 border-y border-white/5">
+                <div class="marquee__content opacity-50 contrast-0 grayscale">
+                    <span class="text-xl font-bold px-12 saturate-0">AS SEEN ON</span>
+                    <span class="text-xl font-black px-12">DOG CHANNELS</span>
+                    <span class="text-xl font-black px-12">PET TODAY</span>
+                    <span class="text-xl font-black px-12">CANINE WEEKLY</span>
+                    <span class="text-xl font-black px-12">VET REVIEW</span>
+                </div>
+                <!-- Duplicate for infinite -->
+                <div class="marquee__content opacity-50 contrast-0 grayscale">
+                    <span class="text-xl font-bold px-12 saturate-0">AS SEEN ON</span>
+                    <span class="text-xl font-black px-12">DOG CHANNELS</span>
+                    <span class="text-xl font-black px-12">PET TODAY</span>
+                    <span class="text-xl font-black px-12">CANINE WEEKLY</span>
+                    <span class="text-xl font-black px-12">VET REVIEW</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7.3 Journey / Problem -->
+    <section id="problem" class="relative py-32 px-6 z-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <div class="badge">The Struggle</div>
+                <h2 class="text-4xl md:text-6xl font-black">Why Your Current <span class="gradient-text">Approach Fails</span></h2>
+            </div>
+
+            <div class="flex justify-center gap-4 mb-12 flex-wrap">
+                <button class="tab-btn active px-8 py-4 rounded-2xl glass-card font-bold text-sm" onclick="switchTab(0)">⏱ NO TIME</button>
+                <button class="tab-btn px-8 py-4 rounded-2xl glass-card font-bold text-sm" onclick="switchTab(1)">🧠 INCONSISTENCY</button>
+                <button class="tab-btn px-8 py-4 rounded-2xl glass-card font-bold text-sm" onclick="switchTab(2)">💥 OVERWHELM</button>
+            </div>
+
+            <div id="tab-content" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Content will be swapped by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 7.4 Solution Showcase -->
+    <section id="solution" class="relative py-32 px-6 z-30">
+        <div class="max-w-7xl mx-auto glass-card p-12 md:p-20 overflow-visible">
+            <div class="text-center mb-16">
+                <div class="badge">The Solution</div>
+                <h2 class="text-4xl md:text-6xl font-black">The 8-Week <span class="gradient-text">Roadmap</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="glass-card p-8 group hover:border-yellow-500/50 transition">
+                    <div class="text-4xl mb-6">🦴</div>
+                    <h3 class="text-xl font-black mb-4">Phase 1: Foundations</h3>
+                    <p class="text-slate-400 text-sm">Communication signals and value-building for guaranteed focus.</p>
+                </div>
+                <div class="glass-card p-8 group hover:border-yellow-500/50 transition">
+                    <div class="text-4xl mb-6">🦮</div>
+                    <h3 class="text-xl font-black mb-4">Phase 2: Mechanics</h3>
+                    <p class="text-slate-400 text-sm">Precision loose-lead walking and rock-solid recall foundations.</p>
+                </div>
+                <div class="glass-card p-8 group hover:border-yellow-500/50 transition">
+                    <div class="text-4xl mb-6">🚀</div>
+                    <h3 class="text-xl font-black mb-4">Phase 3: Proofing</h3>
+                    <p class="text-slate-400 text-sm">Taking skills to the real world — patios, parks, and downtown.</p>
+                </div>
+                <div class="glass-card p-8 group hover:border-yellow-500/50 transition border-yellow-500/50 bg-yellow-500/5">
+                    <div class="text-4xl mb-6">👑</div>
+                    <h3 class="text-xl font-black mb-4">Phase 4: Mastery</h3>
+                    <p class="text-slate-400 text-sm">Advanced distance control and reliable off-lead freedom.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7.9 ROI/Value Calculator -->
+    <section id="roi" class="relative py-32 px-6 z-40">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div>
+                    <div class="badge">ROI Calculator</div>
+                    <h2 class="text-4xl md:text-6xl font-black mb-8 leading-tight">
+                        Invest in Years of <span class="gradient-text">Stress-Free Living</span>
+                    </h2>
+                    <p class="text-xl text-slate-400 mb-8">
+                        The average "untrained" dog costs professional owners 400+ hours of stress and $3k+ in damages over its lifetime.
+                    </p>
+                    <div class="flex gap-4">
+                        <div class="glass-card p-6 flex-1">
+                            <div class="text-3xl font-black text-yellow-500 mb-2">1,200+</div>
+                            <div class="text-xs uppercase font-bold text-slate-400">Success Stories</div>
+                        </div>
+                        <div class="glass-card p-6 flex-1">
+                            <div class="text-3xl font-black text-yellow-500 mb-2">15 min</div>
+                            <div class="text-xs uppercase font-bold text-slate-400">Daily Training</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-10 bg-white/5 border-yellow-500/20">
+                    <h3 class="text-2xl font-black mb-8">Calculate Your Freedom</h3>
+                    <div class="space-y-8 mb-12">
+                        <div>
+                            <div class="flex justify-between mb-4">
+                                <span class="text-sm font-bold text-slate-400">Dog's Current Age (Years)</span>
+                                <span id="age-val" class="font-black text-yellow-500">2</span>
+                            </div>
+                            <input type="range" id="age-slider" min="1" max="15" value="2" oninput="updateROI()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-4">
+                                <span class="text-sm font-bold text-slate-400">Value of Your Hourly Time ($)</span>
+                                <span id="time-val" class="font-black text-yellow-500">150</span>
+                            </div>
+                            <input type="range" id="time-slider" min="50" max="1000" value="150" step="50" oninput="updateROI()">
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-black/50 border border-white/5">
+                        <div class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-widest">Projected Lifestyle ROI</div>
+                        <div id="roi-result" class="text-5xl font-black text-white">$142,500</div>
+                        <div class="text-xs text-slate-500 mt-4 leading-relaxed">
+                            Based on 30 mins saved daily over the next 13 expected years.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7.10 Testimonials -->
+    <section class="py-32 px-6 z-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <div class="badge">Social Proof</div>
+                <h2 class="text-4xl md:text-6xl font-black">Success <span class="gradient-text">Captured</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&auto=format" alt="Husky" class="w-16 h-16 rounded-full mb-6 border-2 border-yellow-500">
+                    <p class="text-lg italic text-slate-300 mb-6 font-medium">"As a VP, I didn't think I had time for a puppy. This program structured everything into 15-min blocks. The results are night and day."</p>
+                    <div class="text-sm font-bold">Mark S. <span class="text-slate-500 ml-2">VP Marketing</span></div>
+                </div>
+                <div class="glass-card p-8 border-yellow-500/30">
+                    <img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400&auto=format" alt="Golden Retriever" class="w-16 h-16 rounded-full mb-6 border-2 border-yellow-500">
+                    <p class="text-lg italic text-slate-300 mb-6 font-medium">"The money-back guarantee gave me confidence, but within 2 weeks I knew I wouldn't need it. My Golden actually listens now!"</p>
+                    <div class="text-sm font-bold">Sarah J. <span class="text-slate-500 ml-2">Software Architect</span></div>
+                </div>
+                <div class="glass-card p-8">
+                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400&auto=format" alt="Frenchie" class="w-16 h-16 rounded-full mb-6 border-2 border-yellow-500">
+                    <p class="text-lg italic text-slate-300 mb-6 font-medium">"The 1-on-1 call was the game changer. We solved a 6-month barking problem in 30 minutes. Exceptional value."</p>
+                    <div class="text-sm font-bold">David L. <span class="text-slate-500 ml-2">Surgeon</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7.11 FAQ -->
+    <section id="faq" class="py-32 px-6 z-60">
+        <div class="max-w-3xl mx-auto glass-card p-12 overflow-visible">
+            <h2 class="text-4xl font-black mb-12 text-center">Frequently <span class="gradient-text">Asked</span></h2>
+            <div class="space-y-4">
+                <div class="accordion-item border-b border-white/5 pb-4">
+                    <button class="w-full flex justify-between items-center py-4 text-left font-bold text-lg" onclick="toggleAccordion(this)">
+                        What exactly do I get for $997?
+                        <span class="text-yellow-500">+</span>
+                    </button>
+                    <div class="accordion-content text-slate-400">
+                        You get the full 8-week structured roadmap, 40+ high-definition video modules, access to our private community of professionals, and a 60-minute 1-on-1 strategy call with our head trainer.
+                    </div>
+                </div>
+                <div class="accordion-item border-b border-white/5 pb-4">
+                    <button class="w-full flex justify-between items-center py-4 text-left font-bold text-lg" onclick="toggleAccordion(this)">
+                        I work 60+ hours a week. Can I do this?
+                        <span class="text-yellow-500">+</span>
+                    </button>
+                    <div class="accordion-content text-slate-400">
+                        Absolutely. The program is designed specifically for you. We break training down into 15-minute "micro-sessions" that you can do before work or during your lunch break.
+                    </div>
+                </div>
+                <div class="accordion-item border-b border-white/5 pb-4">
+                    <button class="w-full flex justify-between items-center py-4 text-left font-bold text-lg" onclick="toggleAccordion(this)">
+                        Is there a guarantee?
+                        <span class="text-yellow-500">+</span>
+                    </button>
+                    <div class="accordion-content text-slate-400">
+                        Yes. If you follow the program for 30 days and don't see a significant improvement in your dog's obedience, we will issue a full $997 refund, no questions asked.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7.12 Final CTA Section -->
+    <section id="final-cta" class="py-40 px-6 relative z-[110] overflow-hidden">
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <div class="badge">Enrollment Closing Soon</div>
+            <h2 class="text-5xl md:text-8xl font-black mb-12">Stop Managing Chaos. <br><span class="gradient-text">Start Leading.</span></h2>
+            <p class="text-xl sm:text-2xl text-slate-400 mb-12 max-w-2xl mx-auto">
+                Join 1,200+ professionals who transformed their relationship with their dogs. $997 one-time investment.
+            </p>
+            
+            <div class="flex flex-col items-center gap-8">
+                <div class="rotating-cta">
+                    <span class="rotating-cta__gradient"></span>
+                    <span class="rotating-cta__face">Claim My 8-Week Program</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-4xl mt-20">
+                    <div>
+                        <div class="text-3xl font-black mb-2">Video Library</div>
+                        <p class="text-slate-500 text-sm italic">Bonus #1: Value $499</p>
+                    </div>
+                    <div class="border-x border-white/5 px-12">
+                        <div class="text-3xl font-black mb-2">Private Group</div>
+                        <p class="text-slate-500 text-sm italic">Bonus #2: Value $299/mo</p>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-black mb-2">1-on-1 Call</div>
+                        <p class="text-slate-500 text-sm italic">Bonus #3: Value $350</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-[300px] bg-yellow-500/10 blur-[120px] rounded-[100%] pointer-events-none"></div>
+    </section>
+
+    <footer class="py-20 px-6 border-t border-white/5 text-slate-600 text-sm relative z-[120] bg-[#030712]">
+        <div class="max-w-7xl mx-auto flex flex-col md:row justify-between items-center gap-8">
+            <div class="text-xl font-black satoshi text-white">CANINE<span class="text-yellow-500">CORE</span></div>
+            <div class="flex gap-8">
+                <a href="#" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Privacy</a>
+                <a href="#" class="hover:text-white transition">Contact</a>
+            </div>
+            <p>© 2026 CanineCore Academy. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('nav-scrolled');
+                nav.style.padding = '1rem 0';
+            } else {
+                nav.classList.remove('nav-scrolled');
+                nav.style.padding = '1.5rem 0';
+            }
+        });
+
+        // Tab Data
+        const tabData = [
+            {
+                title: "Destructive Boredom",
+                desc: "Coming home to chewed furniture and stress. Your dog is trying to speak, you just don't have the translator.",
+                metric: "Loss: $2,400/yr"
+            },
+            {
+                title: "The Zoomies Crisis",
+                desc: "Uncontrolled energy that leads to knocked-over items and public embarrassment. No focus means no freedom.",
+                metric: "Stress: MAX"
+            },
+            {
+                title: "Patio Anxiety",
+                desc: "The 'reactive' bark that ends your dinner before it starts. Being held hostage by your own companion.",
+                metric: "Cost: Social ISO"
+            }
+        ];
+
+        function switchTab(index) {
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach((btn, i) => i === index ? btn.classList.add('active') : btn.classList.remove('active'));
+            
+            const container = document.getElementById('tab-content');
+            container.innerHTML = tabData.map((item, i) => `
+                <div class="glass-card p-8 transform rotate-${i === index ? '0' : '2'} opacity-${i === index ? '100' : '50'}">
+                    <div class="badge ${i === index ? 'bg-yellow-500/20 text-yellow-500' : 'bg-red-500/10 text-red-400 border-red-500/20'}">${item.metric}</div>
+                    <h3 class="text-2xl font-black mb-4">${item.title}</h3>
+                    <p class="text-slate-400 leading-relaxed">${item.desc}</p>
+                </div>
+            `).join('');
+
+            // Re-run animations for new items
+            gsap.from(container.children, {
+                opacity: 0,
+                y: 20,
+                stagger: 0.1,
+                duration: 0.5
+            });
+        }
+
+        // ROI Calc
+        function updateROI() {
+            const age = document.getElementById('age-slider').value;
+            const rate = document.getElementById('time-slider').value;
+            
+            document.getElementById('age-val').innerText = age;
+            document.getElementById('time-val').innerText = rate;
+            
+            const yearsLeft = 15 - age;
+            const hoursPerYear = 365 * 0.5; // 30 mins saved daily
+            const totalHours = yearsLeft * hoursPerYear;
+            const roi = totalHours * rate;
+            
+            document.getElementById('roi-result').innerText = '$' + roi.toLocaleString();
+        }
+
+        // FAQ Accordion
+        function toggleAccordion(btn) {
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-item').forEach(el => el.classList.remove('active'));
+            if (!isActive) item.classList.add('active');
+        }
+
+        // Animations
+        gsap.from("#hero-content > *", {
+            opacity: 0,
+            y: 50,
+            stagger: 0.2,
+            duration: 1.2,
+            ease: "power4.out"
+        });
+
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section.querySelectorAll('.glass-card'), {
+                opacity: 0,
+                y: 30,
+                stagger: 0.15,
+                duration: 1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Initial States
+        switchTab(0);
+        updateROI();
+    </script>
+</body>
+</html>
