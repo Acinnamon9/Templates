@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parallax Studio | Brand Identity, Web Design & Motion Graphics for Luxury Brands</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      colors: {
+        cream: '#F5F0EB',
+        charcoal: '#1A1A1A',
+        warmgray: '#2D2D2D',
+        gold: '#C8A96E',
+        goldlight: '#D4BC8B',
+        offwhite: '#FAF8F5',
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #1A1A1A;
+    color: #FAF8F5;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: #C8A96E;
+    color: #1A1A1A;
+  }
+
+  /* Custom cursor */
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: #C8A96E;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease;
+  }
+
+  .cursor-ring {
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid rgba(200, 169, 110, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  /* Preloader */
+  .preloader {
+    position: fixed;
+    inset: 0;
+    background: #1A1A1A;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .preloader-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    color: #FAF8F5;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    overflow: hidden;
+  }
+
+  .preloader-line {
+    width: 0;
+    height: 1px;
+    background: #C8A96E;
+    margin-top: 1.5rem;
+  }
+
+  /* Hero parallax layers */
+  .hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+  }
+
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,169,110,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,110,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 1;
+  }
+
+  .hero-gradient-orb {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    z-index: 0;
+  }
+
+  .orb-1 { background: #C8A96E; top: -200px; right: -100px; }
+  .orb-2 { background: #8B7355; bottom: -200px; left: -100px; }
+
+  /* Text reveal animation */
+  .reveal-text {
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  .reveal-text span {
+    display: inline-block;
+    transform: translateY(110%);
+  }
+
+  /* Horizontal scroll section */
+  .horizontal-scroll-wrapper {
+    overflow: hidden;
+  }
+
+  .horizontal-scroll-inner {
+    display: flex;
+    flex-wrap: nowrap;
+    width: fit-content;
+  }
+
+  /* Project cards */
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(26,26,26,0.9) 100%);
+    z-index: 1;
+  }
+
+  .project-card img {
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .project-card:hover img {
+    transform: scale(1.08);
+  }
+
+  .project-card .card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    z-index: 2;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .project-card:hover .card-content {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Marquee */
+  .marquee-track {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Service card hover */
+  .service-card {
+    position: relative;
+    background: rgba(45, 45, 45, 0.4);
+    border: 1px solid rgba(200, 169, 110, 0.08);
+    backdrop-filter: blur(20px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,169,110,0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .service-card:hover {
+    border-color: rgba(200, 169, 110, 0.3);
+    transform: translateY(-8px);
+  }
+
+  .service-card:hover::before {
+    opacity: 1;
+  }
+
+  .service-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 600;
+    color: rgba(200, 169, 110, 0.1);
+    line-height: 1;
+    transition: color 0.5s ease;
+  }
+
+  .service-card:hover .service-number {
+    color: rgba(200, 169, 110, 0.25);
+  }
+
+  /* Testimonial */
+  .testimonial-quote {
+    position: relative;
+  }
+
+  .testimonial-quote::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: rgba(200, 169, 110, 0.15);
+    position: absolute;
+    top: -3rem;
+    left: -1rem;
+    line-height: 1;
+  }
+
+  /* Stats counter */
+  .stat-item {
+    position: relative;
+  }
+
+  .stat-item::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 60%;
+    background: rgba(200, 169, 110, 0.2);
+  }
+
+  .stat-item:last-child::after {
+    display: none;
+  }
+
+  /* CTA section */
+  .cta-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(200,169,110,0.1) 0%, transparent 70%);
+  }
+
+  /* Form styling */
+  .form-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(200, 169, 110, 0.3);
+    padding: 1rem 0;
+    color: #FAF8F5;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-input::placeholder {
+    color: rgba(250, 248, 245, 0.3);
+  }
+
+  .form-input:focus {
+    border-color: #C8A96E;
+  }
+
+  /* Button */
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 2.5rem;
+    background: #C8A96E;
+    color: #1A1A1A;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #FAF8F5;
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-primary:hover::before {
+    transform: translateX(0);
+  }
+
+  .btn-primary span,
+  .btn-primary svg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(200, 169, 110, 0.3);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: transparent;
+    color: #C8A96E;
+    border: 1px solid rgba(200, 169, 110, 0.4);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s ease;
+  }
+
+  .btn-outline:hover {
+    background: rgba(200, 169, 110, 0.08);
+    border-color: #C8A96E;
+  }
+
+  /* Noise texture overlay */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+
+  /* Smooth scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: rgba(200, 169, 110, 0.3);
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #C8A96E;
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollDown {
+    0% { top: -100%; }
+    100% { top: 100%; }
+  }
+
+  /* Magnetic button effect */
+  .magnetic-btn {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Video placeholder with animated border */
+  .video-showcase {
+    position: relative;
+    border: 1px solid rgba(200, 169, 110, 0.15);
+    overflow: hidden;
+  }
+
+  .video-showcase::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(from 0deg, transparent, #C8A96E, transparent);
+    animation: rotateBorder 6s linear infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .video-showcase:hover::before {
+    opacity: 0.3;
+  }
+
+  @keyframes rotateBorder {
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Split text on scroll */
+  .split-line {
+    overflow: hidden;
+  }
+
+  .split-line > div {
+    transform: translateY(100%);
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .cursor-dot, .cursor-ring { display: none; }
+    .stat-item::after { display: none; }
+  }
+
+  /* Smooth page transitions */
+  .page-content {
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Noise overlay -->
+<div class="noise-overlay"></div>
+
+<!-- Custom cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+  <div class="preloader-text" id="preloaderText">Parallax Studio</div>
+  <div class="preloader-line" id="preloaderLine"></div>
+</div>
+
+<!-- Page content -->
+<div class="page-content" id="pageContent">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 flex items-center justify-between" id="mainNav">
+    <a href="#" class="flex items-center gap-3 group">
+      <div class="w-8 h-8 border border-gold flex items-center justify-center group-hover:bg-gold transition-all duration-500">
+        <div class="w-2 h-2 bg-gold group-hover:bg-charcoal transition-all duration-500"></div>
+      </div>
+      <span class="font-serif text-lg tracking-wider text-offwhite">Parallax</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-10">
+      <a href="#work" class="text-xs tracking-[0.2em] uppercase text-offwhite/60 hover:text-gold transition-colors duration-300">Work</a>
+      <a href="#services" class="text-xs tracking-[0.2em] uppercase text-offwhite/60 hover:text-gold transition-colors duration-300">Services</a>
+      <a href="#about" class="text-xs tracking-[0.2em] uppercase text-offwhite/60 hover:text-gold transition-colors duration-300">About</a>
+      <a href="#contact" class="btn-outline text-[0.7rem] py-2 px-5">Start a Project</a>
+    </div>
+
+    <!-- Mobile menu toggle -->
+    <button class="md:hidden flex flex-col gap-1.5 group" id="mobileMenuBtn">
+      <span class="w-6 h-px bg-offwhite group-hover:bg-gold transition-colors"></span>
+      <span class="w-4 h-px bg-offwhite group-hover:bg-gold transition-colors ml-auto"></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="fixed inset-0 bg-charcoal z-40 flex flex-col items-center justify-center gap-8 transform translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" id="mobileMenu">
+    <a href="#work" class="font-serif text-3xl text-offwhite hover:text-gold transition-colors mobile-link">Work</a>
+    <a href="#services" class="font-serif text-3xl text-offwhite hover:text-gold transition-colors mobile-link">Services</a>
+    <a href="#about" class="font-serif text-3xl text-offwhite hover:text-gold transition-colors mobile-link">About</a>
+    <a href="#contact" class="font-serif text-3xl text-offwhite hover:text-gold transition-colors mobile-link">Contact</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section flex items-center" id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-gradient-orb orb-1"></div>
+    <div class="hero-gradient-orb orb-2"></div>
+
+    <div class="relative z-10 px-6 md:px-12 lg:px-24 w-full max-w-[1600px] mx-auto">
+      <div class="mb-6">
+        <span class="text-xs tracking-[0.35em] uppercase text-gold/70 font-light">Creative Agency for Luxury Brands</span>
+      </div>
+
+      <h1 class="font-serif text-[clamp(2.8rem,8vw,8rem)] leading-[0.95] tracking-tight mb-8">
+        <div class="reveal-text"><span>We craft</span></div>
+        <div class="reveal-text"><span class="italic text-gold">timeless</span> <span>brands</span></div>
+        <div class="reveal-text"><span>that move.</span></div>
+      </h1>
+
+      <div class="flex flex-col md:flex-row md:items-end gap-8 md:gap-16">
+        <p class="text-offwhite/50 text-base md:text-lg max-w-md font-light leading-relaxed" id="heroSubtext">
+          Brand identity, web design, and motion graphics for the world's most discerning brands. We don't follow trends. We set them.
+        </p>
+        <a href="#contact" class="btn-primary magnetic-btn">
+          <span>Book a Discovery Call</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <span class="text-[0.65rem] tracking-[0.3em] uppercase text-offwhite/30 block mb-3">Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Marquee Strip -->
+  <div class="py-6 border-y border-gold/10 overflow-hidden">
+    <div class="marquee-track">
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Brand Identity</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Web Design</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Motion Graphics</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Art Direction</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Visual Strategy</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Packaging Design</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Brand Identity</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Web Design</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Motion Graphics</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Art Direction</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Visual Strategy</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+      <span class="text-xs tracking-[0.4em] uppercase text-offwhite/20 whitespace-nowrap px-8">Packaging Design</span>
+      <span class="text-gold/30 px-4">&#9670;</span>
+    </div>
+  </div>
+
+  <!-- Selected Work Section -->
+  <section class="py-24 md:py-40 px-6 md:px-12 lg:px-24" id="work">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-16 md:mb-24 gap-6">
+        <div>
+          <span class="text-xs tracking-[0.35em] uppercase text-gold/70 font-light block mb-4">Portfolio</span>
+          <h2 class="font-serif text-[clamp(2.2rem,5vw,4.5rem)] leading-[1.05] split-line">
+            <div>Selected Work</div>
+          </h2>
+        </div>
+        <p class="text-offwhite/40 text-sm max-w-xs font-light leading-relaxed">
+          A curated selection of our work across brand identity, digital experiences, and motion design.
+        </p>
+      </div>
+
+      <!-- Project Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <!-- Project 1 - Large -->
+        <div class="project-card aspect-[4/5] md:aspect-[3/4] rounded-sm group" data-speed="1.05">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80" alt="Aurum Jewelry Brand" class="w-full h-full object-cover">
+          <div class="card-content">
+            <span class="text-[0.65rem] tracking-[0.3em] uppercase text-gold mb-2 block">Brand Identity / Art Direction</span>
+            <h3 class="font-serif text-2xl md:text-3xl text-offwhite">Aurum Jewelry</h3>
+            <p class="text-offwhite/50 text-sm mt-2 font-light">Complete brand transformation for a heritage jewelry house.</p>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card aspect-[4/5] md:aspect-[3/4] rounded-sm group mt-0 md:mt-24" data-speed="0.95">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80" alt="Maison Noir Fashion" class="w-full h-full object-cover">
+          <div class="card-content">
+            <span class="text-[0.65rem] tracking-[0.3em] uppercase text-gold mb-2 block">Web Design / E-Commerce</span>
+            <h3 class="font-serif text-2xl md:text-3xl text-offwhite">Maison Noir</h3>
+            <p class="text-offwhite/50 text-sm mt-2 font-light">Digital flagship store for a Parisian fashion maison.</p>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card aspect-[4/5] md:aspect-[3/4] rounded-sm group" data-speed="1.02">
+          <img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?w=800&q=80" alt="Vero Cosmetics" class="w-full h-full object-cover">
+          <div class="card-content">
+            <span class="text-[0.65rem] tracking-[0.3em] uppercase text-gold mb-2 block">Motion Graphics / Campaign</span>
+            <h3 class="font-serif text-2xl md:text-3xl text-offwhite">Vero Cosmetics</h3>
+            <p class="text-offwhite/50 text-sm mt-2 font-light">Launch campaign with immersive motion storytelling.</p>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="project-card aspect-[4/5] md:aspect-[3/4] rounded-sm group mt-0 md:mt-24" data-speed="0.98">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" alt="Elysian Hotels" class="w-full h-full object-cover">
+          <div class="card-content">
+            <span class="text-[0.65rem] tracking-[0.3em] uppercase text-gold mb-2 block">Brand Identity / Web Design</span>
+            <h3 class="font-serif text-2xl md:text-3xl text-offwhite">Elysian Hotels</h3>
+            <p class="text-offwhite/50 text-sm mt-2 font-light">Luxury hospitality brand with an elevated digital presence.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video / Reel Section -->
+  <section class="py-16 md:py-24 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="video-showcase aspect-video rounded-sm relative flex items-center justify-center bg-warmgray/30 group cursor-pointer" id="videoShowcase">
+        <img src="https://images.unsplash.com/photo-1626544827763-d516dce335e2?w=1200&q=80" alt="Studio Reel" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700">
+        <div class="relative z-10 flex flex-col items-center gap-4">
+          <div class="w-20 h-20 md:w-28 md:h-28 rounded-full border border-gold/40 flex items-center justify-center group-hover:border-gold group-hover:scale-110 transition-all duration-500">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-gold ml-1" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5,3 19,12 5,21"/>
+            </svg>
+          </div>
+          <span class="text-xs tracking-[0.3em] uppercase text-offwhite/60">Watch Showreel 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="py-24 md:py-40 px-6 md:px-12 lg:px-24" id="services">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="text-center mb-16 md:mb-24">
+        <span class="text-xs tracking-[0.35em] uppercase text-gold/70 font-light block mb-4">What We Do</span>
+        <h2 class="font-serif text-[clamp(2.2rem,5vw,4.5rem)] leading-[1.05]">
+          Three disciplines.<br><span class="italic text-gold">One vision.</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <!-- Service 1 -->
+        <div class="service-card rounded-sm p-8 md:p-10">
+          <div class="service-number">01</div>
+          <h3 class="font-serif text-2xl mt-4 mb-4 text-offwhite">Brand Identity</h3>
+          <p class="text-offwhite/40 text-sm leading-relaxed font-light mb-6">
+            We distill the essence of luxury brands into cohesive visual identities that command attention and inspire loyalty. From logo systems to complete brand worlds.
+          </p>
+          <ul class="space-y-2">
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Logo & Identity Systems
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Brand Strategy
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Visual Guidelines
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Packaging Design
+            </li>
+          </ul>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="service-card rounded-sm p-8 md:p-10">
+          <div class="service-number">02</div>
+          <h3 class="font-serif text-2xl mt-4 mb-4 text-offwhite">Web Design</h3>
+          <p class="text-offwhite/40 text-sm leading-relaxed font-light mb-6">
+            Digital experiences that mirror the sophistication of your brand. Pixel-perfect interfaces crafted with meticulous attention to every interaction and transition.
+          </p>
+          <ul class="space-y-2">
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>UI/UX Design
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>E-Commerce
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Interactive Experiences
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Webflow & Custom Dev
+            </li>
+          </ul>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="service-card rounded-sm p-8 md:p-10">
+          <div class="service-number">03</div>
+          <h3 class="font-serif text-2xl mt-4 mb-4 text-offwhite">Motion Graphics</h3>
+          <p class="text-offwhite/40 text-sm leading-relaxed font-light mb-6">
+            Static is forgettable. We bring luxury brands to life through cinematic motion design that captivates audiences and elevates every touchpoint.
+          </p>
+          <ul class="space-y-2">
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Brand Films
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Product Animation
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Social Content
+            </li>
+            <li class="text-offwhite/30 text-xs tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1 h-1 bg-gold rounded-full"></span>Campaign Videos
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-24 border-t border-gold/10">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+        <div>
+          <span class="text-xs tracking-[0.35em] uppercase text-gold/70 font-light block mb-4">Our Process</span>
+          <h2 class="font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.1]">
+            Precision at<br>every stage.
+          </h2>
+        </div>
+
+        <div class="space-y-12">
+          <div class="group">
+            <div class="flex items-start gap-6">
+              <span class="font-serif text-3xl text-gold/20 group-hover:text-gold/50 transition-colors duration-500 shrink-0 mt-1">01</span>
+              <div>
+                <h3 class="font-serif text-xl text-offwhite mb-2">Discovery & Strategy</h3>
+                <p class="text-offwhite/40 text-sm font-light leading-relaxed">
+                  We immerse ourselves in your world. Understanding your brand DNA, market position, audience, and aspirations to build a strategic foundation.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full h-px bg-gold/10"></div>
+
+          <div class="group">
+            <div class="flex items-start gap-6">
+              <span class="font-serif text-3xl text-gold/20 group-hover:text-gold/50 transition-colors duration-500 shrink-0 mt-1">02</span>
+              <div>
+                <h3 class="font-serif text-xl text-offwhite mb-2">Concept & Design</h3>
+                <p class="text-offwhite/40 text-sm font-light leading-relaxed">
+                  From mood boards to refined concepts, we explore bold creative directions that push boundaries while honoring your brand's heritage.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full h-px bg-gold/10"></div>
+
+          <div class="group">
+            <div class="flex items-start gap-6">
+              <span class="font-serif text-3xl text-gold/20 group-hover:text-gold/50 transition-colors duration-500 shrink-0 mt-1">03</span>
+              <div>
+                <h3 class="font-serif text-xl text-offwhite mb-2">Refinement & Production</h3>
+                <p class="text-offwhite/40 text-sm font-light leading-relaxed">
+                  Obsessive attention to detail as we craft every pixel, frame, and asset to perfection. Nothing ships until it exceeds expectations.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full h-px bg-gold/10"></div>
+
+          <div class="group">
+            <div class="flex items-start gap-6">
+              <span class="font-serif text-3xl text-gold/20 group-hover:text-gold/50 transition-colors duration-500 shrink-0 mt-1">04</span>
+              <div>
+                <h3 class="font-serif text-xl text-offwhite mb-2">Launch & Evolve</h3>
+                <p class="text-offwhite/40 text-sm font-light leading-relaxed">
+                  Strategic rollout paired with ongoing support. We ensure your brand makes an impact and continues to evolve in the market.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-20 px-6 md:px-12 lg:px-24 border-y border-gold/10 bg-warmgray/20" id="about">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0">
+        <div class="stat-item text-center px-4">
+          <div class="font-serif text-[clamp(2.5rem,5vw,4rem)] text-offwhite leading-none" data-count="12">0</div>
+          <span class="text-xs tracking-[0.25em] uppercase text-offwhite/30 mt-2 block">Years of Craft</span>
+        </div>
+        <div class="stat-item text-center px-4">
+          <div class="font-serif text-[clamp(2.5rem,5vw,4rem)] text-offwhite leading-none" data-count="180">0</div>
+          <span class="text-xs tracking-[0.25em] uppercase text-offwhite/30 mt-2 block">Projects Delivered</span>
+        </div>
+        <div class="stat-item text-center px-4">
+          <div class="font-serif text-[clamp(2.5rem,5vw,4rem)] text-offwhite leading-none" data-count="47">0</div>
+          <span class="text-xs tracking-[0.25em] uppercase text-offwhite/30 mt-2 block">Awards Won</span>
+        </div>
+        <div class="stat-item text-center px-4">
+          <div class="font-serif text-[clamp(2.5rem,5vw,4rem)] text-offwhite leading-none" data-count="98">0</div>
+          <span class="text-xs tracking-[0.25em] uppercase text-offwhite/30 mt-2 block font-light">% Client Retention</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="py-24 md:py-40 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[900px] mx-auto text-center">
+      <span class="text-xs tracking-[0.35em] uppercase text-gold/70 font-light block mb-8">Client Words</span>
+
+      <div class="testimonial-quote relative">
+        <p class="font-serif text-[clamp(1.3rem,3vw,2.2rem)] leading-relaxed text-offwhite/80 italic">
+          Parallax Studio didn't just design our brand -- they understood its soul. The level of craft and strategic thinking they brought was unlike anything we've experienced. They are, without question, the best in the luxury space.
+        </p>
+      </div>
+
+      <div class="mt-10 flex flex-col items-center gap-2">
+        <div class="w-12 h-12 rounded-full bg-warmgray border border-gold/20 flex items-center justify-center">
+          <span class="font-serif text-gold text-sm">SC</span>
+        </div>
+        <span class="text-offwhite/80 text-sm font-medium">Sophia Chen</span>
+        <span class="text-offwhite/30 text-xs tracking-wider uppercase">Creative Director, Aurum Jewelry</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clients / Trust Strip -->
+  <section class="py-16 px-6 md:px-12 lg:px-24 border-y border-gold/10">
+    <div class="max-w-[1600px] mx-auto">
+      <p class="text-center text-xs tracking-[0.35em] uppercase text-offwhite/20 mb-10">Trusted by Leading Luxury Brands</p>
+      <div class="flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
+        <span class="font-serif text-xl md:text-2xl text-offwhite/15 hover:text-offwhite/40 transition-colors duration-500 cursor-default">Cartier</span>
+        <span class="font-serif text-xl md:text-2xl text-offwhite/15 hover:text-offwhite/40 transition-colors duration-500 cursor-default italic">Bvlgari</span>
+        <span class="font-serif text-xl md:text-2xl text-offwhite/15 hover:text-offwhite/40 transition-colors duration-500 cursor-default">Dior</span>
+        <span class="font-serif text-xl md:text-2xl text-offwhite/15 hover:text-offwhite/40 transition-colors duration-500 cursor-default italic">Aston Martin</span>
+        <span class="font-serif text-xl md:text-2xl text-offwhite/15 hover:text-offwhite/40 transition-colors duration-500 cursor-default">Rolls-Royce</span>
+        <span class="font-serif text-xl md:text-2xl text-offwhite/15 hover:text-offwhite/40 transition-colors duration-500 cursor-default italic">Chanel</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA + Contact Section -->
+  <section class="cta-section py-24 md:py-40 px-6 md:px-12 lg:px-24" id="contact">
+    <div class="max-w-[1000px] mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-xs tracking-[0.35em] uppercase text-gold/70 font-light block mb-4">Start a Conversation</span>
+        <h2 class="font-serif text-[clamp(2.2rem,5vw,4.5rem)] leading-[1.05] mb-6">
+          Let's create something<br><span class="italic text-gold">extraordinary.</span>
+        </h2>
+        <p class="text-offwhite/40 text-base font-light max-w-lg mx-auto leading-relaxed">
+          We partner with a select number of luxury brands each year to ensure every project receives our full creative attention.
+        </p>
+      </div>
+
+      <!-- Contact Form -->
+      <form class="space-y-8 max-w-xl mx-auto" onsubmit="handleSubmit(event)">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <label class="text-[0.65rem] tracking-[0.25em] uppercase text-offwhite/30 block mb-1">Name</label>
+            <input type="text" placeholder="Your full name" class="form-input" required>
+          </div>
+          <div>
+            <label class="text-[0.65rem] tracking-[0.25em] uppercase text-offwhite/30 block mb-1">Company</label>
+            <input type="text" placeholder="Brand or company" class="form-input">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[0.65rem] tracking-[0.25em] uppercase text-offwhite/30 block mb-1">Email</label>
+          <input type="email" placeholder="your@email.com" class="form-input" required>
+        </div>
+
+        <div>
+          <label class="text-[0.65rem] tracking-[0.25em] uppercase text-offwhite/30 block mb-1">What are you looking for?</label>
+          <div class="flex flex-wrap gap-3 mt-3">
+            <label class="cursor-pointer">
+              <input type="checkbox" class="hidden peer" name="service" value="brand">
+              <span class="text-xs tracking-wider uppercase px-4 py-2 border border-gold/20 text-offwhite/40 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/10 transition-all duration-300 inline-block rounded-sm">Brand Identity</span>
+            </label>
+            <label class="cursor-pointer">
+              <input type="checkbox" class="hidden peer" name="service" value="web">
+              <span class="text-xs tracking-wider uppercase px-4 py-2 border border-gold/20 text-offwhite/40 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/10 transition-all duration-300 inline-block rounded-sm">Web Design</span>
+            </label>
+            <label class="cursor-pointer">
+              <input type="checkbox" class="hidden peer" name="service" value="motion">
+              <span class="text-xs tracking-wider uppercase px-4 py-2 border border-gold/20 text-offwhite/40 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/10 transition-all duration-300 inline-block rounded-sm">Motion Graphics</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[0.65rem] tracking-[0.25em] uppercase text-offwhite/30 block mb-1">Tell us about your project</label>
+          <textarea placeholder="Brief overview of your project, goals, and timeline..." class="form-input resize-none" rows="4"></textarea>
+        </div>
+
+        <div>
+          <label class="text-[0.65rem] tracking-[0.25em] uppercase text-offwhite/30 block mb-1">Estimated Budget</label>
+          <div class="flex flex-wrap gap-3 mt-3">
+            <label class="cursor-pointer">
+              <input type="radio" class="hidden peer" name="budget" value="25-50k">
+              <span class="text-xs tracking-wider px-4 py-2 border border-gold/20 text-offwhite/40 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/10 transition-all duration-300 inline-block rounded-sm">$25k - $50k</span>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" class="hidden peer" name="budget" value="50-100k">
+              <span class="text-xs tracking-wider px-4 py-2 border border-gold/20 text-offwhite/40 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/10 transition-all duration-300 inline-block rounded-sm">$50k - $100k</span>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" class="hidden peer" name="budget" value="100k+">
+              <span class="text-xs tracking-wider px-4 py-2 border border-gold/20 text-offwhite/40 peer-checked:border-gold peer-checked:text-gold peer-checked:bg-gold/10 transition-all duration-300 inline-block rounded-sm">$100k+</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button type="submit" class="btn-primary w-full justify-center">
+            <span>Submit Inquiry</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+          <p class="text-offwhite/20 text-xs text-center mt-4 font-light">We respond to all inquiries within 24 hours.</p>
+        </div>
+      </form>
+
+      <!-- Success message (hidden by default) -->
+      <div id="successMessage" class="hidden text-center py-16">
+        <div class="w-16 h-16 rounded-full border border-gold/40 flex items-center justify-center mx-auto mb-6">
+          <svg class="w-6 h-6 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3 class="font-serif text-2xl text-offwhite mb-2">Inquiry Received</h3>
+        <p class="text-offwhite/40 text-sm font-light">Thank you. We'll be in touch within 24 hours to schedule your discovery call.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 md:px-12 lg:px-24 border-t border-gold/10">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
+        <!-- Brand -->
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 border border-gold flex items-center justify-center">
+              <div class="w-2 h-2 bg-gold"></div>
+            </div>
+            <span class="font-serif text-xl tracking-wider text-offwhite">Parallax Studio</span>
+          </div>
+          <p class="text-offwhite/30 text-sm font-light leading-relaxed max-w-sm">
+            A creative agency specializing in brand identity, web design, and motion graphics for the world's most prestigious luxury brands.
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div>
+          <h4 class="text-xs tracking-[0.25em] uppercase text-offwhite/50 mb-4">Studio</h4>
+          <ul class="space-y-3">
+            <li><a href="#work" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">Work</a></li>
+            <li><a href="#services" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">Services</a></li>
+            <li><a href="#about" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">About</a></li>
+            <li><a href="#contact" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Social -->
+        <div>
+          <h4 class="text-xs tracking-[0.25em] uppercase text-offwhite/50 mb-4">Connect</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">Instagram</a></li>
+            <li><a href="#" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">Behance</a></li>
+            <li><a href="#" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">Dribbble</a></li>
+            <li><a href="#" class="text-offwhite/30 text-sm hover:text-gold transition-colors duration-300">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-gold/5 gap-4">
+        <span class="text-offwhite/15 text-xs tracking-wider">&copy; 2026 Parallax Studio. All rights reserved.</span>
+        <div class="flex gap-6">
+          <a href="#" class="text-offwhite/15 text-xs tracking-wider hover:text-offwhite/40 transition-colors">Privacy</a>
+          <a href="#" class="text-offwhite/15 text-xs tracking-wider hover:text-offwhite/40 transition-colors">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-content -->
+
+<script>
+// ===================
+// PRELOADER
+// ===================
+window.addEventListener('load', () => {
+  const tl = gsap.timeline();
+
+  tl.to('#preloaderLine', {
+    width: '120px',
+    duration: 1.2,
+    ease: 'power2.inOut'
+  })
+  .to('#preloader', {
+    yPercent: -100,
+    duration: 0.8,
+    ease: 'power3.inOut',
+    delay: 0.3
+  })
+  .to('#pageContent', {
+    opacity: 1,
+    duration: 0.5,
+    ease: 'power2.out'
+  }, '-=0.3')
+  .then(() => {
+    document.getElementById('preloader').style.display = 'none';
+    animateHero();
+  });
+});
+
+// ===================
+// HERO ANIMATION
+// ===================
+function animateHero() {
+  const tl = gsap.timeline();
+
+  tl.to('.reveal-text span', {
+    y: 0,
+    duration: 1,
+    ease: 'power3.out',
+    stagger: 0.12
+  })
+  .from('#heroSubtext', {
+    opacity: 0,
+    y: 30,
+    duration: 0.8,
+    ease: 'power2.out'
+  }, '-=0.4')
+  .from('.btn-primary', {
+    opacity: 0,
+    y: 20,
+    duration: 0.6,
+    ease: 'power2.out'
+  }, '-=0.4')
+  .from('.scroll-indicator', {
+    opacity: 0,
+    duration: 0.6,
+    ease: 'power2.out'
+  }, '-=0.2');
+}
+
+// ===================
+// CUSTOM CURSOR
+// ===================
+const cursorDot = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  gsap.to(cursorDot, { x: mouseX - 4, y: mouseY - 4, duration: 0.1 });
+});
+
+function animateCursorRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  cursorRing.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+  requestAnimationFrame(animateCursorRing);
+}
+animateCursorRing();
+
+// Cursor hover effects
+document.querySelectorAll('a, button, .project-card, .service-card, .video-showcase').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursorRing.style.width = '60px';
+    cursorRing.style.height = '60px';
+    cursorRing.style.borderColor = 'rgba(200, 169, 110, 0.8)';
+    cursorDot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px) scale(2)`;
+  });
+  el.addEventListener('mouseleave', () => {
+    cursorRing.style.width = '40px';
+    cursorRing.style.height = '40px';
+    cursorRing.style.borderColor = 'rgba(200, 169, 110, 0.5)';
+    cursorDot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px) scale(1)`;
+  });
+});
+
+// ===================
+// GSAP SCROLL TRIGGERS
+// ===================
+gsap.registerPlugin(ScrollTrigger);
+
+// Nav background on scroll
+ScrollTrigger.create({
+  start: 'top -80',
+  onEnter: () => {
+    gsap.to('#mainNav', {
+      backgroundColor: 'rgba(26, 26, 26, 0.9)',
+      backdropFilter: 'blur(20px)',
+      duration: 0.3
+    });
+  },
+  onLeaveBack: () => {
+    gsap.to('#mainNav', {
+      backgroundColor: 'transparent',
+      backdropFilter: 'blur(0px)',
+      duration: 0.3
+    });
+  }
+});
+
+// Split line reveals
+document.querySelectorAll('.split-line > div').forEach(el => {
+  gsap.to(el, {
+    y: 0,
+    duration: 0.8,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: el.parentElement,
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    }
+  });
+});
+
+// Project cards stagger
+gsap.utils.toArray('.project-card').forEach((card, i) => {
+  gsap.from(card, {
+    y: 80,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: card,
+      start: 'top 85%',
+      toggleActions: 'play none none none'
+    }
+  });
+});
+
+// Service cards
+gsap.utils.toArray('.service-card').forEach((card, i) => {
+  gsap.from(card, {
+    y: 60,
+    opacity: 0,
+    duration: 0.8,
+    delay: i * 0.15,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: card,
+      start: 'top 85%',
+      toggleActions: 'play none none none'
+    }
+  });
+});
+
+// Stats counter animation
+const statElements = document.querySelectorAll('[data-count]');
+statElements.forEach(el => {
+  const target = parseInt(el.getAttribute('data-count'));
+
+  ScrollTrigger.create({
+    trigger: el,
+    start: 'top 85%',
+    onEnter: () => {
+      gsap.to(el, {
+        innerHTML: target,
+        duration: 2,
+        ease: 'power2.out',
+        snap: { innerHTML: 1 },
+        onUpdate: function() {
+          const val = Math.round(parseFloat(el.innerHTML));
+          if (el.getAttribute('data-count') === '98') {
+            el.innerHTML = val + '%';
+          } else if (val >= 100) {
+            el.innerHTML = val + '+';
+          } else {
+            el.innerHTML = val;
+          }
+        }
+      });
+    },
+    once: true
+  });
+});
+
+// Testimonial reveal
+gsap.from('.testimonial-quote', {
+  y: 40,
+  opacity: 0,
+  duration: 1,
+  ease: 'power3.out',
+  scrollTrigger: {
+    trigger: '.testimonial-quote',
+    start: 'top 80%',
+    toggleActions: 'play none none none'
+  }
+});
+
+// Parallax effect on project images
+gsap.utils.toArray('.project-card img').forEach(img => {
+  gsap.to(img, {
+    yPercent: -10,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: img.parentElement,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 1
+    }
+  });
+});
+
+// Video showcase
+gsap.from('#videoShowcase', {
+  scale: 0.92,
+  opacity: 0.5,
+  duration: 1,
+  ease: 'power3.out',
+  scrollTrigger: {
+    trigger: '#videoShowcase',
+    start: 'top 80%',
+    toggleActions: 'play none none none'
+  }
+});
+
+// CTA section
+gsap.from('#contact h2', {
+  y: 50,
+  opacity: 0,
+  duration: 0.8,
+  ease: 'power3.out',
+  scrollTrigger: {
+    trigger: '#contact',
+    start: 'top 75%',
+    toggleActions: 'play none none none'
+  }
+});
+
+// ===================
+// MOBILE MENU
+// ===================
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
+
+mobileMenuBtn.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  if (menuOpen) {
+    mobileMenu.style.transform = 'translateX(0)';
+    document.body.style.overflow = 'hidden';
+  } else {
+    mobileMenu.style.transform = 'translateX(100%)';
+    document.body.style.overflow = '';
+  }
+});
+
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.style.transform = 'translateX(100%)';
+    document.body.style.overflow = '';
+    menuOpen = false;
+  });
+});
+
+// ===================
+// FORM SUBMIT
+// ===================
+function handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+
+  gsap.to(form, {
+    opacity: 0,
+    y: -20,
+    duration: 0.4,
+    ease: 'power2.in',
+    onComplete: () => {
+      form.style.display = 'none';
+      const successMsg = document.getElementById('successMessage');
+      successMsg.classList.remove('hidden');
+      gsap.from(successMsg, {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        ease: 'power2.out'
+      });
+    }
+  });
+}
+
+// ===================
+// SMOOTH ANCHOR SCROLL
+// ===================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      const offset = 80;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

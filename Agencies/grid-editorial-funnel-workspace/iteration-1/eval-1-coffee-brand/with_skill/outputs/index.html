@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Altitude Coffee - Rise Above Ordinary</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'bg-primary': '#F2F2F2',
+            'bg-secondary': '#111111',
+            'text-primary': '#111111',
+            'text-secondary': '#6E6E6E',
+            'accent': '#C45D2A'
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            'mono-label': ['IBM Plex Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { overflow-x: hidden; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F2F2F2;
+      color: #111111;
+      overflow-x: hidden;
+    }
+
+    /* Grid System */
+    .grid-checkerboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      width: 100vw;
+      height: 100vh;
+    }
+    .grid-tile {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease;
+    }
+    .grid-tile:hover { border-color: rgba(17, 17, 17, 0.9); }
+
+    .grid-tile-accent {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #C45D2A;
+      animation: accentPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes accentPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    /* Tile Text */
+    .tile-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(28px, 3.5vw, 56px);
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+      color: #111111;
+    }
+
+    /* Image slices */
+    .image-slice {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
+    /* Mono Label */
+    .font-mono-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #6E6E6E;
+    }
+
+    /* Font classes */
+    .font-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+    }
+    .font-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+    /* CTA Button */
+    .cta-button {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      background-color: #C45D2A;
+      color: #FFFFFF;
+      border: none;
+      padding: 14px 28px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+    .cta-button:hover {
+      transform: scale(1.03);
+    }
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Grain Overlay */
+    .grain-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* Navigation */
+    .nav-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      mix-blend-mode: difference;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+    }
+    .nav-fixed a,
+    .nav-fixed span {
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+    .nav-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+    }
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 0.7; }
+
+    /* Section pinning container */
+    .section-pinned {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      background: #F2F2F2;
+    }
+
+    /* Card Grid Section */
+    .card-grid-section {
+      padding: 80px 32px;
+      background: #F2F2F2;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .product-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(17, 17, 17, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .product-card:hover { transform: translateY(-4px); }
+    .product-card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+    .product-card .card-content {
+      padding: 24px;
+    }
+    .product-card .card-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .product-card .card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #6E6E6E;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .product-card .card-price {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 14px;
+      color: #C45D2A;
+      margin-bottom: 16px;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      background: #111111;
+      color: #FFFFFF;
+      padding: 80px 32px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .contact-link-tile {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 32px;
+      transition: border-color 0.3s ease;
+      cursor: pointer;
+    }
+    .contact-link-tile:hover {
+      border-color: #C45D2A;
+    }
+    .contact-link-tile h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+    .contact-link-tile p {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+    .contact-footer {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      width: 100%;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .contact-footer span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+    }
+    .social-tiles {
+      display: flex;
+      gap: 16px;
+    }
+    .social-tile {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      transition: border-color 0.3s;
+      cursor: pointer;
+    }
+    .social-tile:hover { border-color: #C45D2A; color: #C45D2A; }
+
+    /* Section tagline */
+    .section-tagline {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #6E6E6E;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+      }
+      .nav-links { display: none; }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-footer {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-fixed">
+    <span class="nav-logo">Altitude Coffee</span>
+    <div class="nav-links">
+      <a href="#origins">Origins</a>
+      <a href="#beans">Beans</a>
+      <a href="#shop">Shop</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay"></div>
+
+  <main>
+
+    <!-- ============================================ -->
+    <!-- SECTION 1: HERO -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="hero">
+      <div class="grid-checkerboard">
+        <!-- Row 1: 8 tiles -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="font-mono-label">Single Origin Roast</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2: 8 tiles -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile hero-text-tile">
+          <span class="tile-text">RISE</span>
+        </div>
+        <div class="grid-tile hero-text-tile">
+          <span class="tile-text">ABOVE</span>
+        </div>
+        <div class="grid-tile hero-img-tile">
+          <img src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Altitude Coffee" class="image-slice" style="object-position: 20% 20%;">
+        </div>
+        <div class="grid-tile hero-img-tile">
+          <img src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Altitude Coffee" class="image-slice" style="object-position: 50% 20%;">
+        </div>
+        <div class="grid-tile hero-img-tile">
+          <img src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Altitude Coffee" class="image-slice" style="object-position: 80% 20%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3: 8 tiles -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile hero-text-tile">
+          <span class="tile-text">ORDINARY</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile hero-img-tile">
+          <img src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Altitude Coffee" class="image-slice" style="object-position: 20% 50%;">
+        </div>
+        <div class="grid-tile hero-img-tile">
+          <img src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Altitude Coffee" class="image-slice" style="object-position: 50% 50%;">
+        </div>
+        <div class="grid-tile hero-img-tile">
+          <img src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Altitude Coffee" class="image-slice" style="object-position: 80% 50%;">
+        </div>
+        <div class="grid-tile-accent hero-accent-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4: 8 tiles -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="section-tagline">Sourced at altitude. Roasted with intent.</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5: 8 tiles -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent hero-accent-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <button class="cta-button" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop the Roast</button>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6: 8 tiles -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 2: MANIFESTO -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="origins">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-text-tile">
+          <span class="tile-text">EVERY</span>
+        </div>
+        <div class="grid-tile manifesto-text-tile">
+          <span class="tile-text">CUP</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-img-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Coffee Lifestyle" class="image-slice" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile manifesto-img-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Coffee Lifestyle" class="image-slice" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-text-tile">
+          <span class="tile-text">TELLS</span>
+        </div>
+        <div class="grid-tile manifesto-text-tile">
+          <span class="tile-text">A</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-img-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Coffee Lifestyle" class="image-slice" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile manifesto-img-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Coffee Lifestyle" class="image-slice" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile-accent manifesto-accent-tile"></div>
+        <div class="grid-tile manifesto-text-tile">
+          <span class="tile-text">STORY</span>
+        </div>
+        <div class="grid-tile manifesto-text-tile">
+          <span class="tile-text">OF</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-text-tile">
+          <span class="tile-text">ORIGIN</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="font-mono-label">Farm to Cup</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="section-tagline">Traceable. Sustainable. Uncompromised.</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent manifesto-accent-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 3: SPOTLIGHT -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="beans">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="font-mono-label">Flagship Blend</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile spotlight-text-tile">
+          <span class="tile-text">BEAN</span>
+        </div>
+        <div class="grid-tile spotlight-text-tile">
+          <span class="tile-text">THAT</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-img-tile">
+          <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Coffee Beans" class="image-slice" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile spotlight-img-tile">
+          <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Coffee Beans" class="image-slice" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-text-tile">
+          <span class="tile-text">WAKES</span>
+        </div>
+        <div class="grid-tile spotlight-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile spotlight-text-tile">
+          <span class="tile-text">WORLD</span>
+        </div>
+        <div class="grid-tile-accent spotlight-accent-tile"></div>
+        <div class="grid-tile spotlight-img-tile">
+          <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Coffee Beans" class="image-slice" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile spotlight-img-tile">
+          <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Coffee Beans" class="image-slice" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-img2-tile">
+          <img src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Coffee Culture" class="image-slice" style="object-position: 30% 30%;">
+        </div>
+        <div class="grid-tile spotlight-img2-tile">
+          <img src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Coffee Culture" class="image-slice" style="object-position: 70% 30%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-img2-tile">
+          <img src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Coffee Culture" class="image-slice" style="object-position: 30% 70%;">
+        </div>
+        <div class="grid-tile spotlight-img2-tile">
+          <img src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Coffee Culture" class="image-slice" style="object-position: 70% 70%;">
+        </div>
+        <div class="grid-tile">
+          <span class="section-tagline">Ethiopian highlands. Colombian peaks. Your morning.</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 4: TEXTURE -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="texture">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile texture-img-tile">
+          <img src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Coffee Detail" class="image-slice" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile texture-img-tile">
+          <img src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Coffee Detail" class="image-slice" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile texture-text-tile">
+          <span class="tile-text">TASTE</span>
+        </div>
+        <div class="grid-tile texture-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile texture-img-tile">
+          <img src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Coffee Detail" class="image-slice" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile texture-img-tile">
+          <img src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Coffee Detail" class="image-slice" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile-accent texture-accent-tile"></div>
+        <div class="grid-tile texture-text-tile">
+          <span class="tile-text">ALTITUDE</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile texture-text-tile">
+          <span class="tile-text">OWN</span>
+        </div>
+        <div class="grid-tile texture-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile texture-text-tile">
+          <span class="tile-text">RITUAL</span>
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile texture-img2-tile">
+          <img src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Coffee Process" class="image-slice" style="object-position: 30% 40%;">
+        </div>
+        <div class="grid-tile texture-img2-tile">
+          <img src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Coffee Process" class="image-slice" style="object-position: 70% 40%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="section-tagline">Notes of dark cherry. Whispers of earth.</span>
+        </div>
+        <div class="grid-tile-accent texture-accent-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 5: CARD GRID -->
+    <!-- ============================================ -->
+    <section class="card-grid-section" id="shop">
+      <div style="max-width:1200px; margin:0 auto 40px; text-align:center;">
+        <span class="font-mono-label" style="display:block; margin-bottom:16px;">The Collection</span>
+        <h2 class="font-heading" style="font-size:clamp(28px,4vw,48px); margin-bottom:8px;">CHOOSE YOUR ORIGIN</h2>
+        <p class="section-tagline">Every bag. A different altitude. A different story.</p>
+      </div>
+      <div class="card-grid">
+        <!-- Card 1 -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1522125123931-9304d91a42ee?q=80&w=582&auto=format&fit=crop" alt="Ethiopian Yirgacheffe">
+          <div class="card-content">
+            <div class="card-name">Ethiopian Yirgacheffe</div>
+            <div class="card-desc">Bright citrus, floral jasmine, and a clean honey finish. Grown at 2,000m in the birthplace of coffee.</div>
+            <div class="card-price">$24.00 / 250g</div>
+            <button class="cta-button" style="width:100%;">Add to Bag</button>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1504610926078-a1611febcad3?q=80&w=580&auto=format&fit=crop" alt="Colombian Huila">
+          <div class="card-content">
+            <div class="card-name">Colombian Huila</div>
+            <div class="card-desc">Dark chocolate, toasted almond, and red berry sweetness. Shade-grown by fourth-generation farmers.</div>
+            <div class="card-price">$22.00 / 250g</div>
+            <button class="cta-button" style="width:100%;">Add to Bag</button>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1622586757007-efda9475c347?q=80&w=870&auto=format&fit=crop" alt="Guatemalan Antigua">
+          <div class="card-content">
+            <div class="card-name">Guatemalan Antigua</div>
+            <div class="card-desc">Smoky cocoa, brown sugar, and a velvety body. Volcanic soil at 1,500m gives it depth you can feel.</div>
+            <div class="card-price">$26.00 / 250g</div>
+            <button class="cta-button" style="width:100%;">Add to Bag</button>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1657771192840-7e3f6e827e58?q=80&w=925&auto=format&fit=crop" alt="Kenyan AA">
+          <div class="card-content">
+            <div class="card-name">Kenyan AA</div>
+            <div class="card-desc">Blackcurrant, grapefruit zest, and a sparkling acidity. Washed process from the central highlands.</div>
+            <div class="card-price">$28.00 / 250g</div>
+            <button class="cta-button" style="width:100%;">Add to Bag</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 6: STATEMENT -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="statement">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile statement-text-tile">
+          <span class="tile-text">LIFE</span>
+        </div>
+        <div class="grid-tile statement-text-tile">
+          <span class="tile-text">IS</span>
+        </div>
+        <div class="grid-tile statement-text-tile">
+          <span class="tile-text">TOO</span>
+        </div>
+        <div class="grid-tile statement-text-tile">
+          <span class="tile-text">SHORT</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile statement-img-tile">
+          <img src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Coffee Moment" class="image-slice" style="object-position: 30% 25%;">
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile statement-text-tile">
+          <span class="tile-text">FOR</span>
+        </div>
+        <div class="grid-tile statement-text-tile">
+          <span class="tile-text">BLAND</span>
+        </div>
+        <div class="grid-tile statement-text-tile">
+          <span class="tile-text">COFFEE</span>
+        </div>
+        <div class="grid-tile-accent statement-accent-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile statement-img-tile">
+          <img src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Coffee Moment" class="image-slice" style="object-position: 30% 75%;">
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile statement-img2-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" class="image-slice" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile statement-img2-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" class="image-slice" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent statement-accent-tile"></div>
+        <div class="grid-tile statement-img2-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" class="image-slice" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile statement-img2-tile">
+          <img src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" class="image-slice" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile">
+          <button class="cta-button" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 7: CONTACT -->
+    <!-- ============================================ -->
+    <section class="contact-section" id="contact">
+      <div class="contact-grid">
+        <!-- Column 1: Links -->
+        <div>
+          <div class="contact-link-tile" style="margin-bottom:16px;">
+            <h3>Stockists</h3>
+            <p>Find Altitude Coffee at select roasters and specialty shops worldwide.</p>
+          </div>
+          <div class="contact-link-tile" style="margin-bottom:16px;">
+            <h3>Press</h3>
+            <p>Media inquiries, collaborations, and brand partnerships.</p>
+          </div>
+          <div class="contact-link-tile">
+            <h3>Sustainability</h3>
+            <p>Our commitments to farmers, communities, and the planet.</p>
+          </div>
+        </div>
+
+        <!-- Column 2: Form -->
+        <div style="display:flex; flex-direction:column; justify-content:center;">
+          <span class="font-mono-label" style="color:rgba(255,255,255,0.5); margin-bottom:24px; display:block;">Join the Ritual</span>
+          <h3 style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:20px; text-transform:uppercase; margin-bottom:8px;">First Access. Origin Stories. No Noise.</h3>
+          <p style="font-family:'Inter',sans-serif; font-size:13px; color:rgba(255,255,255,0.5); margin-bottom:24px; line-height:1.5;">New roasts, farmer stories, and exclusive drops. Delivered when it matters.</p>
+          <form class="flex flex-col gap-4" onsubmit="event.preventDefault(); fetch('{{FORM_ENDPOINT}}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email: this.querySelector('input[type=email]').value, source: 'funnel-page'})}).then(() => this.querySelector('button').textContent = 'Subscribed').catch(() => this.querySelector('button').textContent = 'Try Again')">
+            <input type="email" placeholder="YOUR EMAIL" required style="background:transparent; border:1px solid rgba(255,255,255,0.3); padding:14px 16px; color:#FFFFFF; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.04em; outline:none; transition:border-color 0.3s;" onfocus="this.style.borderColor='#C45D2A'" onblur="this.style.borderColor='rgba(255,255,255,0.3)'">
+            <button type="submit" class="cta-button" style="width:100%;">Subscribe</button>
+          </form>
+        </div>
+
+        <!-- Column 3: Social -->
+        <div style="display:flex; flex-direction:column; justify-content:center; align-items:flex-end;">
+          <span class="font-mono-label" style="color:rgba(255,255,255,0.5); margin-bottom:24px; display:block;">Follow the Journey</span>
+          <div class="social-tiles">
+            <div class="social-tile">IG</div>
+            <div class="social-tile">TW</div>
+            <div class="social-tile">TK</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-footer">
+        <span>&copy; 2026 Altitude Coffee. All rights reserved.</span>
+        <span>Sourced with care. Roasted with purpose.</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ==============================
+    // HERO — Load Animation (non-scroll)
+    // ==============================
+    const heroSection = document.querySelector('#hero');
+    const heroTiles = heroSection.querySelectorAll('.grid-tile, .grid-tile-accent');
+    const heroImages = heroSection.querySelectorAll('.hero-img-tile');
+    const heroTextTiles = heroSection.querySelectorAll('.hero-text-tile');
+    const heroAccentTiles = heroSection.querySelectorAll('.hero-accent-tile');
+
+    const heroLoadTl = gsap.timeline({ delay: 0.3 });
+    heroLoadTl.fromTo(heroTiles,
+      { scaleY: 0, opacity: 0 },
+      { scaleY: 1, opacity: 1, duration: 0.9, stagger: { amount: 0.6 } }
+    );
+    heroLoadTl.fromTo(heroImages,
+      { clipPath: 'inset(100% 0 0 0)' },
+      { clipPath: 'inset(0% 0 0 0)', duration: 0.7, stagger: 0.06 },
+      "-=0.5"
+    );
+    heroLoadTl.fromTo(heroTextTiles,
+      { scale: 0.85, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.05 },
+      "-=0.4"
+    );
+
+    // HERO — Scroll Exit
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: heroSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    })
+    .to(heroImages, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+    .to(heroTextTiles, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+    .to(heroAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75);
+
+
+    // ==============================
+    // MANIFESTO — Pin + Enter/Exit
+    // ==============================
+    const manifestoSection = document.querySelector('#origins');
+    const manifestoImgTiles = manifestoSection.querySelectorAll('.manifesto-img-tile');
+    const manifestoTextTiles = manifestoSection.querySelectorAll('.manifesto-text-tile');
+    const manifestoAccentTiles = manifestoSection.querySelectorAll('.manifesto-accent-tile');
+
+    const manifestoTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: manifestoSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+    // Enter
+    manifestoTl.fromTo(manifestoImgTiles,
+      { x: '-18vw', opacity: 0 },
+      { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 }, 0
+    );
+    manifestoTl.fromTo(manifestoTextTiles,
+      { y: '12vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05
+    );
+    manifestoTl.fromTo(manifestoAccentTiles,
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 }, 0.1
+    );
+    // Exit
+    manifestoTl.to(manifestoImgTiles,
+      { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    manifestoTl.to(manifestoTextTiles,
+      { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    manifestoTl.to(manifestoAccentTiles,
+      { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75
+    );
+
+
+    // ==============================
+    // SPOTLIGHT — Pin + Enter/Exit
+    // ==============================
+    const spotlightSection = document.querySelector('#beans');
+    const spotlightImgTiles = spotlightSection.querySelectorAll('.spotlight-img-tile');
+    const spotlightImg2Tiles = spotlightSection.querySelectorAll('.spotlight-img2-tile');
+    const spotlightTextTiles = spotlightSection.querySelectorAll('.spotlight-text-tile');
+    const spotlightAccentTiles = spotlightSection.querySelectorAll('.spotlight-accent-tile');
+
+    const spotlightTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: spotlightSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+    // Enter
+    spotlightTl.fromTo(spotlightImgTiles,
+      { y: '35vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 }, 0
+    );
+    spotlightTl.fromTo(spotlightImg2Tiles,
+      { x: '-18vw', opacity: 0 },
+      { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05
+    );
+    spotlightTl.fromTo(spotlightTextTiles,
+      { y: '12vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05
+    );
+    spotlightTl.fromTo(spotlightAccentTiles,
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 }, 0.1
+    );
+    // Exit
+    spotlightTl.to(spotlightImgTiles,
+      { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    spotlightTl.to(spotlightImg2Tiles,
+      { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    spotlightTl.to(spotlightTextTiles,
+      { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    spotlightTl.to(spotlightAccentTiles,
+      { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75
+    );
+
+
+    // ==============================
+    // TEXTURE — Pin + Enter/Exit
+    // ==============================
+    const textureSection = document.querySelector('#texture');
+    const textureImgTiles = textureSection.querySelectorAll('.texture-img-tile');
+    const textureImg2Tiles = textureSection.querySelectorAll('.texture-img2-tile');
+    const textureTextTiles = textureSection.querySelectorAll('.texture-text-tile');
+    const textureAccentTiles = textureSection.querySelectorAll('.texture-accent-tile');
+
+    const textureTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: textureSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+    // Enter
+    textureTl.fromTo(textureImgTiles,
+      { x: '-18vw', opacity: 0 },
+      { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 }, 0
+    );
+    textureTl.fromTo(textureImg2Tiles,
+      { y: '35vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05
+    );
+    textureTl.fromTo(textureTextTiles,
+      { y: '12vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05
+    );
+    textureTl.fromTo(textureAccentTiles,
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 }, 0.1
+    );
+    // Exit
+    textureTl.to(textureImgTiles,
+      { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    textureTl.to(textureImg2Tiles,
+      { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    textureTl.to(textureTextTiles,
+      { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    textureTl.to(textureAccentTiles,
+      { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75
+    );
+
+
+    // ==============================
+    // CARD GRID — Staggered Reveal
+    // ==============================
+    const cards = document.querySelectorAll('.product-card');
+    gsap.fromTo(cards,
+      { y: 60, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.card-grid-section',
+          start: 'top 70%',
+          end: 'top 30%',
+          scrub: false,
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+
+    // ==============================
+    // STATEMENT — Pin + Enter/Exit
+    // ==============================
+    const statementSection = document.querySelector('#statement');
+    const statementImgTiles = statementSection.querySelectorAll('.statement-img-tile');
+    const statementImg2Tiles = statementSection.querySelectorAll('.statement-img2-tile');
+    const statementTextTiles = statementSection.querySelectorAll('.statement-text-tile');
+    const statementAccentTiles = statementSection.querySelectorAll('.statement-accent-tile');
+
+    const statementTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: statementSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+    // Enter
+    statementTl.fromTo(statementImgTiles,
+      { y: '35vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 }, 0
+    );
+    statementTl.fromTo(statementImg2Tiles,
+      { x: '-18vw', opacity: 0 },
+      { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05
+    );
+    statementTl.fromTo(statementTextTiles,
+      { y: '12vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05
+    );
+    statementTl.fromTo(statementAccentTiles,
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 }, 0.1
+    );
+    // Exit
+    statementTl.to(statementImgTiles,
+      { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    statementTl.to(statementImg2Tiles,
+      { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    statementTl.to(statementTextTiles,
+      { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7
+    );
+    statementTl.to(statementAccentTiles,
+      { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75
+    );
+
+
+    // ==============================
+    // CONTACT — Fade In
+    // ==============================
+    const contactElements = document.querySelectorAll('.contact-link-tile, .contact-grid > div');
+    gsap.fromTo(contactElements,
+      { y: 40, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.contact-section',
+          start: 'top 70%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+
+    // ==============================
+    // GLOBAL SNAP (optional)
+    // ==============================
+    ScrollTrigger.refresh();
+  </script>
+
+</body>
+</html>

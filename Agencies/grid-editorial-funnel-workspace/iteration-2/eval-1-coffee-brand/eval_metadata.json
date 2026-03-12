@@ -1,0 +1,29 @@
+{
+  "eval_id": 1,
+  "eval_name": "coffee-brand",
+  "prompt": "I sell premium single-origin coffee beans. Target: millennials who care about origin stories and sustainability. Brand name: Altitude Coffee.",
+  "assertions": [
+    "Output is a single valid HTML file",
+    "Uses Tailwind CDN and GSAP CDN (no build step required)",
+    "Has an 8-column checkerboard grid layout with visible tile borders",
+    "All images use grayscale(100%) contrast(1.15) filter",
+    "Has at least 4 scroll-pinned sections with GSAP ScrollTrigger",
+    "Hero section has a non-scroll load animation",
+    "Text is scattered across individual grid tiles (one word per tile)",
+    "Accent color is NOT the default pink (#FF2D8F)",
+    "Has a grain overlay div with fixed positioning",
+    "Contact section has dark background with email form",
+    "Form uses {{FORM_ENDPOINT}} placeholder",
+    "Navigation uses mix-blend-mode: difference",
+    "Copy is uppercase manifesto-style",
+    "Page title includes Altitude Coffee",
+    "Hero ScrollTrigger has onLeaveBack callback that resets element visibility",
+    "All spatial typography words are 6 characters or fewer",
+    "Global snap uses custom snapTo function targeting pinned range centers",
+    "Snap is initialized with setTimeout (500ms delay)",
+    "Contact section footer uses mt-auto (not position absolute)",
+    "All nav anchor hrefs match section ids",
+    "Card grid buttons use margin-top:auto for consistent bottom placement",
+    "Non-pinned sections use toggleActions: play none none reverse"
+  ]
+}

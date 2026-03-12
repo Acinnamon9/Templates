@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallax Studio - Craft Your Vision</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#5B21B6',
+            primary: '#F2F2F2',
+            secondary: '#111111',
+            'text-primary': '#111111',
+            'text-secondary': '#6E6E6E',
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            'mono-label': ['"IBM Plex Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F2F2F2;
+      color: #111111;
+      overflow-x: hidden;
+    }
+
+    .font-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+    }
+
+    .font-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+    .font-mono-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    /* Grid System */
+    .grid-checkerboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .grid-tile {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease;
+    }
+
+    .grid-tile:hover {
+      border-color: rgba(17, 17, 17, 0.9);
+    }
+
+    .tile-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(24px, 3.5vw, 48px);
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+      word-break: break-all;
+    }
+
+    .image-slice {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
+    .grid-tile-accent {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #5B21B6;
+      animation: accentPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes accentPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    /* CTA Button */
+    .cta-button {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      background: #5B21B6;
+      color: #FFFFFF;
+      border: none;
+      padding: 14px 28px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .cta-button:hover::after {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      background: #4C1D95;
+    }
+
+    /* Navigation */
+    .nav-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      mix-blend-mode: difference;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-fixed a, .nav-fixed span {
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.6;
+    }
+
+    /* Grain Overlay */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 90;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* Section pinned wrapper */
+    .section-pinned {
+      position: relative;
+      background: #F2F2F2;
+    }
+
+    /* Card Grid Section */
+    .card-grid-section {
+      background: #F2F2F2;
+      padding: 80px 24px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(17, 17, 17, 0.65);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card-item {
+      background: #F2F2F2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-item img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+      }
+      .card-grid {
+        grid-template-columns: repeat(1, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-fixed">
+    <span class="font-heading text-lg tracking-tight">Parallax Studio</span>
+    <div class="nav-links">
+      <a href="#heroSection">Work</a>
+      <a href="#manifestoSection">Ethos</a>
+      <a href="#spotlightSection">Focus</a>
+      <a href="#cardGridSection">Scope</a>
+      <a href="#contactSection">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay"></div>
+
+  <main>
+
+    <!-- ============================================ -->
+    <!-- HERO SECTION -->
+    <!-- ============================================ -->
+    <section id="heroSection" class="section-pinned">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile">
+          <span class="font-mono-label text-text-secondary">Est. 2019</span>
+        </div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile hero-text-tile">
+          <span class="tile-text">CRAFT</span>
+        </div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile hero-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Hero" style="object-position: 20% 25%;">
+        </div>
+        <div class="grid-tile hero-tile hero-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Hero" style="object-position: 50% 25%;">
+        </div>
+        <div class="grid-tile hero-tile hero-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Hero" style="object-position: 80% 25%;">
+        </div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile hero-text-tile">
+          <span class="tile-text">YOUR</span>
+        </div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile hero-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Hero" style="object-position: 20% 75%;">
+        </div>
+        <div class="grid-tile hero-tile hero-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Hero" style="object-position: 50% 75%;">
+        </div>
+        <div class="grid-tile hero-tile hero-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Hero" style="object-position: 80% 75%;">
+        </div>
+        <div class="grid-tile-accent hero-accent-tile"></div>
+        <div class="grid-tile hero-tile hero-text-tile">
+          <span class="tile-text">VISION</span>
+        </div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile">
+          <span class="font-mono-label text-text-secondary">Brand + Web + Motion</span>
+        </div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile-accent hero-accent-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile">
+          <button class="cta-button" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">Start a Brief</button>
+        </div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile"></div>
+        <div class="grid-tile hero-tile">
+          <span class="font-mono-label text-text-secondary">Scroll</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- MANIFESTO SECTION -->
+    <!-- ============================================ -->
+    <section id="manifestoSection" class="section-pinned">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile mf-text-tile">
+          <span class="tile-text">WE</span>
+        </div>
+        <div class="grid-tile mf-tile mf-text-tile">
+          <span class="tile-text">DON'T</span>
+        </div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile mf-text-tile">
+          <span class="tile-text">MAKE</span>
+        </div>
+        <div class="grid-tile mf-tile mf-text-tile">
+          <span class="tile-text">PRETTY</span>
+        </div>
+        <div class="grid-tile mf-tile mf-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile mf-tile mf-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile-accent mf-accent-tile"></div>
+        <div class="grid-tile mf-tile mf-text-tile">
+          <span class="tile-text">WE</span>
+        </div>
+        <div class="grid-tile mf-tile mf-text-tile">
+          <span class="tile-text">MAKE</span>
+        </div>
+        <div class="grid-tile mf-tile mf-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile mf-tile mf-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile mf-text-tile">
+          <span class="tile-text">POWER</span>
+        </div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile-accent mf-accent-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile">
+          <span class="font-mono-label text-text-secondary">Brand is truth. Design is proof.</span>
+        </div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+        <div class="grid-tile mf-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SPOTLIGHT SECTION -->
+    <!-- ============================================ -->
+    <section id="spotlightSection" class="section-pinned">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile sp-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile sp-tile sp-text-tile">
+          <span class="tile-text">WORK</span>
+        </div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile sp-tile sp-text-tile">
+          <span class="tile-text">THAT</span>
+        </div>
+        <div class="grid-tile sp-tile sp-text-tile">
+          <span class="tile-text">SPEAKS</span>
+        </div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile-accent sp-accent-tile"></div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile sp-tile sp-text-tile">
+          <span class="tile-text">BEFORE</span>
+        </div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile sp-text-tile">
+          <span class="tile-text">YOU</span>
+        </div>
+        <div class="grid-tile sp-tile sp-text-tile">
+          <span class="tile-text">DO</span>
+        </div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Hero 2" style="object-position: 30% 30%;">
+        </div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Hero 2" style="object-position: 70% 30%;">
+        </div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile">
+          <span class="font-mono-label text-text-secondary">Brand. Web. Motion.</span>
+        </div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Hero 2" style="object-position: 30% 70%;">
+        </div>
+        <div class="grid-tile sp-tile sp-image-tile relative">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Hero 2" style="object-position: 70% 70%;">
+        </div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+        <div class="grid-tile sp-tile">
+          <button class="cta-button" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">View Work</button>
+        </div>
+        <div class="grid-tile-accent sp-accent-tile"></div>
+        <div class="grid-tile sp-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- CARD GRID SECTION -->
+    <!-- ============================================ -->
+    <section id="cardGridSection" class="card-grid-section">
+      <div style="max-width:1200px; margin:0 auto; padding-bottom:40px;">
+        <span class="font-mono-label" style="color:#5B21B6;">What We Build</span>
+        <h2 class="font-heading" style="font-size:clamp(28px, 4vw, 48px); margin-top:12px;">SCOPE OF CRAFT</h2>
+      </div>
+      <div class="card-grid">
+        <!-- Card 1: Brand Identity -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1522125123931-9304d91a42ee?q=80&w=582&auto=format&fit=crop" alt="Brand Identity">
+          <div style="padding:24px; display:flex; flex-direction:column; gap:12px; flex:1;">
+            <span class="font-mono-label" style="color:#5B21B6;">01</span>
+            <h3 class="font-heading" style="font-size:20px;">BRAND IDENTITY</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px;">Logo systems, visual language, brand books. We distill who you are into marks that last decades.</p>
+            <button class="cta-button" style="margin-top:auto; width:100%;" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">Learn More</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Web Design -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1504610926078-a1611febcad3?q=80&w=580&auto=format&fit=crop" alt="Web Design">
+          <div style="padding:24px; display:flex; flex-direction:column; gap:12px; flex:1;">
+            <span class="font-mono-label" style="color:#5B21B6;">02</span>
+            <h3 class="font-heading" style="font-size:20px;">WEB DESIGN</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px;">Editorial sites, product pages, immersive digital worlds. Every pixel earns its place.</p>
+            <button class="cta-button" style="margin-top:auto; width:100%;" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">Learn More</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Motion Graphics -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1622586757007-efda9475c347?q=80&w=870&auto=format&fit=crop" alt="Motion Graphics">
+          <div style="padding:24px; display:flex; flex-direction:column; gap:12px; flex:1;">
+            <span class="font-mono-label" style="color:#5B21B6;">03</span>
+            <h3 class="font-heading" style="font-size:20px;">MOTION GRAPHICS</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px;">Brand films, UI animation, title sequences. Movement that holds attention and builds desire.</p>
+            <button class="cta-button" style="margin-top:auto; width:100%;" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">Learn More</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- CONTACT SECTION -->
+    <!-- ============================================ -->
+    <section id="contactSection" class="relative bg-[#111111] z-[70] py-20 min-h-[60vh]">
+      <div class="max-w-7xl mx-auto px-8 flex flex-col min-h-[60vh]">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <!-- Left: Link Tiles -->
+          <div class="flex flex-col gap-4 contact-fade">
+            <span class="font-mono-label text-white/50 mb-4">Navigate</span>
+            <a href="#heroSection" class="block border border-white/20 hover:border-[#5B21B6] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Work</span>
+            </a>
+            <a href="#manifestoSection" class="block border border-white/20 hover:border-[#5B21B6] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Ethos</span>
+            </a>
+            <a href="#cardGridSection" class="block border border-white/20 hover:border-[#5B21B6] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Services</span>
+            </a>
+          </div>
+
+          <!-- Center: Form Block -->
+          <div class="flex flex-col gap-6 contact-fade">
+            <span class="font-mono-label text-white/50">Start a Project</span>
+            <h2 class="font-heading text-white" style="font-size:clamp(28px,4vw,48px);">LET'S BUILD</h2>
+            <p class="font-body text-white/60" style="font-size:14px;">Tell us what you're making. We'll tell you how we can help.</p>
+            <form class="flex flex-col gap-4" onsubmit="event.preventDefault(); fetch('{{FORM_ENDPOINT}}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email: this.querySelector('input[type=email]').value, source: 'funnel-page'})}).then(() => this.querySelector('button').textContent = 'Subscribed').catch(() => this.querySelector('button').textContent = 'Try Again')">
+              <input type="email" placeholder="YOUR EMAIL" required class="bg-transparent border border-white/30 px-4 py-3 text-white font-mono text-sm focus:border-[#5B21B6] focus:outline-none transition-colors" style="font-family:'IBM Plex Mono',monospace;">
+              <button type="submit" class="cta-button w-full">Get in Touch</button>
+            </form>
+          </div>
+
+          <!-- Right: Social Tiles -->
+          <div class="flex flex-col gap-4 contact-fade">
+            <span class="font-mono-label text-white/50 mb-4">Connect</span>
+            <a href="#" class="block border border-white/20 hover:border-[#5B21B6] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Instagram</span>
+            </a>
+            <a href="#" class="block border border-white/20 hover:border-[#5B21B6] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Behance</span>
+            </a>
+            <a href="#" class="block border border-white/20 hover:border-[#5B21B6] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">X / Twitter</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <span class="font-mono-label text-white/40">&copy; 2026 PARALLAX STUDIO</span>
+          <span class="font-mono-label text-white/40">CRAFT YOUR VISION</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ==========================================
+    // HERO SECTION — Load Animation + Pin
+    // ==========================================
+    (() => {
+      const heroSection = document.querySelector('#heroSection');
+      const heroTiles = heroSection.querySelectorAll('.grid-tile, .grid-tile-accent');
+      const heroImages = heroSection.querySelectorAll('.hero-image-tile');
+      const heroTextTiles = heroSection.querySelectorAll('.hero-text-tile');
+      const heroAccentTiles = heroSection.querySelectorAll('.hero-accent-tile');
+
+      // Hero load animation (non-scroll, plays on page load)
+      const heroLoadTl = gsap.timeline({ delay: 0.3 });
+      heroLoadTl.fromTo(heroTiles,
+        { scaleY: 0, opacity: 0 },
+        { scaleY: 1, opacity: 1, duration: 0.9, stagger: { amount: 0.6 } }
+      );
+      heroLoadTl.fromTo(heroImages,
+        { clipPath: 'inset(100% 0 0 0)' },
+        { clipPath: 'inset(0% 0 0 0)', duration: 0.7, stagger: 0.06 },
+        "-=0.5"
+      );
+      heroLoadTl.fromTo(heroTextTiles,
+        { scale: 0.85, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.05 },
+        "-=0.4"
+      );
+
+      // Hero pin + scroll exit with onLeaveBack
+      const heroScrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroSection,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 0.6,
+          onLeaveBack: () => {
+            gsap.set(heroImages, { opacity: 1, x: 0, y: 0 });
+            gsap.set(heroTextTiles, { opacity: 1, x: 0, y: 0 });
+            gsap.set(heroAccentTiles, { opacity: 1, scale: 1 });
+          }
+        }
+      });
+
+      // Exit choreography (0.7 to 1.0)
+      heroScrollTl.to(heroImages,
+        { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 },
+        0.7
+      );
+      heroScrollTl.to(heroTextTiles,
+        { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 },
+        0.7
+      );
+      heroScrollTl.to(heroAccentTiles,
+        { scale: 1.15, opacity: 0, ease: 'power2.in', stagger: 0.05 },
+        0.7
+      );
+    })();
+
+    // ==========================================
+    // MANIFESTO SECTION — Pin + Enter/Exit
+    // ==========================================
+    (() => {
+      const section = document.querySelector('#manifestoSection');
+      const images = section.querySelectorAll('.mf-image-tile');
+      const textTiles = section.querySelectorAll('.mf-text-tile');
+      const accentTiles = section.querySelectorAll('.mf-accent-tile');
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 0.6
+        }
+      });
+
+      // Enter choreography (0 to 0.5)
+      tl.fromTo(images,
+        { x: '-18vw', opacity: 0 },
+        { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 },
+        0
+      );
+      tl.fromTo(textTiles,
+        { y: '12vh', opacity: 0 },
+        { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 },
+        0.05
+      );
+      tl.fromTo(accentTiles,
+        { scale: 0.6, opacity: 0 },
+        { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 },
+        0.1
+      );
+
+      // Exit choreography (0.7 to 1.0)
+      tl.to(images,
+        { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 },
+        0.7
+      );
+      tl.to(textTiles,
+        { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 },
+        0.7
+      );
+      tl.to(accentTiles,
+        { scale: 1.15, opacity: 0, ease: 'power2.in', stagger: 0.05 },
+        0.7
+      );
+    })();
+
+    // ==========================================
+    // SPOTLIGHT SECTION — Pin + Enter/Exit
+    // ==========================================
+    (() => {
+      const section = document.querySelector('#spotlightSection');
+      const images = section.querySelectorAll('.sp-image-tile');
+      const textTiles = section.querySelectorAll('.sp-text-tile');
+      const accentTiles = section.querySelectorAll('.sp-accent-tile');
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 0.6
+        }
+      });
+
+      // Enter choreography (0 to 0.5)
+      tl.fromTo(images,
+        { y: '35vh', opacity: 0 },
+        { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 },
+        0
+      );
+      tl.fromTo(textTiles,
+        { y: '12vh', opacity: 0 },
+        { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 },
+        0.05
+      );
+      tl.fromTo(accentTiles,
+        { scale: 0.6, opacity: 0 },
+        { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 },
+        0.1
+      );
+
+      // Exit choreography (0.7 to 1.0)
+      tl.to(images,
+        { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 },
+        0.7
+      );
+      tl.to(textTiles,
+        { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 },
+        0.7
+      );
+      tl.to(accentTiles,
+        { scale: 1.15, opacity: 0, ease: 'power2.in', stagger: 0.05 },
+        0.7
+      );
+    })();
+
+    // ==========================================
+    // CARD GRID SECTION — toggleActions (NOT pinned)
+    // ==========================================
+    (() => {
+      const cards = document.querySelectorAll('.card-reveal');
+      cards.forEach((card, i) => {
+        gsap.fromTo(card,
+          { y: '10vh', rotate: -1.5, opacity: 0 },
+          {
+            y: 0, rotate: 0, opacity: 1, duration: 0.7, delay: i * 0.08, ease: 'power2.out',
+            scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' }
+          }
+        );
+      });
+
+      // Animate the section header
+      const sectionHeader = document.querySelector('#cardGridSection > div:first-child');
+      gsap.fromTo(sectionHeader,
+        { y: '8vh', opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: sectionHeader, start: 'top 80%', toggleActions: 'play none none reverse' }
+        }
+      );
+    })();
+
+    // ==========================================
+    // CONTACT SECTION — toggleActions (NOT pinned)
+    // ==========================================
+    (() => {
+      const contactElements = document.querySelectorAll('.contact-fade');
+      contactElements.forEach((el) => {
+        gsap.fromTo(el,
+          { y: '8vh', opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
+            scrollTrigger: { trigger: el, start: 'top 80%', toggleActions: 'play none none reverse' }
+          }
+        );
+      });
+    })();
+
+    // ==========================================
+    // GLOBAL SNAP — Pinned Range Center Targeting
+    // ==========================================
+    const setupSnap = () => {
+      const pinned = ScrollTrigger.getAll().filter(st => st.vars.pin).sort((a, b) => a.start - b.start);
+      const maxScroll = ScrollTrigger.maxScroll(window);
+      if (!maxScroll || pinned.length === 0) return;
+
+      const pinnedRanges = pinned.map(st => ({
+        start: st.start / maxScroll,
+        end: (st.end ?? st.start) / maxScroll,
+        center: (st.start + ((st.end ?? st.start) - st.start) * 0.5) / maxScroll,
+      }));
+
+      ScrollTrigger.create({
+        snap: {
+          snapTo: (value) => {
+            const inPinned = pinnedRanges.some(r => value >= r.start - 0.02 && value <= r.end + 0.02);
+            if (!inPinned) return value;
+            return pinnedRanges.reduce((closest, r) =>
+              Math.abs(r.center - value) < Math.abs(closest - value) ? r.center : closest,
+              pinnedRanges[0]?.center ?? 0
+            );
+          },
+          duration: { min: 0.15, max: 0.35 },
+          delay: 0,
+          ease: 'power2.out',
+        }
+      });
+    };
+
+    // Wait 500ms for ScrollTriggers to fully initialize before setting up snap
+    setTimeout(setupSnap, 500);
+  </script>
+
+</body>
+</html>

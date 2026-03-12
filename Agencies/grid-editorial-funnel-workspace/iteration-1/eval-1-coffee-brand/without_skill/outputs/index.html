@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Altitude Coffee — Single-Origin, Sustainably Sourced</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        bean: {
+                            50: '#fdf8f0',
+                            100: '#f5e6d0',
+                            200: '#e8cba0',
+                            300: '#d4a96a',
+                            400: '#c08a3e',
+                            500: '#a06e2a',
+                            600: '#7a5420',
+                            700: '#5c3f18',
+                            800: '#3d2a10',
+                            900: '#1f1508',
+                        },
+                        forest: {
+                            400: '#6b9e7a',
+                            500: '#4a7c5a',
+                            600: '#3a6248',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scroll-behavior: smooth; }
+
+        .hero-gradient {
+            background: linear-gradient(160deg, #1f1508 0%, #3d2a10 35%, #5c3f18 65%, #1f1508 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #e8cba0 0%, #d4a96a 40%, #c08a3e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .card-shimmer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(232,203,160,0.06), transparent);
+            transition: left 0.6s ease;
+        }
+        .card-shimmer:hover::before {
+            left: 100%;
+        }
+
+        .origin-card {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+        }
+        .origin-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(31,21,8,0.5);
+        }
+
+        .altitude-line {
+            position: relative;
+        }
+        .altitude-line::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, #c08a3e, #e8cba0);
+            transition: width 0.4s ease;
+        }
+        .altitude-line:hover::after {
+            width: 100%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        .float-anim-delay { animation: float 6s ease-in-out 2s infinite; }
+        .float-anim-delay2 { animation: float 6s ease-in-out 4s infinite; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid #c08a3e;
+            animation: pulse-ring 2s ease-out infinite;
+        }
+
+        .topo-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='600' height='600' viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23c08a3e' stroke-width='0.5' opacity='0.07'%3E%3Cellipse cx='300' cy='300' rx='280' ry='200'/%3E%3Cellipse cx='300' cy='300' rx='240' ry='170'/%3E%3Cellipse cx='300' cy='300' rx='200' ry='140'/%3E%3Cellipse cx='300' cy='300' rx='160' ry='110'/%3E%3Cellipse cx='300' cy='300' rx='120' ry='80'/%3E%3Cellipse cx='300' cy='300' rx='80' ry='50'/%3E%3Cellipse cx='300' cy='300' rx='40' ry='25'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 600px 600px;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .cta-glow {
+            box-shadow: 0 0 0 0 rgba(192,138,62,0.4);
+            animation: glow-pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(192,138,62,0.4); }
+            50% { box-shadow: 0 0 30px 8px rgba(192,138,62,0.15); }
+        }
+
+        .scroll-indicator {
+            animation: bounce-down 2s ease-in-out infinite;
+        }
+        @keyframes bounce-down {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(10px); opacity: 0.5; }
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #c08a3e;
+            box-shadow: 0 0 0 3px rgba(192,138,62,0.15);
+        }
+    </style>
+</head>
+<body class="bg-bean-900 text-bean-100 font-sans antialiased overflow-x-hidden">
+
+    <!-- Grain Overlay -->
+    <div class="grain-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-full border-2 border-bean-400 flex items-center justify-center group-hover:border-bean-200 transition-colors">
+                    <svg class="w-5 h-5 text-bean-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="font-serif text-xl font-bold text-bean-100 tracking-wide">ALTITUDE</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#origins" class="text-sm text-bean-300 hover:text-bean-100 transition-colors altitude-line">Origins</a>
+                <a href="#process" class="text-sm text-bean-300 hover:text-bean-100 transition-colors altitude-line">Process</a>
+                <a href="#impact" class="text-sm text-bean-300 hover:text-bean-100 transition-colors altitude-line">Impact</a>
+                <a href="#subscribe" class="text-sm font-semibold text-bean-900 bg-bean-400 px-5 py-2 rounded-full hover:bg-bean-300 transition-all">Get Started</a>
+            </div>
+            <button class="md:hidden text-bean-300" id="mobile-menu-btn">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden bg-bean-800/95 backdrop-blur-lg border-t border-bean-700" id="mobile-menu">
+            <div class="px-6 py-4 flex flex-col gap-4">
+                <a href="#origins" class="text-bean-200 py-2">Origins</a>
+                <a href="#process" class="text-bean-200 py-2">Process</a>
+                <a href="#impact" class="text-bean-200 py-2">Impact</a>
+                <a href="#subscribe" class="text-sm font-semibold text-bean-900 bg-bean-400 px-5 py-2.5 rounded-full text-center hover:bg-bean-300 transition-all">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center relative overflow-hidden topo-bg">
+        <!-- Decorative elements -->
+        <div class="absolute top-20 right-10 w-72 h-72 bg-bean-400/5 rounded-full blur-3xl float-anim"></div>
+        <div class="absolute bottom-20 left-10 w-96 h-96 bg-bean-500/5 rounded-full blur-3xl float-anim-delay"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-bean-400/3 rounded-full blur-[120px]"></div>
+
+        <div class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-16 items-center relative z-10">
+            <div>
+                <div class="animate-in" style="animation-delay: 0.1s">
+                    <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.25em] uppercase text-bean-400 mb-6">
+                        <span class="w-8 h-px bg-bean-400"></span>
+                        Single-Origin Excellence
+                    </span>
+                </div>
+                <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] mb-6 animate-in" style="animation-delay: 0.3s">
+                    Coffee from<br>
+                    <span class="text-gradient">where the clouds</span><br>
+                    begin.
+                </h1>
+                <p class="text-lg text-bean-300 leading-relaxed max-w-lg mb-10 animate-in" style="animation-delay: 0.5s">
+                    Every bag of Altitude Coffee traces back to a single farm, a single story, a single commitment to the earth. Premium beans grown at peak elevation, roasted to perfection, delivered to your door.
+                </p>
+                <div class="flex flex-wrap gap-4 animate-in" style="animation-delay: 0.7s">
+                    <a href="#subscribe" class="cta-glow inline-flex items-center gap-2 bg-bean-400 text-bean-900 font-semibold px-8 py-4 rounded-full hover:bg-bean-300 transition-all text-lg">
+                        Start Your Journey
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                    <a href="#origins" class="inline-flex items-center gap-2 border border-bean-600 text-bean-200 font-medium px-8 py-4 rounded-full hover:border-bean-400 hover:text-bean-100 transition-all text-lg">
+                        Explore Origins
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Visual -->
+            <div class="relative flex justify-center items-center animate-in" style="animation-delay: 0.5s">
+                <div class="relative w-80 h-80 lg:w-[420px] lg:h-[420px]">
+                    <!-- Outer ring -->
+                    <div class="absolute inset-0 rounded-full border border-bean-700/50"></div>
+                    <div class="absolute inset-4 rounded-full border border-bean-600/30"></div>
+                    <div class="absolute inset-8 rounded-full border border-bean-500/20"></div>
+
+                    <!-- Central image area -->
+                    <div class="absolute inset-12 rounded-full bg-gradient-to-br from-bean-700 to-bean-800 flex items-center justify-center overflow-hidden">
+                        <svg class="w-32 h-32 lg:w-40 lg:h-40 text-bean-400 float-anim" viewBox="0 0 100 100" fill="currentColor">
+                            <path d="M50 10c-5 0-15 8-20 20s-8 25-5 35c3 10 12 18 25 18s22-8 25-18c3-10 0-23-5-35S55 10 50 10zm-8 40c-2-6 0-15 3-22s8-13 12-13-9 6-12 13-5 16-3 22z" opacity="0.6"/>
+                            <path d="M55 12c-4-1-12 7-16 18s-6 23-3 32c3 9 10 16 20 16s18-7 21-16c3-9 1-21-3-32S59 13 55 12zm-6 38c-2-5 0-14 2-20s7-11 10-11-7 5-10 11-4 15-2 20z" opacity="0.4" transform="translate(5,2)"/>
+                        </svg>
+                    </div>
+
+                    <!-- Floating badges -->
+                    <div class="absolute top-4 right-4 bg-bean-800/90 backdrop-blur-sm border border-bean-600/50 rounded-2xl px-4 py-3 float-anim">
+                        <div class="text-xs text-bean-400 font-medium">Altitude</div>
+                        <div class="text-lg font-bold text-bean-100">1,800m+</div>
+                    </div>
+                    <div class="absolute bottom-4 left-0 bg-bean-800/90 backdrop-blur-sm border border-bean-600/50 rounded-2xl px-4 py-3 float-anim-delay">
+                        <div class="text-xs text-bean-400 font-medium">SCA Score</div>
+                        <div class="text-lg font-bold text-bean-100">86+</div>
+                    </div>
+                    <div class="absolute bottom-16 right-0 bg-forest-600/90 backdrop-blur-sm border border-forest-400/30 rounded-2xl px-4 py-3 float-anim-delay2">
+                        <div class="text-xs text-forest-400 font-medium">Carbon</div>
+                        <div class="text-lg font-bold text-green-200">Neutral</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator">
+            <span class="text-xs text-bean-500 tracking-widest uppercase">Scroll</span>
+            <svg class="w-5 h-5 text-bean-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7"/></svg>
+        </div>
+    </section>
+
+    <!-- Social Proof Bar -->
+    <section class="bg-bean-800 border-y border-bean-700/50 py-8">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl font-serif font-bold text-bean-200 stat-number" data-target="12">0</div>
+                    <div class="text-sm text-bean-400 mt-1">Origin Countries</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-serif font-bold text-bean-200 stat-number" data-target="34">0</div>
+                    <div class="text-sm text-bean-400 mt-1">Partner Farms</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-serif font-bold text-bean-200 stat-number" data-target="15">0</div>
+                    <div class="text-sm text-bean-400 mt-1">K+ Subscribers</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-serif font-bold text-bean-200 stat-number" data-target="98">0</div>
+                    <div class="text-sm text-bean-400 mt-1">% Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Origins Section -->
+    <section id="origins" class="py-24 lg:py-32 bg-bean-900 relative">
+        <div class="absolute inset-0 topo-bg opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal-section">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.25em] uppercase text-bean-400 mb-4">
+                    <span class="w-8 h-px bg-bean-400"></span>
+                    Our Origins
+                    <span class="w-8 h-px bg-bean-400"></span>
+                </span>
+                <h2 class="font-serif text-4xl lg:text-5xl font-bold text-bean-100 mb-4">Every bean has a birthplace.</h2>
+                <p class="text-bean-300 text-lg max-w-2xl mx-auto">We partner directly with smallholder farmers across the world's most renowned coffee regions. No middlemen, full traceability, fair prices.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Ethiopia -->
+                <div class="origin-card card-shimmer bg-bean-800/60 backdrop-blur-sm border border-bean-700/50 rounded-3xl overflow-hidden group reveal-section">
+                    <div class="h-56 bg-gradient-to-br from-bean-600 to-bean-800 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-bean-800/80 to-transparent z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-24 h-24 text-bean-500/30 group-hover:text-bean-400/40 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8 2 4 6 4 10c0 6 8 12 8 12s8-6 8-12c0-4-4-8-8-8zm0 11c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 right-4 z-20 bg-bean-900/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-bean-300">
+                            2,100m
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🇪🇹</span>
+                            <h3 class="font-serif text-2xl font-bold text-bean-100">Ethiopia Yirgacheffe</h3>
+                        </div>
+                        <p class="text-bean-400 text-sm mb-4">Birthplace of coffee. Bright, floral, with jasmine and bergamot notes. Grown by the Konga cooperative — 340 families preserving heirloom varietals.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Floral</span>
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Citrus</span>
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Light Roast</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colombia -->
+                <div class="origin-card card-shimmer bg-bean-800/60 backdrop-blur-sm border border-bean-700/50 rounded-3xl overflow-hidden group reveal-section" style="animation-delay: 0.15s">
+                    <div class="h-56 bg-gradient-to-br from-bean-500 to-bean-700 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-bean-800/80 to-transparent z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-24 h-24 text-bean-400/30 group-hover:text-bean-300/40 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8 2 4 6 4 10c0 6 8 12 8 12s8-6 8-12c0-4-4-8-8-8zm0 11c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 right-4 z-20 bg-bean-900/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-bean-300">
+                            1,850m
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🇨🇴</span>
+                            <h3 class="font-serif text-2xl font-bold text-bean-100">Colombia Huila</h3>
+                        </div>
+                        <p class="text-bean-400 text-sm mb-4">Rich and balanced. Caramel sweetness with a hint of red apple. From the volcanic soils of Huila, where Don Carlos tends his 3-hectare family plot.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Caramel</span>
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Apple</span>
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Medium Roast</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rwanda -->
+                <div class="origin-card card-shimmer bg-bean-800/60 backdrop-blur-sm border border-bean-700/50 rounded-3xl overflow-hidden group reveal-section" style="animation-delay: 0.3s">
+                    <div class="h-56 bg-gradient-to-br from-bean-700 to-bean-900 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-bean-800/80 to-transparent z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-24 h-24 text-bean-600/30 group-hover:text-bean-400/40 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8 2 4 6 4 10c0 6 8 12 8 12s8-6 8-12c0-4-4-8-8-8zm0 11c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 right-4 z-20 bg-bean-900/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-bean-300">
+                            1,900m
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🇷🇼</span>
+                            <h3 class="font-serif text-2xl font-bold text-bean-100">Rwanda Nyungwe</h3>
+                        </div>
+                        <p class="text-bean-400 text-sm mb-4">Complex and vibrant. Black tea, plum, and dark chocolate. Washed-process beans from women-led cooperatives bordering the ancient Nyungwe Forest.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Chocolate</span>
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Plum</span>
+                            <span class="text-xs bg-bean-700/50 text-bean-300 px-3 py-1 rounded-full">Medium-Dark</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-24 lg:py-32 bg-bean-800 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-bean-600 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 reveal-section">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.25em] uppercase text-bean-400 mb-4">
+                    <span class="w-8 h-px bg-bean-400"></span>
+                    Our Process
+                    <span class="w-8 h-px bg-bean-400"></span>
+                </span>
+                <h2 class="font-serif text-4xl lg:text-5xl font-bold text-bean-100 mb-4">From summit to sip.</h2>
+                <p class="text-bean-300 text-lg max-w-2xl mx-auto">A transparent, end-to-end journey. You'll know exactly who grew your coffee, how it was processed, and when it was roasted.</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8 relative">
+                <!-- Connection line -->
+                <div class="hidden md:block absolute top-16 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-bean-600 via-bean-400 to-bean-600"></div>
+
+                <div class="text-center reveal-section">
+                    <div class="relative w-32 h-32 mx-auto mb-6 rounded-full bg-bean-700/50 border border-bean-600/30 flex items-center justify-center pulse-ring">
+                        <svg class="w-12 h-12 text-bean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-bean-100 mb-2">Sourced</h3>
+                    <p class="text-bean-400 text-sm">Direct partnerships with farmers at 1,800m+ elevation. We visit every farm annually.</p>
+                </div>
+
+                <div class="text-center reveal-section" style="animation-delay: 0.15s">
+                    <div class="relative w-32 h-32 mx-auto mb-6 rounded-full bg-bean-700/50 border border-bean-600/30 flex items-center justify-center pulse-ring">
+                        <svg class="w-12 h-12 text-bean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-bean-100 mb-2">Curated</h3>
+                    <p class="text-bean-400 text-sm">SCA-certified Q-graders taste and score every lot. Only 86+ makes the cut.</p>
+                </div>
+
+                <div class="text-center reveal-section" style="animation-delay: 0.3s">
+                    <div class="relative w-32 h-32 mx-auto mb-6 rounded-full bg-bean-700/50 border border-bean-600/30 flex items-center justify-center pulse-ring">
+                        <svg class="w-12 h-12 text-bean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-bean-100 mb-2">Roasted</h3>
+                    <p class="text-bean-400 text-sm">Small-batch roasted within 48 hours of your order. Peak freshness, guaranteed.</p>
+                </div>
+
+                <div class="text-center reveal-section" style="animation-delay: 0.45s">
+                    <div class="relative w-32 h-32 mx-auto mb-6 rounded-full bg-bean-700/50 border border-bean-600/30 flex items-center justify-center pulse-ring">
+                        <svg class="w-12 h-12 text-bean-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-bean-100 mb-2">Delivered</h3>
+                    <p class="text-bean-400 text-sm">Carbon-neutral shipping in compostable packaging. At your door in 2-4 days.</p>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-bean-600 to-transparent"></div>
+    </section>
+
+    <!-- Impact / Sustainability Section -->
+    <section id="impact" class="py-24 lg:py-32 bg-bean-900 relative topo-bg">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal-section">
+                    <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.25em] uppercase text-forest-400 mb-4">
+                        <span class="w-8 h-px bg-forest-400"></span>
+                        Sustainability
+                    </span>
+                    <h2 class="font-serif text-4xl lg:text-5xl font-bold text-bean-100 mb-6">
+                        Good coffee<br>shouldn't cost<br><span class="text-forest-400">the earth.</span>
+                    </h2>
+                    <p class="text-bean-300 text-lg leading-relaxed mb-8">
+                        We believe that the best coffee comes from a system that works for everyone: the farmer, the land, and you. Every purchase funds reforestation, fair wages, and community infrastructure in origin countries.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-forest-600/20 border border-forest-400/30 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-forest-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-bean-100 mb-1">Carbon Neutral Certified</h4>
+                                <p class="text-bean-400 text-sm">Every shipment offset. We've removed 240 tonnes of CO2 in 2025 alone.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-forest-600/20 border border-forest-400/30 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-forest-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-bean-100 mb-1">3x Fair Trade Premiums</h4>
+                                <p class="text-bean-400 text-sm">Farmers earn triple the fair trade minimum. Real wages, real impact.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-forest-600/20 border border-forest-400/30 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-forest-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-bean-100 mb-1">10,000+ Trees Planted</h4>
+                                <p class="text-bean-400 text-sm">One tree planted per subscription. Shade-grown reforestation in origin countries.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Visual -->
+                <div class="reveal-section">
+                    <div class="bg-bean-800/60 backdrop-blur-sm border border-bean-700/50 rounded-3xl p-8 lg:p-10">
+                        <h3 class="font-serif text-2xl font-bold text-bean-100 mb-8">Your impact with every bag</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-bean-300">Farmer income increase</span>
+                                    <span class="text-bean-200 font-semibold">3.2x above market</span>
+                                </div>
+                                <div class="w-full bg-bean-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-bean-400 to-bean-300 h-2 rounded-full impact-bar" style="width: 0%" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-bean-300">Carbon offset per bag</span>
+                                    <span class="text-bean-200 font-semibold">2.4 kg CO2</span>
+                                </div>
+                                <div class="w-full bg-bean-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-forest-500 to-forest-400 h-2 rounded-full impact-bar" style="width: 0%" data-width="72%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-bean-300">Packaging compostability</span>
+                                    <span class="text-bean-200 font-semibold">100%</span>
+                                </div>
+                                <div class="w-full bg-bean-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-forest-500 to-forest-400 h-2 rounded-full impact-bar" style="width: 0%" data-width="100%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-bean-300">Supply chain transparency</span>
+                                    <span class="text-bean-200 font-semibold">Full traceability</span>
+                                </div>
+                                <div class="w-full bg-bean-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-bean-400 to-bean-300 h-2 rounded-full impact-bar" style="width: 0%" data-width="95%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-4 bg-forest-600/10 border border-forest-400/20 rounded-2xl">
+                            <p class="text-sm text-forest-400 italic font-serif">
+                                "Since partnering with Altitude, our cooperative has built a new school and clean water well. Our children have a future now."
+                            </p>
+                            <p class="text-xs text-bean-400 mt-2">-- Maria, Huila Cooperative, Colombia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 lg:py-32 bg-bean-800 relative">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-bean-600 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal-section">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.25em] uppercase text-bean-400 mb-4">
+                    <span class="w-8 h-px bg-bean-400"></span>
+                    Community
+                    <span class="w-8 h-px bg-bean-400"></span>
+                </span>
+                <h2 class="font-serif text-4xl lg:text-5xl font-bold text-bean-100">What our community says.</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-bean-900/60 border border-bean-700/50 rounded-2xl p-8 reveal-section">
+                    <div class="flex gap-1 mb-4">
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="text-bean-300 text-sm leading-relaxed mb-6">"I used to just buy whatever was on sale. Now I actually <em>care</em> about my morning cup. Knowing the farmer's name and seeing the altitude data makes it feel personal. The Ethiopia Yirgacheffe is unreal."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-bean-600 flex items-center justify-center text-bean-200 font-bold text-sm">JM</div>
+                        <div>
+                            <div class="text-sm font-semibold text-bean-200">Jake M.</div>
+                            <div class="text-xs text-bean-500">Subscriber since 2024</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-bean-900/60 border border-bean-700/50 rounded-2xl p-8 reveal-section" style="animation-delay: 0.15s">
+                    <div class="flex gap-1 mb-4">
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="text-bean-300 text-sm leading-relaxed mb-6">"The sustainability angle isn't just marketing -- they actually publish their impact reports. I've been gifting this to everyone. The packaging is gorgeous and fully compostable. My kind of brand."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-forest-600 flex items-center justify-center text-green-200 font-bold text-sm">AP</div>
+                        <div>
+                            <div class="text-sm font-semibold text-bean-200">Aisha P.</div>
+                            <div class="text-xs text-bean-500">Subscriber since 2023</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-bean-900/60 border border-bean-700/50 rounded-2xl p-8 reveal-section" style="animation-delay: 0.3s">
+                    <div class="flex gap-1 mb-4">
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="text-bean-300 text-sm leading-relaxed mb-6">"As a home barista, I'm picky. Altitude's beans are consistently exceptional. The QR code on each bag that links to the farm's story? Chef's kiss. This is how coffee should be sold."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-bean-500 flex items-center justify-center text-bean-100 font-bold text-sm">DL</div>
+                        <div>
+                            <div class="text-sm font-semibold text-bean-200">Devon L.</div>
+                            <div class="text-xs text-bean-500">Subscriber since 2024</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing / Subscribe Section -->
+    <section id="subscribe" class="py-24 lg:py-32 bg-bean-900 relative topo-bg">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-bean-600 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal-section">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.25em] uppercase text-bean-400 mb-4">
+                    <span class="w-8 h-px bg-bean-400"></span>
+                    Subscriptions
+                    <span class="w-8 h-px bg-bean-400"></span>
+                </span>
+                <h2 class="font-serif text-4xl lg:text-5xl font-bold text-bean-100 mb-4">Choose your altitude.</h2>
+                <p class="text-bean-300 text-lg max-w-2xl mx-auto">Every plan includes free shipping, a farmer story card, and the freshest beans you'll ever taste. Cancel anytime.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Basecamp -->
+                <div class="bg-bean-800/60 backdrop-blur-sm border border-bean-700/50 rounded-3xl p-8 reveal-section hover:border-bean-600/50 transition-all">
+                    <div class="text-sm text-bean-400 font-semibold uppercase tracking-wider mb-2">Basecamp</div>
+                    <div class="flex items-baseline gap-1 mb-1">
+                        <span class="font-serif text-4xl font-bold text-bean-100">$22</span>
+                        <span class="text-bean-400">/month</span>
+                    </div>
+                    <p class="text-sm text-bean-500 mb-6">Perfect for the curious sipper</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            250g single-origin bag
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Farmer story card
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Free carbon-neutral shipping
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            1 tree planted
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 rounded-full border border-bean-600 text-bean-200 font-semibold hover:bg-bean-700 transition-all">
+                        Start Here
+                    </button>
+                </div>
+
+                <!-- Summit - Featured -->
+                <div class="bg-gradient-to-b from-bean-700/80 to-bean-800/80 backdrop-blur-sm border-2 border-bean-400/50 rounded-3xl p-8 relative reveal-section scale-105 shadow-2xl shadow-bean-900/50" style="animation-delay: 0.15s">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-bean-400 text-bean-900 text-xs font-bold uppercase tracking-wider px-4 py-1 rounded-full">Most Popular</div>
+                    <div class="text-sm text-bean-300 font-semibold uppercase tracking-wider mb-2">Summit</div>
+                    <div class="flex items-baseline gap-1 mb-1">
+                        <span class="font-serif text-4xl font-bold text-bean-100">$38</span>
+                        <span class="text-bean-300">/month</span>
+                    </div>
+                    <p class="text-sm text-bean-400 mb-6">For the daily ritual devotee</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-bean-200">
+                            <svg class="w-5 h-5 text-bean-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            500g single-origin bag
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-200">
+                            <svg class="w-5 h-5 text-bean-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Choose your roast level
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-200">
+                            <svg class="w-5 h-5 text-bean-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Brew guide + tasting notes
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-200">
+                            <svg class="w-5 h-5 text-bean-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Early access to limited lots
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-200">
+                            <svg class="w-5 h-5 text-bean-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            3 trees planted
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 rounded-full bg-bean-400 text-bean-900 font-bold hover:bg-bean-300 transition-all cta-glow">
+                        Choose Summit
+                    </button>
+                </div>
+
+                <!-- Peak -->
+                <div class="bg-bean-800/60 backdrop-blur-sm border border-bean-700/50 rounded-3xl p-8 reveal-section hover:border-bean-600/50 transition-all" style="animation-delay: 0.3s">
+                    <div class="text-sm text-bean-400 font-semibold uppercase tracking-wider mb-2">Peak</div>
+                    <div class="flex items-baseline gap-1 mb-1">
+                        <span class="font-serif text-4xl font-bold text-bean-100">$62</span>
+                        <span class="text-bean-400">/month</span>
+                    </div>
+                    <p class="text-sm text-bean-500 mb-6">The connoisseur's collection</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            2 x 350g unique origins
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Cupping journal included
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Monthly virtual tasting session
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Priority access + member perks
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-bean-300">
+                            <svg class="w-5 h-5 text-bean-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            5 trees planted
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 rounded-full border border-bean-600 text-bean-200 font-semibold hover:bg-bean-700 transition-all">
+                        Go Peak
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA / Email Capture -->
+    <section class="py-24 lg:py-32 hero-gradient relative overflow-hidden">
+        <div class="absolute inset-0 topo-bg"></div>
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-bean-600 to-transparent"></div>
+        <div class="max-w-3xl mx-auto px-6 text-center relative z-10 reveal-section">
+            <h2 class="font-serif text-4xl lg:text-5xl font-bold text-bean-100 mb-4">
+                Ready to taste the<br><span class="text-gradient">difference altitude makes?</span>
+            </h2>
+            <p class="text-bean-300 text-lg mb-10 max-w-xl mx-auto">
+                Join 15,000+ coffee lovers who start every morning with purpose. Your first bag ships free.
+            </p>
+
+            <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-6" onsubmit="event.preventDefault(); handleSubscribe();">
+                <input
+                    type="email"
+                    placeholder="your@email.com"
+                    class="flex-1 bg-bean-800/80 border border-bean-600/50 rounded-full px-6 py-4 text-bean-100 placeholder:text-bean-500 text-base"
+                    required
+                    id="email-input"
+                />
+                <button type="submit" class="bg-bean-400 text-bean-900 font-bold px-8 py-4 rounded-full hover:bg-bean-300 transition-all whitespace-nowrap cta-glow" id="subscribe-btn">
+                    Get First Bag Free
+                </button>
+            </form>
+            <p class="text-xs text-bean-500">No commitment. Cancel anytime. Compostable packaging guaranteed.</p>
+
+            <!-- Success message (hidden by default) -->
+            <div id="success-msg" class="hidden mt-6 p-4 bg-forest-600/20 border border-forest-400/30 rounded-2xl">
+                <p class="text-forest-400 font-semibold">Welcome to the altitude. Check your inbox for your free bag code.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-bean-900 border-t border-bean-800 py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full border-2 border-bean-600 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-bean-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <span class="font-serif text-lg font-bold text-bean-200 tracking-wide">ALTITUDE</span>
+                    </div>
+                    <p class="text-sm text-bean-500 leading-relaxed">Premium single-origin coffee, sustainably sourced and roasted to order. Every cup tells a story.</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-bean-300 uppercase tracking-wider mb-4">Coffee</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">All Origins</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Subscriptions</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Gift Sets</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Brew Guides</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-bean-300 uppercase tracking-wider mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Our Story</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Impact Report</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Partner Farms</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-bean-300 uppercase tracking-wider mb-4">Connect</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Instagram</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">TikTok</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Newsletter</a></li>
+                        <li><a href="#" class="text-sm text-bean-500 hover:text-bean-300 transition-colors">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-bean-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-bean-600">&copy; 2026 Altitude Coffee. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="text-xs text-bean-600 hover:text-bean-400 transition-colors">Privacy</a>
+                    <a href="#" class="text-xs text-bean-600 hover:text-bean-400 transition-colors">Terms</a>
+                    <a href="#" class="text-xs text-bean-600 hover:text-bean-400 transition-colors">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // Navbar background on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(31,21,8,0.92)';
+                navbar.style.backdropFilter = 'blur(20px)';
+                navbar.style.borderBottom = '1px solid rgba(92,63,24,0.3)';
+            } else {
+                navbar.style.background = 'transparent';
+                navbar.style.backdropFilter = 'none';
+                navbar.style.borderBottom = 'none';
+            }
+        });
+
+        // Animated stat counters
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+
+                const update = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        requestAnimationFrame(update);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                update();
+            });
+        }
+
+        // Impact bar animations
+        function animateImpactBars() {
+            const bars = document.querySelectorAll('.impact-bar');
+            bars.forEach((bar, i) => {
+                setTimeout(() => {
+                    bar.style.transition = 'width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    bar.style.width = bar.getAttribute('data-width');
+                }, i * 200);
+            });
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+
+                    // Trigger counters when stats section is visible
+                    if (entry.target.querySelector('.stat-number')) {
+                        animateCounters();
+                    }
+
+                    // Trigger impact bars
+                    if (entry.target.querySelector('.impact-bar')) {
+                        animateImpactBars();
+                    }
+
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections and reveal elements
+        document.querySelectorAll('.reveal-section').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Also observe the stats bar parent
+        const statsSection = document.querySelector('.stat-number')?.closest('section');
+        if (statsSection) observer.observe(statsSection);
+
+        // Also observe the impact section
+        const impactSection = document.querySelector('.impact-bar')?.closest('.reveal-section');
+        if (impactSection) observer.observe(impactSection);
+
+        // Email subscribe handler
+        function handleSubscribe() {
+            const emailInput = document.getElementById('email-input');
+            const btn = document.getElementById('subscribe-btn');
+            const successMsg = document.getElementById('success-msg');
+
+            if (emailInput.value) {
+                btn.textContent = 'Sending...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    successMsg.classList.remove('hidden');
+                    btn.textContent = 'Welcome!';
+                    emailInput.value = '';
+                    emailInput.disabled = true;
+                }, 1200);
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

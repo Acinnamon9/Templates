@@ -1,0 +1,78 @@
+{
+  "skill_name": "grid-editorial-funnel",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I sell premium single-origin coffee beans. Target: millennials who care about origin stories and sustainability. Brand name: Altitude Coffee.",
+      "expected_output": "A standalone HTML page with spirits-fragrance category tokens (warm earthy accent ~#C45D2A), scroll-pinned grid sections, spatial typography spelling out a manifesto-style phrase, grayscale imagery, GSAP animations, and a contact form wired to {{FORM_ENDPOINT}}.",
+      "files": [],
+      "expectations": [
+        "Output is a single valid HTML file",
+        "Uses Tailwind CDN and GSAP CDN (no build step required)",
+        "Has an 8-column checkerboard grid layout with visible tile borders",
+        "All images use grayscale(100%) contrast(1.15) filter",
+        "Has at least 4 scroll-pinned sections with GSAP ScrollTrigger",
+        "Hero section has a non-scroll load animation",
+        "Text is scattered across individual grid tiles (one word per tile) for at least one phrase",
+        "Includes accent-colored tiles that are NOT the default pink (#FF2D8F)",
+        "Has a grain overlay div with fixed positioning",
+        "Contact section has dark background (#111111) with email form",
+        "Form action uses {{FORM_ENDPOINT}} placeholder",
+        "Navigation uses mix-blend-mode: difference",
+        "Copy is uppercase manifesto-style, not corporate sales language",
+        "Page title includes 'Altitude Coffee'"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm a luxury real estate agent in Miami. I want a page for a $4.2M waterfront penthouse at Azure Tower. Target: high-net-worth buyers, international investors.",
+      "expected_output": "A standalone HTML page with luxury-real-estate category tokens (sophisticated dark accent ~#0D1B2A), property showcase sections, spatial typography, grayscale imagery with scroll animations.",
+      "files": [],
+      "expectations": [
+        "Output is a single valid HTML file",
+        "Uses Tailwind CDN and GSAP CDN",
+        "Has checkerboard grid layout with 8 columns",
+        "All images use grayscale filter",
+        "Has scroll-pinned sections with enter/exit choreography",
+        "Accent color is NOT the default pink - should be dark/sophisticated",
+        "Has a Card Grid section showing property features or rooms",
+        "Copy mentions the property or real estate context",
+        "Includes a contact/CTA section with form",
+        "Page title includes 'Azure Tower' or brand name"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I run a high-ticket fitness transformation coaching program called FORGE. 12-week program, $2,997. Target: men 30-45 who want to look and feel elite.",
+      "expected_output": "A standalone HTML page with premium-fitness tokens (intense accent ~#00E5FF), coaching-style sections with program cards, commanding copy voice.",
+      "files": [],
+      "expectations": [
+        "Output is a single valid HTML file",
+        "Has checkerboard grid with spatial typography",
+        "Accent color suggests fitness/energy (not default pink)",
+        "Has a Card Grid section showing program tiers or features",
+        "Copy voice is intense and commanding, not soft",
+        "Hero phrase is short (3-5 words) and scattered across tiles",
+        "Has GSAP scroll animations on multiple sections",
+        "Contact section includes email form with {{FORM_ENDPOINT}}",
+        "Includes price or program details somewhere on the page"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We're a creative agency called Parallax Studio. We do brand identity, web design, and motion graphics for luxury brands.",
+      "expected_output": "A standalone HTML page with creative-agency tokens (refined accent ~#5B21B6), portfolio-style card grid, minimal confident copy.",
+      "files": [],
+      "expectations": [
+        "Output is a single valid HTML file",
+        "Has checkerboard grid layout",
+        "Accent color is NOT the default pink",
+        "Card Grid section shows portfolio-style items",
+        "Copy is confident and minimal, not salesy",
+        "Has scroll-pinned animations",
+        "Navigation includes brand name 'Parallax Studio'",
+        "Contact section with form present"
+      ]
+    }
+  ]
+}

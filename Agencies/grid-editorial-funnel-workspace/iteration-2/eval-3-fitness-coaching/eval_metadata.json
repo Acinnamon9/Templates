@@ -1,0 +1,23 @@
+{
+  "eval_id": 3,
+  "eval_name": "fitness-coaching",
+  "prompt": "I run a high-ticket fitness transformation coaching program called FORGE. 12-week program, $2,997. Target: men 30-45 who want to look and feel elite.",
+  "assertions": [
+    "Output is a single valid HTML file",
+    "Has checkerboard grid with spatial typography",
+    "Accent color suggests fitness/energy (not default pink)",
+    "Has a Card Grid section showing program tiers or features",
+    "Copy voice is intense and commanding",
+    "Hero phrase is short (3-5 words) scattered across tiles",
+    "Has GSAP scroll animations on multiple sections",
+    "Contact section includes email form with {{FORM_ENDPOINT}}",
+    "Includes price or program details somewhere on the page",
+    "Hero ScrollTrigger has onLeaveBack callback",
+    "All spatial typography words are 6 characters or fewer",
+    "Global snap uses custom snapTo function (not simple array snap)",
+    "No scroll snap-back loop between sections",
+    "Contact footer in normal flow with mt-auto",
+    "Card buttons consistently at bottom via margin-top auto",
+    "Non-pinned sections use toggleActions for reverse on scroll-back"
+  ]
+}

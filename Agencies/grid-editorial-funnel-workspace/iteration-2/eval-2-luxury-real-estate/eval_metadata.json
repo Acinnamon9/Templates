@@ -1,0 +1,24 @@
+{
+  "eval_id": 2,
+  "eval_name": "luxury-real-estate",
+  "prompt": "I'm a luxury real estate agent in Miami. I want a page for a $4.2M waterfront penthouse at Azure Tower. Target: high-net-worth buyers, international investors.",
+  "assertions": [
+    "Output is a single valid HTML file",
+    "Uses Tailwind CDN and GSAP CDN",
+    "Has checkerboard grid layout with 8 columns",
+    "All images use grayscale filter",
+    "Has scroll-pinned sections with enter/exit choreography",
+    "Accent color is NOT the default pink",
+    "Has a Card Grid section showing property features or rooms",
+    "Copy mentions the property or real estate context",
+    "Includes a contact/CTA section with form",
+    "Page title includes Azure Tower or brand name",
+    "Hero ScrollTrigger has onLeaveBack callback",
+    "All spatial typography words are 6 characters or fewer",
+    "Global snap targets pinned range centers (not starts)",
+    "Contact section footer is in normal flow (not position absolute)",
+    "Contact section has z-[70] or z-index >= 70",
+    "All nav anchor hrefs match section ids",
+    "Card buttons consistently at bottom via margin-top auto"
+  ]
+}

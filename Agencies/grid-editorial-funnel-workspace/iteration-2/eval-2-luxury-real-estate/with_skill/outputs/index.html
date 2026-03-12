@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azure Tower - LIVE ABOVE IT ALL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#0D1B2A',
+            primary: '#F2F2F2',
+            secondary: '#111111',
+            'text-primary': '#111111',
+            'text-secondary': '#6E6E6E',
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            'mono-label': ['IBM Plex Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F2F2F2;
+      color: #111111;
+      overflow-x: hidden;
+    }
+
+    /* Grid System */
+    .grid-checkerboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .grid-tile {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease;
+    }
+
+    .grid-tile:hover {
+      border-color: rgba(17, 17, 17, 0.9);
+    }
+
+    /* Tile Types */
+    .tile-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(24px, 3.5vw, 48px);
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+      color: #111111;
+      word-break: break-all;
+    }
+
+    .grid-tile-accent {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0D1B2A;
+      animation: accentPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes accentPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    .image-slice {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
+    .font-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+    }
+
+    .font-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+    .font-mono-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    /* CTA Button */
+    .cta-button {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      background: #0D1B2A;
+      color: #F2F2F2;
+      border: none;
+      padding: 14px 28px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(13, 27, 42, 0.3);
+    }
+
+    /* Navigation */
+    .nav-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      mix-blend-mode: difference;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-fixed a,
+    .nav-fixed span {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-fixed a:hover {
+      opacity: 0.6;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    /* Grain Overlay */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 90;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* Section */
+    .section-pinned {
+      position: relative;
+      width: 100%;
+      background: #F2F2F2;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+      .card-grid-responsive {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+      .card-grid-responsive {
+        grid-template-columns: repeat(1, 1fr) !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-fixed">
+    <span class="font-mono-label">Azure Tower</span>
+    <div class="nav-links">
+      <a href="#heroSection">Home</a>
+      <a href="#spotlightSection">Views</a>
+      <a href="#textureSection">Detail</a>
+      <a href="#cardGridSection">Spaces</a>
+      <a href="#statementSection">Legacy</a>
+      <a href="#contactSection">Inquire</a>
+    </div>
+  </nav>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay"></div>
+
+  <main>
+
+    <!-- ===================== HERO SECTION ===================== -->
+    <section id="heroSection" class="section-pinned">
+      <div class="grid-checkerboard">
+        <!-- Row 1: 8 tiles -->
+        <div class="grid-tile"></div><!-- 1 -->
+        <div class="grid-tile"><span class="font-mono-label" style="color:#6E6E6E;">$4.2M Listing</span></div><!-- 2 -->
+        <div class="grid-tile"></div><!-- 3 -->
+        <div class="grid-tile"></div><!-- 4 -->
+        <div class="grid-tile"></div><!-- 5 -->
+        <div class="grid-tile"></div><!-- 6 -->
+        <div class="grid-tile"><span class="font-mono-label" style="color:#6E6E6E;">Miami, FL</span></div><!-- 7 -->
+        <div class="grid-tile"></div><!-- 8 -->
+
+        <!-- Row 2: 8 tiles -->
+        <div class="grid-tile"></div><!-- 9 -->
+        <div class="grid-tile hero-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower exterior" style="object-position:20% 25%;"></div><!-- 10 -->
+        <div class="grid-tile hero-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower exterior" style="object-position:50% 25%;"></div><!-- 11 -->
+        <div class="grid-tile hero-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower exterior" style="object-position:80% 25%;"></div><!-- 12 -->
+        <div class="grid-tile hero-text"><span class="tile-text">LIVE</span></div><!-- 13 -->
+        <div class="grid-tile"></div><!-- 14 -->
+        <div class="grid-tile-accent hero-accent"></div><!-- 15 -->
+        <div class="grid-tile"></div><!-- 16 -->
+
+        <!-- Row 3: 8 tiles -->
+        <div class="grid-tile"></div><!-- 17 -->
+        <div class="grid-tile hero-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower exterior" style="object-position:20% 75%;"></div><!-- 18 -->
+        <div class="grid-tile hero-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower exterior" style="object-position:50% 75%;"></div><!-- 19 -->
+        <div class="grid-tile hero-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower exterior" style="object-position:80% 75%;"></div><!-- 20 -->
+        <div class="grid-tile hero-text"><span class="tile-text">ABOVE</span></div><!-- 21 -->
+        <div class="grid-tile hero-text"><span class="tile-text">IT</span></div><!-- 22 -->
+        <div class="grid-tile"></div><!-- 23 -->
+        <div class="grid-tile"></div><!-- 24 -->
+
+        <!-- Row 4: 8 tiles -->
+        <div class="grid-tile"></div><!-- 25 -->
+        <div class="grid-tile"></div><!-- 26 -->
+        <div class="grid-tile"></div><!-- 27 -->
+        <div class="grid-tile"></div><!-- 28 -->
+        <div class="grid-tile"></div><!-- 29 -->
+        <div class="grid-tile hero-text"><span class="tile-text">ALL</span></div><!-- 30 -->
+        <div class="grid-tile"></div><!-- 31 -->
+        <div class="grid-tile-accent hero-accent"></div><!-- 32 -->
+
+        <!-- Row 5: 8 tiles -->
+        <div class="grid-tile"></div><!-- 33 -->
+        <div class="grid-tile"></div><!-- 34 -->
+        <div class="grid-tile"></div><!-- 35 -->
+        <div class="grid-tile"><span class="font-mono-label" style="color:#6E6E6E;">Azure Tower Penthouse</span></div><!-- 36 -->
+        <div class="grid-tile"></div><!-- 37 -->
+        <div class="grid-tile"></div><!-- 38 -->
+        <div class="grid-tile"><button class="cta-button" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">Book a Tour</button></div><!-- 39 -->
+        <div class="grid-tile"></div><!-- 40 -->
+
+        <!-- Row 6: 8 tiles -->
+        <div class="grid-tile"></div><!-- 41 -->
+        <div class="grid-tile"></div><!-- 42 -->
+        <div class="grid-tile"></div><!-- 43 -->
+        <div class="grid-tile"></div><!-- 44 -->
+        <div class="grid-tile"></div><!-- 45 -->
+        <div class="grid-tile"></div><!-- 46 -->
+        <div class="grid-tile"></div><!-- 47 -->
+        <div class="grid-tile"></div><!-- 48 -->
+      </div>
+    </section>
+
+    <!-- ===================== SPOTLIGHT SECTION ===================== -->
+    <section id="spotlightSection" class="section-pinned">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-text"><span class="tile-text">THE</span></div>
+        <div class="grid-tile spot-text"><span class="tile-text">VIEW</span></div>
+        <div class="grid-tile spot-text"><span class="tile-text">THAT</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse view" style="object-position:25% 25%;"></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse view" style="object-position:75% 25%;"></div>
+        <div class="grid-tile spot-text"><span class="tile-text">NEVER</span></div>
+        <div class="grid-tile spot-text"><span class="tile-text">SLEEPS</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent spot-accent"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label" style="color:#6E6E6E;">Floor-to-ceiling glass.</span></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse view" style="object-position:25% 75%;"></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse view" style="object-position:75% 75%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position:25% 40%;"></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position:75% 40%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position:25% 80%;"></div>
+        <div class="grid-tile spot-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position:75% 80%;"></div>
+        <div class="grid-tile-accent spot-accent"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label" style="color:#6E6E6E;">270-degree bay views.</span></div>
+        <div class="grid-tile"><button class="cta-button" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">See More</button></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ===================== TEXTURE SECTION ===================== -->
+    <section id="textureSection" class="section-pinned">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-text"><span class="tile-text">FEEL</span></div>
+        <div class="grid-tile tex-text"><span class="tile-text">THE</span></div>
+        <div class="grid-tile tex-text"><span class="tile-text">SPACE</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Interior detail" style="object-position:25% 25%;"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Interior detail" style="object-position:75% 25%;"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile-accent tex-accent"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position:20% 25%;"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position:50% 25%;"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position:80% 25%;"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Interior detail" style="object-position:25% 75%;"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Interior detail" style="object-position:75% 75%;"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label" style="color:#6E6E6E;">Italian marble. Miele suite.</span></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position:20% 75%;"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position:50% 75%;"></div>
+        <div class="grid-tile tex-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position:80% 75%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-text"><span class="tile-text">OWN</span></div>
+        <div class="grid-tile tex-text"><span class="tile-text">THE</span></div>
+        <div class="grid-tile tex-text"><span class="tile-text">EDGE</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent tex-accent"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><button class="cta-button" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">Inquire</button></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ===================== CARD GRID SECTION ===================== -->
+    <section id="cardGridSection" class="relative bg-[#F2F2F2] py-20" style="z-index:60;">
+      <div class="max-w-7xl mx-auto px-8">
+        <div class="mb-12">
+          <span class="font-mono-label" style="color:#0D1B2A;">Curated Spaces</span>
+          <h2 class="font-heading text-4xl mt-4" style="font-size: clamp(28px, 4vw, 48px);">EVERY ROOM A VIEW</h2>
+        </div>
+        <div class="card-grid-responsive" style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(17,17,17,0.65);">
+
+          <!-- Card 1 -->
+          <div class="card-item" style="background:#F2F2F2; display:flex; flex-direction:column;">
+            <img src="https://images.unsplash.com/photo-1522125123931-9304d91a42ee?q=80&w=582&auto=format&fit=crop" alt="Grand salon" style="width:100%; height:280px; object-fit:cover; filter:grayscale(100%) contrast(1.15);">
+            <div style="padding:24px; display:flex; flex-direction:column; gap:12px; flex:1;">
+              <span class="font-mono-label" style="color:#0D1B2A;">Space 01</span>
+              <h3 class="font-heading" style="font-size:20px;">GRAND SALON</h3>
+              <p class="font-body" style="color:#6E6E6E; font-size:14px;">Open-plan living with 12-foot ceilings and direct bay access through retractable glass walls.</p>
+              <button class="cta-button" style="margin-top:auto; width:100%;" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">View Floor Plan</button>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="card-item" style="background:#F2F2F2; display:flex; flex-direction:column;">
+            <img src="https://images.unsplash.com/photo-1504610926078-a1611febcad3?q=80&w=580&auto=format&fit=crop" alt="Primary suite" style="width:100%; height:280px; object-fit:cover; filter:grayscale(100%) contrast(1.15);">
+            <div style="padding:24px; display:flex; flex-direction:column; gap:12px; flex:1;">
+              <span class="font-mono-label" style="color:#0D1B2A;">Space 02</span>
+              <h3 class="font-heading" style="font-size:20px;">PRIMARY SUITE</h3>
+              <p class="font-body" style="color:#6E6E6E; font-size:14px;">East-facing master with private terrace, spa bath, dual walk-ins, and sunrise panorama.</p>
+              <button class="cta-button" style="margin-top:auto; width:100%;" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">View Floor Plan</button>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card-item" style="background:#F2F2F2; display:flex; flex-direction:column;">
+            <img src="https://images.unsplash.com/photo-1622586757007-efda9475c347?q=80&w=870&auto=format&fit=crop" alt="Sky terrace" style="width:100%; height:280px; object-fit:cover; filter:grayscale(100%) contrast(1.15);">
+            <div style="padding:24px; display:flex; flex-direction:column; gap:12px; flex:1;">
+              <span class="font-mono-label" style="color:#0D1B2A;">Space 03</span>
+              <h3 class="font-heading" style="font-size:20px;">SKY TERRACE</h3>
+              <p class="font-body" style="color:#6E6E6E; font-size:14px;">Private rooftop with infinity pool, summer kitchen, and unbroken skyline on three sides.</p>
+              <button class="cta-button" style="margin-top:auto; width:100%;" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">View Floor Plan</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STATEMENT SECTION ===================== -->
+    <section id="statementSection" class="section-pinned">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">SOME</span></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">WAIT</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position:25% 25%;"></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position:75% 25%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent stmt-accent"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">FOR</span></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">A</span></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">VIEW</span></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position:25% 75%;"></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position:75% 75%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position:25% 40%;"></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position:75% 40%;"></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">SOME</span></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">OWN</span></div>
+        <div class="grid-tile stmt-text"><span class="tile-text">IT</span></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position:25% 80%;"></div>
+        <div class="grid-tile stmt-img relative"><img class="image-slice absolute inset-0" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position:75% 80%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent stmt-accent"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label" style="color:#6E6E6E;">Only one remains.</span></div>
+        <div class="grid-tile"><button class="cta-button" onclick="document.getElementById('contactSection').scrollIntoView({behavior:'smooth'})">Claim It</button></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT SECTION ===================== -->
+    <section id="contactSection" class="relative bg-[#111111] z-[70] py-20 min-h-[60vh]">
+      <div class="max-w-7xl mx-auto px-8 flex flex-col min-h-[60vh]">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+          <!-- Left: Link Tiles -->
+          <div class="flex flex-col gap-4 contact-el">
+            <span class="font-mono-label text-white/60 mb-4">Explore</span>
+            <a href="#spotlightSection" class="block border border-white/20 hover:border-[#0D1B2A] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Views</span>
+            </a>
+            <a href="#cardGridSection" class="block border border-white/20 hover:border-[#0D1B2A] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Floor Plans</span>
+            </a>
+            <a href="#textureSection" class="block border border-white/20 hover:border-[#0D1B2A] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Finishes</span>
+            </a>
+          </div>
+
+          <!-- Center: Form Block -->
+          <div class="flex flex-col gap-6 contact-el">
+            <span class="font-mono-label text-white/60">Private Inquiry</span>
+            <h2 class="font-heading text-white text-3xl">SCHEDULE A PRIVATE TOUR</h2>
+            <p class="font-body text-white/50 text-sm">Exclusive access by appointment. Enter your email and our team will arrange a private showing of the Azure Tower penthouse.</p>
+            <form class="flex flex-col gap-4" onsubmit="event.preventDefault(); fetch('{{FORM_ENDPOINT}}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email: this.querySelector('input[type=email]').value, source: 'funnel-page'})}).then(() => this.querySelector('button').textContent = 'Subscribed').catch(() => this.querySelector('button').textContent = 'Try Again')">
+              <input type="email" placeholder="YOUR EMAIL" required class="bg-transparent border border-white/30 px-4 py-3 text-white font-mono text-sm focus:border-[#0D1B2A] focus:outline-none transition-colors" style="font-family:'IBM Plex Mono',monospace;">
+              <button type="submit" class="cta-button w-full">Request Access</button>
+            </form>
+          </div>
+
+          <!-- Right: Social Tiles -->
+          <div class="flex flex-col gap-4 contact-el">
+            <span class="font-mono-label text-white/60 mb-4">Connect</span>
+            <a href="#" class="block border border-white/20 hover:border-[#0D1B2A] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">Instagram</span>
+            </a>
+            <a href="#" class="block border border-white/20 hover:border-[#0D1B2A] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">LinkedIn</span>
+            </a>
+            <a href="#" class="block border border-white/20 hover:border-[#0D1B2A] px-6 py-4 transition-colors">
+              <span class="font-mono-label text-white">WhatsApp</span>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <span class="font-mono-label text-white/40">&copy; 2026 AZURE TOWER</span>
+          <span class="font-mono-label text-white/40">LIVE ABOVE IT ALL</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ==================== HERO SECTION ====================
+    const heroSection = document.querySelector('#heroSection');
+    const heroGrid = heroSection.querySelector('.grid-checkerboard');
+    const heroTiles = heroGrid.querySelectorAll('.grid-tile, .grid-tile-accent');
+    const heroImages = heroGrid.querySelectorAll('.hero-img');
+    const heroTextTiles = heroGrid.querySelectorAll('.hero-text');
+    const heroAccentTiles = heroGrid.querySelectorAll('.hero-accent');
+
+    // Hero Load Animation (plays on page load)
+    const heroLoadTl = gsap.timeline({ delay: 0.3 });
+    heroLoadTl.fromTo(heroTiles,
+      { scaleY: 0, opacity: 0 },
+      { scaleY: 1, opacity: 1, duration: 0.9, stagger: { amount: 0.6 } }
+    );
+    heroLoadTl.fromTo(heroImages,
+      { clipPath: 'inset(100% 0 0 0)' },
+      { clipPath: 'inset(0% 0 0 0)', duration: 0.7, stagger: 0.06 },
+      "-=0.5"
+    );
+    heroLoadTl.fromTo(heroTextTiles,
+      { scale: 0.85, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.05 },
+      "-=0.4"
+    );
+
+    // Hero Scroll Exit with onLeaveBack
+    const heroScrollTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: heroSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6,
+        onLeaveBack: () => {
+          gsap.set(heroImages, { opacity: 1, x: 0, y: 0 });
+          gsap.set(heroTextTiles, { opacity: 1, x: 0, y: 0 });
+          gsap.set(heroAccentTiles, { opacity: 1, scale: 1 });
+        }
+      }
+    });
+
+    // Enter phase (0 to 0.5) — already visible from load, so just hold
+    // Exit phase (0.7 to 1.0)
+    heroScrollTl.to(heroImages, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    heroScrollTl.to(heroTextTiles, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    heroScrollTl.to(heroAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in', stagger: 0.05 }, 0.7);
+
+
+    // ==================== SPOTLIGHT SECTION ====================
+    const spotSection = document.querySelector('#spotlightSection');
+    const spotImages = spotSection.querySelectorAll('.spot-img');
+    const spotTextTiles = spotSection.querySelectorAll('.spot-text');
+    const spotAccentTiles = spotSection.querySelectorAll('.spot-accent');
+
+    const spotTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: spotSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+
+    // Enter choreography (0 to 0.5)
+    spotTl.fromTo(spotImages,
+      { x: '-18vw', opacity: 0 },
+      { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 },
+      0
+    );
+    spotTl.fromTo(spotTextTiles,
+      { y: '12vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 },
+      0.05
+    );
+    spotTl.fromTo(spotAccentTiles,
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 },
+      0.1
+    );
+
+    // Exit choreography (0.7 to 1.0)
+    spotTl.to(spotImages, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    spotTl.to(spotTextTiles, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    spotTl.to(spotAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in', stagger: 0.05 }, 0.7);
+
+
+    // ==================== TEXTURE SECTION ====================
+    const texSection = document.querySelector('#textureSection');
+    const texImages = texSection.querySelectorAll('.tex-img');
+    const texTextTiles = texSection.querySelectorAll('.tex-text');
+    const texAccentTiles = texSection.querySelectorAll('.tex-accent');
+
+    const texTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: texSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+
+    // Enter choreography (0 to 0.5)
+    texTl.fromTo(texImages,
+      { y: '35vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 },
+      0
+    );
+    texTl.fromTo(texTextTiles,
+      { y: '12vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 },
+      0.05
+    );
+    texTl.fromTo(texAccentTiles,
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 },
+      0.1
+    );
+
+    // Exit choreography (0.7 to 1.0)
+    texTl.to(texImages, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    texTl.to(texTextTiles, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    texTl.to(texAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in', stagger: 0.05 }, 0.7);
+
+
+    // ==================== CARD GRID SECTION (non-pinned) ====================
+    const cards = document.querySelectorAll('.card-item');
+    cards.forEach((card, i) => {
+      gsap.fromTo(card,
+        { y: '10vh', rotate: -1.5, opacity: 0 },
+        {
+          y: 0, rotate: 0, opacity: 1, duration: 0.7, delay: i * 0.08, ease: 'power2.out',
+          scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' }
+        }
+      );
+    });
+
+    // Card section heading animation
+    const cardHeading = document.querySelector('#cardGridSection .mb-12');
+    gsap.fromTo(cardHeading,
+      { y: '8vh', opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
+        scrollTrigger: { trigger: cardHeading, start: 'top 80%', toggleActions: 'play none none reverse' }
+      }
+    );
+
+
+    // ==================== STATEMENT SECTION ====================
+    const stmtSection = document.querySelector('#statementSection');
+    const stmtImages = stmtSection.querySelectorAll('.stmt-img');
+    const stmtTextTiles = stmtSection.querySelectorAll('.stmt-text');
+    const stmtAccentTiles = stmtSection.querySelectorAll('.stmt-accent');
+
+    const stmtTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: stmtSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+
+    // Enter choreography (0 to 0.5)
+    stmtTl.fromTo(stmtImages,
+      { x: '-18vw', opacity: 0 },
+      { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 },
+      0
+    );
+    stmtTl.fromTo(stmtTextTiles,
+      { y: '12vh', opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 },
+      0.05
+    );
+    stmtTl.fromTo(stmtAccentTiles,
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 },
+      0.1
+    );
+
+    // Exit choreography (0.7 to 1.0)
+    stmtTl.to(stmtImages, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    stmtTl.to(stmtTextTiles, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7);
+    stmtTl.to(stmtAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in', stagger: 0.05 }, 0.7);
+
+
+    // ==================== CONTACT SECTION (non-pinned) ====================
+    const contactEls = document.querySelectorAll('.contact-el');
+    contactEls.forEach((el) => {
+      gsap.fromTo(el,
+        { y: '8vh', opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 80%', toggleActions: 'play none none reverse' }
+        }
+      );
+    });
+
+
+    // ==================== GLOBAL SNAP — Pinned Section Center Targeting ====================
+    const setupSnap = () => {
+      const pinned = ScrollTrigger.getAll().filter(st => st.vars.pin).sort((a, b) => a.start - b.start);
+      const maxScroll = ScrollTrigger.maxScroll(window);
+      if (!maxScroll || pinned.length === 0) return;
+
+      const pinnedRanges = pinned.map(st => ({
+        start: st.start / maxScroll,
+        end: (st.end ?? st.start) / maxScroll,
+        center: (st.start + ((st.end ?? st.start) - st.start) * 0.5) / maxScroll,
+      }));
+
+      ScrollTrigger.create({
+        snap: {
+          snapTo: (value) => {
+            const inPinned = pinnedRanges.some(r => value >= r.start - 0.02 && value <= r.end + 0.02);
+            if (!inPinned) return value;
+            return pinnedRanges.reduce((closest, r) =>
+              Math.abs(r.center - value) < Math.abs(closest - value) ? r.center : closest,
+              pinnedRanges[0]?.center ?? 0
+            );
+          },
+          duration: { min: 0.15, max: 0.35 },
+          delay: 0,
+          ease: 'power2.out',
+        }
+      });
+    };
+
+    // Wait 500ms for ScrollTriggers to fully initialize before setting up snap
+    setTimeout(setupSnap, 500);
+  </script>
+
+</body>
+</html>

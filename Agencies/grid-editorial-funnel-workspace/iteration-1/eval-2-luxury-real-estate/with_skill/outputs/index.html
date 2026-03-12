@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azure Tower - LIVE ABOVE IT ALL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'bg-primary': '#F2F2F2',
+            'bg-secondary': '#111111',
+            'text-primary': '#111111',
+            'text-secondary': '#6E6E6E',
+            'accent': '#0D1B2A'
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            'mono-label': ['IBM Plex Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+    body {
+      background: #F2F2F2;
+      color: #111111;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Grid System */
+    .grid-checkerboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      width: 100vw;
+      height: 100vh;
+    }
+    .grid-tile {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease;
+    }
+    .grid-tile:hover { border-color: rgba(17, 17, 17, 0.9); }
+
+    .grid-tile-accent {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0D1B2A;
+      animation: accentPulse 3s ease-in-out infinite;
+    }
+    @keyframes accentPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    /* Typography */
+    .tile-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(28px, 3.5vw, 56px);
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+      color: #111111;
+    }
+    .font-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+    }
+    .font-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+    .font-mono-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #6E6E6E;
+    }
+
+    /* Image Fragments */
+    .image-slice {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
+    /* CTA Button */
+    .cta-button {
+      background: #0D1B2A;
+      color: #F2F2F2;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding: 14px 32px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+    .cta-button:hover {
+      transform: scale(1.03);
+    }
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Navigation */
+    .nav-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      mix-blend-mode: difference;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+    .nav-fixed a, .nav-fixed span {
+      color: white;
+      pointer-events: auto;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    /* Grain Overlay */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* Section Pinning */
+    .section-pinned {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Card Grid Section */
+    .card-grid-section {
+      min-height: 100vh;
+      padding: 80px 40px;
+      background: #F2F2F2;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .property-card {
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      background: #F2F2F2;
+      transition: transform 0.3s ease;
+    }
+    .property-card:hover { transform: translateY(-4px); }
+    .property-card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+    .property-card .card-content { padding: 24px; }
+
+    /* Contact Section */
+    .contact-section {
+      min-height: 100vh;
+      background: #111111;
+      color: white;
+      padding: 80px 40px;
+      display: flex;
+      align-items: center;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .contact-link {
+      display: block;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 24px;
+      text-align: center;
+      color: white;
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: border-color 0.3s ease;
+    }
+    .contact-link:hover { border-color: #0D1B2A; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+      }
+      .nav-links { display: none; }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .nav-fixed { padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-fixed">
+    <span class="font-heading" style="font-size: 14px; letter-spacing: 0.05em;">AZURE TOWER</span>
+    <div class="nav-links">
+      <a href="#" class="font-mono-label" style="color: white;">Residence</a>
+      <a href="#" class="font-mono-label" style="color: white;">Views</a>
+      <a href="#" class="font-mono-label" style="color: white;">Amenities</a>
+      <a href="#" class="font-mono-label" style="color: white;">Inquire</a>
+    </div>
+  </nav>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay"></div>
+
+  <main>
+
+    <!-- ============================================ -->
+    <!-- SECTION 1: HERO -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="hero">
+      <div class="grid-checkerboard">
+        <!-- Row 1: 8 tiles -->
+        <div class="grid-tile"></div><!-- 1 -->
+        <div class="grid-tile">
+          <span class="font-mono-label">$4.2M Penthouse Listing</span>
+        </div><!-- 2 -->
+        <div class="grid-tile"></div><!-- 3 -->
+        <div class="grid-tile"></div><!-- 4 -->
+        <div class="grid-tile"></div><!-- 5 -->
+        <div class="grid-tile"></div><!-- 6 -->
+        <div class="grid-tile">
+          <span class="font-mono-label">Miami Waterfront</span>
+        </div><!-- 7 -->
+        <div class="grid-tile"></div><!-- 8 -->
+
+        <!-- Row 2: 8 tiles -->
+        <div class="grid-tile"></div><!-- 9 -->
+        <div class="grid-tile hero-text-tile">
+          <span class="tile-text">LIVE</span>
+        </div><!-- 10 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 20% 20%;">
+        </div><!-- 11 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 50% 20%;">
+        </div><!-- 12 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 80% 20%;">
+        </div><!-- 13 -->
+        <div class="grid-tile hero-text-tile">
+          <span class="tile-text">ABOVE</span>
+        </div><!-- 14 -->
+        <div class="grid-tile"></div><!-- 15 -->
+        <div class="grid-tile-accent"></div><!-- 16 -->
+
+        <!-- Row 3: 8 tiles -->
+        <div class="grid-tile"></div><!-- 17 -->
+        <div class="grid-tile"></div><!-- 18 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 20% 50%;">
+        </div><!-- 19 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 50% 50%;">
+        </div><!-- 20 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 80% 50%;">
+        </div><!-- 21 -->
+        <div class="grid-tile"></div><!-- 22 -->
+        <div class="grid-tile hero-text-tile">
+          <span class="tile-text">IT</span>
+        </div><!-- 23 -->
+        <div class="grid-tile"></div><!-- 24 -->
+
+        <!-- Row 4: 8 tiles -->
+        <div class="grid-tile-accent"></div><!-- 25 -->
+        <div class="grid-tile"></div><!-- 26 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 20% 80%;">
+        </div><!-- 27 -->
+        <div class="grid-tile hero-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="Azure Tower penthouse" style="object-position: 50% 80%;">
+        </div><!-- 28 -->
+        <div class="grid-tile hero-text-tile">
+          <span class="tile-text">ALL</span>
+        </div><!-- 29 -->
+        <div class="grid-tile"></div><!-- 30 -->
+        <div class="grid-tile"></div><!-- 31 -->
+        <div class="grid-tile"></div><!-- 32 -->
+
+        <!-- Row 5: 8 tiles -->
+        <div class="grid-tile"></div><!-- 33 -->
+        <div class="grid-tile"></div><!-- 34 -->
+        <div class="grid-tile"></div><!-- 35 -->
+        <div class="grid-tile"></div><!-- 36 -->
+        <div class="grid-tile"></div><!-- 37 -->
+        <div class="grid-tile">
+          <span class="font-mono-label" style="text-align:center; line-height: 1.6;">Penthouse 42. Azure Tower.<br>Biscayne Bay. Infinite horizon.</span>
+        </div><!-- 38 -->
+        <div class="grid-tile">
+          <button class="cta-button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Schedule Private Tour</button>
+        </div><!-- 39 -->
+        <div class="grid-tile"></div><!-- 40 -->
+
+        <!-- Row 6: 8 tiles -->
+        <div class="grid-tile"></div><!-- 41 -->
+        <div class="grid-tile"></div><!-- 42 -->
+        <div class="grid-tile"></div><!-- 43 -->
+        <div class="grid-tile"></div><!-- 44 -->
+        <div class="grid-tile-accent"></div><!-- 45 -->
+        <div class="grid-tile"></div><!-- 46 -->
+        <div class="grid-tile"></div><!-- 47 -->
+        <div class="grid-tile"></div><!-- 48 -->
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 2: SPOTLIGHT -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="spotlight">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile spot-text-tile">
+          <span class="tile-text">CROWN</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse interior" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse interior" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile spot-text-tile">
+          <span class="tile-text">OF</span>
+        </div>
+        <div class="grid-tile spot-text-tile">
+          <span class="tile-text">MIAMI</span>
+        </div>
+        <div class="grid-tile-accent spot-accent-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse interior" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Penthouse interior" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-text-tile">
+          <span class="tile-text">SKYLINE</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position: 25% 30%;">
+        </div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position: 50% 30%;">
+        </div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position: 75% 30%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="font-mono-label">4,200 sq ft. 42nd Floor.</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position: 25% 70%;">
+        </div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position: 50% 70%;">
+        </div>
+        <div class="grid-tile spot-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami skyline" style="object-position: 75% 70%;">
+        </div>
+        <div class="grid-tile-accent spot-accent-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spot-text-tile">
+          <span class="tile-text" style="font-size: clamp(14px, 1.8vw, 22px);">THAT NEVER<br>SLEEPS</span>
+        </div>
+        <div class="grid-tile">
+          <button class="cta-button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">View Floor Plan</button>
+        </div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 3: TEXTURE -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="texture">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-text-tile">
+          <span class="tile-text">FEEL</span>
+        </div>
+        <div class="grid-tile tex-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-text-tile">
+          <span class="tile-text">HORIZON</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Material detail" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Material detail" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile-accent tex-accent-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent tex-accent-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Material detail" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1763888450559-c1e93e238000?q=80&w=580&auto=format&fit=crop" alt="Material detail" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position: 25% 30%;">
+        </div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position: 50% 30%;">
+        </div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position: 75% 30%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-text-tile">
+          <span class="tile-text">OWN</span>
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile">
+          <span class="font-mono-label" style="text-align:center; line-height: 1.6;">Italian marble. Floor-to-ceiling glass.<br>Private terrace. No compromise.</span>
+        </div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position: 25% 70%;">
+        </div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position: 50% 70%;">
+        </div>
+        <div class="grid-tile tex-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Luxury finish" style="object-position: 75% 70%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-text-tile">
+          <span class="tile-text">THE</span>
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile tex-text-tile">
+          <span class="tile-text">SKY</span>
+        </div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 4: CARD GRID -->
+    <!-- ============================================ -->
+    <section class="card-grid-section" id="cards">
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <div style="margin-bottom: 60px;">
+          <span class="font-mono-label" style="display:block; margin-bottom: 12px;">The Residence</span>
+          <h2 class="font-heading" style="font-size: clamp(32px, 5vw, 64px); color: #111111;">EVERY ROOM.<br>A STATEMENT.</h2>
+        </div>
+        <div class="card-grid">
+          <!-- Card 1 -->
+          <div class="property-card card-item">
+            <img src="https://images.unsplash.com/photo-1522125123931-9304d91a42ee?q=80&w=582&auto=format&fit=crop" alt="Grand living room">
+            <div class="card-content">
+              <span class="font-mono-label" style="display:block; margin-bottom: 8px;">Living Space</span>
+              <h3 class="font-heading" style="font-size: 20px; margin-bottom: 8px;">THE GRAND SALON</h3>
+              <p class="font-body" style="color: #6E6E6E; font-size: 14px; margin-bottom: 16px;">1,400 sq ft of open living. Double-height ceilings. Biscayne Bay panorama through 14-foot glass walls.</p>
+              <button class="cta-button" style="width: 100%;">View Details</button>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="property-card card-item">
+            <img src="https://images.unsplash.com/photo-1504610926078-a1611febcad3?q=80&w=580&auto=format&fit=crop" alt="Master suite">
+            <div class="card-content">
+              <span class="font-mono-label" style="display:block; margin-bottom: 8px;">Master Suite</span>
+              <h3 class="font-heading" style="font-size: 20px; margin-bottom: 8px;">THE OWNER'S REFUGE</h3>
+              <p class="font-body" style="color: #6E6E6E; font-size: 14px; margin-bottom: 16px;">Private terrace. Walk-in dressing room. Italian marble en-suite with freestanding soaking tub.</p>
+              <button class="cta-button" style="width: 100%;">View Details</button>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="property-card card-item">
+            <img src="https://images.unsplash.com/photo-1622586757007-efda9475c347?q=80&w=870&auto=format&fit=crop" alt="Chef's kitchen">
+            <div class="card-content">
+              <span class="font-mono-label" style="display:block; margin-bottom: 8px;">Chef's Kitchen</span>
+              <h3 class="font-heading" style="font-size: 20px; margin-bottom: 8px;">WHERE TASTE LIVES</h3>
+              <p class="font-body" style="color: #6E6E6E; font-size: 14px; margin-bottom: 16px;">Gaggenau appliances. Calacatta marble island. Wine column. Designed for those who entertain without apology.</p>
+              <button class="cta-button" style="width: 100%;">View Details</button>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="property-card card-item">
+            <img src="https://images.unsplash.com/photo-1657771192840-7e3f6e827e58?q=80&w=925&auto=format&fit=crop" alt="Private terrace">
+            <div class="card-content">
+              <span class="font-mono-label" style="display:block; margin-bottom: 8px;">Sky Terrace</span>
+              <h3 class="font-heading" style="font-size: 20px; margin-bottom: 8px;">YOUR PRIVATE SKYLINE</h3>
+              <p class="font-body" style="color: #6E6E6E; font-size: 14px; margin-bottom: 16px;">1,800 sq ft wraparound terrace. Summer kitchen. Heated infinity plunge pool. Sunrise to sunset, uninterrupted.</p>
+              <button class="cta-button" style="width: 100%;">View Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 5: STATEMENT -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="statement">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-text-tile">
+          <span class="tile-text">LIFE</span>
+        </div>
+        <div class="grid-tile stmt-text-tile">
+          <span class="tile-text">IS</span>
+        </div>
+        <div class="grid-tile stmt-text-tile">
+          <span class="tile-text">TOO</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position: 25% 25%;">
+        </div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position: 75% 25%;">
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile-accent stmt-accent-tile"></div>
+        <div class="grid-tile stmt-text-tile">
+          <span class="tile-text">SHORT</span>
+        </div>
+        <div class="grid-tile stmt-text-tile">
+          <span class="tile-text">FOR</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position: 25% 75%;">
+        </div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="Miami waterfront" style="object-position: 75% 75%;">
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-text-tile">
+          <span class="tile-text">ORDINARY</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 25% 30%;">
+        </div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 50% 30%;">
+        </div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 75% 30%;">
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent stmt-accent-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-text-tile">
+          <span class="tile-text">VIEWS</span>
+        </div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 25% 70%;">
+        </div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 50% 70%;">
+        </div>
+        <div class="grid-tile stmt-image-tile">
+          <img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 75% 70%;">
+        </div>
+        <div class="grid-tile">
+          <button class="cta-button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Claim This View</button>
+        </div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 6: CONTACT -->
+    <!-- ============================================ -->
+    <section class="contact-section" id="contact">
+      <div class="contact-grid">
+        <!-- Column 1: Links -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span class="font-mono-label" style="color: #6E6E6E; margin-bottom: 12px;">Connect</span>
+          <a href="#" class="contact-link">Schedule Private Tour</a>
+          <a href="#" class="contact-link">Download Brochure</a>
+          <a href="#" class="contact-link">Building Amenities</a>
+          <a href="#" class="contact-link">Financing Options</a>
+        </div>
+
+        <!-- Column 2: Form -->
+        <div>
+          <span class="font-mono-label" style="color: #6E6E6E; display: block; margin-bottom: 12px;">Private Inquiry</span>
+          <p class="font-body" style="color: #999; font-size: 14px; margin-bottom: 24px;">Receive exclusive listing details, virtual tour access, and priority scheduling for Penthouse 42.</p>
+          <form class="flex flex-col gap-4" onsubmit="event.preventDefault(); fetch('{{FORM_ENDPOINT}}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email: this.querySelector('input[type=email]').value, source: 'funnel-page'})}).then(() => this.querySelector('button').textContent = 'Inquiry Sent').catch(() => this.querySelector('button').textContent = 'Try Again')">
+            <input type="text" placeholder="YOUR NAME" class="bg-transparent border border-white/30 px-4 py-3 text-white font-mono text-sm focus:border-[#0D1B2A] focus:outline-none transition-colors" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.05em;">
+            <input type="email" placeholder="YOUR EMAIL" required class="bg-transparent border border-white/30 px-4 py-3 text-white font-mono text-sm focus:border-[#0D1B2A] focus:outline-none transition-colors" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.05em;">
+            <input type="tel" placeholder="YOUR PHONE" class="bg-transparent border border-white/30 px-4 py-3 text-white font-mono text-sm focus:border-[#0D1B2A] focus:outline-none transition-colors" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.05em;">
+            <button type="submit" class="cta-button w-full">Request Private Showing</button>
+          </form>
+        </div>
+
+        <!-- Column 3: Social & Info -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span class="font-mono-label" style="color: #6E6E6E; margin-bottom: 12px;">Follow</span>
+          <a href="#" class="contact-link">Instagram</a>
+          <a href="#" class="contact-link">LinkedIn</a>
+          <a href="#" class="contact-link">WhatsApp</a>
+          <div style="margin-top: auto; padding-top: 40px;">
+            <span class="font-mono-label" style="color: #6E6E6E; display: block; margin-bottom: 8px;">Location</span>
+            <p class="font-body" style="color: #999; font-size: 13px; line-height: 1.7;">Azure Tower, Penthouse 42<br>Biscayne Boulevard<br>Miami, FL 33131</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="position: absolute; bottom: 32px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px;">
+        <span class="font-mono-label" style="color: #6E6E6E;">&copy; 2026 Azure Tower Residences. All rights reserved.</span>
+        <span class="font-mono-label" style="color: #6E6E6E;">Offered at $4,200,000</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ========================================
+    // HERO: Load Animation (non-scroll)
+    // ========================================
+    const heroSection = document.querySelector('#hero');
+    const heroTiles = heroSection.querySelectorAll('.grid-tile, .grid-tile-accent');
+    const heroImages = heroSection.querySelectorAll('.hero-image-tile');
+    const heroTextTiles = heroSection.querySelectorAll('.hero-text-tile');
+
+    const heroLoadTl = gsap.timeline({ delay: 0.3 });
+    heroLoadTl.fromTo(heroTiles,
+      { scaleY: 0, opacity: 0 },
+      { scaleY: 1, opacity: 1, duration: 0.9, stagger: { amount: 0.6 } }
+    );
+    heroLoadTl.fromTo(heroImages,
+      { clipPath: 'inset(100% 0 0 0)' },
+      { clipPath: 'inset(0% 0 0 0)', duration: 0.7, stagger: 0.06 },
+      "-=0.5"
+    );
+    heroLoadTl.fromTo(heroTextTiles,
+      { scale: 0.85, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.05 },
+      "-=0.4"
+    );
+
+    // ========================================
+    // HERO: Scroll Exit
+    // ========================================
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: heroSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    })
+    .to(heroSection.querySelectorAll('.grid-tile, .grid-tile-accent'), {
+      y: '-18vh',
+      opacity: 0,
+      ease: 'power2.in',
+      stagger: 0.01
+    }, 0.7);
+
+    // ========================================
+    // SPOTLIGHT: Enter + Exit
+    // ========================================
+    const spotSection = document.querySelector('#spotlight');
+    const spotImageTiles = spotSection.querySelectorAll('.spot-image-tile');
+    const spotTextTiles = spotSection.querySelectorAll('.spot-text-tile');
+    const spotAccentTiles = spotSection.querySelectorAll('.spot-accent-tile');
+    const spotAllTiles = spotSection.querySelectorAll('.grid-tile, .grid-tile-accent');
+
+    gsap.set(spotImageTiles, { x: '-18vw', opacity: 0 });
+    gsap.set(spotTextTiles, { y: '12vh', opacity: 0 });
+    gsap.set(spotAccentTiles, { scale: 0.6, opacity: 0 });
+
+    const spotTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: spotSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+
+    // Enter (0 to 0.5)
+    spotTl.to(spotImageTiles, { x: 0, opacity: 1, stagger: 0.03, ease: 'power2.out', duration: 0.5 }, 0);
+    spotTl.to(spotTextTiles, { y: 0, opacity: 1, stagger: 0.02, ease: 'power2.out', duration: 0.5 }, 0.05);
+    spotTl.to(spotAccentTiles, { scale: 1, opacity: 1, stagger: 0.05, ease: 'back.out(1.4)', duration: 0.5 }, 0.1);
+
+    // Exit (0.7 to 1.0)
+    spotTl.to(spotAllTiles, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.01, duration: 0.3 }, 0.7);
+    spotTl.to(spotAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in', duration: 0.3 }, 0.7);
+
+    // ========================================
+    // TEXTURE: Enter + Exit
+    // ========================================
+    const texSection = document.querySelector('#texture');
+    const texImageTiles = texSection.querySelectorAll('.tex-image-tile');
+    const texTextTiles = texSection.querySelectorAll('.tex-text-tile');
+    const texAccentTiles = texSection.querySelectorAll('.tex-accent-tile');
+    const texAllTiles = texSection.querySelectorAll('.grid-tile, .grid-tile-accent');
+
+    gsap.set(texImageTiles, { y: '35vh', opacity: 0 });
+    gsap.set(texTextTiles, { y: '12vh', opacity: 0 });
+    gsap.set(texAccentTiles, { scale: 0.6, opacity: 0 });
+
+    const texTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: texSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+
+    // Enter
+    texTl.to(texImageTiles, { y: 0, opacity: 1, stagger: 0.02, ease: 'power2.out', duration: 0.5 }, 0);
+    texTl.to(texTextTiles, { y: 0, opacity: 1, stagger: 0.02, ease: 'power2.out', duration: 0.5 }, 0.05);
+    texTl.to(texAccentTiles, { scale: 1, opacity: 1, stagger: 0.05, ease: 'back.out(1.4)', duration: 0.5 }, 0.1);
+
+    // Exit
+    texTl.to(texAllTiles, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.01, duration: 0.3 }, 0.7);
+    texTl.to(texAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in', duration: 0.3 }, 0.7);
+
+    // ========================================
+    // CARD GRID: Staggered Reveal
+    // ========================================
+    const cardItems = document.querySelectorAll('.card-item');
+    gsap.set(cardItems, { y: 60, opacity: 0 });
+
+    ScrollTrigger.batch(cardItems, {
+      onEnter: (batch) => gsap.to(batch, {
+        y: 0,
+        opacity: 1,
+        stagger: 0.12,
+        duration: 0.8,
+        ease: 'power2.out'
+      }),
+      start: 'top 85%'
+    });
+
+    // ========================================
+    // STATEMENT: Enter + Exit
+    // ========================================
+    const stmtSection = document.querySelector('#statement');
+    const stmtImageTiles = stmtSection.querySelectorAll('.stmt-image-tile');
+    const stmtTextTiles = stmtSection.querySelectorAll('.stmt-text-tile');
+    const stmtAccentTiles = stmtSection.querySelectorAll('.stmt-accent-tile');
+    const stmtAllTiles = stmtSection.querySelectorAll('.grid-tile, .grid-tile-accent');
+
+    gsap.set(stmtImageTiles, { x: '-18vw', opacity: 0 });
+    gsap.set(stmtTextTiles, { y: '12vh', opacity: 0 });
+    gsap.set(stmtAccentTiles, { scale: 0.6, opacity: 0 });
+
+    const stmtTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: stmtSection,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 0.6
+      }
+    });
+
+    // Enter
+    stmtTl.to(stmtImageTiles, { x: 0, opacity: 1, stagger: 0.03, ease: 'power2.out', duration: 0.5 }, 0);
+    stmtTl.to(stmtTextTiles, { y: 0, opacity: 1, stagger: 0.02, ease: 'power2.out', duration: 0.5 }, 0.05);
+    stmtTl.to(stmtAccentTiles, { scale: 1, opacity: 1, stagger: 0.05, ease: 'back.out(1.4)', duration: 0.5 }, 0.1);
+
+    // Exit
+    stmtTl.to(stmtAllTiles, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.01, duration: 0.3 }, 0.7);
+    stmtTl.to(stmtAccentTiles, { scale: 1.15, opacity: 0, ease: 'power2.in', duration: 0.3 }, 0.7);
+
+    // ========================================
+    // CONTACT: Fade In
+    // ========================================
+    const contactSection = document.querySelector('#contact');
+    const contactChildren = contactSection.querySelectorAll('.contact-grid > div, .contact-link, form');
+    gsap.set(contactChildren, { y: 40, opacity: 0 });
+
+    ScrollTrigger.create({
+      trigger: contactSection,
+      start: 'top 75%',
+      onEnter: () => {
+        gsap.to(contactChildren, {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.7,
+          ease: 'power2.out'
+        });
+      }
+    });
+
+    // ========================================
+    // GLOBAL SNAP
+    // ========================================
+    const sections = gsap.utils.toArray('.section-pinned');
+    const totalPinnedHeight = sections.length * window.innerHeight * 2.3;
+
+    ScrollTrigger.addEventListener('refresh', () => {
+      const triggers = ScrollTrigger.getAll().filter(t => t.pin);
+      if (triggers.length > 0) {
+        const snapPoints = triggers.map(t => {
+          const startScroll = t.start;
+          const endScroll = t.end;
+          const center = (startScroll + endScroll) / 2;
+          return center / ScrollTrigger.maxScroll(window);
+        });
+
+        ScrollTrigger.create({
+          snap: {
+            snapTo: snapPoints,
+            duration: { min: 0.2, max: 0.6 },
+            ease: 'power1.inOut'
+          }
+        });
+      }
+    });
+
+    ScrollTrigger.refresh();
+  </script>
+</body>
+</html>

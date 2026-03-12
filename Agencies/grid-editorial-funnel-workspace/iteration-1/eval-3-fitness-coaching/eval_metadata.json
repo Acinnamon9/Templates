@@ -1,0 +1,16 @@
+{
+  "eval_id": 3,
+  "eval_name": "fitness-coaching",
+  "prompt": "I run a high-ticket fitness transformation coaching program called FORGE. 12-week program, $2,997. Target: men 30-45 who want to look and feel elite.",
+  "assertions": [
+    "Output is a single valid HTML file",
+    "Has checkerboard grid with spatial typography",
+    "Accent color suggests fitness/energy (not default pink)",
+    "Has a Card Grid section showing program tiers or features",
+    "Copy voice is intense and commanding",
+    "Hero phrase is short (3-5 words) scattered across tiles",
+    "Has GSAP scroll animations on multiple sections",
+    "Contact section includes email form with {{FORM_ENDPOINT}}",
+    "Includes price or program details somewhere on the page"
+  ]
+}

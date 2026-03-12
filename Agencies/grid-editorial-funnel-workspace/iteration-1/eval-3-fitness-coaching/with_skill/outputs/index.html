@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FORGE - Forged In Discipline</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'bg-primary': '#F2F2F2',
+            'bg-secondary': '#111111',
+            'text-primary': '#111111',
+            'text-secondary': '#6E6E6E',
+            'accent': '#00E5FF',
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            'mono-label': ['IBM Plex Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #F2F2F2;
+      color: #111111;
+      overflow-x: hidden;
+    }
+
+    /* Grid System */
+    .grid-checkerboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .grid-tile {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease;
+    }
+
+    .grid-tile:hover {
+      border-color: rgba(17, 17, 17, 0.9);
+    }
+
+    .grid-tile-accent {
+      position: relative;
+      border: 1px solid rgba(17, 17, 17, 0.65);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #00E5FF;
+      animation: accentPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes accentPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    /* Tile Text */
+    .tile-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(28px, 3.5vw, 56px);
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+      color: #111111;
+    }
+
+    .tile-text-light {
+      color: #F2F2F2;
+    }
+
+    /* Image Slices */
+    .image-slice {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
+    /* Mono Labels */
+    .font-mono-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #6E6E6E;
+    }
+
+    /* Font Classes */
+    .font-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+    }
+
+    .font-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+    /* CTA Button */
+    .cta-button {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      background: #00E5FF;
+      color: #111111;
+      padding: 14px 28px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.03);
+    }
+
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Navigation */
+    .nav-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      mix-blend-mode: difference;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .nav-fixed * {
+      pointer-events: auto;
+    }
+
+    .nav-fixed a, .nav-fixed span {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-brand {
+      font-family: 'Montserrat', sans-serif !important;
+      font-weight: 900 !important;
+      font-size: 18px !important;
+      letter-spacing: 0.15em !important;
+    }
+
+    /* Grain Overlay */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* Section Pinned */
+    .section-pinned {
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(17, 17, 17, 0.65);
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card-item {
+      background: #F2F2F2;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .card-item img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.15);
+    }
+
+    .card-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      background: #111111;
+      color: #F2F2F2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      flex: 1;
+      align-content: center;
+    }
+
+    .contact-link {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: clamp(18px, 2vw, 28px);
+      color: #F2F2F2;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      display: block;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+    }
+
+    .contact-link:hover {
+      color: #00E5FF;
+    }
+
+    .contact-footer {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-footer span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6E6E6E;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-checkerboard {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+      }
+      .nav-links {
+        display: none !important;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr;
+        padding: 60px 24px;
+        gap: 40px;
+      }
+      .contact-footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-fixed">
+    <span class="nav-brand">FORGE</span>
+    <div class="nav-links" style="display:flex; gap:32px;">
+      <a href="#manifesto">Manifesto</a>
+      <a href="#program">Program</a>
+      <a href="#offerings">Offerings</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay"></div>
+
+  <main>
+
+    <!-- ============================================ -->
+    <!-- SECTION 1: HERO -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="hero">
+      <div class="grid-checkerboard">
+        <!-- Row 1: 8 tiles -->
+        <div class="grid-tile"></div><!-- 1 -->
+        <div class="grid-tile"><span class="font-mono-label">12-Week Transformation</span></div><!-- 2 -->
+        <div class="grid-tile"></div><!-- 3 -->
+        <div class="grid-tile"></div><!-- 4 -->
+        <div class="grid-tile"></div><!-- 5 -->
+        <div class="grid-tile"></div><!-- 6 -->
+        <div class="grid-tile"><span class="font-mono-label">Est. 2024</span></div><!-- 7 -->
+        <div class="grid-tile"></div><!-- 8 -->
+
+        <!-- Row 2: 8 tiles -->
+        <div class="grid-tile"></div><!-- 9 -->
+        <div class="grid-tile hero-text"><span class="tile-text">FORGED</span></div><!-- 10 -->
+        <div class="grid-tile hero-text"><span class="tile-text">IN</span></div><!-- 11 -->
+        <div class="grid-tile hero-img"><img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 25% 25%;"></div><!-- 12 -->
+        <div class="grid-tile hero-img"><img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 75% 25%;"></div><!-- 13 -->
+        <div class="grid-tile"></div><!-- 14 -->
+        <div class="grid-tile-accent hero-accent"></div><!-- 15 -->
+        <div class="grid-tile"></div><!-- 16 -->
+
+        <!-- Row 3: 8 tiles -->
+        <div class="grid-tile"></div><!-- 17 -->
+        <div class="grid-tile hero-text"><span class="tile-text">DISCIPLINE</span></div><!-- 18 -->
+        <div class="grid-tile"></div><!-- 19 -->
+        <div class="grid-tile hero-img"><img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 25% 75%;"></div><!-- 20 -->
+        <div class="grid-tile hero-img"><img class="image-slice" src="https://images.unsplash.com/photo-1613834926943-9e4ac2945744?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 75% 75%;"></div><!-- 21 -->
+        <div class="grid-tile hero-img"><img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 50% 50%;"></div><!-- 22 -->
+        <div class="grid-tile"></div><!-- 23 -->
+        <div class="grid-tile"></div><!-- 24 -->
+
+        <!-- Row 4: 8 tiles -->
+        <div class="grid-tile"></div><!-- 25 -->
+        <div class="grid-tile"></div><!-- 26 -->
+        <div class="grid-tile"><span class="font-mono-label" style="color:#00E5FF;">Limited Cohort</span></div><!-- 27 -->
+        <div class="grid-tile"></div><!-- 28 -->
+        <div class="grid-tile"></div><!-- 29 -->
+        <div class="grid-tile"></div><!-- 30 -->
+        <div class="grid-tile"></div><!-- 31 -->
+        <div class="grid-tile-accent hero-accent"></div><!-- 32 -->
+
+        <!-- Row 5: 8 tiles -->
+        <div class="grid-tile"></div><!-- 33 -->
+        <div class="grid-tile"></div><!-- 34 -->
+        <div class="grid-tile"></div><!-- 35 -->
+        <div class="grid-tile"></div><!-- 36 -->
+        <div class="grid-tile"></div><!-- 37 -->
+        <div class="grid-tile"><button class="cta-button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Apply Now</button></div><!-- 38 -->
+        <div class="grid-tile"></div><!-- 39 -->
+        <div class="grid-tile"></div><!-- 40 -->
+
+        <!-- Row 6: 8 tiles -->
+        <div class="grid-tile"></div><!-- 41 -->
+        <div class="grid-tile"></div><!-- 42 -->
+        <div class="grid-tile"></div><!-- 43 -->
+        <div class="grid-tile"><span class="font-mono-label">Elite body. Elite mind. No excuses.</span></div><!-- 44 -->
+        <div class="grid-tile"></div><!-- 45 -->
+        <div class="grid-tile"></div><!-- 46 -->
+        <div class="grid-tile"></div><!-- 47 -->
+        <div class="grid-tile"></div><!-- 48 -->
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 2: MANIFESTO -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="manifesto">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-text"><span class="tile-text">YOUR</span></div>
+        <div class="grid-tile manifesto-text"><span class="tile-text">BODY</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-text"><span class="tile-text">IS</span></div>
+        <div class="grid-tile manifesto-text"><span class="tile-text">NOT</span></div>
+        <div class="grid-tile manifesto-img"><img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 20% 25%;"></div>
+        <div class="grid-tile manifesto-img"><img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 50% 25%;"></div>
+        <div class="grid-tile manifesto-img"><img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 80% 25%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent manifesto-accent"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-text"><span class="tile-text">A</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile manifesto-img"><img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 20% 75%;"></div>
+        <div class="grid-tile manifesto-img"><img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 50% 75%;"></div>
+        <div class="grid-tile manifesto-img"><img class="image-slice" src="https://images.unsplash.com/photo-1522717425499-89d3198ccc74?q=80&w=1032&auto=format&fit=crop" alt="Lifestyle" style="object-position: 80% 75%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile-accent manifesto-accent"></div>
+        <div class="grid-tile manifesto-text"><span class="tile-text">CEILING</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label">You already know what you're capable of.</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label">Now prove it.</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 3: SPOTLIGHT -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="program">
+      <div class="grid-checkerboard">
+        <!-- Row 1 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label">The Program</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-text"><span class="tile-text">THE</span></div>
+        <div class="grid-tile spotlight-text"><span class="tile-text">PROGRAM</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 25% 25%;"></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 75% 25%;"></div>
+        <div class="grid-tile spotlight-text"><span class="tile-text">THAT</span></div>
+        <div class="grid-tile spotlight-text"><span class="tile-text">CHANGES</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent spotlight-accent"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile-accent spotlight-accent"></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 25% 75%;"></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=580&auto=format&fit=crop" alt="Product" style="object-position: 75% 75%;"></div>
+        <div class="grid-tile spotlight-text"><span class="tile-text">EVERYTHING</span></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 4 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 33% 33%;"></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 66% 33%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 5 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><span class="font-mono-label">12 weeks. Total transformation. No excuses.</span></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 33% 66%;"></div>
+        <div class="grid-tile spotlight-img"><img class="image-slice" src="https://images.unsplash.com/photo-1552820755-733e038f86d5?q=80&w=870&auto=format&fit=crop" alt="FORGE" style="object-position: 66% 66%;"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+
+        <!-- Row 6 -->
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"><button class="cta-button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Apply Now</button></div>
+        <div class="grid-tile"></div>
+        <div class="grid-tile"></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 4: CARD GRID -->
+    <!-- ============================================ -->
+    <section class="section-pinned" id="offerings" style="display:flex; flex-direction:column; justify-content:center; align-items:center; padding: 80px 40px; background: #F2F2F2;">
+      <div style="max-width:1200px; width:100%; margin-bottom:48px;">
+        <span class="font-mono-label" style="display:block; margin-bottom:16px;">What You Get</span>
+        <h2 class="font-heading" style="font-size:clamp(32px, 4vw, 56px); color:#111111;">THE FORGE FRAMEWORK</h2>
+      </div>
+      <div class="card-grid">
+        <!-- Card 1 -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1522125123931-9304d91a42ee?q=80&w=582&auto=format&fit=crop" alt="Training Protocol">
+          <div class="card-content">
+            <span class="font-mono-label" style="color:#00E5FF;">Pillar 01</span>
+            <h3 class="font-heading" style="font-size:20px; margin-top:4px;">Training Protocol</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px; line-height:1.6;">Custom programming built for your body, your schedule, your goals. Progressive overload, periodized for 12 weeks of relentless progress.</p>
+            <span class="font-mono-label" style="margin-top:auto; padding-top:16px;">Included</span>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1504610926078-a1611febcad3?q=80&w=580&auto=format&fit=crop" alt="Nutrition Architecture">
+          <div class="card-content">
+            <span class="font-mono-label" style="color:#00E5FF;">Pillar 02</span>
+            <h3 class="font-heading" style="font-size:20px; margin-top:4px;">Nutrition Architecture</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px; line-height:1.6;">Precision macros, meal frameworks, and strategic refeeds. No crash diets. A system you can sustain while living your life.</p>
+            <span class="font-mono-label" style="margin-top:auto; padding-top:16px;">Included</span>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1622586757007-efda9475c347?q=80&w=870&auto=format&fit=crop" alt="1:1 Coaching">
+          <div class="card-content">
+            <span class="font-mono-label" style="color:#00E5FF;">Pillar 03</span>
+            <h3 class="font-heading" style="font-size:20px; margin-top:4px;">1:1 Coaching Calls</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px; line-height:1.6;">Weekly calls with your dedicated coach. Accountability, adjustments, and the push you need when discipline starts to fade.</p>
+            <span class="font-mono-label" style="margin-top:auto; padding-top:16px;">Included</span>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1657771192840-7e3f6e827e58?q=80&w=925&auto=format&fit=crop" alt="Mindset Forging">
+          <div class="card-content">
+            <span class="font-mono-label" style="color:#00E5FF;">Pillar 04</span>
+            <h3 class="font-heading" style="font-size:20px; margin-top:4px;">Mindset Forging</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px; line-height:1.6;">The body follows the mind. Daily protocols for mental toughness, stress management, and the identity shift that makes results permanent.</p>
+            <span class="font-mono-label" style="margin-top:auto; padding-top:16px;">Included</span>
+          </div>
+        </div>
+        <!-- Card 5 -->
+        <div class="card-item card-reveal">
+          <img src="https://images.unsplash.com/photo-1523884156331-22cc4f5df98d?q=80&w=874&auto=format&fit=crop" alt="Community">
+          <div class="card-content">
+            <span class="font-mono-label" style="color:#00E5FF;">Pillar 05</span>
+            <h3 class="font-heading" style="font-size:20px; margin-top:4px;">The Forge Brotherhood</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px; line-height:1.6;">Private community of driven men on the same mission. Share wins, stay accountable, build connections that outlast the program.</p>
+            <span class="font-mono-label" style="margin-top:auto; padding-top:16px;">Included</span>
+          </div>
+        </div>
+        <!-- Card 6: Pricing -->
+        <div class="card-item card-reveal" style="background:#111111; color:#F2F2F2;">
+          <div class="card-content" style="justify-content:center; align-items:center; text-align:center; height:100%;">
+            <span class="font-mono-label" style="color:#00E5FF;">Investment</span>
+            <h3 class="font-heading" style="font-size:clamp(36px, 4vw, 56px); margin-top:12px; color:#F2F2F2;">$2,997</h3>
+            <p class="font-body" style="color:#6E6E6E; font-size:14px; margin-top:8px;">12 weeks. Everything included.</p>
+            <button class="cta-button" style="margin-top:24px;" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Apply Now</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 5: CONTACT -->
+    <!-- ============================================ -->
+    <section class="contact-section" id="contact">
+      <div class="contact-grid">
+        <!-- Column 1: Links -->
+        <div>
+          <span class="font-mono-label" style="display:block; margin-bottom:32px; color:#6E6E6E;">Navigate</span>
+          <a href="#hero" class="contact-link">Program</a>
+          <a href="#manifesto" class="contact-link">Manifesto</a>
+          <a href="#offerings" class="contact-link">What You Get</a>
+          <a href="mailto:apply@forgeprogram.com" class="contact-link">Press</a>
+          <a href="#" class="contact-link">FAQ</a>
+        </div>
+        <!-- Column 2: Form -->
+        <div>
+          <span class="font-mono-label" style="display:block; margin-bottom:32px; color:#6E6E6E;">Apply for the next cohort</span>
+          <form class="flex flex-col gap-4" onsubmit="event.preventDefault(); fetch('{{FORM_ENDPOINT}}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email: this.querySelector('input[type=email]').value, source: 'funnel-page'})}).then(() => this.querySelector('button').textContent = 'Subscribed').catch(() => this.querySelector('button').textContent = 'Try Again')">
+            <input type="email" placeholder="YOUR EMAIL" required class="bg-transparent border border-white/30 px-4 py-3 text-white font-mono text-sm focus:border-[#00E5FF] focus:outline-none transition-colors" style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;">
+            <button type="submit" class="cta-button w-full">Apply Now</button>
+          </form>
+          <p class="font-body" style="color:#6E6E6E; font-size:13px; margin-top:16px; line-height:1.5;">Limited spots per cohort. Applications reviewed within 48 hours. This program is not for everyone.</p>
+        </div>
+        <!-- Column 3: Social -->
+        <div>
+          <span class="font-mono-label" style="display:block; margin-bottom:32px; color:#6E6E6E;">Connect</span>
+          <a href="#" class="contact-link" style="font-size:16px;">Instagram</a>
+          <a href="#" class="contact-link" style="font-size:16px;">YouTube</a>
+          <a href="#" class="contact-link" style="font-size:16px;">Twitter / X</a>
+          <a href="mailto:apply@forgeprogram.com" class="contact-link" style="font-size:16px;">Email</a>
+        </div>
+      </div>
+      <div class="contact-footer">
+        <span>&copy; 2026 FORGE. All rights reserved.</span>
+        <span>Forged in discipline. Built for elite.</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ========================================
+    // HERO: Load Animation (non-scroll)
+    // ========================================
+    (function() {
+      const heroSection = document.querySelector('#hero');
+      const allHeroTiles = heroSection.querySelectorAll('.grid-tile, .grid-tile-accent');
+      const heroImages = heroSection.querySelectorAll('.hero-img');
+      const heroText = heroSection.querySelectorAll('.hero-text');
+
+      const heroLoadTl = gsap.timeline({ delay: 0.3 });
+      heroLoadTl.fromTo(allHeroTiles,
+        { scaleY: 0, opacity: 0 },
+        { scaleY: 1, opacity: 1, duration: 0.9, stagger: { amount: 0.6 } }
+      );
+      heroLoadTl.fromTo(heroImages,
+        { clipPath: 'inset(100% 0 0 0)' },
+        { clipPath: 'inset(0% 0 0 0)', duration: 0.7, stagger: 0.06 },
+        "-=0.5"
+      );
+      heroLoadTl.fromTo(heroText,
+        { scale: 0.85, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.05 },
+        "-=0.4"
+      );
+
+      // Hero scroll exit
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: heroSection,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 0.6
+        }
+      })
+      .to(heroImages, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+      .to(heroText, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+      .to(heroSection.querySelectorAll('.hero-accent'), { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75);
+    })();
+
+    // ========================================
+    // MANIFESTO: Pin + Enter/Exit
+    // ========================================
+    (function() {
+      const section = document.querySelector('#manifesto');
+      const images = section.querySelectorAll('.manifesto-img');
+      const text = section.querySelectorAll('.manifesto-text');
+      const accents = section.querySelectorAll('.manifesto-accent');
+      const allTiles = section.querySelectorAll('.grid-tile, .grid-tile-accent');
+
+      // Set initial states
+      gsap.set(images, { x: '-18vw', opacity: 0 });
+      gsap.set(text, { y: '12vh', opacity: 0 });
+      gsap.set(accents, { scale: 0.6, opacity: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 0.6
+        }
+      });
+
+      // Enter (0 -> 0.5)
+      tl.to(images, { x: 0, opacity: 1, ease: 'power2.out', stagger: 0.03 }, 0)
+        .to(text, { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05)
+        .to(accents, { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 }, 0.1);
+
+      // Exit (0.7 -> 1.0)
+      tl.to(images, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+        .to(text, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+        .to(accents, { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75);
+    })();
+
+    // ========================================
+    // SPOTLIGHT: Pin + Enter/Exit
+    // ========================================
+    (function() {
+      const section = document.querySelector('#program');
+      const images = section.querySelectorAll('.spotlight-img');
+      const text = section.querySelectorAll('.spotlight-text');
+      const accents = section.querySelectorAll('.spotlight-accent');
+
+      gsap.set(images, { y: '35vh', opacity: 0 });
+      gsap.set(text, { y: '12vh', opacity: 0 });
+      gsap.set(accents, { scale: 0.6, opacity: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 0.6
+        }
+      });
+
+      // Enter
+      tl.to(images, { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0)
+        .to(text, { y: 0, opacity: 1, ease: 'power2.out', stagger: 0.02 }, 0.05)
+        .to(accents, { scale: 1, opacity: 1, ease: 'back.out(1.4)', stagger: 0.05 }, 0.1);
+
+      // Exit
+      tl.to(images, { x: '-18vw', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+        .to(text, { y: '-18vh', opacity: 0, ease: 'power2.in', stagger: 0.02 }, 0.7)
+        .to(accents, { scale: 1.15, opacity: 0, ease: 'power2.in' }, 0.75);
+    })();
+
+    // ========================================
+    // CARD GRID: Staggered Reveal
+    // ========================================
+    (function() {
+      const cards = document.querySelectorAll('.card-reveal');
+
+      gsap.set(cards, { y: 60, opacity: 0 });
+
+      ScrollTrigger.batch(cards, {
+        onEnter: function(batch) {
+          gsap.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power2.out'
+          });
+        },
+        start: 'top 85%'
+      });
+    })();
+
+    // ========================================
+    // CONTACT: Fade In
+    // ========================================
+    (function() {
+      const contactSection = document.querySelector('#contact');
+      const contactChildren = contactSection.querySelectorAll('.contact-grid > div, .contact-footer');
+
+      gsap.set(contactChildren, { y: 40, opacity: 0 });
+
+      ScrollTrigger.create({
+        trigger: contactSection,
+        start: 'top 80%',
+        onEnter: function() {
+          gsap.to(contactChildren, {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: 'power2.out'
+          });
+        },
+        once: true
+      });
+    })();
+
+    // ========================================
+    // GLOBAL SNAP (optional snap to sections)
+    // ========================================
+    (function() {
+      const sections = gsap.utils.toArray('.section-pinned');
+      const snaps = [];
+
+      ScrollTrigger.getAll().forEach(function(st) {
+        if (st.pin) {
+          snaps.push(st.start / ScrollTrigger.maxScroll(window));
+        }
+      });
+
+      if (snaps.length > 1) {
+        ScrollTrigger.create({
+          snap: {
+            snapTo: snaps,
+            duration: { min: 0.2, max: 0.5 },
+            ease: 'power1.inOut'
+          }
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

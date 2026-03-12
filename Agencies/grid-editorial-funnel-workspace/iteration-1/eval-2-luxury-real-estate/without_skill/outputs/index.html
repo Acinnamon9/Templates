@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Tower Penthouse | $4.2M Waterfront Living in Miami</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FFF9E6',
+                            100: '#FFF0BF',
+                            200: '#FFE080',
+                            300: '#FFD040',
+                            400: '#FFC20E',
+                            500: '#C9981A',
+                            600: '#A67C17',
+                            700: '#836013',
+                            800: '#5F4510',
+                            900: '#3C2A0A',
+                        },
+                        navy: {
+                            50: '#E8EDF5',
+                            100: '#C5D0E6',
+                            200: '#8BA1CD',
+                            300: '#5172B4',
+                            400: '#2A4F8F',
+                            500: '#0A1E3D',
+                            600: '#091A35',
+                            700: '#07152B',
+                            800: '#050F20',
+                            900: '#030915',
+                        },
+                        azure: {
+                            50: '#E6F4FA',
+                            100: '#B3DFF0',
+                            200: '#80CAE6',
+                            300: '#4DB5DC',
+                            400: '#1AA0D2',
+                            500: '#0D7FAA',
+                            600: '#0A6182',
+                            700: '#07445B',
+                            800: '#042733',
+                            900: '#02131A',
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'body': ['Inter', 'sans-serif'],
+                        'accent': ['Cormorant Garamond', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A1E3D; }
+        ::-webkit-scrollbar-thumb { background: #C9981A; border-radius: 3px; }
+
+        /* Hero parallax */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(10,30,61,0.15) 0%, rgba(10,30,61,0.4) 40%, rgba(10,30,61,0.85) 100%),
+                url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=85') center/cover no-repeat;
+            transform: scale(1.1);
+            transition: transform 0.3s ease-out;
+        }
+
+        /* Gold shimmer line */
+        .gold-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #C9981A, transparent);
+        }
+        .gold-line-thick {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #C9981A 30%, #FFD040 50%, #C9981A 70%, transparent);
+        }
+
+        /* Feature card hover */
+        .feature-card {
+            background: linear-gradient(145deg, rgba(10,30,61,0.95), rgba(10,30,61,0.8));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(201,152,26,0.15);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .feature-card:hover {
+            border-color: rgba(201,152,26,0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4), 0 0 40px rgba(201,152,26,0.08);
+        }
+
+        /* Gallery */
+        .gallery-item {
+            overflow: hidden;
+            position: relative;
+        }
+        .gallery-item img {
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+        .gallery-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(10,30,61,0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .gallery-item:hover .overlay {
+            opacity: 1;
+        }
+        .gallery-item .label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover .label {
+            transform: translateY(0);
+        }
+
+        /* Stat counter */
+        .stat-box {
+            position: relative;
+        }
+        .stat-box::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, rgba(201,152,26,0.4), transparent);
+        }
+        .stat-box:last-child::after {
+            display: none;
+        }
+
+        /* Floating nav */
+        .floating-nav {
+            backdrop-filter: blur(24px);
+            background: rgba(10,30,61,0.85);
+            border-bottom: 1px solid rgba(201,152,26,0.2);
+            transition: all 0.4s ease;
+        }
+        .floating-nav.scrolled {
+            background: rgba(10,30,61,0.95);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+
+        /* CTA button pulse */
+        .cta-primary {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #C9981A, #FFD040, #C9981A);
+            background-size: 200% 200%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        .cta-primary:hover::before {
+            transform: translateX(100%);
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Price tag */
+        .price-tag {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #C9981A, #FFD040);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Luxury text gradient */
+        .text-luxury {
+            background: linear-gradient(135deg, #FFD040, #C9981A, #FFD040);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Floor plan grid visual */
+        .floorplan-feature {
+            border-left: 2px solid rgba(201,152,26,0.3);
+            padding-left: 1.5rem;
+            transition: border-color 0.3s ease;
+        }
+        .floorplan-feature:hover {
+            border-left-color: #C9981A;
+        }
+
+        /* Testimonial card */
+        .testimonial-card {
+            background: linear-gradient(145deg, rgba(10,30,61,0.6), rgba(10,30,61,0.3));
+            border: 1px solid rgba(201,152,26,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Form inputs */
+        .luxury-input {
+            background: rgba(10,30,61,0.6);
+            border: 1px solid rgba(201,152,26,0.2);
+            transition: all 0.3s ease;
+        }
+        .luxury-input:focus {
+            border-color: #C9981A;
+            box-shadow: 0 0 20px rgba(201,152,26,0.1);
+            outline: none;
+        }
+
+        /* Map overlay */
+        .map-overlay {
+            background: linear-gradient(135deg, rgba(10,30,61,0.95), rgba(10,30,61,0.85));
+        }
+
+        /* Animated underline */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #C9981A;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Video section */
+        .video-section {
+            position: relative;
+        }
+        .play-btn {
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(201,152,26,0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        .play-btn:hover {
+            background: rgba(201,152,26,0.15);
+            border-color: #C9981A;
+            transform: scale(1.1);
+        }
+
+        /* Amenity icon */
+        .amenity-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(201,152,26,0.3);
+            border-radius: 50%;
+            font-size: 1.25rem;
+            color: #C9981A;
+            transition: all 0.3s ease;
+        }
+        .amenity-item:hover .amenity-icon {
+            background: rgba(201,152,26,0.1);
+            border-color: #C9981A;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(3,9,21,0.96);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Reveal animation */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Section spacing */
+        .section-luxury {
+            padding: 7rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-luxury { padding: 4rem 0; }
+            .stat-box::after { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-navy-500 text-white">
+
+    <!-- Floating Navigation -->
+    <nav id="navbar" class="floating-nav fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 border border-gold-500 flex items-center justify-center">
+                    <span class="font-display text-gold-500 text-sm font-bold">A</span>
+                </div>
+                <div>
+                    <div class="font-display text-lg tracking-wider text-white">AZURE TOWER</div>
+                    <div class="text-[10px] tracking-[0.3em] text-gold-500 uppercase">Penthouse Collection</div>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#residence" class="nav-link text-sm tracking-wider text-gray-300 hover:text-white transition-colors">Residence</a>
+                <a href="#gallery" class="nav-link text-sm tracking-wider text-gray-300 hover:text-white transition-colors">Gallery</a>
+                <a href="#amenities" class="nav-link text-sm tracking-wider text-gray-300 hover:text-white transition-colors">Amenities</a>
+                <a href="#location" class="nav-link text-sm tracking-wider text-gray-300 hover:text-white transition-colors">Location</a>
+                <a href="#inquiry" class="cta-primary px-6 py-2.5 text-navy-800 text-sm font-semibold tracking-wider hover:shadow-lg transition-shadow">
+                    SCHEDULE VIEWING
+                </a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-gold-500 text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-navy-600/95 backdrop-blur-xl border-t border-gold-500/10">
+            <div class="px-6 py-6 flex flex-col gap-4">
+                <a href="#residence" class="text-sm tracking-wider text-gray-300 hover:text-gold-500 transition-colors">Residence</a>
+                <a href="#gallery" class="text-sm tracking-wider text-gray-300 hover:text-gold-500 transition-colors">Gallery</a>
+                <a href="#amenities" class="text-sm tracking-wider text-gray-300 hover:text-gold-500 transition-colors">Amenities</a>
+                <a href="#location" class="text-sm tracking-wider text-gray-300 hover:text-gold-500 transition-colors">Location</a>
+                <a href="#inquiry" class="cta-primary text-center px-6 py-3 text-navy-800 text-sm font-semibold tracking-wider">SCHEDULE VIEWING</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section flex items-end pb-20 md:pb-28">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 w-full">
+            <div class="max-w-3xl">
+                <div class="flex items-center gap-4 mb-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="gold-line flex-1 max-w-[60px]"></div>
+                    <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">Exclusive Listing</span>
+                </div>
+                <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-medium leading-[0.95] mb-6" data-aos="fade-up" data-aos-delay="400">
+                    Penthouse<br>
+                    <span class="text-luxury">at Azure</span><br>
+                    Tower
+                </h1>
+                <p class="font-accent text-xl md:text-2xl text-gray-300 italic mb-8 max-w-lg leading-relaxed" data-aos="fade-up" data-aos-delay="600">
+                    Where the Biscayne Bay meets the sky &mdash; an unparalleled waterfront residence in the heart of Miami.
+                </p>
+                <div class="flex flex-wrap items-center gap-6" data-aos="fade-up" data-aos-delay="800">
+                    <a href="#inquiry" class="cta-primary px-10 py-4 text-navy-800 font-semibold tracking-wider text-sm inline-flex items-center gap-3 hover:shadow-2xl transition-all">
+                        REQUEST PRIVATE SHOWING
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                    <a href="#residence" class="border border-white/20 px-8 py-4 text-sm tracking-wider text-white hover:border-gold-500/50 hover:text-gold-400 transition-all">
+                        EXPLORE RESIDENCE
+                    </a>
+                </div>
+            </div>
+            <!-- Price Badge -->
+            <div class="absolute bottom-0 right-6 hidden lg:block" data-aos="fade-left" data-aos-delay="1000">
+                <div class="text-right">
+                    <div class="text-xs tracking-[0.3em] text-gray-400 uppercase mb-1">Offered at</div>
+                    <div class="price-tag text-6xl font-bold">$4.2M</div>
+                    <div class="text-xs tracking-wider text-gray-400 mt-1">USD &bull; MLS #AZ-PH4200</div>
+                </div>
+            </div>
+        </div>
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+            <span class="text-[10px] tracking-[0.3em] text-gray-400 uppercase">Scroll</span>
+            <div class="w-px h-8 bg-gradient-to-b from-gold-500 to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Key Stats Bar -->
+    <section class="relative z-10 -mt-1 bg-navy-700/50 backdrop-blur-xl border-y border-gold-500/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-5 divide-x divide-gold-500/10">
+                <div class="stat-box py-8 px-4 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-3xl font-display text-gold-400 font-semibold">4,850</div>
+                    <div class="text-xs tracking-[0.2em] text-gray-400 uppercase mt-1">Sq. Ft.</div>
+                </div>
+                <div class="stat-box py-8 px-4 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-3xl font-display text-gold-400 font-semibold">4</div>
+                    <div class="text-xs tracking-[0.2em] text-gray-400 uppercase mt-1">Bedrooms</div>
+                </div>
+                <div class="stat-box py-8 px-4 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-3xl font-display text-gold-400 font-semibold">5.5</div>
+                    <div class="text-xs tracking-[0.2em] text-gray-400 uppercase mt-1">Bathrooms</div>
+                </div>
+                <div class="stat-box py-8 px-4 text-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-3xl font-display text-gold-400 font-semibold">47<sup class="text-lg">th</sup></div>
+                    <div class="text-xs tracking-[0.2em] text-gray-400 uppercase mt-1">Floor</div>
+                </div>
+                <div class="stat-box py-8 px-4 text-center col-span-2 md:col-span-1" data-aos="fade-up" data-aos-delay="500">
+                    <div class="text-3xl font-display text-gold-400 font-semibold">360&deg;</div>
+                    <div class="text-xs tracking-[0.2em] text-gray-400 uppercase mt-1">Water Views</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Residence Overview -->
+    <section id="residence" class="section-luxury relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Text -->
+                <div>
+                    <div class="flex items-center gap-4 mb-6" data-aos="fade-up">
+                        <div class="gold-line flex-1 max-w-[40px]"></div>
+                        <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">The Residence</span>
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl leading-tight mb-8" data-aos="fade-up" data-aos-delay="100">
+                        A Masterwork of<br>
+                        <span class="italic text-gold-400">Waterfront Living</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed mb-6 text-lg font-light" data-aos="fade-up" data-aos-delay="200">
+                        Perched on the 47th floor of Miami's most prestigious address, this full-floor penthouse commands panoramic views of Biscayne Bay, the Atlantic Ocean, and Miami's glittering skyline. Every detail has been curated to meet the expectations of the world's most discerning buyers.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed mb-10" data-aos="fade-up" data-aos-delay="300">
+                        From the moment you step off the private elevator into the grand foyer with its 12-foot ceilings and Italian marble floors, you understand: this is not simply a residence. It is a statement. Floor-to-ceiling glass walls dissolve the boundary between interior luxury and the vast expanse of water and sky beyond.
+                    </p>
+                    <!-- Feature List -->
+                    <div class="space-y-5" data-aos="fade-up" data-aos-delay="400">
+                        <div class="floorplan-feature">
+                            <h4 class="text-white font-medium mb-1">Private Elevator & Grand Foyer</h4>
+                            <p class="text-gray-400 text-sm">Direct elevator access with biometric entry into a museum-quality reception gallery.</p>
+                        </div>
+                        <div class="floorplan-feature">
+                            <h4 class="text-white font-medium mb-1">Chef's Kitchen by Boffi</h4>
+                            <p class="text-gray-400 text-sm">Calacatta marble countertops, Gaggenau appliances, climate-controlled wine room for 200+ bottles.</p>
+                        </div>
+                        <div class="floorplan-feature">
+                            <h4 class="text-white font-medium mb-1">Primary Suite with Bay Views</h4>
+                            <p class="text-gray-400 text-sm">Spa-inspired bath with soaking tub, dual vanities, steam shower, and private terrace access.</p>
+                        </div>
+                        <div class="floorplan-feature">
+                            <h4 class="text-white font-medium mb-1">2,100 Sq. Ft. Wraparound Terrace</h4>
+                            <p class="text-gray-400 text-sm">Summer kitchen, heated infinity-edge plunge pool, and unobstructed sunset views.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right: Image Stack -->
+                <div class="relative" data-aos="fade-left" data-aos-delay="200">
+                    <div class="relative z-10">
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=85" alt="Penthouse Interior" class="w-full h-[500px] object-cover">
+                        <div class="absolute -bottom-6 -left-6 bg-navy-500 p-6 border border-gold-500/20">
+                            <div class="price-tag text-4xl font-bold">$4.2M</div>
+                            <div class="text-xs tracking-[0.2em] text-gray-400 uppercase mt-1">Asking Price</div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-8 -right-8 w-64 h-64 border border-gold-500/20 hidden lg:block"></div>
+                    <div class="absolute -bottom-8 right-12 w-48 h-48 border border-gold-500/10 hidden lg:block"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video / Virtual Tour Section -->
+    <section class="video-section relative h-[60vh] md:h-[70vh] overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80" alt="Azure Tower Exterior" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-navy-500/70"></div>
+        <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+            <div class="play-btn mb-8" data-aos="zoom-in">
+                <i class="fas fa-play text-gold-400 text-2xl ml-1"></i>
+            </div>
+            <p class="text-xs tracking-[0.35em] text-gold-500 uppercase mb-3" data-aos="fade-up" data-aos-delay="200">Cinematic Walkthrough</p>
+            <h3 class="font-display text-3xl md:text-5xl mb-4" data-aos="fade-up" data-aos-delay="300">Experience the Penthouse</h3>
+            <p class="text-gray-300 max-w-md font-accent text-lg italic" data-aos="fade-up" data-aos-delay="400">
+                Take an exclusive virtual tour of the most coveted address on Biscayne Bay.
+            </p>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section-luxury">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="flex items-center justify-center gap-4 mb-6" data-aos="fade-up">
+                    <div class="gold-line flex-1 max-w-[60px]"></div>
+                    <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">Gallery</span>
+                    <div class="gold-line flex-1 max-w-[60px]"></div>
+                </div>
+                <h2 class="font-display text-4xl md:text-5xl" data-aos="fade-up" data-aos-delay="100">
+                    A Visual <span class="italic text-gold-400">Journey</span>
+                </h2>
+            </div>
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="gallery-item md:col-span-2 md:row-span-2 cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1000&q=85" alt="Living Room" class="w-full h-full min-h-[300px] md:min-h-full object-cover">
+                    <div class="overlay"></div>
+                    <div class="label">
+                        <p class="font-display text-lg">Great Room</p>
+                        <p class="text-gray-300 text-sm">Floor-to-ceiling bay views</p>
+                    </div>
+                </div>
+                <div class="gallery-item cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=85" alt="Kitchen" class="w-full h-64 object-cover">
+                    <div class="overlay"></div>
+                    <div class="label">
+                        <p class="font-display text-lg">Chef's Kitchen</p>
+                        <p class="text-gray-300 text-sm">Boffi cabinetry &amp; Gaggenau</p>
+                    </div>
+                </div>
+                <div class="gallery-item cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=85" alt="Terrace" class="w-full h-64 object-cover">
+                    <div class="overlay"></div>
+                    <div class="label">
+                        <p class="font-display text-lg">Wraparound Terrace</p>
+                        <p class="text-gray-300 text-sm">2,100 sq. ft. outdoor living</p>
+                    </div>
+                </div>
+                <div class="gallery-item cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=600&q=85" alt="Primary Suite" class="w-full h-64 object-cover">
+                    <div class="overlay"></div>
+                    <div class="label">
+                        <p class="font-display text-lg">Primary Suite</p>
+                        <p class="text-gray-300 text-sm">Panoramic bay views</p>
+                    </div>
+                </div>
+                <div class="gallery-item cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=85" alt="Pool" class="w-full h-64 object-cover">
+                    <div class="overlay"></div>
+                    <div class="label">
+                        <p class="font-display text-lg">Private Pool</p>
+                        <p class="text-gray-300 text-sm">Heated infinity-edge plunge pool</p>
+                    </div>
+                </div>
+                <div class="gallery-item cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=600&q=85" alt="Bathroom" class="w-full h-64 object-cover">
+                    <div class="overlay"></div>
+                    <div class="label">
+                        <p class="font-display text-lg">Spa Bath</p>
+                        <p class="text-gray-300 text-sm">Italian marble throughout</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Amenities Section -->
+    <section id="amenities" class="section-luxury bg-navy-600/30 relative overflow-hidden">
+        <!-- Background accent -->
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-gold-500/[0.02] to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Left: Building Amenities -->
+                <div>
+                    <div class="flex items-center gap-4 mb-6" data-aos="fade-up">
+                        <div class="gold-line flex-1 max-w-[40px]"></div>
+                        <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">Building Amenities</span>
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl leading-tight mb-4" data-aos="fade-up" data-aos-delay="100">
+                        World-Class<br>
+                        <span class="italic text-gold-400">Amenities</span>
+                    </h2>
+                    <p class="text-gray-400 mb-10 leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                        Azure Tower delivers a lifestyle ecosystem designed for those who accept nothing less than extraordinary.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="100">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-water"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Bayfront Infinity Pool</h4>
+                                <p class="text-gray-400 text-sm">Heated resort-style pool with private cabanas</p>
+                            </div>
+                        </div>
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="150">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-spa"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Full-Service Spa</h4>
+                                <p class="text-gray-400 text-sm">Treatment rooms, sauna, cold plunge, hammam</p>
+                            </div>
+                        </div>
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-dumbbell"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Technogym Fitness Center</h4>
+                                <p class="text-gray-400 text-sm">10,000 sq. ft. with yoga & Pilates studios</p>
+                            </div>
+                        </div>
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="250">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-utensils"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Residents' Restaurant</h4>
+                                <p class="text-gray-400 text-sm">Private dining by Michelin-starred chef</p>
+                            </div>
+                        </div>
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="300">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-ship"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Private Marina</h4>
+                                <p class="text-gray-400 text-sm">Deep-water slips up to 60 ft.</p>
+                            </div>
+                        </div>
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="350">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-concierge-bell"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">24/7 Concierge</h4>
+                                <p class="text-gray-400 text-sm">White-glove service, valet & house management</p>
+                            </div>
+                        </div>
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="400">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-wine-glass-alt"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Wine Vault & Cigar Lounge</h4>
+                                <p class="text-gray-400 text-sm">Temperature-controlled private wine lockers</p>
+                            </div>
+                        </div>
+                        <div class="amenity-item flex items-start gap-4" data-aos="fade-up" data-aos-delay="450">
+                            <div class="amenity-icon shrink-0"><i class="fas fa-child"></i></div>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Children's Retreat</h4>
+                                <p class="text-gray-400 text-sm">Supervised play area, game room & theater</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right: Image + Additional Details -->
+                <div class="flex flex-col gap-6">
+                    <div class="relative flex-1 min-h-[400px]" data-aos="fade-left" data-aos-delay="200">
+                        <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=85" alt="Azure Tower Amenities" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-500/80 via-transparent to-transparent"></div>
+                    </div>
+                    <!-- Additional Penthouse Features -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="feature-card p-6 text-center" data-aos="fade-up" data-aos-delay="300">
+                            <i class="fas fa-car text-gold-500 text-xl mb-3"></i>
+                            <h4 class="text-sm font-medium text-white">3 Garage Spaces</h4>
+                            <p class="text-gray-400 text-xs mt-1">Climate-controlled with EV charging</p>
+                        </div>
+                        <div class="feature-card p-6 text-center" data-aos="fade-up" data-aos-delay="400">
+                            <i class="fas fa-lock text-gold-500 text-xl mb-3"></i>
+                            <h4 class="text-sm font-medium text-white">Smart Home</h4>
+                            <p class="text-gray-400 text-xs mt-1">Crestron whole-home automation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location" class="section-luxury relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="flex items-center justify-center gap-4 mb-6" data-aos="fade-up">
+                    <div class="gold-line flex-1 max-w-[60px]"></div>
+                    <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">Prime Location</span>
+                    <div class="gold-line flex-1 max-w-[60px]"></div>
+                </div>
+                <h2 class="font-display text-4xl md:text-5xl" data-aos="fade-up" data-aos-delay="100">
+                    The Heart of <span class="italic text-gold-400">Miami</span>
+                </h2>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Map Visual -->
+                <div class="relative" data-aos="fade-right">
+                    <div class="aspect-[4/3] bg-navy-600 relative overflow-hidden border border-gold-500/10">
+                        <img src="https://images.unsplash.com/photo-1506966953602-c20cc11f75e3?w=800&q=80" alt="Miami Aerial" class="w-full h-full object-cover opacity-40">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="w-4 h-4 bg-gold-400 rounded-full mx-auto mb-3 animate-ping"></div>
+                                <div class="w-3 h-3 bg-gold-400 rounded-full mx-auto -mt-6 mb-6 relative z-10"></div>
+                                <p class="text-white font-display text-lg">Azure Tower</p>
+                                <p class="text-gray-400 text-sm">Biscayne Bay, Miami</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Distances -->
+                <div>
+                    <h3 class="font-display text-2xl mb-8" data-aos="fade-up">
+                        Everything Within <span class="text-gold-400">Reach</span>
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-6 group" data-aos="fade-up" data-aos-delay="100">
+                            <div class="w-14 h-14 shrink-0 border border-gold-500/20 flex items-center justify-center group-hover:border-gold-500/50 transition-colors">
+                                <i class="fas fa-plane-departure text-gold-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-white font-medium">Miami International Airport</h4>
+                                    <span class="text-gold-400 text-sm">18 min</span>
+                                </div>
+                                <div class="w-full h-px bg-navy-600 mt-3">
+                                    <div class="h-px bg-gold-500/30 w-[35%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group" data-aos="fade-up" data-aos-delay="150">
+                            <div class="w-14 h-14 shrink-0 border border-gold-500/20 flex items-center justify-center group-hover:border-gold-500/50 transition-colors">
+                                <i class="fas fa-umbrella-beach text-gold-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-white font-medium">South Beach</h4>
+                                    <span class="text-gold-400 text-sm">12 min</span>
+                                </div>
+                                <div class="w-full h-px bg-navy-600 mt-3">
+                                    <div class="h-px bg-gold-500/30 w-[25%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group" data-aos="fade-up" data-aos-delay="200">
+                            <div class="w-14 h-14 shrink-0 border border-gold-500/20 flex items-center justify-center group-hover:border-gold-500/50 transition-colors">
+                                <i class="fas fa-shopping-bag text-gold-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-white font-medium">Design District</h4>
+                                    <span class="text-gold-400 text-sm">8 min</span>
+                                </div>
+                                <div class="w-full h-px bg-navy-600 mt-3">
+                                    <div class="h-px bg-gold-500/30 w-[18%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group" data-aos="fade-up" data-aos-delay="250">
+                            <div class="w-14 h-14 shrink-0 border border-gold-500/20 flex items-center justify-center group-hover:border-gold-500/50 transition-colors">
+                                <i class="fas fa-golf-ball text-gold-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-white font-medium">Biltmore Golf Course</h4>
+                                    <span class="text-gold-400 text-sm">22 min</span>
+                                </div>
+                                <div class="w-full h-px bg-navy-600 mt-3">
+                                    <div class="h-px bg-gold-500/30 w-[42%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group" data-aos="fade-up" data-aos-delay="300">
+                            <div class="w-14 h-14 shrink-0 border border-gold-500/20 flex items-center justify-center group-hover:border-gold-500/50 transition-colors">
+                                <i class="fas fa-anchor text-gold-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-white font-medium">Bayside Marina</h4>
+                                    <span class="text-gold-400 text-sm">5 min</span>
+                                </div>
+                                <div class="w-full h-px bg-navy-600 mt-3">
+                                    <div class="h-px bg-gold-500/30 w-[10%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Highlights -->
+    <section class="section-luxury bg-navy-600/30 border-y border-gold-500/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="flex items-center justify-center gap-4 mb-6" data-aos="fade-up">
+                    <div class="gold-line flex-1 max-w-[60px]"></div>
+                    <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">For Investors</span>
+                    <div class="gold-line flex-1 max-w-[60px]"></div>
+                </div>
+                <h2 class="font-display text-4xl md:text-5xl mb-4" data-aos="fade-up" data-aos-delay="100">
+                    Investment <span class="italic text-gold-400">Highlights</span>
+                </h2>
+                <p class="text-gray-400 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                    Miami's luxury market continues its meteoric rise. This penthouse represents both an exceptional lifestyle and a strategic asset.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card p-10 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-5xl font-display text-gold-400 mb-4">23%</div>
+                    <h4 class="text-white font-medium text-lg mb-2">YoY Appreciation</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Miami waterfront luxury condos have seen 23% year-over-year price appreciation in the ultra-luxury segment.</p>
+                </div>
+                <div class="feature-card p-10 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-5xl font-display text-gold-400 mb-4">$866</div>
+                    <h4 class="text-white font-medium text-lg mb-2">Price Per Sq. Ft.</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Priced significantly below comparable penthouse residences on Fisher Island and Bal Harbour.</p>
+                </div>
+                <div class="feature-card p-10 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-5xl font-display text-gold-400 mb-4">0%</div>
+                    <h4 class="text-white font-medium text-lg mb-2">State Income Tax</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Florida's zero state income tax makes Miami the premier destination for wealth preservation and relocation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof / Agent Section -->
+    <section class="section-luxury">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-5 gap-12 items-center">
+                <div class="lg:col-span-2" data-aos="fade-right">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=85" alt="Your Agent" class="w-full max-w-sm mx-auto object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                        <div class="absolute -bottom-4 -right-4 w-32 h-32 border border-gold-500/20"></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-3">
+                    <div class="flex items-center gap-4 mb-6" data-aos="fade-up">
+                        <div class="gold-line flex-1 max-w-[40px]"></div>
+                        <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">Your Advisor</span>
+                    </div>
+                    <h2 class="font-display text-3xl md:text-4xl mb-4" data-aos="fade-up" data-aos-delay="100">
+                        Representing the Finest<br><span class="italic text-gold-400">Properties in Miami</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed mb-6 text-lg" data-aos="fade-up" data-aos-delay="200">
+                        With over $500 million in career sales and a client roster spanning five continents, I offer discreet, results-driven representation for the world's most discerning buyers and sellers.
+                    </p>
+                    <div class="grid grid-cols-3 gap-8 mb-8" data-aos="fade-up" data-aos-delay="300">
+                        <div>
+                            <div class="text-3xl font-display text-gold-400 font-semibold">$500M+</div>
+                            <div class="text-xs tracking-wider text-gray-400 uppercase mt-1">Career Sales</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-display text-gold-400 font-semibold">15+</div>
+                            <div class="text-xs tracking-wider text-gray-400 uppercase mt-1">Years Experience</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-display text-gold-400 font-semibold">Top 1%</div>
+                            <div class="text-xs tracking-wider text-gray-400 uppercase mt-1">Nationwide</div>
+                        </div>
+                    </div>
+                    <!-- Testimonial -->
+                    <blockquote class="testimonial-card p-8 relative" data-aos="fade-up" data-aos-delay="400">
+                        <i class="fas fa-quote-left text-gold-500/30 text-3xl absolute top-4 left-6"></i>
+                        <p class="text-gray-300 italic font-accent text-lg leading-relaxed ml-8">
+                            "An exceptional professional who understood exactly what we were looking for. The entire process was seamless, private, and delivered beyond our expectations."
+                        </p>
+                        <div class="mt-4 ml-8">
+                            <p class="text-white text-sm font-medium">International Client</p>
+                            <p class="text-gray-400 text-xs">$7.8M Acquisition, Star Island</p>
+                        </div>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Inquiry Form -->
+    <section id="inquiry" class="section-luxury bg-navy-600/30 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=30" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Left: CTA Text -->
+                <div>
+                    <div class="flex items-center gap-4 mb-6" data-aos="fade-up">
+                        <div class="gold-line flex-1 max-w-[40px]"></div>
+                        <span class="text-gold-500 text-xs tracking-[0.35em] uppercase font-medium">Private Inquiry</span>
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl leading-tight mb-6" data-aos="fade-up" data-aos-delay="100">
+                        Begin Your<br>
+                        <span class="italic text-gold-400">Private Viewing</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed text-lg mb-8" data-aos="fade-up" data-aos-delay="200">
+                        This penthouse is available for private showings by appointment only. All inquiries are handled with the utmost discretion. Complete the form or contact me directly.
+                    </p>
+                    <div class="space-y-6" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 border border-gold-500/30 flex items-center justify-center">
+                                <i class="fas fa-phone text-gold-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">Direct Line</p>
+                                <p class="text-white font-medium">+1 (305) 555-0172</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 border border-gold-500/30 flex items-center justify-center">
+                                <i class="fas fa-envelope text-gold-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">Email</p>
+                                <p class="text-white font-medium">penthouse@azuretower.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 border border-gold-500/30 flex items-center justify-center">
+                                <i class="fab fa-whatsapp text-gold-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">WhatsApp</p>
+                                <p class="text-white font-medium">+1 (305) 555-0172</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Trust Badges -->
+                    <div class="mt-10 flex items-center gap-6 opacity-50" data-aos="fade-up" data-aos-delay="400">
+                        <span class="text-xs tracking-wider text-gray-400">MEMBER OF</span>
+                        <span class="text-sm font-semibold text-gray-300 tracking-wider">MIAMI BOARD OF REALTORS</span>
+                        <span class="text-gray-600">|</span>
+                        <span class="text-sm font-semibold text-gray-300 tracking-wider">FIABCI</span>
+                    </div>
+                </div>
+                <!-- Right: Form -->
+                <div data-aos="fade-left" data-aos-delay="200">
+                    <form id="inquiryForm" class="bg-navy-500/80 backdrop-blur-xl border border-gold-500/10 p-8 md:p-10">
+                        <h3 class="font-display text-2xl mb-2">Schedule a Private Viewing</h3>
+                        <p class="text-gray-400 text-sm mb-8">All fields marked with * are required.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                            <div>
+                                <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">First Name *</label>
+                                <input type="text" required class="luxury-input w-full px-4 py-3 text-white text-sm" placeholder="Enter first name">
+                            </div>
+                            <div>
+                                <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">Last Name *</label>
+                                <input type="text" required class="luxury-input w-full px-4 py-3 text-white text-sm" placeholder="Enter last name">
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">Email Address *</label>
+                            <input type="email" required class="luxury-input w-full px-4 py-3 text-white text-sm" placeholder="your@email.com">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                            <div>
+                                <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">Phone *</label>
+                                <input type="tel" required class="luxury-input w-full px-4 py-3 text-white text-sm" placeholder="+1 (305) 000-0000">
+                            </div>
+                            <div>
+                                <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">Country</label>
+                                <select class="luxury-input w-full px-4 py-3 text-gray-300 text-sm">
+                                    <option value="">Select country</option>
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>United Kingdom</option>
+                                    <option>Brazil</option>
+                                    <option>Colombia</option>
+                                    <option>Argentina</option>
+                                    <option>Venezuela</option>
+                                    <option>Mexico</option>
+                                    <option>France</option>
+                                    <option>Germany</option>
+                                    <option>United Arab Emirates</option>
+                                    <option>China</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">I Am A</label>
+                            <select class="luxury-input w-full px-4 py-3 text-gray-300 text-sm">
+                                <option value="">Select one</option>
+                                <option>Buyer - Primary Residence</option>
+                                <option>Buyer - Investment Property</option>
+                                <option>Buyer's Agent</option>
+                                <option>International Investor</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-5">
+                            <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">Preferred Viewing Date</label>
+                            <input type="date" class="luxury-input w-full px-4 py-3 text-gray-300 text-sm">
+                        </div>
+                        <div class="mb-8">
+                            <label class="text-xs tracking-wider text-gray-400 uppercase block mb-2">Message</label>
+                            <textarea rows="4" class="luxury-input w-full px-4 py-3 text-white text-sm resize-none" placeholder="Tell us about your requirements..."></textarea>
+                        </div>
+                        <button type="submit" class="cta-primary w-full py-4 text-navy-800 font-semibold tracking-wider text-sm hover:shadow-2xl transition-all">
+                            REQUEST PRIVATE SHOWING
+                        </button>
+                        <p class="text-gray-500 text-xs mt-4 text-center">
+                            Your information is handled with complete confidentiality. We will never share your details with third parties.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Banner -->
+    <section class="relative py-24 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1920&q=80" alt="Miami Skyline" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-navy-500/95 via-navy-500/80 to-navy-500/60"></div>
+        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+            <p class="text-gold-500 text-xs tracking-[0.35em] uppercase mb-4" data-aos="fade-up">Once in a Lifetime</p>
+            <h2 class="font-display text-4xl md:text-6xl mb-6 leading-tight" data-aos="fade-up" data-aos-delay="100">
+                The Sky is Not the Limit.<br>
+                <span class="italic text-gold-400">It's the View.</span>
+            </h2>
+            <p class="text-gray-300 text-lg font-accent italic mb-10 max-w-lg mx-auto" data-aos="fade-up" data-aos-delay="200">
+                There are many residences in Miami. There is only one Azure Tower Penthouse.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="300">
+                <a href="#inquiry" class="cta-primary px-12 py-4 text-navy-800 font-semibold tracking-wider text-sm inline-flex items-center gap-3">
+                    SCHEDULE YOUR PRIVATE VIEWING
+                    <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+                <a href="tel:+13055550172" class="border border-white/20 px-8 py-4 text-sm tracking-wider text-white hover:border-gold-500/50 transition-all inline-flex items-center gap-3">
+                    <i class="fas fa-phone text-gold-500"></i>
+                    CALL DIRECTLY
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-navy-800/50 border-t border-gold-500/10">
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 border border-gold-500 flex items-center justify-center">
+                            <span class="font-display text-gold-500 text-sm font-bold">A</span>
+                        </div>
+                        <div>
+                            <div class="font-display text-lg tracking-wider">AZURE TOWER</div>
+                            <div class="text-[10px] tracking-[0.3em] text-gold-500 uppercase">Penthouse Collection</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Azure Tower represents the pinnacle of waterfront luxury living in Miami. This exclusive penthouse listing is offered through private channels only.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs tracking-[0.3em] text-gold-500 uppercase mb-4">Quick Links</h4>
+                    <div class="space-y-3">
+                        <a href="#residence" class="block text-gray-400 text-sm hover:text-white transition-colors">The Residence</a>
+                        <a href="#gallery" class="block text-gray-400 text-sm hover:text-white transition-colors">Photo Gallery</a>
+                        <a href="#amenities" class="block text-gray-400 text-sm hover:text-white transition-colors">Amenities</a>
+                        <a href="#location" class="block text-gray-400 text-sm hover:text-white transition-colors">Location</a>
+                        <a href="#inquiry" class="block text-gray-400 text-sm hover:text-white transition-colors">Schedule Viewing</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs tracking-[0.3em] text-gold-500 uppercase mb-4">Legal</h4>
+                    <p class="text-gray-500 text-xs leading-relaxed">
+                        The information provided is deemed reliable but not guaranteed. All measurements are approximate. This is not intended to solicit property already listed. Equal Housing Opportunity. All rights reserved.
+                    </p>
+                    <div class="flex gap-4 mt-6">
+                        <a href="#" class="w-10 h-10 border border-gold-500/20 flex items-center justify-center text-gold-500 hover:bg-gold-500/10 transition-colors text-sm">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 border border-gold-500/20 flex items-center justify-center text-gold-500 hover:bg-gold-500/10 transition-colors text-sm">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 border border-gold-500/20 flex items-center justify-center text-gold-500 hover:bg-gold-500/10 transition-colors text-sm">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="gold-line mb-8"></div>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-xs">&copy; 2026 Azure Tower Penthouse. All rights reserved.</p>
+                <p class="text-gray-500 text-xs">Powered by luxury.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 80,
+            easing: 'ease-out-cubic'
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            });
+        });
+
+        // Hero parallax on scroll
+        const heroBg = document.getElementById('heroBg');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            if (scrolled < window.innerHeight) {
+                heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.3}px)`;
+            }
+        });
+
+        // Form submission
+        const inquiryForm = document.getElementById('inquiryForm');
+        inquiryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const btn = inquiryForm.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.textContent = 'INQUIRY RECEIVED';
+            btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            btn.disabled = true;
+
+            // Create success overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 z-50 flex items-center justify-center bg-navy-500/90 backdrop-blur-xl';
+            overlay.innerHTML = `
+                <div class="text-center p-12 max-w-md">
+                    <div class="w-20 h-20 border-2 border-gold-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check text-gold-400 text-3xl"></i>
+                    </div>
+                    <h3 class="font-display text-3xl mb-4">Thank You</h3>
+                    <p class="text-gray-300 mb-2">Your private viewing request has been received.</p>
+                    <p class="text-gray-400 text-sm mb-8">I will personally reach out within 2 hours to arrange your exclusive tour of the Azure Tower Penthouse.</p>
+                    <button onclick="this.closest('.fixed').remove()" class="cta-primary px-8 py-3 text-navy-800 font-semibold tracking-wider text-sm">
+                        CLOSE
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.disabled = false;
+                inquiryForm.reset();
+            }, 4000);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for reveal animations
+        const revealElements = document.querySelectorAll('.reveal-up');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>

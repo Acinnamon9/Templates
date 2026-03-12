@@ -1,0 +1,21 @@
+{
+  "eval_id": 4,
+  "eval_name": "creative-agency",
+  "prompt": "We're a creative agency called Parallax Studio. We do brand identity, web design, and motion graphics for luxury brands.",
+  "assertions": [
+    "Output is a single valid HTML file",
+    "Has checkerboard grid layout",
+    "Accent color is NOT the default pink",
+    "Card Grid section shows portfolio-style items",
+    "Copy is confident and minimal, not salesy",
+    "Has scroll-pinned animations",
+    "Navigation includes brand name Parallax Studio",
+    "Contact section with form present",
+    "Hero ScrollTrigger has onLeaveBack callback",
+    "All spatial typography words are 6 characters or fewer",
+    "Global snap targets pinned range centers",
+    "Contact footer uses mt-auto (not absolute positioning)",
+    "All nav hrefs match section ids",
+    "Card buttons at bottom of cards via margin-top auto"
+  ]
+}
