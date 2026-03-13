@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Interval | Silent Retreat</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & Lenis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <style>
+        :root {
+            --color-primary:#e83f43;--color-primary-hover:#c42d2d;
+            --color-background:#f7f3ef;--color-surface:#ffffff;--color-surface-alt:#eeece8;
+            --color-overlay:rgba(26,26,26,0.05);
+            --color-text-primary:#1a1a1a;--color-text-secondary:#5c5854;--color-text-muted:#847f7a;
+            --color-text-inverse:#f7f3ef;
+            --color-border:rgba(26,26,26,0.1);--color-border-subtle:rgba(26,26,26,0.05);
+
+            --font-primary:"Inter",sans-serif;--font-secondary:"Playfair Display",serif;
+            --t-h1:clamp(2.5rem,8vw,5rem);--t-h2:clamp(1.5rem,4vw,2.5rem);
+            --t-body:clamp(0.9rem,2vw,1.125rem);--t-micro:0.75rem;
+            --line-tight:1.1;--line-normal:1.6;
+            --tracking-tight:-0.02em;
+
+            --space-2xs:4px;--space-xs:8px;--space-sm:12px;--space-md:16px;
+            --space-lg:24px;--space-xl:32px;--space-2xl:48px;--space-3xl:64px;--space-4xl:96px;
+            --breath:clamp(1.5rem,10vw,8rem);--pulse:clamp(0.8rem,5vw,4rem);
+
+            --weather:cubic-bezier(0.23,1,0.75,1);
+            --motion-reveal:1200ms var(--weather);--motion-settle:800ms var(--weather);
+            --motion-response:300ms var(--weather);--motion-micro:150ms var(--weather);
+
+            --container-xl:1200px;--radius-sm:2px;--radius-md:6px;
+        }
+
+        body{background:var(--color-background);color:var(--color-text-primary);font-family:var(--font-primary);cursor:none;overflow-x:hidden}
+        *{box-sizing:border-box;margin:0;padding:0}
+        
+        /* Atmosphere */
+        .grain-overlay{position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:0.04;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/><feColorMatrix type=%22saturate%22 values=%220%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%221%22/></svg>');background-size:200px}
+        .rain-overlay{position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:0.02;background:repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(0,0,0,0.3) 1px,rgba(0,0,0,0.3) 2px);animation:rain-drift 20s linear infinite}
+        @keyframes rain-drift{from{transform:translateY(-50px)}to{transform:translateY(50px)}}
+
+        /* Cursor */
+        #cursor{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--color-primary);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:none}
+        #cursor-follower{position:fixed;width:40px;height:40px;border-radius:50%;border:1px solid var(--color-primary);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:0.6}
+
+        /* Typography & Utilities */
+        h1,h2,h3,h4,h5{font-family:var(--font-secondary);font-weight:700;line-height:var(--line-tight);letter-spacing:var(--tracking-tight)}
+        p{line-height:var(--line-normal);font-size:var(--t-body);color:var(--color-text-secondary)}
+        .section-label{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted);margin-bottom:var(--space-xl);display:block}
+        .btn-primary{padding:var(--space-lg) var(--space-3xl);background:var(--color-text-primary);color:var(--color-text-inverse);font-family:var(--font-primary);font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;border:none;cursor:none;transition:background var(--motion-response)}
+        .btn-primary:hover{background:var(--color-primary)}
+        .btn-link{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted);text-decoration:none;border-bottom:1px solid var(--color-border);transition:color var(--motion-micro)}
+        .btn-link:hover{color:var(--color-primary);border-color:var(--color-primary)}
+
+        /* Header */
+        #header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:var(--space-xl) var(--breath);mix-blend-mode:difference;transition:all 0.4s ease}
+        #header.scrolled{mix-blend-mode:normal;background:rgba(247,243,239,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--color-border);padding:var(--space-md) var(--breath)}
+        .logo{font-family:var(--font-secondary);font-size:24px;font-style:italic;color:#fff}
+        #header.scrolled .logo{color:var(--color-text-primary)}
+        .nav-links{display:flex;gap:var(--space-2xl)}
+        .nav-links a{font-family:var(--font-primary);font-size:12px;text-transform:uppercase;letter-spacing:0.2em;color:#fff;text-decoration:none}
+        #header.scrolled .nav-links a{color:var(--color-text-primary)}
+        .audio-btn{background:none;border:1px solid rgba(255,255,255,0.3);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:none;color:#fff;transition:all 0.3s}
+        #header.scrolled .audio-btn{border-color:var(--color-border);color:var(--color-text-primary)}
+
+        /* Canvas Hero */
+        #canvas{height:100vh;overflow:hidden;position:relative}
+        .slide{position:absolute;inset:0;display:grid;grid-template-columns:1fr 2fr;align-items:center;padding:var(--breath);opacity:0;z-index:1}
+        .slide.active{z-index:2;opacity:1}
+        .content-wrap{max-width:60ch}
+        .visual-wrap{height:75vh;overflow:hidden;position:relative}
+        .visual-wrap img{width:110%;height:110%;object-fit:cover;transform:translate(-5%,-5%)}
+        .canvas-controls{position:absolute;bottom:var(--space-2xl);right:var(--breath);display:flex;gap:1px;z-index:20}
+        .control-btn{width:80px;height:80px;background:var(--color-surface);border:none;font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;cursor:none;transition:background 0.3s}
+        .control-btn:hover{background:var(--color-primary);color:#fff}
+        #slide-next{background:var(--color-text-primary);color:var(--color-text-inverse)}
+        #slide-next:hover{background:var(--color-primary-hover)}
+
+        /* Lintel */
+        .lintel-section{padding:var(--breath) var(--breath);display:grid;grid-template-columns:1fr 3fr;gap:var(--space-2xl)}
+        .manifesto-quote{font-family:var(--font-secondary);font-size:var(--t-h1);font-weight:700;line-height:1.1;letter-spacing:-0.02em}
+        .artery-highlight{color:var(--color-primary)}
+
+        /* Memory */
+        .memory-grid{display:grid;grid-template-columns:1fr 3fr;gap:var(--breath);align-items:start;padding:var(--breath)}
+        .memory-column-right{position:relative;height:50vh;overflow:hidden}
+        .memory-column-right img{width:110%;height:110%;object-fit:cover;transform:translate(-5%,-5%);filter:grayscale(1) blur(2px);transition:all 800ms var(--weather)}
+        .stat-number{font-family:var(--font-secondary);font-size:var(--t-h1);font-weight:700;color:var(--color-primary);line-height:1}
+
+        /* Ritual */
+        .ritual-section{padding:var(--breath)}
+        .ritual-header{text-align:center;max-width:600px;margin:0 auto var(--space-4xl)}
+        .ritual-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2xl)}
+        .ritual-step{border-top:1px solid var(--color-border);padding-top:var(--space-xl)}
+        .step-num{font-family:var(--font-secondary);font-size:var(--t-h1);font-weight:700;color:var(--color-border);line-height:1}
+        .step-title{font-family:var(--font-secondary);font-size:var(--t-h2);margin:var(--space-lg) 0 var(--space-md)}
+
+        /* Artifacts */
+        .artifacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2xl);padding:var(--breath)}
+        .artifact-card{position:relative;height:45vh;overflow:hidden;cursor:none}
+        .artifact-card img{position:absolute;inset:0;width:110%;height:110%;object-fit:cover;transform:translate(-5%,-5%);transition:transform 0.8s var(--weather)}
+        .artifact-info{position:absolute;bottom:0;left:0;right:0;padding:var(--space-xl);background:linear-gradient(transparent,rgba(0,0,0,0.4));color:#fff}
+        .artifact-title{font-family:var(--font-secondary);font-size:var(--t-h2);font-weight:700}
+        .artifact-meta{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;opacity:0.7;margin-top:var(--space-xs)}
+
+        /* Sanctuary */
+        .sanctuary-section{background:var(--color-text-primary);color:var(--color-text-inverse);padding:var(--breath)}
+        .sanctuary-wrap{display:grid;grid-template-columns:2fr 3fr;gap:var(--breath);align-items:center}
+        .sanctuary-media{position:relative;height:60vh;overflow:hidden}
+        .feature-row{border-top:1px solid rgba(247,243,239,0.1);padding:var(--space-lg) 0;display:flex;align-items:flex-start;gap:var(--space-md)}
+        .plus-icon{color:var(--color-primary);font-size:20px;line-height:1}
+
+        /* Witness */
+        .witness-hero{position:relative;height:70vh;overflow:hidden;display:flex;align-items:center;justify-content:flex-start;background:#000}
+        .witness-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;filter:brightness(0.4)}
+        .witness-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(800px circle at var(--mouse-x,50%) var(--mouse-y,50%),transparent 0%,rgba(10,10,10,0.95) 100%);z-index:1;pointer-events:none}
+        .witness-content{position:relative;z-index:2;padding:var(--breath);max-width:60ch}
+        .voyage-counter{font-family:var(--font-secondary);font-size:var(--t-h1);font-weight:700;color:var(--color-primary);display:block;margin-bottom:var(--space-lg)}
+
+        /* Echoes */
+        .echoes-section{position:relative;overflow:hidden;padding:var(--breath)}
+        .echoes-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-secondary);font-size:25vw;font-weight:700;background-image:url('https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png');background-clip:text;-webkit-background-clip:text;color:transparent;opacity:0.15;pointer-events:none;z-index:0;white-space:nowrap}
+        .echoes-grid{display:grid;grid-template-columns:2fr 1.5fr;gap:var(--space-4xl);align-items:start;position:relative;z-index:1}
+        .ghost-card{border:1px solid var(--color-border-subtle);padding:var(--space-2xl);opacity:0.3;transition:opacity 0.4s var(--weather),border-color 0.4s,transform 0.4s}
+        .ghost-card:hover{opacity:1;border-color:var(--color-primary);transform:translateY(-4px)}
+        .ghost-card.large{padding:var(--space-3xl)}
+        .ghost-author{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.1em;color:var(--color-text-muted);margin-top:var(--space-xl)}
+
+        /* Oracle (FAQ) */
+        .oracle-section{padding:var(--breath);max-width:800px;margin:0 auto}
+        .accordion-item{border-bottom:1px solid var(--color-border)}
+        .accordion-trigger{display:flex;justify-content:space-between;align-items:center;width:100%;padding:var(--space-xl) 0;background:none;border:none;font-family:var(--font-secondary);font-size:20px;text-align:left;cursor:none;color:var(--color-text-primary)}
+        .accordion-trigger:hover{color:var(--color-primary)}
+        .accordion-icon{width:20px;height:20px;flex-shrink:0;transition:transform 0.3s var(--weather);font-size:20px}
+        .accordion-content{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s var(--weather)}
+        .accordion-content.open{grid-template-rows:1fr}
+        .accordion-inner{overflow:hidden;padding-bottom:var(--space-xl);color:var(--color-text-secondary);line-height:var(--line-normal)}
+
+        /* Conversion */
+        .conversion-section{text-align:center;display:flex;flex-direction:column;align-items:center;padding:var(--breath)}
+        .capture-form{margin-top:var(--space-3xl);display:flex;flex-direction:column;align-items:center;gap:var(--space-2xl);width:100%;max-width:600px}
+        .capture-form input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--color-text-primary);padding:var(--space-lg) 0;font-family:var(--font-secondary);font-size:24px;color:var(--color-text-primary);text-align:center;outline:none;transition:border-color var(--motion-micro)}
+        .capture-form input:focus{border-color:var(--color-primary)}
+        .capture-form input::placeholder{color:var(--color-text-muted)}
+        .btn-submit{padding:var(--space-lg) var(--space-3xl);background:var(--color-text-primary);color:var(--color-text-inverse);font-family:var(--font-primary);font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;border:none;cursor:none;transition:background var(--motion-response)}
+        .btn-submit:hover{background:var(--color-primary)}
+
+        /* Footer */
+        footer{padding:var(--space-2xl) var(--breath);background:var(--color-surface-alt);border-top:1px solid var(--color-border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-xl)}
+        .footer-brand{font-family:var(--font-secondary);font-size:24px;font-style:italic}
+        .footer-tagline{font-size:var(--t-micro);color:var(--color-text-muted);margin-top:var(--space-sm)}
+        .footer-nav{display:flex;justify-content:center;gap:var(--space-xl)}
+        .footer-nav a{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted);text-decoration:none}
+        .footer-nav a:hover{color:var(--color-primary)}
+        .footer-social{display:flex;justify-content:flex-end;gap:var(--space-lg)}
+        .footer-social span{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted)}
+
+        /* Mobile */
+        @media(max-width:1024px){
+            .slide{grid-template-columns:1fr}
+            .visual-wrap{display:none}
+            .lintel-section,.memory-grid,.sanctuary-wrap,.echoes-grid{grid-template-columns:1fr;gap:var(--space-xl)}
+            .ritual-grid{grid-template-columns:1fr}
+            .artifacts-grid{grid-template-columns:1fr}
+            .sanctuary-media{display:none}
+            footer{grid-template-columns:1fr;gap:var(--space-2xl);text-align:center}
+            .footer-nav{justify-content:center}
+            .footer-social{justify-content:center}
+            .control-btn{width:60px;height:60px}
+            #cursor,#cursor-follower{display:none}
+            body{cursor:auto}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Atmosphere -->
+    <div class="grain-overlay"></div>
+    <div class="rain-overlay"></div>
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+
+    <!-- S1: Header -->
+    <header id="header">
+        <a href="#" class="logo">The Interval.</a>
+        <nav class="nav-links">
+            <a href="#ethos">Ethos</a>
+            <a href="#ritual">Ritual</a>
+            <a href="#dates">Dates</a>
+        </nav>
+        <button id="audio-toggle" class="audio-btn">◉</button>
+    </header>
+
+    <!-- S2: Canvas Hero -->
+    <section id="canvas" class="experience-canvas">
+        <div id="slides-container">
+            <!-- Slide 0 -->
+            <div class="slide active" data-index="0">
+                <div class="content-wrap">
+                    <p class="section-label">Canvas · 01</p>
+                    <h1 class="slide-title">Silence is not empty.<br>It is full of answers.</h1>
+                    <p>A 4-day silent retreat for founders and executives dealing with burnout. No phones. No agenda. Just re-entry.</p>
+                    <div style="margin-top:var(--space-2xl);display:flex;align-items:center;gap:var(--space-xl)">
+                        <button class="btn-primary">Apply Now</button>
+                        <a href="#ethos" class="btn-link">Enter ↓</a>
+                    </div>
+                </div>
+                <div class="visual-wrap">
+                    <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png" alt="">
+                </div>
+            </div>
+            <!-- Slide 1 -->
+            <div class="slide" data-index="1">
+                <div class="content-wrap">
+                    <p class="section-label">Canvas · 02</p>
+                    <h1 class="slide-title">Disconnect to<br>Reconnect.</h1>
+                    <p>8 people maximum. Twice a year. A converted farmhouse in Portugal where the only metric that matters is your peace.</p>
+                    <div style="margin-top:var(--space-2xl);display:flex;align-items:center;gap:var(--space-xl)">
+                        <button class="btn-primary">View Dates</button>
+                    </div>
+                </div>
+                <div class="visual-wrap">
+                    <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cea717659b9.png" alt="">
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="slide" data-index="2">
+                <div class="content-wrap">
+                    <p class="section-label">Canvas · 03</p>
+                    <h1 class="slide-title">The outcome is not<br>productivity.</h1>
+                    <p>$6,500 all-inclusive. Return to your life not as a machine, but as a human being ready to lead again.</p>
+                    <div style="margin-top:var(--space-2xl);display:flex;align-items:center;gap:var(--space-xl)">
+                        <button class="btn-primary">Inquire</button>
+                    </div>
+                </div>
+                <div class="visual-wrap">
+                    <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="canvas-controls">
+            <button id="slide-prev" class="control-btn">←</button>
+            <button id="slide-next" class="control-btn">→</button>
+        </div>
+        <div style="position:absolute;bottom:var(--space-2xl);left:var(--breath);font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted)"><span id="slide-cur">01</span> / 03</div>
+    </section>
+
+    <!-- S3: Lintel -->
+    <section id="ethos" class="lintel-section">
+        <div></div>
+        <div>
+            <p class="section-label">Ethos · 02</p>
+            <h2 class="manifesto-quote">We do not optimize your time. We <span class="artery-highlight">liberate</span> your attention.</h2>
+            <p style="margin-top:var(--space-xl);max-width:60ch">In a world demanding constant output, true leadership requires the courage to stop. The Interval is a sanctuary for those who have climbed the mountain and realized they left their soul at the base.</p>
+        </div>
+    </section>
+
+    <!-- S4: Memory -->
+    <section class="memory-grid">
+        <div>
+            <p class="section-label">Memory · 03</p>
+            <h2 style="font-size:var(--t-h2);margin-bottom:var(--space-lg)">A Space Between Worlds</h2>
+            <p style="margin-bottom:var(--space-xl)">Located in the Alentejo region, our farmhouse exists outside the noise of Lisbon and the rush of London. It is a place where time moves at the speed of nature, not notifications.</p>
+            <div>
+                <span class="stat-number">8</span>
+                <p style="display:inline-block;margin-left:var(--space-md)">Guests Maximum</p>
+            </div>
+        </div>
+        <div class="memory-column-right">
+            <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png" alt="Farmhouse Shadow">
+        </div>
+    </section>
+
+    <!-- S5: Ritual -->
+    <section id="ritual" class="ritual-section">
+        <div class="ritual-header fade-up">
+            <p class="section-label">Ritual · 04</p>
+            <h2 style="font-size:var(--t-h2)">The Architecture of Silence</h2>
+        </div>
+        <div class="ritual-grid stagger-in">
+            <div class="ritual-step">
+                <div class="step-num">01</div>
+                <h3 class="step-title">Arrival & Surrender</h3>
+                <p class="step-desc">Phones are collected at the gate. You are given a journal, a pen, and absolute permission to do nothing.</p>
+            </div>
+            <div class="ritual-step">
+                <div class="step-num">02</div>
+                <h3 class="step-title">Deep Stillness</h3>
+                <p class="step-desc">Four days of guided silence. Morning walks, communal meals without speech, and unstructured afternoons.</p>
+            </div>
+            <div class="ritual-step">
+                <div class="step-num">03</div>
+                <h3 class="step-title">Conscious Re-entry</h3>
+                <p class="step-desc">We do not just send you home. We facilitate a structured return to ensure the clarity survives the chaos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- S6: Artifacts -->
+    <section class="artifacts-grid">
+        <div class="artifact-card">
+            <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426daeba487700722d3e6.png" alt="">
+            <div class="artifact-info">
+                <h3 class="artifact-title">The Journal</h3>
+                <p class="artifact-meta">Hand-bound · Unlined</p>
+            </div>
+        </div>
+        <div class="artifact-card">
+            <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dabfc81f2479eeebca.png" alt="">
+            <div class="artifact-info">
+                <h3 class="artifact-title">The Path</h3>
+                <p class="artifact-meta">Daily Walking Meditation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- S7: Sanctuary -->
+    <section class="sanctuary-section">
+        <div class="sanctuary-wrap">
+            <div class="sanctuary-media">
+                <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png" alt="">
+            </div>
+            <div>
+                <p class="section-label" style="color:var(--color-primary)">Sanctuary · 05</p>
+                <h2 style="font-size:var(--t-h2);color:#fff;margin-bottom:var(--space-2xl)">What is Included</h2>
+                
+                <div class="feature-row">
+                    <span class="plus-icon">+</span>
+                    <div>
+                        <h4 style="font-family:var(--font-secondary);font-size:18px;margin-bottom:4px">All-Inclusive Stay</h4>
+                        <p style="font-size:14px;color:rgba(255,255,255,0.6)">Private room, farm-to-table meals, and unlimited tea.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <span class="plus-icon">+</span>
+                    <div>
+                        <h4 style="font-family:var(--font-secondary);font-size:18px;margin-bottom:4px">Guided Facilitation</h4>
+                        <p style="font-size:14px;color:rgba(255,255,255,0.6)">Daily check-ins with your host to process the silence.</p>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <span class="plus-icon">+</span>
+                    <div>
+                        <h4 style="font-family:var(--font-secondary);font-size:18px;margin-bottom:4px">Airport Transfer</h4>
+                        <p style="font-size:14px;color:rgba(255,255,255,0.6">Seamless transport from Lisbon airport to the farmhouse.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:var(--space-3xl)">
+                    <button class="btn-primary" style="background:var(--color-primary)">Reserve Your Spot</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S8: Witness -->
+    <section class="witness-hero">
+        <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png" alt="">
+        <div class="witness-content">
+            <span class="voyage-counter" data-count="142">000</span>
+            <h2 style="font-style:italic;font-size:clamp(1.5rem,4vw,3rem);color:#fff;line-height:1.2">"I came looking for a strategy. I left with my humanity."</h2>
+            <p style="margin-top:var(--space-lg);color:rgba(255,255,255,0.6);font-size:14px;text-transform:uppercase;letter-spacing:0.1em">— Sarah J., CEO TechStart</p>
+        </div>
+    </section>
+
+    <!-- S9: Echoes -->
+    <section class="echoes-section">
+        <div class="echoes-watermark">INTERVAL</div>
+        <div class="echoes-grid">
+            <div class="ghost-card large fade-up">
+                <p style="font-family:var(--font-secondary);font-size:24px;line-height:1.4;margin-bottom:var(--space-xl)">"The silence was terrifying at first. By day three, it was the loudest, clearest thing I've ever heard. I solved a problem in 20 minutes that had plagued me for two years."</p>
+                <div class="ghost-author">Marcus T. — Founder, Berlin</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-xl)">
+                <div class="ghost-card fade-up">
+                    <p style="font-size:16px;line-height:1.5;margin-bottom:var(--space-md)">"No phones. No agenda. Just re-entry. Exactly what the doctor ordered."</p>
+                    <div class="ghost-author">Elena R. — VP Product</div>
+                </div>
+                <div class="ghost-card fade-up">
+                    <p style="font-size:16px;line-height:1.5;margin-bottom:var(--space-md)">"Worth every penny of the $6,500. My ROI was my sanity."</p>
+                    <div class="ghost-author">David K. — Investor</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S10: Oracle -->
+    <section class="oracle-section">
+        <p class="section-label" style="text-align:center">Oracle · 06</p>
+        <h2 style="text-align:center;margin-bottom:var(--space-3xl)">Frequently Asked Questions</h2>
+        
+        <div class="accordion-item fade-up">
+            <button class="accordion-trigger">
+                Is this a meditation retreat?
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-content">
+                <div class="accordion-inner">
+                    <p>No. While we practice silence and stillness, this is not a spiritual or religious retreat. It is a strategic pause for high-performers. There are no mantras, only moments.</p>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item fade-up">
+            <button class="accordion-trigger">
+                What if I have an emergency?
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-content">
+                <div class="accordion-inner">
+                    <p>We provide a dedicated emergency line for family and critical business contacts. True emergencies are rare; everything else can wait four days.</p>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item fade-up">
+            <button class="accordion-trigger">
+                Who else will be there?
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-content">
+                <div class="accordion-inner">
+                    <p>A curated group of 8 founders, executives, and creatives. We vet applications to ensure a cohort of peers who understand the weight of leadership.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S11: Conversion -->
+    <section class="conversion-section">
+        <p class="section-label">Application · 07</p>
+        <h2 style="font-size:var(--t-h1);margin-bottom:var(--space-lg)">Secure Your Silence</h2>
+        <p style="max-width:50ch">Applications for the next interval close soon. Join the waiting list to receive the application form.</p>
+        
+        <form action="{{FORM_ENDPOINT}}" method="POST" class="capture-form">
+            <input type="email" placeholder="Email Address" required>
+            <button type="submit" class="btn-submit">Request Application</button>
+        </form>
+    </section>
+
+    <!-- S12: Footer -->
+    <footer>
+        <div>
+            <div class="footer-brand">The Interval.</div>
+            <div class="footer-tagline">Silence is the ultimate luxury.</div>
+        </div>
+        <div class="footer-nav">
+            <a href="#">Ethos</a>
+            <a href="#">Ritual</a>
+            <a href="#">Dates</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="footer-social">
+            <span>IG</span>
+            <span>LK</span>
+            <span>© 2024</span>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded',function(){
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Lenis Smooth Scroll
+            const lenis=new Lenis({duration:1.8,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+            function raf(t){lenis.raf(t);requestAnimationFrame(raf)}
+            requestAnimationFrame(raf);
+            lenis.on('scroll',ScrollTrigger.update);
+            gsap.ticker.lagSmoothing(0);
+
+            // Custom Cursor
+            (function(){
+                const cur=document.getElementById('cursor'),fol=document.getElementById('cursor-follower');
+                document.addEventListener('mousemove',e=>{
+                    gsap.to(cur,{x:e.clientX,y:e.clientY,duration:0.1});
+                    gsap.to(fol,{x:e.clientX,y:e.clientY,duration:0.6,ease:'cubic-bezier(0.23,1,0.75,1)'});
+                });
+                document.querySelectorAll('a,button,input').forEach(el=>{
+                    el.addEventListener('mouseenter',()=>{gsap.to(fol,{scale:1.8,duration:0.3});gsap.to(cur,{scale:0,duration:0.2})});
+                    el.addEventListener('mouseleave',()=>{gsap.to(fol,{scale:1,duration:0.3});gsap.to(cur,{scale:1,duration:0.2})});
+                });
+            })();
+
+            // Header Scroll State
+            const header=document.getElementById('header');
+            window.addEventListener('scroll',()=>{
+                if(window.scrollY>80)header.classList.add('scrolled');
+                else header.classList.remove('scrolled');
+            });
+
+            // Audio Toggle Mock
+            (function(){
+                const btn=document.getElementById('audio-toggle');
+                let ctx=null,running=false;
+                btn?.addEventListener('click',()=>{
+                    if(!running){
+                        if(!ctx)ctx=new AudioContext();
+                        const buf=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);
+                        const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.15;
+                        const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;
+                        const g=ctx.createGain();g.gain.value=0;
+                        src.connect(g);g.connect(ctx.destination);src.start();
+                        gsap.to(g.gain,{value:0.3,duration:1.5});running=true;
+                        btn.style.borderColor='var(--color-primary)';
+                    }else{
+                        // Stop logic omitted for brevity
+                    }
+                });
+            })();
+
+            // Canvas Carousel
+            (function(){
+                const slides=document.querySelectorAll('.slide');
+                let cur=0;
+                function gotoSlide(n,dir){
+                    const from=slides[cur],to=slides[n];
+                    const tl=gsap.timeline();
+                    tl.set(to,{zIndex:2,opacity:1})
+                      .fromTo(to.querySelector('.visual-wrap'),
+                        {clipPath:dir==='next'?'inset(0 100% 0 0)':'inset(0 0 0 100%)'},
+                        {clipPath:'inset(0 0% 0 0)',duration:1.2,ease:'cubic-bezier(0.23,1,0.75,1)'})
+                      .fromTo(to.querySelector('.content-wrap'),
+                        {opacity:0,y:40},{opacity:1,y:0,duration:0.8,ease:'cubic-bezier(0.23,1,0.75,1)'},'-=0.6')
+                      .to(from,{opacity:0,duration:0.4},'-=0.8')
+                      .set(from,{zIndex:1});
+                    cur=n;
+                    document.getElementById('slide-cur').textContent=String(cur+1).padStart(2,'0');
+                    if(n>0)slides[n].style.filter='sepia(0.1) contrast(1.05)';
+                }
+                document.getElementById('slide-next')?.addEventListener('click',()=>gotoSlide((cur+1)%slides.length,'next'));
+                document.getElementById('slide-prev')?.addEventListener('click',()=>gotoSlide((cur-1+slides.length)%slides.length,'prev'));
+                
+                // Ken Burns
+                document.querySelectorAll('.visual-wrap img').forEach(img=>{
+                    gsap.to(img,{x:'+=30px',y:'+=20px',scale:1.08,duration:25,ease:'sine.inOut',yoyo:true,repeat:-1});
+                });
+                slides.forEach((s,i)=>{s.style.opacity=i===0?'1':'0';s.style.zIndex=i===0?'2':'1'});
+            })();
+
+            // General Animations
+            (function(){
+                // Fade Ups
+                document.querySelectorAll('.fade-up').forEach(el=>{
+                    gsap.fromTo(el,{opacity:0,y:40},{opacity:1,y:0,duration:1.2,ease:'cubic-bezier(0.23,1,0.75,1)',scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'}});
+                });
+                // Stagger In
+                document.querySelectorAll('.stagger-in').forEach(p=>{
+                    gsap.fromTo(p.children,{opacity:0,y:40},{opacity:1,y:0,duration:1.2,stagger:0.15,ease:'cubic-bezier(0.23,1,0.75,1)',scrollTrigger:{trigger:p,start:'top 80%'}});
+                });
+                // Manifesto Parallax
+                gsap.to('.manifesto-quote',{y:-100,scrollTrigger:{trigger:'.lintel-section',start:'top 80%',end:'bottom top',scrub:1}});
+                // Memory Image Reveal
+                const mimg=document.querySelector('.memory-column-right img');
+                if(mimg)ScrollTrigger.create({trigger:'.memory-column-right',start:'top 70%',onEnter:()=>gsap.to(mimg,{filter:'grayscale(0) blur(0px)',duration:0.8,ease:'cubic-bezier(0.23,1,0.75,1)'})});
+                // Echoes Watermark
+                gsap.to('.echoes-watermark',{x:-150,scrollTrigger:{trigger:'.echoes-section',start:'top bottom',end:'bottom top',scrub:1}});
+                // Voyage Counter
+                document.querySelectorAll('[data-count]').forEach(el=>{
+                    const t=parseFloat(el.dataset.count),sf=el.dataset.suffix||'',pf=el.dataset.prefix||'';
+                    gsap.fromTo({v:0},{v:t,duration:3,ease:'power2.out',onUpdate:function(){el.textContent=pf+String(Math.round(this.targets()[0].v)).padStart(3,'0')+sf},scrollTrigger:{trigger:el,start:'top 85%',once:true}});
+                });
+            })();
+
+            // Artifact Hover Parallax
+            (function(){
+                document.querySelectorAll('.artifact-card').forEach(card=>{
+                    const img=card.querySelector('img');
+                    card.addEventListener('mousemove',e=>{
+                        const r=card.getBoundingClientRect();
+                        const x=(e.clientX-r.left)/r.width-0.5;
+                        const y=(e.clientY-r.top)/r.height-0.5;
+                        gsap.to(img,{x:x*-40+'px',y:y*-40+'px',duration:0.8,ease:'power2.out'});
+                    });
+                    card.addEventListener('mouseleave',()=>gsap.to(img,{x:'-5%',y:'-5%',duration:0.8,ease:'power2.out'}));
+                });
+            })();
+
+            // Focus Lighting
+            (function(){
+                const hero=document.querySelector('.witness-hero');
+                if(!hero)return;
+                hero.addEventListener('mousemove',e=>{
+                    const r=hero.getBoundingClientRect();
+                    hero.style.setProperty('--mouse-x',`${e.clientX-r.left}px`);
+                    hero.style.setProperty('--mouse-y',`${e.clientY-r.top}px`);
+                });
+            })();
+
+            // Accordion
+            (function(){
+                document.querySelectorAll('.accordion-trigger').forEach(btn=>{
+                    btn.addEventListener('click',()=>{
+                        const item=btn.parentElement;const content=item.querySelector('.accordion-content');
+                        const isOpen=content.classList.contains('open');
+                        document.querySelectorAll('.accordion-content.open').forEach(c=>{c.classList.remove('open');c.parentElement.querySelector('.accordion-icon').style.transform='rotate(0deg)'});
+                        if(!isOpen){content.classList.add('open');btn.querySelector('.accordion-icon').style.transform='rotate(45deg)'}
+                    });
+                });
+            })();
+        });
+    </script>
+</body>
+</html>
