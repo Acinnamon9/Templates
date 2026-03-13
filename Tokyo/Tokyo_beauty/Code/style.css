@@ -1,0 +1,724 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Brand_tokens.md Migration: Semantic Color Roles */
+  --color-primary: #e83f43;      /* The Artery: Action & Focus */
+  --color-primary-hover: #c42d2d;
+  --color-background: #f7f3ef;   /* The Void: Bone / Parchment */
+  --color-surface: #ffffff;
+  --color-surface-alt: #eeece8;
+  --color-overlay: rgba(26, 26, 26, 0.05);
+  
+  --color-text-primary: #1a1a1a; /* The Ink */
+  --color-text-secondary: #5c5854;
+  --color-text-muted: #847f7a;   /* The Ash */
+  --color-text-inverse: #f7f3ef;
+  
+  --color-border: rgba(26, 26, 26, 0.1);
+  --color-border-subtle: rgba(26, 26, 26, 0.05);
+
+  /* Spacing Scale (Base Unit: 4px) */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  
+  /* Section Spacing (Large Vertical Inhale) */
+  --section-space: clamp(6rem, 12vw, 10rem);
+  --breath: var(--section-space); /* Retaining alias for poetic continuity */
+
+  /* Typography Tokens */
+  --font-primary: "Inter", sans-serif;
+  --font-secondary: "Playfair Display", serif;
+  
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-h1: clamp(2.5rem, 8vw, 5rem);
+  
+  --line-tight: 1.1;
+  --line-normal: 1.6;
+  --tracking-tight: -0.02em;
+
+  /* Motion Tokens (Meteorological) */
+  --weather: cubic-bezier(0.23, 1, 0.75, 1);
+  --motion-reveal: 1200ms var(--weather);
+  --motion-micro: 240ms var(--weather);
+
+  /* Radius Tokens (Asymmetric Tension) */
+  --radius-sm: 2px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+  margin: 0;
+  overflow-x: hidden;
+  line-height: var(--line-normal);
+  cursor: none;
+}
+
+/* 7. The Blur of Distance (Grain Overlay) */
+.grain-overlay, .rain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.grain-overlay {
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.rain-overlay {
+  opacity: 0.02;
+  filter: url(#rain-streaks);
+  animation: rain-drift 20s linear infinite;
+}
+
+@keyframes rain-drift {
+  from { transform: translateY(-50px); }
+  to { transform: translateY(50px); }
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--space-xl) var(--breath);
+  z-index: 10;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+
+.logo {
+  font-family: var(--font-secondary);
+  font-size: var(--text-2xl);
+  letter-spacing: -0.05em;
+  font-style: italic;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-xl);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  align-items: center;
+}
+
+.audio-toggle {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: var(--space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--motion-micro), transform var(--motion-micro);
+  opacity: 0.4;
+}
+
+.audio-toggle.active {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+.audio-toggle:hover {
+  transform: scale(1.1);
+}
+
+.audio-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-links a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--motion-micro);
+}
+
+.nav-links a:hover {
+  color: var(--color-primary);
+}
+
+/* Section 0: The Experience Canvas (Asymmetrical 1:2) */
+.experience-canvas {
+  position: relative;
+  height: 100vh;
+  margin-bottom: var(--section-space);
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1:2 Asymmetry */
+  align-items: center;
+  padding: 0 var(--breath);
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.content-wrap {
+  position: relative;
+  z-index: 2;
+  max-width: 60ch; /* Rule #5: 60ch limit */
+}
+
+.slide-title {
+  font-family: var(--font-secondary);
+  font-size: var(--text-h1);
+  font-weight: 700;
+  margin: 0;
+  line-height: var(--line-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.slide-desc {
+  font-size: var(--text-md);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xl);
+}
+
+.visual-wrap {
+  position: relative;
+  height: 75vh;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--motion-reveal);
+}
+
+.slide.active .visual-wrap {
+  clip-path: inset(0 0 0 0);
+}
+
+.visual-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  transform: scale(1.1);
+}
+
+/* Controls */
+.canvas-controls {
+  position: absolute;
+  bottom: var(--space-xl);
+  right: var(--breath);
+  display: flex;
+  gap: 1px;
+  background: var(--color-text-primary);
+  z-index: 20;
+}
+
+.btn-ctrl {
+  background: var(--color-background);
+  border: none;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background var(--motion-micro);
+}
+
+.btn-ctrl:hover {
+  background: var(--color-text-primary);
+}
+
+.btn-ctrl:hover svg {
+  stroke: var(--color-background);
+}
+
+.btn-ctrl svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--color-text-primary);
+  stroke-width: 1.5;
+}
+
+/* Custom Cursor: 2px Radius */
+.custom-cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cursor-follower {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* Section 1: The Lintel (Ethos) */
+.lintel-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--breath);
+  text-align: left; /* Ragged Right Ethos */
+}
+
+.manifesto-quote {
+  font-family: var(--font-secondary);
+  font-size: var(--text-h1);
+  line-height: var(--line-tight);
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* Section 2: Memory Grid (Asymmetric 1:3) */
+.memory-section {
+  padding: var(--breath);
+}
+
+.section-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3xl);
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: 1fr 3fr; /* 1:3 Split Ratio */
+  gap: var(--breath);
+}
+
+.memory-media {
+  width: 100%;
+  height: 75vh;
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+
+.memory-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: grayscale(1) blur(2px);
+  transition: all 800ms var(--weather);
+}
+
+/* NEW: Section 2.5: The Ritual */
+.ritual-section {
+  padding: var(--breath);
+}
+
+.ritual-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
+}
+
+.ritual-step {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-lg);
+}
+
+.step-num {
+  font-family: var(--font-secondary);
+  color: var(--color-primary);
+  font-size: var(--text-lg);
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.step-title {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.step-desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Section 3: Sanctuary (2:3 Split) */
+.sanctuary-section {
+  padding: var(--breath);
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+}
+
+.sanctuary-wrap {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: var(--breath);
+  align-items: center;
+}
+
+.sanctuary-visual {
+  height: 75vh;
+  overflow: hidden;
+}
+
+.sanctuary-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+/* NEW: Section 3.5: Echoes */
+.echoes-section {
+  padding: var(--breath);
+  position: relative;
+  overflow: hidden;
+}
+
+.echoes-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-secondary);
+  font-size: 25vw;
+  font-weight: 700;
+  color: var(--color-border-subtle);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+.echoes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-3xl);
+}
+
+.witness-counter {
+  font-family: var(--font-primary);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+
+.echoes-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr; /* Asymmetric Density */
+  gap: var(--space-4xl);
+  align-items: start;
+}
+
+.ghost-card {
+  padding: var(--space-2xl);
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface);
+  opacity: 0.3;
+  transition: all 800ms var(--weather);
+  cursor: default;
+}
+
+.ghost-card.large {
+  padding: var(--space-3xl);
+}
+
+.echoes-column-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.ghost-card:hover {
+  opacity: 1;
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.02);
+}
+
+.ghost-quote {
+  font-family: var(--font-secondary);
+  font-size: var(--text-2xl);
+  line-height: var(--line-normal);
+  color: var(--color-text-primary);
+  font-style: italic;
+  margin: 0;
+}
+
+.ghost-card.large .ghost-quote {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.ghost-author {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  display: block;
+  margin-top: var(--space-xl);
+}
+
+/* NEW: Section 3.8: The Oracle */
+.oracle-section {
+  padding: var(--breath);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion-trigger {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: var(--space-xl) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-secondary);
+  font-size: var(--text-xl);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--motion-micro);
+}
+
+.accordion-trigger:hover {
+  color: var(--color-primary);
+}
+
+.accordion-icon {
+  font-weight: 300;
+  transition: transform var(--motion-micro);
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(45deg);
+}
+
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 600ms var(--weather);
+}
+
+.accordion-item.active .accordion-content {
+  grid-template-rows: 1fr;
+}
+
+.accordion-inner {
+  overflow: hidden;
+}
+
+.accordion-inner p {
+  padding-bottom: var(--space-xl);
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: var(--line-normal);
+}
+
+/* Section 4: Conversion */
+.conversion-section {
+  padding: var(--breath);
+}
+
+.conversion-wrap {
+  max-width: 800px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  align-items: flex-start;
+}
+
+.capture-form input {
+  width: 100%;
+  max-width: 500px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-text-primary);
+  padding: var(--space-lg) 0;
+  font-family: var(--font-secondary);
+  font-size: var(--text-2xl);
+  outline: none;
+  color: var(--color-text-primary);
+  transition: border-color var(--motion-micro);
+}
+
+.capture-form input:focus {
+  border-color: var(--color-primary);
+}
+
+.btn-submit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-3xl);
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  border: none;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: background var(--motion-micro), transform var(--motion-micro);
+}
+
+.btn-submit:hover {
+  background: var(--color-primary);
+  transform: scale(0.98); /* Forgiving Click Scale */
+}
+
+/* NEW: Artifact Archive Styles */
+.artifacts-section {
+  padding: var(--breath);
+}
+
+.artifacts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
+}
+
+.artifact-card {
+  position: relative;
+  height: 60vh;
+  overflow: hidden;
+  background: var(--color-surface-alt);
+}
+
+.artifact-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--weather);
+}
+
+.artifact-card:hover img {
+  transform: scale(1.05);
+}
+
+.artifact-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: var(--space-xl);
+  background: linear-gradient(transparent, rgba(0,0,0,0.4));
+  color: #fff;
+}
+
+.artifact-tag {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  opacity: 0.8;
+}
+
+.artifact-name {
+  font-family: var(--font-secondary);
+  font-size: var(--text-xl);
+  margin: var(--space-xs) 0 0 0;
+}
+
+/* NEW: Final Witness Styles */
+.final-witness {
+  padding: var(--breath);
+  margin: var(--section-space) 0;
+}
+
+.witness-hero {
+  position: relative;
+  height: 90vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.witness-hero img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.witness-content {
+  text-align: center;
+  color: #fff;
+  max-width: 600px;
+  background: rgba(26, 26, 26, 0.4);
+  padding: var(--space-3xl);
+  backdrop-filter: blur(10px);
+}
+
+.witness-title {
+  font-family: var(--font-secondary);
+  font-size: var(--text-h1);
+  margin: 0 0 var(--space-lg) 0;
+}
+
+.witness-desc {
+  font-size: var(--text-lg);
+  opacity: 0.9;
+}
+
+/* Tablet/Mobile Adjustments */
+@media (max-width: 1024px) {
+  .experience-canvas, .slide, .memory-grid, .sanctuary-wrap, .ritual-grid, .echoes-grid, .artifacts-grid {
+    grid-template-columns: 1fr !important;
+    padding: var(--space-xl);
+  }
+  .artifact-card { height: 40vh; }
+  .witness-hero { height: 70vh; }
+}

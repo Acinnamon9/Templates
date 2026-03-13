@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokyo Beauty | The Aesthetic of Attending</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Hosted Modern Dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- Lenis for smooth inertial scroll -->
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+</head>
+<body>
+
+  <div class="grain-overlay"></div>
+  <div class="rain-overlay"></div>
+  <div class="custom-cursor" id="cursor"></div>
+  <div class="cursor-follower" id="follower"></div>
+
+  <div class="app-shell">
+    <header>
+      <div class="logo">TokyoBeauty</div>
+      <nav class="nav-links">
+        <a href="#canvas">Canvas</a>
+        <a href="#lintel">Ethos</a>
+        <a href="#memory">Memories</a>
+        <a href="#sanctuary">Sanctuary</a>
+        <button id="audio-toggle" class="audio-toggle" aria-label="Toggle Atmosphere">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 1v22M17 5v14M22 9v6M7 7v10M2 11v2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Section 0: The Experience Canvas (Attention Phase) -->
+    <main class="experience-canvas" id="canvas">
+      <section class="slide active" data-index="0">
+        <div class="content-wrap">
+          <h1 class="slide-title">Witness Tokyo's Beauty In Absolute Stillness</h1>
+          <p class="slide-desc">A city discovered rather than navigated. Experience the transformation of neon into rain from your sanctuary in seconds.</p>
+        </div>
+        <div class="visual-wrap">
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png" alt="The Neon Bleed">
+        </div>
+      </section>
+
+      <section class="slide" data-index="1">
+        <div class="content-wrap">
+          <h1 class="slide-title">The Gravity of Choice</h1>
+          <p class="slide-desc">In the intersection of shadow and light, we find the margin that breathes. Buddhist temples holding time like a porch holds the sun.</p>
+        </div>
+        <div class="visual-wrap">
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cea717659b9.png" alt="Shoji Lattice Shadows">
+        </div>
+      </section>
+
+      <section class="slide" data-index="2">
+        <div class="content-wrap">
+          <h1 class="slide-title">Atmospheric Presence</h1>
+          <p class="slide-desc">A slow inhalation of fog. We trust what is absent to be more potent than what is present.</p>
+        </div>
+        <div class="visual-wrap">
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png" alt="Atmospheric Incense">
+        </div>
+      </section>
+
+      <div class="canvas-controls">
+        <button class="btn-ctrl" id="prev" aria-label="Previous Threshold">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="var(--color-text)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="btn-ctrl" id="next" aria-label="Next Threshold">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="var(--color-text)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </main>
+
+    <!-- Section 1: The Lintel (Problem Phase - Awareness) -->
+    <section class="lintel-section" id="lintel">
+      <div class="lintel-content">
+        <h2 class="section-label">Why Presence Fails / Awareness</h2>
+        <blockquote class="manifesto-quote">
+          "The white is not empty;<br>
+          it is the color of <span class="highlight">waiting</span>."
+        </blockquote>
+        <p class="slide-desc">In a world of noise, we've forgotten the art of attending. Most digital spaces capture your time; we archive your presence.</p>
+      </div>
+    </section>
+
+    <!-- Section 2: The Depth of Memory (The Solution Mechanism - Asymmetric 1:3) -->
+    <section class="memory-section" id="memory">
+      <div class="section-label">The Mechanism / Credibility</div>
+      <div class="memory-grid">
+        <div class="memory-column-left">
+           <p class="memory-text">"Beauty is temporal debt." Our architecture remembers your attendance, marking the sections you have witnessed with subtle interaction residue.</p>
+        </div>
+        <div class="memory-column-right">
+          <div class="memory-media">
+            <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png" alt="Macro Sumi-e Concrete">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2.5: The Ritual (Process / Features) -->
+    <section class="ritual-section" id="ritual">
+      <div class="ritual-header">
+        <h2 class="section-label">The Ritual / Process</h2>
+      </div>
+      <div class="ritual-grid">
+        <div class="ritual-step">
+          <span class="step-num">01</span>
+          <h4 class="step-title">Relinquish Speed</h4>
+          <p class="step-desc">The first step is a surrender of velocity. Our interfaces do not respond to frantic clicking; they respond to deliberate attendance. Every animation breathes deeply.</p>
+        </div>
+        <div class="ritual-step">
+          <span class="step-num">02</span>
+          <h4 class="step-title">Observe the Grid</h4>
+          <p class="step-desc">Allow your eyes to trace the asymmetric lines. Find the 1:3 and 2:3 ratios where the mind is allowed to rest, breaking free from dead symmetry.</p>
+        </div>
+        <div class="ritual-step">
+          <span class="step-num">03</span>
+          <h4 class="step-title">Leave a Memory</h4>
+          <p class="step-desc">Your presence alters the code. Sections you dwell upon will hold the residue of your visitation long after you scroll past, accumulating temporal debt.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2.8: Artifact Archive (The Collection) -->
+    <section class="artifacts-section">
+      <div class="section-label">Artifact Archive / Collection</div>
+      <div class="artifacts-grid">
+        <div class="artifact-card">
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dafb38ca83408ecb9b.png" alt="Motionless Shinkansen">
+          <div class="artifact-info">
+            <span class="artifact-tag">005 / Kinetic</span>
+            <h5 class="artifact-name">The Shinkansen Mirror</h5>
+          </div>
+        </div>
+        <div class="artifact-card">
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426daeba487700722d3e6.png" alt="Sashimono Joinery">
+          <div class="artifact-info">
+            <span class="artifact-tag">003 / Logic</span>
+            <h5 class="artifact-name">Sashimono Symmetry</h5>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: The Sanctuary (Benefits Phase - 2:3 Ratio) -->
+    <section class="sanctuary-section" id="sanctuary">
+      <div class="sanctuary-wrap">
+        <div class="sanctuary-visual">
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cdf487659b8.png" alt="The Porch of Shadows">
+        </div>
+        <div class="sanctuary-content">
+          <h2 class="sanctuary-title">A Sanctuary for the Senses</h2>
+          <p class="sanctuary-desc">Experience absolute clarity in every pixel. Built with negative space because we trust what is absent to be more potent than what is present.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3.2: The Final Witness (Single Highlight) -->
+    <section class="final-witness">
+      <div class="witness-hero">
+        <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dabfc81f2479eeebca.png" alt="The Monk's Path">
+        <div class="witness-content">
+          <h2 class="witness-title">The Path Revealed</h2>
+          <p class="witness-desc">Every stone is a testament to the ritual of attendance. Proceed toward the threshold.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3.5: Echoes (Social Proof - Refactored for Density) -->
+    <section class="echoes-section" id="echoes">
+      <div class="echoes-watermark">ATTENDANCE</div>
+      <div class="echoes-header">
+        <div class="section-label">Echoes / Attendance</div>
+        <div class="witness-counter" id="voyages">0,429 VOYAGES ARCHIVED</div>
+      </div>
+      <div class="echoes-grid">
+        <div class="ghost-card large">
+          <p class="ghost-quote">"I stayed on the landing page for twenty minutes. Not because I was reading, but because I was breathing."</p>
+          <span class="ghost-author">— M. K., Architect</span>
+        </div>
+        <div class="echoes-column-stack">
+          <div class="ghost-card">
+            <p class="ghost-quote">"It doesn't feel like software. It feels like a carefully curated gallery space."</p>
+            <span class="ghost-author">— A. R., Designer</span>
+          </div>
+          <div class="ghost-card">
+             <p class="ghost-quote">"The silence is palpable. A rare digital sanctuary."</p>
+             <span class="ghost-author">— J. H., Traveler</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3.8: The Oracle (FAQ) -->
+    <section class="oracle-section" id="oracle">
+      <div class="section-label">The Oracle / Clarity</div>
+      <div class="accordion-wrap">
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>Why is the movement so slow?</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <p>We believe speed is the enemy of depth. The architectural motion dictates that all reveals must happen at a meteorological pace, ensuring you arrive calmly and with intention.</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>What happens to my captured coordinates?</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <p>Your email becomes a temporal token. It is archived in silence, and you will only be summoned when a new threshold is ready to be crossed. We do not spam; we invite.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: The Word Almost Spoken (Conversion Phase) -->
+    <footer class="conversion-section">
+      <div class="conversion-wrap">
+        <h3 class="conversion-title">Archive Your Coordinates</h3>
+        <p class="conversion-sub">Join the waitlist to receive access to the next threshold launch.</p>
+        
+        <form class="capture-form">
+          <div class="input-group">
+            <input type="email" placeholder="Email (The essence of presence)" required>
+            <button type="submit" class="btn-submit">
+              <span>Enter Threshold</span>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+        
+        <div class="footer-meta">
+          <span>&copy; 2026 Tokyo Beauty | A masterpiece of attendance.</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
