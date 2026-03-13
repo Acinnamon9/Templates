@@ -73,6 +73,13 @@
       "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png",
       "description": "Microscopic cell imagery or motion light trails. Validates the technical mechanism.",
       "local_relative": "Resources/images/process_biological.png"
+    },
+    {
+      "id": "Two_people",
+      "category": "leadership",
+      "context": "cinematic/dramatic",
+      "url": "https://unsplash.com/photos/a-man-and-woman-standing-in-front-of-a-large-fire-XrVSlG8s71A",
+      "description": "two peoples backs turned to the camera. theyre looking at fire"
     }
   ]
 }

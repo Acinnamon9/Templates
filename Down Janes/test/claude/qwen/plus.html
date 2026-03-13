@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Strong & Free | Fitness Coaching for Busy Moms</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{--pearl:#f5f4f3;--black:#211e1b;--white:#ffffff;--fg:#211e1b;--fg-muted:#5d6c7b;--border:#d4d6d8;--border-light:rgba(0,0,0,0.08);--accent:#ec6340;--accent-rgb:236,99,64;--accent-10:rgba(236,99,64,0.1);--accent-20:rgba(236,99,64,0.2);--section-alt:#ec6340;--shadow-card:0 4px 24px rgba(0,0,0,0.06),0 1px 4px rgba(0,0,0,0.04);--shadow-hover:0 8px 40px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);--navbar-bg:rgba(245,244,243,0.92);--footer-bg:#211e1b;--radius-card:12px;--radius-pill:9999px;--radius-btn:8px}
+body{background:var(--pearl);color:var(--fg);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+.dj-container{max-width:1200px;margin:0 auto;padding:0 24px}
+.overline{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:12px;display:block}
+.classy{font-family:'Playfair Display',serif;font-weight:700;line-height:1.1;letter-spacing:-0.01em}
+.classy-80{font-size:clamp(40px,5vw,80px)}
+.lead-text{font-size:17px;line-height:1.7;color:var(--fg-muted)}
+.bg-pearl{background:var(--pearl)}
+.bg-black{background:var(--black)}
+.bg-section-alt{background:var(--section-alt)}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:15px 32px;background:var(--black);color:#fff;border:1px solid var(--black);border-radius:var(--radius-btn);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.04em;text-decoration:none;transition:all 0.25s;cursor:pointer}
+.btn-primary:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
+.btn-accent{background:var(--accent);border-color:var(--accent)}
+.btn-outline{background:transparent;color:var(--black);border-color:var(--black)}
+.btn-outline:hover{background:var(--black);color:#fff}
+.btn-outline-white{background:transparent;color:#fff;border-color:rgba(255,255,255,0.5);border-radius:var(--radius-btn);padding:15px 32px;font-size:14px;font-weight:600;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;cursor:pointer}
+.btn-outline-white:hover{background:rgba(255,255,255,0.1);border-color:#fff}
+.arrow-link{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--accent);text-decoration:none;transition:gap 0.2s}
+.arrow-link:hover{gap:12px}
+.arrow-link img{width:18px;height:18px}
+.dj-card{background:#fff;border-radius:var(--radius-card);box-shadow:var(--shadow-card);overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease}
+.dj-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+.dj-card-pearl{background:var(--pearl)}
+.stat-number{font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,56px);font-weight:700;color:var(--accent);line-height:1}
+.stat-label{font-size:14px;color:var(--fg-muted);margin-top:6px}
+.testimonial-card{background:#fff;border-radius:var(--radius-card);padding:32px;box-shadow:var(--shadow-card);height:100%}
+.testimonial-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover}
+.star-row img{height:20px;width:auto}
+/* Navbar */
+#navbar{position:fixed;top:0;left:0;right:0;z-index:999;transition:background 0.3s,box-shadow 0.3s;padding:20px 0}
+#navbar.scrolled{background:var(--navbar-bg);backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--border-light);padding:16px 0}
+.nav-link{font-size:14px;font-weight:500;color:var(--fg);text-decoration:none;margin:0 16px;transition:color 0.2s}
+.nav-link:hover{color:var(--accent)}
+/* Bento Grid */
+.aura-hero-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:8px;width:100%;aspect-ratio:1/1}
+.aura-box{position:relative;overflow:hidden;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.aura-box img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.aura-box:hover img{transform:scale(1.05)}
+/* Mobile Nav */
+#nav-drawer{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--pearl);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+#nav-drawer a{font-size:24px;font-family:'Playfair Display',serif;font-weight:700;color:var(--fg);text-decoration:none}
+@media(max-width:768px){.aura-hero-grid{display:none}.hero-mobile-img{display:block!important}}
+.hero-mobile-img{display:none;width:100%;border-radius:var(--radius-card);margin-top:32px}
+</style>
+</head>
+<body>
+
+<!-- S1: Navbar -->
+<nav id="navbar">
+<div class="dj-container" style="display:flex;justify-content:space-between;align-items:center">
+<a href="#" style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;font-style:italic;color:var(--fg);text-decoration:none">Strong <span style="color:var(--accent)">&</span> Free</a>
+<div class="hidden md:flex" style="align-items:center">
+<a href="#programs" class="nav-link">Programs</a>
+<a href="#approach" class="nav-link">Approach</a>
+<a href="#stories" class="nav-link">Stories</a>
+<a href="#join" class="btn-primary">Start Your Journey</a>
+</div>
+<button id="nav-toggle" class="md:hidden" style="background:none;border:none;cursor:pointer">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+</div>
+</nav>
+<div id="nav-drawer">
+<a href="#programs" onclick="document.getElementById('nav-drawer').style.display='none'">Programs</a>
+<a href="#approach" onclick="document.getElementById('nav-drawer').style.display='none'">Approach</a>
+<a href="#stories" onclick="document.getElementById('nav-drawer').style.display='none'">Stories</a>
+<a href="#join" onclick="document.getElementById('nav-drawer').style.display='none'" style="color:var(--accent)">Start Now</a>
+</div>
+
+<!-- S2: Hero -->
+<section class="bg-pearl" style="padding:140px 0 80px;position:relative;z-index:1">
+<div class="dj-container">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+<div>
+<span class="overline">Fitness for Busy Moms</span>
+<h1 class="classy classy-80" style="margin-bottom:24px">Lose Weight & Build Strength <em style="font-style:italic;color:var(--accent)">Without the Gym</em></h1>
+<p class="lead-text" style="margin-bottom:32px">You've tried everything and failed. Not because you lack willpower, but because you lacked a plan that fits your real life. Strong & Free helps women 30–50 reclaim their energy in just 20 minutes a day.</p>
+<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:32px">
+<a href="#join" class="btn-primary">Join the 12-Week Program</a>
+<a href="#approach" class="arrow-link">How it works <img src="https://templates-kappa-two.vercel.app/Resources/images/arrow_right_green.svg" alt="arrow"></a>
+</div>
+<div style="display:flex;align-items:center;gap:12px">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/hero_clients.webp" alt="clients" style="height:40px;border-radius:50%">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/star_rating.svg" alt="stars" style="height:20px">
+<span style="font-size:14px;font-weight:500;color:var(--fg-muted)">Join 2,000+ moms like you</span>
+</div>
+</div>
+<div>
+<div class="aura-hero-grid">
+<div class="aura-box" style="grid-area:1/2;background:var(--pearl)"></div>
+<div class="aura-box" style="grid-area:1/4/3/5"><img alt="" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png"/></div>
+<div class="aura-box" style="grid-area:2/1"><img alt="" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befb38cabb229231e2.png"/></div>
+<div class="aura-box" style="grid-area:2/2;background:var(--accent-10)"></div>
+<div class="aura-box" style="grid-area:3/1;background:var(--accent-20)"></div>
+<div class="aura-box" style="grid-area:3/2/5/4"><img alt="" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png"/></div>
+<div class="aura-box" style="grid-area:3/4;background:var(--pearl)"></div>
+<div class="aura-box" style="grid-area:4/1;background:var(--black)"></div>
+<div class="aura-box" style="grid-area:4/4"><img alt="" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png"/></div>
+</div>
+<img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80&fit=crop" alt="Mom working out" class="hero-mobile-img">
+</div>
+</div>
+</div>
+</section>
+
+<!-- S3: Media Logos -->
+<section class="bg-black" style="padding:40px 0">
+<div class="dj-container">
+<p style="color:rgba(255,255,255,0.6);text-align:center;font-size:13px;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:24px">Featured In</p>
+<div style="display:flex;justify-content:center;align-items:center;gap:40px;flex-wrap:wrap;opacity:0.7">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/logo_insider.svg" alt="Insider" style="height:24px;filter:invert(1)">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/logo_medium.svg" alt="Medium" style="height:24px;filter:invert(1)">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/logo_wapo.svg" alt="Washington Post" style="height:24px;filter:invert(1)">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/logo_yahoo_finance.svg" alt="Yahoo" style="height:24px;filter:invert(1)">
+</div>
+</div>
+</section>
+
+<!-- S4: Programs -->
+<section id="programs" class="bg-pearl" style="padding:80px 0">
+<div class="dj-container">
+<div style="text-align:center;max-width:680px;margin:0 auto 60px">
+<span class="overline">Choose Your Path</span>
+<h2 class="classy" style="font-size:clamp(32px,4vw,48px);margin-bottom:16px">Programs Designed for Real Life</h2>
+<p class="lead-text">No gym required. No complicated equipment. Just effective strength training that fits into your schedule.</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+<!-- Card 1 -->
+<div class="dj-card" style="padding:36px;position:relative;border:2px solid var(--accent)">
+<div style="position:absolute;top:16px;right:16px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;text-transform:uppercase">Most Popular</div>
+<span class="overline">12-Week Transformation</span>
+<h3 style="font-family:'Playfair Display',serif;font-size:24px;margin:12px 0 24px">The Complete Reset</h3>
+<ul style="list-style:none;padding:0;margin:0 0 32px;color:var(--fg-muted);font-size:15px;line-height:1.8">
+<li style="margin-bottom:8px">✓ Full 12-week strength plan</li>
+<li style="margin-bottom:8px">✓ Nutrition guide for busy moms</li>
+<li style="margin-bottom:8px">✓ Weekly check-ins & accountability</li>
+<li style="margin-bottom:8px">✓ Private community access</li>
+</ul>
+<a href="#join" class="btn-primary btn-outline" style="width:100%;justify-content:center">Enroll Now</a>
+</div>
+<!-- Card 2 -->
+<div class="dj-card" style="padding:36px">
+<span class="overline">Monthly Membership</span>
+<h3 style="font-family:'Playfair Display',serif;font-size:24px;margin:12px 0 24px">Strong & Free Club</h3>
+<ul style="list-style:none;padding:0;margin:0 0 32px;color:var(--fg-muted);font-size:15px;line-height:1.8">
+<li style="margin-bottom:8px">✓ New workouts every month</li>
+<li style="margin-bottom:8px">✓ Live Q&A sessions</li>
+<li style="margin-bottom:8px">✓ Recipe library access</li>
+<li style="margin-bottom:8px">✓ Cancel anytime</li>
+</ul>
+<a href="#join" class="btn-primary btn-outline" style="width:100%;justify-content:center">Join Monthly</a>
+</div>
+<!-- Card 3 -->
+<div class="dj-card" style="padding:36px">
+<span class="overline">1:1 Coaching</span>
+<h3 style="font-family:'Playfair Display',serif;font-size:24px;margin:12px 0 24px">Private Mentorship</h3>
+<ul style="list-style:none;padding:0;margin:0 0 32px;color:var(--fg-muted);font-size:15px;line-height:1.8">
+<li style="margin-bottom:8px">✓ Customized workout plan</li>
+<li style="margin-bottom:8px">✓ Bi-weekly video calls</li>
+<li style="margin-bottom:8px">✓ Direct text support</li>
+<li style="margin-bottom:8px">✓ Form analysis & adjustments</li>
+</ul>
+<a href="#join" class="btn-primary btn-outline" style="width:100%;justify-content:center">Apply for Coaching</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S5: Quiz CTA -->
+<section class="bg-pearl" style="padding:80px 0">
+<div class="dj-container">
+<div class="dj-card" style="padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
+<div style="background:var(--pearl);border-radius:24px;padding:32px;max-width:280px;margin:0 auto">
+<div style="background:#fff;border-radius:8px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)">
+<div style="width:20px;height:20px;border-radius:4px;border:2px solid var(--border)"></div>
+<div style="height:10px;background:var(--border);border-radius:4px;flex:1"></div>
+</div>
+<div style="background:#fff;border-radius:8px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)">
+<div style="width:20px;height:20px;border-radius:4px;border:2px solid var(--border)"></div>
+<div style="height:10px;background:var(--border);border-radius:4px;flex:1"></div>
+</div>
+<div style="background:#fff;border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)">
+<div style="width:20px;height:20px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4"><path d="M20 6L9 17l-5-5"/></svg></div>
+<div style="height:10px;background:var(--border);border-radius:4px;flex:1"></div>
+</div>
+</div>
+<div>
+<span class="overline">Free Assessment</span>
+<h3 class="classy" style="font-size:clamp(28px,3vw,36px);margin-bottom:16px">Curious Where You Stand on the Path to Strength?</h3>
+<p class="lead-text" style="margin-bottom:24px">Take our 2-minute quiz to discover your "Mom Fitness Archetype" and get a personalized roadmap to losing weight without spending hours in the gym.</p>
+<a href="#join" class="btn-accent btn-primary">Take the 2-Minute Quiz</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S6: Social Proof -->
+<section id="stories" class="bg-pearl" style="padding:80px 0">
+<div class="dj-container">
+<div style="text-align:center;max-width:680px;margin:0 auto 60px">
+<span class="overline">Real Results</span>
+<h2 class="classy" style="font-size:clamp(32px,4vw,48px)">Trusted by 2,000+ Moms Like You</h2>
+</div>
+<div class="testimonial-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+<div class="testimonial-card">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/star_rating.svg" alt="stars" style="height:20px;margin-bottom:16px">
+<p style="font-size:15px;line-height:1.6;color:var(--fg);margin-bottom:24px">"I lost 18 pounds in 12 weeks and finally feel strong again. The workouts are short enough that I can do them while my kids nap. This program changed my life."</p>
+<div style="display:flex;align-items:center;gap:12px">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_ivy.avif" alt="Sarah" class="testimonial-avatar">
+<div><div style="font-weight:600;font-size:14px">Sarah M.</div><div style="font-size:12px;color:var(--fg-muted)">Lost 18 lbs</div></div>
+</div>
+</div>
+<div class="testimonial-card">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/star_rating.svg" alt="stars" style="height:20px;margin-bottom:16px">
+<p style="font-size:15px;line-height:1.6;color:var(--fg);margin-bottom:24px">"I've tried every diet and gym membership. They all failed because I didn't have time. Strong & Free fits into my chaotic schedule perfectly. I'm down 2 sizes!"</p>
+<div style="display:flex;align-items:center;gap:12px">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_marianne.avif" alt="Jessica" class="testimonial-avatar">
+<div><div style="font-weight:600;font-size:14px">Jessica T.</div><div style="font-size:12px;color:var(--fg-muted)">Down 2 sizes</div></div>
+</div>
+</div>
+<div class="testimonial-card">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/star_rating.svg" alt="stars" style="height:20px;margin-bottom:16px">
+<p style="font-size:15px;line-height:1.6;color:var(--fg);margin-bottom:24px">"The community is so supportive. I never felt judged, only encouraged. The 1:1 coaching option was worth every penny for the personalized attention."</p>
+<div style="display:flex;align-items:center;gap:12px">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_katherine.avif" alt="Emily" class="testimonial-avatar">
+<div><div style="font-weight:600;font-size:14px">Emily R.</div><div style="font-size:12px;color:var(--fg-muted)">1:1 Coaching Client</div></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S7: Approach -->
+<section id="approach" class="bg-section-alt" style="padding:80px 0">
+<div class="dj-container">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+<div>
+<span class="overline" style="color:rgba(255,255,255,0.6)">Our Philosophy</span>
+<h2 class="classy" style="font-size:clamp(32px,4vw,48px);color:#fff;margin-bottom:24px">Strength Without the Stress</h2>
+<p style="color:rgba(255,255,255,0.75);font-size:17px;line-height:1.7;margin-bottom:24px">We believe fitness should add to your life, not take away from it. Our method focuses on compound movements that build lean muscle and boost metabolism in minimal time.</p>
+<p style="color:rgba(255,255,255,0.75);font-size:17px;line-height:1.7;margin-bottom:32px">No intimidating gym floors. No confusing machinery. Just you, some dumbbells (or water bottles), and a plan that works.</p>
+<a href="#join" class="btn-outline-white">Meet Your Coach</a>
+<div style="margin-top:24px;display:flex;gap:16px;flex-wrap:wrap">
+<span style="color:#fff;font-size:14px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#fff;border-radius:50%"></span> Home Workouts</span>
+<span style="color:#fff;font-size:14px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#fff;border-radius:50%"></span> Flexible Nutrition</span>
+<span style="color:#fff;font-size:14px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#fff;border-radius:50%"></span> Mom Community</span>
+</div>
+</div>
+<div style="position:relative;height:400px">
+<div class="dj-card" style="position:absolute;top:0;left:0;padding:24px;z-index:3;background:#fff">
+<div style="font-size:24px;margin-bottom:8px">🏠</div>
+<div style="font-weight:600;font-size:16px">Work From Home</div>
+<div style="font-size:13px;color:var(--fg-muted)">No commute, no gym fees</div>
+</div>
+<div class="dj-card" style="position:absolute;top:60px;left:60px;padding:24px;z-index:2;background:#fff;opacity:0.9">
+<div style="font-size:24px;margin-bottom:8px">⏱️</div>
+<div style="font-weight:600;font-size:16px">20 Min Sessions</div>
+<div style="font-size:13px;color:var(--fg-muted)">Efficient & effective</div>
+</div>
+<div class="dj-card" style="position:absolute;top:120px;left:120px;padding:24px;z-index:1;background:#fff;opacity:0.8">
+<div style="font-size:24px;margin-bottom:8px">🤝</div>
+<div style="font-weight:600;font-size:16px">Supportive Group</div>
+<div style="font-size:13px;color:var(--fg-muted)">Never do it alone</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S8: Content -->
+<section class="bg-pearl" style="padding:80px 0">
+<div class="dj-container">
+<div style="text-align:center;max-width:680px;margin:0 auto 60px">
+<span class="overline">From the Blog</span>
+<h2 class="classy" style="font-size:clamp(32px,4vw,48px)">Tips for Busy Moms</h2>
+</div>
+<div class="content-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px">
+<div class="dj-card">
+<img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=600&q=80&fit=crop" alt="Healthy food" style="width:100%;height:220px;object-fit:cover">
+<div style="padding:24px">
+<span class="overline">Nutrition</span>
+<h4 style="font-family:'Playfair Display',serif;font-size:20px;margin:8px 0 12px">5 Meals You Can Make in 15 Minutes</h4>
+<a href="#" class="arrow-link">Read More <img src="https://templates-kappa-two.vercel.app/Resources/images/arrow_right_green.svg" alt="arrow"></a>
+</div>
+</div>
+<div class="dj-card">
+<img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80&fit=crop" alt="Workout" style="width:100%;height:220px;object-fit:cover">
+<div style="padding:24px">
+<span class="overline">Workouts</span>
+<h4 style="font-family:'Playfair Display',serif;font-size:20px;margin:8px 0 12px">Why Strength Training Beats Cardio for Moms</h4>
+<a href="#" class="arrow-link">Read More <img src="https://templates-kappa-two.vercel.app/Resources/images/arrow_right_green.svg" alt="arrow"></a>
+</div>
+</div>
+</div>
+<div class="dj-card" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:0;overflow:hidden">
+<img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80&fit=crop" alt="Gym" style="width:100%;height:100%;object-fit:cover">
+<div style="padding:40px">
+<span class="overline">Success Story</span>
+<h3 class="classy" style="font-size:28px;margin:12px 0 16px">How Jennifer Lost 30lbs After Baby #3</h3>
+<p class="lead-text" style="margin-bottom:24px">"I thought my metabolism was broken. Strong & Free showed me it was just about consistency, not perfection."</p>
+<a href="#stories" class="btn-primary">Read Her Story</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S9: Testimonial Slider -->
+<section class="bg-black" style="padding:80px 0;overflow:hidden;position:relative">
+<div id="slider-track" style="display:flex;transition:transform 0.5s ease">
+<div class="slide" style="min-width:100%;padding:0 40px;text-align:center">
+<h2 class="classy" style="color:#fff;font-style:italic;font-size:clamp(24px,3vw,36px);max-width:800px;margin:0 auto 24px">"I finally feel like myself again. Not just a mom, but a strong, capable woman."</h2>
+<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:24px">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_rebecca.avif" alt="Client" style="width:48px;height:48px;border-radius:50%">
+<span style="color:#fff;font-weight:600">Rebecca L.</span>
+</div>
+</div>
+<div class="slide" style="min-width:100%;padding:0 40px;text-align:center">
+<h2 class="classy" style="color:#fff;font-style:italic;font-size:clamp(24px,3vw,36px);max-width:800px;margin:0 auto 24px">"The 12-week program gave me my confidence back. I can lift my kids without back pain now."</h2>
+<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:24px">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_ivy.avif" alt="Client" style="width:48px;height:48px;border-radius:50%">
+<span style="color:#fff;font-weight:600">Amanda K.</span>
+</div>
+</div>
+<div class="slide" style="min-width:100%;padding:0 40px;text-align:center">
+<h2 class="classy" style="color:#fff;font-style:italic;font-size:clamp(24px,3vw,36px);max-width:800px;margin:0 auto 24px">"No gym intimidation, no weird diets. Just real results for real moms."</h2>
+<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:24px">
+<img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_marianne.avif" alt="Client" style="width:48px;height:48px;border-radius:50%">
+<span style="color:#fff;font-weight:600">Lisa M.</span>
+</div>
+</div>
+</div>
+<button id="slider-prev" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer">←</button>
+<button id="slider-next" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer">→</button>
+</section>
+
+<!-- S10: Stats -->
+<section class="bg-pearl" style="padding:80px 0">
+<div class="dj-container">
+<div style="text-align:center;max-width:680px;margin:0 auto 60px">
+<span class="overline">By The Numbers</span>
+<h2 class="classy" style="font-size:clamp(32px,4vw,48px)">Real Impact</h2>
+</div>
+<div style="display:grid;grid-cols-2 md:grid-cols-4;gap:24px;text-align:center;margin-bottom:60px">
+<div>
+<div class="stat-number" data-count="2000" data-suffix="+">0</div>
+<div class="stat-label">Moms Coached</div>
+</div>
+<div>
+<div class="stat-number" data-count="15000" data-suffix="+">0</div>
+<div class="stat-label">Pounds Lost</div>
+</div>
+<div>
+<div class="stat-number" data-count="12" data-suffix=" Weeks">0</div>
+<div class="stat-label">Average Program</div>
+</div>
+<div>
+<div class="stat-number" data-count="100" data-suffix="%">0</div>
+<div class="stat-label">Commitment</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px">
+<div class="dj-card-pearl" style="padding:24px;border-radius:var(--radius-card)">
+<div style="font-size:24px;margin-bottom:12px">🥗</div>
+<h4 style="font-weight:600;margin-bottom:8px">Simple Nutrition</h4>
+<p style="font-size:14px;color:var(--fg-muted)">No calorie counting. Just whole foods that fuel your busy days.</p>
+</div>
+<div class="dj-card-pearl" style="padding:24px;border-radius:var(--radius-card)">
+<div style="font-size:24px;margin-bottom:12px">💪</div>
+<h4 style="font-weight:600;margin-bottom:8px">Strength First</h4>
+<p style="font-size:14px;color:var(--fg-muted)">Build lean muscle to boost metabolism and burn fat all day.</p>
+</div>
+<div class="dj-card-pearl" style="padding:24px;border-radius:var(--radius-card)">
+<div style="font-size:24px;margin-bottom:12px">❤️</div>
+<h4 style="font-weight:600;margin-bottom:8px">Community Support</h4>
+<p style="font-size:14px;color:var(--fg-muted)">Surround yourself with women who understand your struggle.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S11: Final CTA -->
+<section id="join" class="bg-section-alt" style="padding:80px 0">
+<div class="dj-container" style="text-align:center;max-width:680px">
+<span class="overline" style="color:rgba(255,255,255,0.6)">Ready to Start?</span>
+<h2 class="classy" style="font-size:clamp(32px,4vw,48px);color:#fff;margin-bottom:16px">Join Strong & Free Today</h2>
+<p style="color:rgba(255,255,255,0.75);font-size:17px;line-height:1.7;margin-bottom:32px">Stop trying to fit into old clothes. Start building the strong, confident body you deserve. Enrollment for the next 12-week cohort closes soon.</p>
+<div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:32px">
+<a href="#" class="btn-primary" style="background:#fff;color:var(--black);border-color:#fff">Join the 12-Week Program</a>
+<a href="#" class="btn-outline-white">Explore Monthly Membership</a>
+</div>
+<div style="display:flex;gap:24px;justify-content:center;font-size:14px;color:rgba(255,255,255,0.8)">
+<span style="display:flex;align-items:center;gap:6px">✓ 100% Satisfaction Guarantee</span>
+<span style="display:flex;align-items:center;gap:6px">✓ Secure Checkout</span>
+</div>
+</div>
+</section>
+
+<!-- S12: Footer -->
+<footer style="background:var(--footer-bg);padding:64px 0 24px;color:#fff">
+<div class="dj-container">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px;margin-bottom:40px">
+<div>
+<div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;font-style:italic;margin-bottom:16px">Strong <span style="color:var(--accent)">&</span> Free</div>
+<p style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:24px">Helping busy moms lose weight and build strength from home. No gym required.</p>
+<div style="display:flex;gap:16px">
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none">Instagram</a>
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none">Facebook</a>
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none">TikTok</a>
+</div>
+</div>
+<div>
+<h5 class="overline" style="color:rgba(255,255,255,0.5)">Programs</h5>
+<div style="display:flex;flex-direction:column;gap:12px">
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px">12-Week Transformation</a>
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px">Monthly Membership</a>
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px">1:1 Coaching</a>
+</div>
+</div>
+<div>
+<h5 class="overline" style="color:rgba(255,255,255,0.5)">Company</h5>
+<div style="display:flex;flex-direction:column;gap:12px">
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px">About Us</a>
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px">Success Stories</a>
+<a href="#" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px">Contact</a>
+</div>
+</div>
+<div>
+<h5 class="overline" style="color:rgba(255,255,255,0.5)">Stay Updated</h5>
+<p style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:16px">Get free workout tips and recipes.</p>
+<form action="{{FORM_ENDPOINT}}" method="POST" style="display:flex;gap:8px">
+<input type="email" placeholder="Your email" style="flex:1;padding:12px;border-radius:6px;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:14px">
+<button type="submit" class="btn-accent btn-primary" style="padding:12px 20px">Join</button>
+</form>
+</div>
+</div>
+<div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:24px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:13px;color:rgba(255,255,255,0.4)">
+<div>&copy; 2026 Strong & Free. All rights reserved.</div>
+<div style="display:flex;gap:24px">
+<a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none">Privacy Policy</a>
+<a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+gsap.registerPlugin(ScrollTrigger);
+const fadeUp=(s,st=0.1)=>document.querySelectorAll(s).forEach(el=>gsap.fromTo(el,{opacity:0,y:36},{opacity:1,y:0,duration:0.8,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none reverse'}}));
+const staggerIn=(c,ch,st=0.1)=>document.querySelectorAll(c).forEach(p=>gsap.fromTo(p.querySelectorAll(ch),{opacity:0,y:24},{opacity:1,y:0,duration:0.7,stagger:st,ease:'power2.out',scrollTrigger:{trigger:p,start:'top 84%',toggleActions:'play none none reverse'}}));
+const counters=()=>document.querySelectorAll('[data-count]').forEach(el=>{const t=parseFloat(el.dataset.count),sf=el.dataset.suffix||'',pf=el.dataset.prefix||'';gsap.fromTo({v:0},{v:t,duration:2,ease:'power2.out',onUpdate:function(){el.textContent=pf+Math.round(this.targets()[0].v).toLocaleString()+sf},scrollTrigger:{trigger:el,start:'top 85%',once:true}})});
+
+(function(){const nav=document.getElementById('navbar');window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60))})();
+(function(){const btn=document.getElementById('nav-toggle');const drawer=document.getElementById('nav-drawer');if(!btn||!drawer)return;btn.addEventListener('click',()=>{const open=drawer.style.display==='flex';drawer.style.display=open?'none':'flex';if(!open)gsap.fromTo(drawer,{opacity:0,y:-8},{opacity:1,y:0,duration:0.25})})})();
+(function(){const track=document.getElementById('slider-track');if(!track)return;let cur=0;const slides=track.querySelectorAll('.slide');const total=slides.length;const go=n=>{cur=(n+total)%total;track.style.transform=`translateX(-${cur*100}%)`};document.getElementById('slider-prev')?.addEventListener('click',()=>go(cur-1));document.getElementById('slider-next')?.addEventListener('click',()=>go(cur+1));setInterval(()=>go(cur+1),5000)})();
+(function(){const c=document.createElement('div');c.style.cssText='position:fixed;width:10px;height:10px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.5;transform:translate(-50%,-50%);transition:transform 0.15s ease';document.body.appendChild(c);document.addEventListener('mousemove',e=>{c.style.left=e.clientX+'px';c.style.top=e.clientY+'px'});document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='translate(-50%,-50%) scale(2.2)');el.addEventListener('mouseleave',()=>c.style.transform='translate(-50%,-50%) scale(1)')})})();
+
+fadeUp('.overline');fadeUp('h1,h2,h3');fadeUp('.lead-text');fadeUp('.testimonial-card');
+staggerIn('.content-grid','.dj-card',0.1);
+staggerIn('.testimonial-grid','.testimonial-card',0.08);
+counters();
+});
+</script>
+</body>
+</html>
