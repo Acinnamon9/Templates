@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aesthetic Diagnostic</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+
+  <!-- Custom Cursor Elements -->
+  <div class="custom-cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Drifting Background (Temporal Decoupling) -->
+  <div class="background-viewport">
+    <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426daeba4876b8222d3e5.png" alt="Atmospheric Background" class="drifting-bg">
+    <div class="bg-vignette"></div>
+  </div>
+
+  <!-- Header / Progress -->
+  <header>
+    <div class="brand">YOUR BRAND</div>
+    <div class="progress-indicator">
+       <div class="progress-bar"></div>
+    </div>
+  </header>
+
+  <!-- Quiz State Machine Container -->
+  <main class="quiz-container">
+    
+    <!-- STEP 0: The Hook -->
+    <section class="quiz-step active" data-step="0">
+      <div class="step-content text-center">
+        <h1 class="slide-title">Discover Your Baseline.</h1>
+        <p class="slide-desc">This 60-second diagnostic analyzes your current routine and calculates the optimal operational structure for your skin.</p>
+        <button class="btn-primary" onclick="nextStep()">Begin Assessment</button>
+      </div>
+    </section>
+
+    <!-- STEP 1: Question 1 -->
+    <section class="quiz-step" data-step="1">
+      <div class="step-content">
+        <h2 class="question-title">What is your primary atmospheric exposure?</h2>
+        <div class="options-grid">
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">A</span>
+             <span class="option-text">Urban / High Pollution</span>
+           </button>
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">B</span>
+             <span class="option-text">Suburban / Moderate</span>
+           </button>
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">C</span>
+             <span class="option-text">Coastal / High Humidity</span>
+           </button>
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">D</span>
+             <span class="option-text">Arid / Low Moisture</span>
+           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: Question 2 -->
+    <section class="quiz-step" data-step="2">
+      <div class="step-content">
+        <h2 class="question-title">How does your barrier react to friction?</h2>
+        <div class="options-grid">
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">A</span>
+             <span class="option-text">Immediate Redness (High Reactivity)</span>
+           </button>
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">B</span>
+             <span class="option-text">Slight Flush (Moderate)</span>
+           </button>
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">C</span>
+             <span class="option-text">No Visible Reaction (Resilient)</span>
+           </button>
+           <button class="ghost-option" onclick="nextStep()">
+             <span class="option-label">D</span>
+             <span class="option-text">Flaking / Texture Irregularity</span>
+           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3: Question 3 -->
+    <section class="quiz-step" data-step="3">
+      <div class="step-content">
+        <h2 class="question-title">Define your primary optical goal.</h2>
+        <div class="options-grid">
+           <button class="ghost-option" onclick="beginAnalysis()">
+             <span class="option-label">A</span>
+             <span class="option-text">Structural Firmness</span>
+           </button>
+           <button class="ghost-option" onclick="beginAnalysis()">
+             <span class="option-label">B</span>
+             <span class="option-text">Tone Uniformity</span>
+           </button>
+           <button class="ghost-option" onclick="beginAnalysis()">
+             <span class="option-label">C</span>
+             <span class="option-text">Barrier Restoration</span>
+           </button>
+           <button class="ghost-option" onclick="beginAnalysis()">
+             <span class="option-label">D</span>
+             <span class="option-text">Sebum Regulation</span>
+           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: The Analysis Loader -->
+    <section class="quiz-step" data-step="4">
+      <div class="step-content text-center">
+         <div class="loader-ring"></div>
+         <h2 class="loader-status" id="loader-text">Analyzing Barrier Metrics...</h2>
+      </div>
+    </section>
+
+    <!-- STEP 5: The Recommendation Gate (Focus Lighting) -->
+    <section class="quiz-step final-witness-step" data-step="5">
+       <div class="focus-mask"></div>
+       <div class="step-content text-center z-front">
+          <h2 class="slide-title">Protocol Calculated.</h2>
+          <p class="slide-desc">Your custom formulation blueprint is ready. Enter your secure address to view the analysis.</p>
+          <div class="email-capture">
+             <input type="email" placeholder="YOUR EMAIL ADDRESS" class="dark-input">
+             <button class="btn-primary" onclick="alert('Proceed to Results Page')">View Protocol</button>
+          </div>
+       </div>
+    </section>
+
+  </main>
+
+  <script src="quiz.js"></script>
+</body>
+</html>

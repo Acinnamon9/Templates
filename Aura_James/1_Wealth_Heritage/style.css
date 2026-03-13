@@ -1,0 +1,343 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Silent Luxury Tokens */
+  --color-primary: #c7a554;     /* Gold Accent */
+  --color-bg: #050a08;          /* Deep Forest / Black */
+  --color-surface: #0a110f;     /* Subtle Green Tint */
+  --color-text: #f7f3ef;        /* Linen White */
+  --color-text-muted: #847f7a;
+  
+  --color-border: rgba(199, 165, 84, 0.2);
+  --color-glass: rgba(255, 255, 255, 0.03);
+
+  --font-main: 'Inter', sans-serif;
+  --font-display: 'Playfair Display', serif;
+
+  --weather: cubic-bezier(0.23, 1, 0.75, 1);
+  --breath: clamp(2rem, 5vw, 6rem);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  cursor: none;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 1. Global System Overlays */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2000;
+}
+
+.cursor-follower {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.1s;
+  z-index: 1999;
+}
+
+/* 2. Background System (Temporal Decoupling) */
+.bg-system {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.drifting-asset {
+  width: 110%;
+  height: 110%;
+  object-fit: cover;
+  opacity: 0.4;
+  transform: scale(1.1);
+  filter: grayscale(0.5) contrast(1.2);
+}
+
+.bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, var(--color-bg) 100%);
+}
+
+/* 3. Hero Canvas */
+.hero-canvas {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--breath);
+  position: relative;
+}
+
+.nav-bar {
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brand-logo {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-text);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--color-primary);
+}
+
+.btn-briefing {
+  border: 1px solid var(--color-primary);
+  padding: 10px 20px;
+}
+
+.hero-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.hero-text-container {
+  flex: 1;
+  max-width: 600px;
+}
+
+.split-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.hero-subline {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  margin-bottom: 40px;
+  max-width: 80%;
+}
+
+.hero-visual {
+  flex: 1;
+  height: 60vh;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9);
+}
+
+/* Kinetic Ticker */
+.ticker-system {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  border-top: 1px solid var(--color-border);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-track {
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 0.5em;
+  color: var(--color-primary);
+  opacity: 0.5;
+  animation: ticker 30s linear infinite;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 4. Utilities & Sections */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px var(--breath);
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 40px;
+}
+
+.logo-grid {
+  display: flex;
+  justify-content: space-between;
+  opacity: 0.3;
+}
+
+.logo-item {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -1px;
+}
+
+/* 1:3 Grid */
+.grid-1-3 {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+}
+
+.classy-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.manifesto-text {
+  font-size: 18px;
+  color: var(--color-text-muted);
+}
+
+.ghost-card {
+  background: var(--color-glass);
+  border: 1px solid var(--color-border);
+  padding: 40px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(20px);
+  transition: transform 0.6s var(--weather);
+}
+
+.ghost-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--color-primary);
+}
+
+.card-num {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--color-primary);
+  display: block;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* 5. Briefing Gate (Focus Lighting) */
+.briefing-gate {
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--color-surface);
+}
+
+.focus-mask {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    transparent 0%,
+    rgba(5, 10, 8, 0.98) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.z-front { z-index: 20; }
+
+.gate-form {
+  margin-top: 40px;
+  display: flex;
+  gap: 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gate-input {
+  flex: 1;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--color-border);
+  padding: 20px;
+  color: #fff;
+  border-right: none;
+  font-family: var(--font-main);
+  outline: none;
+}
+
+.primary-action {
+  background: var(--color-primary);
+  color: #000;
+  border: none;
+  padding: 20px 40px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+/* 6. General Elements */
+.text-center { text-align: center; }
+
+footer {
+  padding: 60px var(--breath);
+  border-top: 1px solid var(--color-border);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+.footer-wrap {
+  display: flex;
+  justify-content: space-between;
+}

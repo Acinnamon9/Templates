@@ -29,7 +29,7 @@
   --space-4xl: 96px;
   
   /* Section Spacing (Large Vertical Inhale) */
-  --section-space: clamp(6rem, 12vw, 10rem);
+  --section-space: clamp(4rem, 8vw, 6rem);
   --breath: var(--section-space); /* Retaining alias for poetic continuity */
 
   /* Typography Tokens */
@@ -294,12 +294,11 @@ header {
 
 /* Section 1: The Lintel (Ethos) */
 .lintel-section {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--breath);
+  padding: var(--space-4xl) var(--breath);
   text-align: left; /* Ragged Right Ethos */
 }
 
@@ -332,7 +331,7 @@ header {
 
 .memory-media {
   width: 100%;
-  height: 75vh;
+  height: 50vh;
   overflow: hidden;
   margin-bottom: var(--space-lg);
 }
@@ -360,7 +359,7 @@ header {
 
 .ritual-step {
   border-top: 1px solid var(--color-border);
-  padding-top: var(--space-lg);
+  padding-top: var(--space-md);
 }
 
 .step-num {
@@ -397,7 +396,7 @@ header {
 }
 
 .sanctuary-visual {
-  height: 75vh;
+  height: 50vh;
   overflow: hidden;
 }
 
@@ -423,10 +422,17 @@ header {
   font-family: var(--font-secondary);
   font-size: 25vw;
   font-weight: 700;
-  color: var(--color-border-subtle);
+  /* Typographic Masking replacing solid color */
+  color: transparent;
+  background-image: url('https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  background-clip: text;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.15;
   white-space: nowrap;
 }
 
@@ -628,20 +634,17 @@ header {
 
 .artifact-card {
   position: relative;
-  height: 60vh;
+  height: 45vh;
   overflow: hidden;
   background: var(--color-surface-alt);
 }
 
 .artifact-card img {
-  width: 100%;
-  height: 100%;
+  width: 110%; /* Increased for Temporal Decoupling panning */
+  height: 110%;
   object-fit: cover;
-  transition: transform 1.2s var(--weather);
-}
-
-.artifact-card:hover img {
-  transform: scale(1.05);
+  transform: translate(-5%, -5%); /* Center the oversized image */
+  will-change: transform;
 }
 
 .artifact-info {
@@ -675,12 +678,27 @@ header {
 
 .witness-hero {
   position: relative;
-  height: 90vh;
+  height: 70vh;
   width: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Focus Lighting (Flashlight Effect) */
+.witness-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    transparent 0%,
+    rgba(10, 10, 10, 0.95) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.3s ease;
 }
 
 .witness-hero img {
@@ -697,9 +715,10 @@ header {
   text-align: center;
   color: #fff;
   max-width: 600px;
-  background: rgba(26, 26, 26, 0.4);
+  background: transparent; /* Removed blur box for flashlight purity */
   padding: var(--space-3xl);
-  backdrop-filter: blur(10px);
+  z-index: 2; /* Ensure content is above the lighting mask */
+  position: relative;
 }
 
 .witness-title {

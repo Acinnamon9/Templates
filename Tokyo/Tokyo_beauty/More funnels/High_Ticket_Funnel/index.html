@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Ticket Consultation</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+</head>
+<body>
+
+  <!-- Custom Cursor Elements -->
+  <div class="custom-cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Header / Navigation -->
+  <header>
+    <div class="brand">YOUR BRAND</div>
+  </header>
+
+  <!-- 1. VSL Hero (Experience Canvas Adapted) -->
+  <main class="experience-canvas">
+    <section class="slide active">
+      <div class="content-wrap">
+        <h1 class="slide-title">The End of the Revenue Plateau.</h1>
+        <p class="slide-desc">A brutalist breakdown of how seven-figure agencies scale without adding operational drag. Watch the breakdown below.</p>
+        
+        <!-- VSL Placeholder -->
+        <div class="vsl-container">
+           <div class="vsl-placeholder">
+             <span>[ Video Sales Letter 16:9 ]</span>
+           </div>
+        </div>
+        
+        <button class="btn-submit vsl-cta">Apply For Consultation</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Kinetic Lintel (Transition) -->
+  <section class="lintel-section">
+    <div class="lintel-content">
+      <h2 class="section-label">The Old Model Is Broken</h2>
+      <blockquote class="manifesto-quote">
+        "Most agencies scale by adding <span class="highlight">complexity</span>.<br>
+        We scale by subtracting it."
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- 2. The Mechanism (Asymmetric Memory Grid) -->
+  <section class="memory-section">
+    <div class="section-label">The Mechanism / Logic</div>
+    <div class="memory-grid">
+      <div class="memory-column-left">
+         <h2 class="sanctuary-title">The Complexity Tax</h2>
+         <p class="memory-text">Every new service line you add introduces operational drag. The "Complexity Tax" is why your margins shrink as your gross revenue grows. We implement an asymmetric service delivery model that severs the link between fulfillment hours and client results.</p>
+      </div>
+      <div class="memory-column-right">
+        <div class="artifact-card" id="mechanism-card">
+          <!-- Temporal Decoupling Image here -->
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dafb38ca83408ecb9b.png" alt="Mechanism Diagram">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. The Methodology (The Ritual) -->
+  <section class="ritual-section">
+    <div class="ritual-header">
+      <h2 class="section-label">The Methodology / 90 Days</h2>
+    </div>
+    <div class="ritual-grid">
+      <div class="ritual-step">
+        <span class="step-num">01</span>
+        <h4 class="step-title">The Audit</h4>
+        <p class="step-desc">We mathematically deconstruct your current offer stack. We identify the specific operational bottlenecks consuming your fulfillment team's time.</p>
+      </div>
+      <div class="ritual-step">
+        <span class="step-num">02</span>
+        <h4 class="step-title">The Restructure</h4>
+        <p class="step-desc">We implement the asymmetric delivery model. This removes 40% of standard client deliverables while increasing the perceived value of the core outcome.</p>
+      </div>
+      <div class="ritual-step">
+        <span class="step-num">03</span>
+        <h4 class="step-title">The Scale</h4>
+        <p class="step-desc">With operational drag removed, we inject our high-ticket acquisition system, allowing you to double client volume without breaking fulfillment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Elite Social Proof (Echoes / Ghost Cards) -->
+  <section class="echoes-section">
+    <div class="echoes-watermark">RESULTS</div>
+    <div class="echoes-header">
+      <div class="section-label">Evidence / Case Studies</div>
+      <div class="witness-counter" id="voyages">$4.2M NEW ARR GENERATED</div>
+    </div>
+    <div class="echoes-grid">
+      <div class="ghost-card large">
+        <p class="ghost-quote">"We were stuck at $50k/mo for a year. In 90 days after ripping out our old deliverables, we hit $120k/mo at 80% margins."</p>
+        <span class="ghost-author">— Sarah J., Design Agency</span>
+      </div>
+      <div class="echoes-column-stack">
+        <div class="ghost-card">
+          <p class="ghost-quote">"The clarity is terrifying. They broke down out business purely into numbers and rebuilt it."</p>
+          <span class="ghost-author">— Michael T., Consultancy</span>
+        </div>
+        <div class="ghost-card">
+           <p class="ghost-quote">"We work less hours now than we did when we were making half the money."</p>
+           <span class="ghost-author">— David M., B2B SaaS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Objection Handling (The Oracle FAQ) -->
+  <section class="oracle-section">
+    <div class="oracle-header">
+      <h2 class="section-label">The Oracle / Clarity</h2>
+    </div>
+    <div class="oracle-list">
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span class="accordion-title">Who is this program actually for?</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <p>This is strictly for agencies, consultancies, or B2B service providers currently doing at least $20,000 per month. If you are a beginner, this architecture will break your business.</p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span class="accordion-title">Do you do the implementation for us?</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <p>We provide the exact operational blueprints, the hiring protocols, and the sales scripts. We consult you on the installation, but your team must build the house.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Application / Calendar (Final Witness with Lighting) -->
+  <section class="final-witness">
+    <div class="witness-hero">
+      <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png" alt="Focus Lighting Background">
+      <div class="witness-content">
+        <h2 class="witness-title">The Threshold</h2>
+        <p class="witness-desc">Availability is strictly limited. Apply below to see if your current operational model qualifies for restructure.</p>
+        
+        <!-- Fake Calendar Embed -->
+        <div class="calendar-embed-placeholder">
+           [ Calendly / Acuity Embed Goes Here ]
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-wrap">
+       <span class="brand">YOUR BRAND © 2026</span>
+       <span>Privacy • Terms</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

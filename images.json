@@ -1,0 +1,78 @@
+{
+  "collection": "Aura James",
+  "version": "1.1",
+  "assets": [
+    {
+      "id": "atm_wealth",
+      "category": "Atmospheric Depth",
+      "context": "Wealth & Heritage",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png",
+      "description": "Minimalist marble architecture / premium fabric suiting. High-resolution textures for drifting backdrops.",
+      "local_relative": "Resources/images/atm_wealth.png"
+    },
+    {
+      "id": "atm_biohacking",
+      "category": "Atmospheric Depth",
+      "context": "Biohacking Diagnostic",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png",
+      "description": "Macro liquid movement / high-tech glass lab aesthetic. Essential for temporal decoupling.",
+      "local_relative": "Resources/images/atm_biohacking.png"
+    },
+    {
+      "id": "atm_estate",
+      "category": "Atmospheric Depth",
+      "context": "Luxury Estate",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bed548179ed021687d.png",
+      "description": "Atmospheric mountain fog / minimalist concrete shadows. Evokes architectural permanence.",
+      "local_relative": "Resources/images/atm_estate.png"
+    },
+    {
+      "id": "hero_wealth",
+      "category": "Hero: Object of Desire",
+      "context": "Wealth & Heritage",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befb38cabb229231e2.png",
+      "description": "High-stakes luxury object (Fountain pen/Watch/Leather). Commands the Experience Canvas center.",
+      "local_relative": "Resources/images/hero_wealth.png"
+    },
+    {
+      "id": "hero_biohacking",
+      "category": "Hero: Object of Desire",
+      "context": "Biohacking Diagnostic",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png",
+      "description": "Fine art motion capture or sleek biosensing device. Represents the Longevity Lab pinnacle.",
+      "local_relative": "Resources/images/hero_biohacking.png"
+    },
+    {
+      "id": "hero_estate",
+      "category": "Hero: Object of Desire",
+      "context": "Luxury Estate",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png",
+      "description": "Cinematic brutalist mansion at dusk. High chiaroscuro for dramatic layout hooks.",
+      "local_relative": "Resources/images/hero_estate.png"
+    },
+    {
+      "id": "hero_mindset",
+      "category": "Hero: Object of Desire",
+      "context": "Mindset Mastery",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png",
+      "description": "Founder power shot. High-balcony cityscape or empty boardroom minimalism.",
+      "local_relative": "Resources/images/hero_mindset.png"
+    },
+    {
+      "id": "process_lifestyle",
+      "category": "Process & Proof",
+      "context": "Wealth / Estate",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png",
+      "description": "Elite social proof detail (Private jet / Luxury interior). Used for Ghost Card interactions.",
+      "local_relative": "Resources/images/process_lifestyle.png"
+    },
+    {
+      "id": "process_biological",
+      "category": "Process & Proof",
+      "context": "Biohacking / Mastery",
+      "url": "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png",
+      "description": "Microscopic cell imagery or motion light trails. Validates the technical mechanism.",
+      "local_relative": "Resources/images/process_biological.png"
+    }
+  ]
+}

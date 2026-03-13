@@ -144,7 +144,7 @@ function initScrollAnims() {
     });
   });
 
-  // Echoes Watermark Parallax
+  // Echoes Watermark Parallax (Typographic Masking enhancement)
   gsap.to(".echoes-watermark", {
     scrollTrigger: {
       trigger: ".echoes-section",
@@ -152,9 +152,47 @@ function initScrollAnims() {
       end: "bottom top",
       scrub: 1
     },
-    x: -100,
+    x: -150,
     ease: "none"
   });
+
+  // Temporal Decoupling (Floating Canvas) on Artifacts
+  document.querySelectorAll('.artifact-card').forEach(card => {
+    const img = card.querySelector('img');
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      
+      gsap.to(img, {
+        x: (x * -40) - 5 + "%", // Drift opposite to mouse, accounting for the -5% base offset
+        y: (y * -40) - 5 + "%",
+        duration: 0.8,
+        ease: "power2.out"
+      });
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      gsap.to(img, {
+        x: "-5%",
+        y: "-5%",
+        duration: 1.2,
+        ease: weatherEase
+      });
+    });
+  });
+
+  // Focus Lighting (Flashlight Effect) on Final Witness
+  const witnessHero = document.querySelector('.witness-hero');
+  if (witnessHero) {
+    witnessHero.addEventListener('mousemove', (e) => {
+      const rect = witnessHero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      witnessHero.style.setProperty('--mouse-x', `${x}px`);
+      witnessHero.style.setProperty('--mouse-y', `${y}px`);
+    });
+  }
 
   // Voyage Counter Animation
   const voyages = document.getElementById('voyages');
