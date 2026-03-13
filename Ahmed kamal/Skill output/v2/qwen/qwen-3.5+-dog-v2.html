@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K9 Executive | Premium Dog Training for Busy Professionals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --bg-elevated: rgba(255, 255, 255, 0.08);
+            --fg: #f1f5f9;
+            --fg-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-strong: rgba(255, 255, 255, 0.18);
+            --edge-highlight: rgba(255, 255, 255, 0.08);
+            --shadow-card: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+            --navbar-bg: rgba(10, 10, 10, 0.85);
+            --footer-bg: #030712;
+            --accent: #eab308;
+            --accent-rgb: 234, 179, 8;
+            --success: #22c55e;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Satoshi', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent), rgba(var(--accent-rgb), 0.5));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Background Orbs */
+        #bg-orbs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            animation: float-orb 30s ease-in-out infinite;
+        }
+        
+        #orb1 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent), transparent 70%);
+            opacity: 0.12;
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+        
+        #orb2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--success), transparent 70%);
+            opacity: 0.08;
+            bottom: 10%;
+            right: 15%;
+            animation-delay: -10s;
+        }
+        
+        #orb3 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #8b5cf6, transparent 70%);
+            opacity: 0.06;
+            top: 50%;
+            left: 55%;
+            animation-delay: -20s;
+        }
+        
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -40px) scale(1.08); }
+            50% { transform: translate(-40px, 60px) scale(0.95); }
+            75% { transform: translate(30px, 30px) scale(1.04); }
+        }
+        
+        /* Glass Card System */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-card);
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--edge-highlight) 40%, var(--edge-highlight) 60%, transparent 100%);
+            pointer-events: none;
+        }
+        
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg,
+                rgba(var(--accent-rgb), 0.04) 0%,
+                transparent 50%,
+                rgba(var(--accent-rgb), 0.04) 100%
+            );
+            pointer-events: none;
+        }
+        
+        .glass-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card), 0 0 40px rgba(var(--accent-rgb), 0.1);
+        }
+        
+        .glass-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25), inset 0 1px 0 var(--edge-highlight);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb),0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        
+        .dot-grid {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+            background-size: 40px 40px;
+            -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+            mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+            pointer-events: none;
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 1px solid rgba(var(--accent-rgb), 0.25);
+            color: var(--accent);
+            background: rgba(var(--accent-rgb), 0.08);
+        }
+        
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.5); }
+        }
+        
+        /* Rotating Border CTA */
+        .rotating-cta {
+            position: relative;
+            display: inline-flex;
+            padding: 2px;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 24px rgba(var(--accent-rgb), 0.35);
+            animation: pulse-scale 3s ease-in-out infinite;
+        }
+        
+        .rotating-cta-gradient {
+            position: absolute;
+            inset: -100%;
+            background: conic-gradient(from 0deg, transparent 40%, var(--accent) 50%, transparent 60%);
+            animation: spin 4s linear infinite;
+        }
+        
+        .rotating-cta-face {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 40px;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.05em;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
+            font-family: 'Satoshi', sans-serif;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        /* Secondary Glass Button */
+        .btn-glass {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: rgba(var(--accent-rgb), 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(var(--accent-rgb), 0.3);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.25s;
+        }
+        
+        .btn-glass:hover {
+            background: rgba(var(--accent-rgb), 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Navbar */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        #navbar.scrolled {
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+        
+        /* Trust Logos Marquee */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .marquee-content {
+            display: inline-flex;
+            animation: marquee 30s linear infinite;
+        }
+        
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 32px;
+            opacity: 0.6;
+            filter: grayscale(100%);
+            transition: all 0.3s;
+        }
+        
+        .marquee-item:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        /* Timeline */
+        .timeline-track {
+            position: relative;
+            height: 4px;
+            margin: 40px 0;
+        }
+        
+        .timeline-base {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            border-radius: 1px;
+        }
+        
+        #timeline-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 1px;
+            width: 0;
+        }
+        
+        .step-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--accent);
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+        
+        /* FAQ Accordion */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s;
+        }
+        
+        .faq-item.expanded {
+            border-color: var(--accent);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        /* Widget */
+        #widget-toggle {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 9999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        
+        #widget-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .widget-ping {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 9998;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.4;
+            animation: ping 2s ease-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes ping {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
+        
+        #widget-panel {
+            position: fixed;
+            bottom: 104px;
+            right: 28px;
+            z-index: 9998;
+            width: 360px;
+            max-width: calc(100vw - 40px);
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 var(--edge-highlight);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Cursor Dot */
+        #cursor-dot {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            pointer-events: none;
+            z-index: 99999;
+            opacity: 0.6;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: block; }
+        }
+        
+        @media (min-width: 769px) {
+            .hamburger { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Orbs -->
+    <div id="bg-orbs">
+        <div class="orb" id="orb1"></div>
+        <div class="orb" id="orb2"></div>
+        <div class="orb" id="orb3"></div>
+    </div>
+
+    <!-- Cursor Dot -->
+    <div id="cursor-dot"></div>
+
+    <!-- S1: Navbar -->
+    <nav id="navbar">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold font-satoshi">K9 Executive</span>
+                </div>
+                
+                <div class="nav-links hidden md:flex items-center gap-8">
+                    <a href="#program" class="text-sm font-medium hover:text-yellow-400 transition-colors">Program</a>
+                    <a href="#results" class="text-sm font-medium hover:text-yellow-400 transition-colors">Results</a>
+                    <a href="#bonuses" class="text-sm font-medium hover:text-yellow-400 transition-colors">Bonuses</a>
+                    <a href="#testimonials" class="text-sm font-medium hover:text-yellow-400 transition-colors">Testimonials</a>
+                </div>
+                
+                <button class="rotating-cta">
+                    <div class="rotating-cta-gradient"></div>
+                    <div class="rotating-cta-face">
+                        Start Now
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </div>
+                </button>
+                
+                <button class="hamburger md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- S2: Hero -->
+    <section id="hero" style="position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: center;">
+        <div class="container mx-auto px-6 py-20">
+            <div id="hero-content" class="max-w-4xl mx-auto text-center">
+                <div class="badge mb-8">
+                    <div class="badge-dot"></div>
+                    For Busy Professionals
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
+                    Transform Your Dog Into an<br>
+                    <span class="gradient-text">Obedient Companion</span><br>
+                    in Just 8 Weeks
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                    The premium training system designed for executives who demand results. 
+                    Get a well-behaved dog without sacrificing your career or schedule.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                    <button class="rotating-cta">
+                        <div class="rotating-cta-gradient"></div>
+                        <div class="rotating-cta-face">
+                            Enroll Now — $997
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <a href="#program" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                        See how it works
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <!-- Trust Badges -->
+                <div class="flex flex-wrap justify-center gap-6 mb-12">
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        30-Day Money-Back Guarantee
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        Lifetime Access
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        24/7 Support
+                    </div>
+                </div>
+                
+                <!-- Trust Logos Marquee -->
+                <div class="marquee-container opacity-50">
+                    <div class="marquee-content">
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" alt="Salesforce" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" alt="HubSpot" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" alt="Shopify" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" alt="Telegram" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" alt="WhatsApp" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" alt="Monday" class="h-8">
+                        </div>
+                        <!-- Duplicate for seamless loop -->
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" alt="Salesforce" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" alt="HubSpot" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" alt="Shopify" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" alt="Telegram" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" alt="WhatsApp" class="h-8">
+                        </div>
+                        <div class="marquee-item">
+                            <img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" alt="Monday" class="h-8">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S3: The Problem -->
+    <section id="problem" style="position: relative; z-index: 20; padding: 72px 0;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <div class="badge mb-4">The Reality Check</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Why Your Dog Still <span class="gradient-text">Isn't Obedient</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Most training programs fail busy professionals because they don't account for your demanding schedule.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-card">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=200&fit=crop" alt="Dog pulling on leash" class="w-full h-48 object-cover rounded-t-20">
+                        <div class="absolute top-3 right-3 bg-red-500/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-white">
+                            ✗ DAILY STRUGGLE
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-2">Leash Pulling Chaos</h3>
+                        <p class="text-sm text-gray-400 mb-3">Every walk becomes a battle you don't have time for.</p>
+                        <div class="text-xs text-gray-500">73% of owners report this issue</div>
+                    </div>
+                </div>
+                
+                <div class="glass-card">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&h=200&fit=crop" alt="Dog jumping on guests" class="w-full h-48 object-cover rounded-t-20">
+                        <div class="absolute top-3 right-3 bg-red-500/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-white">
+                            ✗ EMBARRASSING
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-2">Jumping on Guests</h3>
+                        <p class="text-sm text-gray-400 mb-3">Your professional image suffers when visitors arrive.</p>
+                        <div class="text-xs text-gray-500">Creates negative first impressions</div>
+                    </div>
+                </div>
+                
+                <div class="glass-card">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598133893769-6e1c78a8e8e8?w=400&h=200&fit=crop" alt="Dog destroying furniture" class="w-full h-48 object-cover rounded-t-20">
+                        <div class="absolute top-3 right-3 bg-red-500/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-white">
+                            ✗ COSTLY DAMAGE
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-2">Destructive Behavior</h3>
+                        <p class="text-sm text-gray-400 mb-3">Coming home to destruction after long work days.</p>
+                        <div class="text-xs text-gray-500">Average repair cost: $500+</div>
+                    </div>
+                </div>
+                
+                <div class="glass-card">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1534361960057-19889db9621e?w=400&h=200&fit=crop" alt="Dog ignoring commands" class="w-full h-48 object-cover rounded-t-20">
+                        <div class="absolute top-3 right-3 bg-red-500/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-white">
+                            ✗ IGNORES COMMANDS
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-2">Selective Hearing</h3>
+                        <p class="text-sm text-gray-400 mb-3">Your dog only obeys when it's convenient for them.</p>
+                        <div class="text-xs text-gray-500">Frustration builds daily</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S4: The Solution -->
+    <section id="program" style="position: relative; z-index: 30; padding: 72px 0;">
+        <div class="glass-container">
+            <div class="dot-grid"></div>
+            <div class="container mx-auto px-6 py-16">
+                <div class="text-center mb-12">
+                    <div class="badge mb-4">The K9 Executive Method</div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                        8 Weeks to a <span class="gradient-text">Perfectly Trained</span> Dog
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        A structured, science-based program designed specifically for busy professionals who need efficient, lasting results.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="glass-card">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-lg mb-2">Week 1-2: Foundation</h3>
+                            <ul class="text-sm text-gray-400 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Basic commands mastery</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Focus & attention building</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Leash walking fundamentals</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-lg mb-2">Week 3-4: Control</h3>
+                            <ul class="text-sm text-gray-400 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Impulse control exercises</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Stay & wait commands</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Distraction training</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-lg mb-2">Week 5-6: Reliability</h3>
+                            <ul class="text-sm text-gray-400 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Off-leash reliability</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Real-world scenarios</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Advanced obedience</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-lg mb-2">Week 7-8: Mastery</h3>
+                            <ul class="text-sm text-gray-400 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Behavioral refinement</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Long-term maintenance</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-yellow-400 mt-1">✓</span>
+                                    <span>Lifetime support access</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn-glass" onclick="toggleExpand()">
+                        View Complete Curriculum
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S5: Timeline -->
+    <section id="timeline-section" style="position: relative; z-index: 40; padding: 72px 0;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <div class="badge mb-4">Quick Start</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Get Started in <span class="gradient-text">48 Hours</span>
+                </h2>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="timeline-base"></div>
+                <div id="timeline-fill"></div>
+                <div class="step-dot" data-step="1" style="left: 0%;"></div>
+                <div class="step-dot" data-step="2" style="left: 33.33%;"></div>
+                <div class="step-dot" data-step="3" style="left: 66.66%;"></div>
+                <div class="step-dot" data-step="4" style="left: 100%;"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+                <div class="glass-card p-6">
+                    <div class="text-yellow-400 font-bold text-sm mb-2">STEP 1</div>
+                    <h3 class="font-bold text-lg mb-3">Instant Access</h3>
+                    <p class="text-sm text-gray-400">Get immediate access to all training modules upon enrollment.</p>
+                </div>
+                
+                <div class="glass-card p-6">
+                    <div class="text-yellow-400 font-bold text-sm mb-2">STEP 2</div>
+                    <h3 class="font-bold text-lg mb-3">Assessment Call</h3>
+                    <p class="text-sm text-gray-400">30-minute consultation to customize your training plan.</p>
+                </div>
+                
+                <div class="glass-card p-6">
+                    <div class="text-yellow-400 font-bold text-sm mb-2">STEP 3</div>
+                    <h3 class="font-bold text-lg mb-3">Begin Training</h3>
+                    <p class="text-sm text-gray-400">Start with Week 1 modules and daily 15-minute sessions.</p>
+                </div>
+                
+                <div class="glass-card p-6">
+                    <div class="text-yellow-400 font-bold text-sm mb-2">STEP 4</div>
+                    <h3 class="font-bold text-lg mb-3">See Results</h3>
+                    <p class="text-sm text-gray-400">Noticeable improvements within the first 2 weeks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S6: Bonuses -->
+    <section id="bonuses" style="position: relative; z-index: 50; padding: 72px 0;">
+        <div class="glass-container">
+            <div class="dot-grid"></div>
+            <div class="container mx-auto px-6 py-16">
+                <div class="text-center mb-12">
+                    <div class="badge mb-4">Exclusive Bonuses</div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                        Plus <span class="gradient-text">3 Premium Bonuses</span> Worth $2,000+
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Everything you need for complete success, included at no extra cost.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="glass-card p-6 cursor-pointer bonus-card active" data-bonus="1">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-yellow-400 font-bold">1</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-2">Complete Video Library</h3>
+                                    <p class="text-sm text-gray-400">150+ HD training videos covering every command, behavior issue, and advanced technique. Lifetime access with regular updates.</p>
+                                    <div class="mt-3 flex items-center gap-4 text-xs text-gray-500">
+                                        <span>Value: $997</span>
+                                        <span class="text-yellow-400">✓ Included</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-card p-6 cursor-pointer bonus-card" data-bonus="2">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-yellow-400 font-bold">2</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-2">Private Community Access</h3>
+                                    <p class="text-sm text-gray-400">Join 2,000+ successful graduates in our exclusive community. Get support, share progress, and access weekly Q&A sessions.</p>
+                                    <div class="mt-3 flex items-center gap-4 text-xs text-gray-500">
+                                        <span>Value: $497</span>
+                                        <span class="text-yellow-400">✓ Included</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-card p-6 cursor-pointer bonus-card" data-bonus="3">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-yellow-400 font-bold">3</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-2">1-on-1 Strategy Call</h3>
+                                    <p class="text-sm text-gray-400">Personal 45-minute session with a certified trainer to address your specific challenges and optimize your approach.</p>
+                                    <div class="mt-3 flex items-center gap-4 text-xs text-gray-500">
+                                        <span>Value: $297</span>
+                                        <span class="text-yellow-400">✓ Included</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-8 flex items-center justify-center">
+                        <div id="bonus-preview" class="text-center">
+                            <div class="w-32 h-32 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-6">
+                                <svg class="w-16 h-16 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2">Video Library Preview</h3>
+                            <p class="text-gray-400">Click any bonus to see details</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S7: Testimonials -->
+    <section id="testimonials" style="position: relative; z-index: 60; padding: 72px 0;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <div class="badge mb-4">Success Stories</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Real Results from <span class="gradient-text">Busy Professionals</span>
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold">
+                            SM
+                        </div>
+                        <div>
+                            <div class="font-bold">Sarah Mitchell</div>
+                            <div class="text-xs text-gray-400">CEO, Tech Startup</div>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="text-gray-300 mb-4 italic">"As a CEO working 70-hour weeks, I thought training my German Shepherd was impossible. This program changed everything. Max is now perfectly behaved, and I only spend 15 minutes a day."</p>
+                    <div class="text-xs text-gray-400">Before: Constant pulling, jumping on clients<br>After: Calm, obedient, professional</div>
+                </div>
+                
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold">
+                            JD
+                        </div>
+                        <div>
+                            <div class="font-bold">James Davidson</div>
+                            <div class="text-xs text-gray-400">Investment Banker</div>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="text-gray-300 mb-4 italic">"The 1-on-1 call was a game-changer. My trainer understood my schedule and created a plan that actually worked. Bella went from embarrassing me at client dinners to being the perfect companion."</p>
+                    <div class="text-xs text-gray-400">Before: Aggressive with strangers<br>After: Friendly, controlled, calm</div>
+                </div>
+                
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold">
+                            ER
+                        </div>
+                        <div>
+                            <div class="font-bold">Emily Rodriguez</div>
+                            <div class="text-xs text-gray-400">Marketing Director</div>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="text-gray-300 mb-4 italic">"I was skeptical about online training, but the video library is incredible. Every question I had was already answered. The community support kept me motivated throughout the 8 weeks."</p>
+                    <div class="text-xs text-gray-400">Before: Destructive when alone<br>After: Calm, independent, happy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S8: Guarantee -->
+    <section id="guarantee" style="position: relative; z-index: 70; padding: 72px 0;">
+        <div class="glass-container">
+            <div class="dot-grid"></div>
+            <div class="container mx-auto px-6 py-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="badge mb-4">Risk-Free Investment</div>
+                        <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                            30-Day <span class="gradient-text">Money-Back Guarantee</span>
+                        </h2>
+                        <p class="text-gray-400 mb-6">
+                            We're so confident in our program that we offer a full refund if you're not satisfied within the first 30 days. No questions asked.
+                        </p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Complete access to all materials</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Full support from our team</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>No risk, all reward</span>
+                            </li>
+                        </ul>
+                        <button class="rotating-cta">
+                            <div class="rotating-cta-gradient"></div>
+                            <div class="rotating-cta-face">
+                                Start Risk-Free Today
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="glass-card p-8 text-center">
+                        <div class="w-24 h-24 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-12 h-12 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">100% Satisfaction</h3>
+                        <p class="text-gray-400 mb-4">If you don't see results, you don't pay.</p>
+                        <div class="text-sm text-gray-500">Over 2,000 successful graduates</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S9: FAQ -->
+    <section id="faq" style="position: relative; z-index: 80; padding: 72px 0;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <div class="badge mb-4">Common Questions</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Everything You Need to <span class="gradient-text">Know</span>
+                </h2>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="glass-card p-6 mb-4 faq-item">
+                    <div class="flex items-center justify-between cursor-pointer faq-question">
+                        <h3 class="font-bold text-lg">How much time do I need to commit daily?</h3>
+                        <svg class="w-5 h-5 text-yellow-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 mt-4">Just 15-20 minutes per day. The program is specifically designed for busy professionals. Short, focused sessions are more effective than long training marathons.</p>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 mb-4 faq-item">
+                    <div class="flex items-center justify-between cursor-pointer faq-question">
+                        <h3 class="font-bold text-lg">What if my dog has severe behavioral issues?</h3>
+                        <svg class="w-5 h-5 text-yellow-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 mt-4">The program covers everything from basic obedience to advanced behavioral modification. Your 1-on-1 call will address specific challenges, and our community can provide additional support.</p>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 mb-4 faq-item">
+                    <div class="flex items-center justify-between cursor-pointer faq-question">
+                        <h3 class="font-bold text-lg">Is this suitable for puppies and older dogs?</h3>
+                        <svg class="w-5 h-5 text-yellow-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 mt-4">Absolutely! The techniques work for dogs of all ages. Puppies benefit from early foundation training, while older dogs can learn new behaviors at any age.</p>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 mb-4 faq-item">
+                    <div class="flex items-center justify-between cursor-pointer faq-question">
+                        <h3 class="font-bold text-lg">What happens after the 8 weeks?</h3>
+                        <svg class="w-5 h-5 text-yellow-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 mt-4">You get lifetime access to all materials, the community, and ongoing support. Many graduates continue using the advanced modules and stay active in the community for years.</p>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 mb-4 faq-item">
+                    <div class="flex items-center justify-between cursor-pointer faq-question">
+                        <h3 class="font-bold text-lg">How do I claim my bonuses?</h3>
+                        <svg class="w-5 h-5 text-yellow-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 mt-4">All bonuses are automatically included with your enrollment. You'll receive immediate access to the video library and community, and can schedule your 1-on-1 call within the first week.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S10: Final CTA -->
+    <section id="final-cta" style="position: relative; z-index: 90; padding: 72px 0;">
+        <div class="container mx-auto px-6">
+            <div class="glass-container p-12 text-center">
+                <div class="badge mb-6">
+                    <div class="badge-dot" style="background: #ef4444;"></div>
+                    Limited Spots Available
+                </div>
+                
+                <h2 class="text-4xl md:text-6xl font-black mb-6">
+                    Stop Struggling. Start Enjoying<br>
+                    Your <span class="gradient-text">Perfect Companion</span>
+                </h2>
+                
+                <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                    Join 2,000+ busy professionals who transformed their relationship with their dog in just 8 weeks.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                    <button class="rotating-cta">
+                        <div class="rotating-cta-gradient"></div>
+                        <div class="rotating-cta-face">
+                            Enroll Now — $997
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <button class="btn-glass">
+                        Watch Success Stories
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-yellow-400 mb-2" data-count="48" data-suffix="h"></div>
+                        <div class="text-sm text-gray-400">Setup Time</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-yellow-400 mb-2" data-count="100" data-suffix="%"></div>
+                        <div class="text-sm text-gray-400">Satisfaction Rate</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-yellow-400 mb-2" data-count="30" data-suffix="d"></div>
+                        <div class="text-sm text-gray-400">Money-Back Guarantee</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S11: Footer -->
+    <footer style="position: relative; z-index: 100; background: var(--footer-bg); border-top: 1px solid var(--border); padding: 60px 0 24px;">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold font-satoshi">K9 Executive</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">Premium dog training for busy professionals who demand results.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-yellow-400 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-yellow-400 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Program</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#program" class="hover:text-yellow-400 transition-colors">Curriculum</a></li>
+                        <li><a href="#bonuses" class="hover:text-yellow-400 transition-colors">Bonuses</a></li>
+                        <li><a href="#testimonials" class="hover:text-yellow-400 transition-colors">Success Stories</a></li>
+                        <li><a href="#faq" class="hover:text-yellow-400 transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-yellow-400 transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-yellow-400 transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-yellow-400 transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-yellow-400 transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>support@k9executive.com</li>
+                        <li>Mon-Fri: 9am-6pm EST</li>
+                        <li>24/7 Community Support</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2026 K9 Executive. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Voice Widget -->
+    <div class="widget-ping"></div>
+    <button id="widget-toggle" onclick="toggleWidget()">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+        </svg>
+    </button>
+    
+    <div id="widget-panel">
+        <div class="bg-yellow-500/20 p-4 border-b border-gray-700">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-bold text-sm">K9 Executive AI</div>
+                    <div class="text-xs text-green-400 flex items-center gap-1">
+                        <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                        Online
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-4 h-48 overflow-y-auto">
+            <div class="glass-card p-3 mb-3 max-w-[80%]">
+                <p class="text-sm">Hi! I'm here to help you get started with the K9 Executive program. What questions do you have?</p>
+            </div>
+            <div class="glass-card p-3 mb-3 max-w-[80%] ml-auto">
+                <p class="text-sm">Is this program suitable for my busy schedule?</p>
+            </div>
+            <div class="glass-card p-3 mb-3 max-w-[80%]">
+                <p class="text-sm">Absolutely! The program requires just 15-20 minutes per day, designed specifically for professionals like you.</p>
+            </div>
+        </div>
+        
+        <form id="widget-form" class="p-4 border-t border-gray-700">
+            <div class="space-y-3 mb-3">
+                <input type="text" placeholder="Your Name" required class="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-sm focus:outline-none focus:border-yellow-400">
+                <input type="email" placeholder="Your Email" required class="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-sm focus:outline-none focus:border-yellow-400">
+            </div>
+            <button type="submit" class="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg text-sm transition-colors">
+                Get Started
+            </button>
+        </form>
+        
+        <div class="px-4 py-2 bg-gray-900/50 border-t border-gray-700 text-center">
+            <div class="text-xs text-gray-500">Powered by K9 Executive AI</div>
+        </div>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 60) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Hero parallax
+        gsap.to('#hero-content', {
+            y: -60,
+            opacity: 0.3,
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'top top',
+                end: '80% top',
+                scrub: 1
+            }
+        });
+        
+        // Timeline fill animation
+        gsap.to('#timeline-fill', {
+            width: '100%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#timeline-section',
+                start: 'top 70%',
+                end: 'bottom 60%',
+                scrub: 1
+            }
+        });
+        
+        // Reveal animations
+        function revealUp(selector, stagger = 0.12) {
+            document.querySelectorAll(selector).forEach(el => {
+                gsap.fromTo(el, { opacity: 0, y: 40 },
+                    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+                        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
+                    });
+            });
+        }
+        
+        revealUp('.glass-card');
+        revealUp('.badge');
+        revealUp('h2');
+        
+        // Counter animations
+        function animateCounters() {
+            document.querySelectorAll('[data-count]').forEach(el => {
+                const target = parseFloat(el.dataset.count);
+                const suffix = el.dataset.suffix || '';
+                const prefix = el.dataset.prefix || '';
+                gsap.fromTo({ val: 0 }, { val: target, duration: 2, ease: 'power2.out',
+                    onUpdate: function() {
+                        el.textContent = prefix + Math.round(this.targets()[0].val) + suffix;
+                    },
+                    scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+                });
+            });
+        }
+        animateCounters();
+        
+        // Bonus cards interaction
+        document.querySelectorAll('.bonus-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.bonus-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                
+                const bonusId = card.dataset.bonus;
+                const preview = document.getElementById('bonus-preview');
+                
+                if (bonusId === '1') {
+                    preview.innerHTML = `
+                        <div class="w-32 h-32 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-16 h-16 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">150+ HD Training Videos</h3>
+                        <p class="text-gray-400">Complete library covering every command and behavior</p>
+                    `;
+                } else if (bonusId === '2') {
+                    preview.innerHTML = `
+                        <div class="w-32 h-32 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-16 h-16 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Private Community</h3>
+                        <p class="text-gray-400">2,000+ members sharing success and support</p>
+                    `;
+                } else if (bonusId === '3') {
+                    preview.innerHTML = `
+                        <div class="w-32 h-32 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-16 h-16 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">1-on-1 Strategy Call</h3>
+                        <p class="text-gray-400">45-minute personalized session with expert trainer</p>
+                    `;
+                }
+                
+                gsap.fromTo(preview, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.3 });
+            });
+        });
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                const icon = question.querySelector('svg');
+                
+                if (item.classList.contains('expanded')) {
+                    item.classList.remove('expanded');
+                    answer.style.maxHeight = '0';
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    document.querySelectorAll('.faq-item').forEach(i => {
+                        i.classList.remove('expanded');
+                        i.querySelector('.faq-answer').style.maxHeight = '0';
+                        i.querySelector('svg').style.transform = 'rotate(0deg)';
+                    });
+                    
+                    item.classList.add('expanded');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+        
+        // Widget toggle
+        function toggleWidget() {
+            const panel = document.getElementById('widget-panel');
+            const isOpen = panel.style.display === 'flex';
+            panel.style.display = isOpen ? 'none' : 'flex';
+            if (!isOpen) {
+                gsap.fromTo(panel, { opacity: 0, y: 20, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.4)' });
+            }
+        }
+        
+        document.getElementById('widget-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            this.innerHTML = '<p style="text-align:center;padding:24px;color:var(--success);font-weight:700;">✓ We\'ll be in touch shortly.</p>';
+        });
+        
+        // Cursor dot
+        const cur = document.createElement('div');
+        cur.id = 'cursor-dot';
+        cur.style.cssText = 'position:fixed;width:12px;height:12px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.6;transform:translate(-50%,-50%);transition:transform 0.15s ease;';
+        document.body.appendChild(cur);
+        document.addEventListener('mousemove', e => { 
+            cur.style.left = e.clientX + 'px'; 
+            cur.style.top = e.clientY + 'px'; 
+        });
+        document.querySelectorAll('button,a,.cursor-pointer').forEach(el => {
+            el.addEventListener('mouseenter', () => cur.style.transform = 'translate(-50%,-50%) scale(2.5)');
+            el.addEventListener('mouseleave', () => cur.style.transform = 'translate(-50%,-50%) scale(1)');
+        });
+        
+        // Mobile menu toggle
+        document.querySelector('.hamburger')?.addEventListener('click', () => {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'left-0', 'right-0', 'bg-gray-900', 'p-6', 'gap-4');
+        });
+    </script>
+</body>
+</html>

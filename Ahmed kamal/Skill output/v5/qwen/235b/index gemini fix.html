@@ -1,0 +1,961 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canine Command | Obedient Dog Training for Busy Professionals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --bg-card:rgba(255,255,255,0.65);
+      --bg-card-hover:rgba(255,255,255,0.85);
+      --bg-elevated:rgba(255,255,255,0.85);
+      --fg:#0f172a;
+      --fg-muted:#475569;
+      --border:rgba(0,0,0,0.08);
+      --border-strong:rgba(0,0,0,0.14);
+      --edge-highlight:rgba(255,255,255,0.95);
+      --shadow-card:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);
+      --navbar-bg:rgba(248,250,252,0.85);
+      --footer-bg:#0f172a;
+      --orb-opacity1:0.08;
+      --orb-opacity2:0.05;
+      --orb-opacity3:0.04;
+      --accent:#eab308;
+      --accent-rgb:234,179,8;
+      --success:#16a34a;
+    }
+    body{background:var(--bg);color:var(--fg)}
+    .glass-card{background:var(--bg-card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-card);transition:background 0.3s ease,transform 0.3s ease,box-shadow 0.3s ease;position:relative;overflow:hidden}
+    .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--edge-highlight) 40%,var(--edge-highlight) 60%,transparent 100%);pointer-events:none}
+    .glass-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(var(--accent-rgb),0.04) 0%,transparent 50%,rgba(var(--accent-rgb),0.04) 100%);pointer-events:none}
+    .glass-card:hover{background:var(--bg-card-hover);transform:translateY(-4px);box-shadow:var(--shadow-card),0 0 40px rgba(var(--accent-rgb),0.1)}
+    .glass-container{background:var(--bg-card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,0.25),inset 0 1px 0 var(--edge-highlight);position:relative;overflow:hidden}
+    .glass-container::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(var(--accent-rgb),0.05) 0%,transparent 60%);pointer-events:none}
+    .dot-grid{position:absolute;inset:0;opacity:0.03;background-image:radial-gradient(circle,currentColor 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:radial-gradient(ellipse at center,black,transparent 80%);mask-image:radial-gradient(ellipse at center,black,transparent 80%);pointer-events:none}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:9999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;border:1px solid rgba(var(--accent-rgb),0.25);color:var(--accent);background:rgba(var(--accent-rgb),0.08)}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease-in-out infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.5)}}
+    .gradient-text{background:linear-gradient(135deg,var(--accent),rgba(var(--accent-rgb),0.5));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .rotating-cta{position:relative;display:inline-flex;padding:2;border-radius:14px;overflow:hidden;cursor:pointer;border:none;box-shadow:0 4px 24px rgba(var(--accent-rgb),0.35)}
+    .rotating-cta-gradient{position:absolute;inset:-100%;animation:spin 4s linear infinite}
+    body:not(.theme-dark) .rotating-cta-gradient{background:conic-gradient(from 0deg,transparent 30%,var(--accent) 50%,transparent 70%)}
+    .rotating-cta-face{position:relative;z-index:1;display:inline-flex;align-items:center;gap:10px;padding:14px 40px;font-weight:900;font-size:16px;letter-spacing:0.05em;border-radius:12px;background:var(--accent);color:#fff;font-family:'Satoshi',sans-serif}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    body:not(.theme-dark) .rotating-cta{animation:pulse-light 3s ease-in-out infinite}
+    @keyframes pulse-light{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+    .btn-glass{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:14px;border:none;cursor:pointer;background:rgba(var(--accent-rgb),0.12);backdrop-filter:blur(12px);border:1px solid rgba(var(--accent-rgb),0.3);color:var(--accent);font-weight:700;font-size:15px;transition:all 0.25s}
+    .btn-glass:hover{background:rgba(var(--accent-rgb),0.2);transform:translateY(-2px)}
+    .orb{position:absolute;border-radius:50%;filter:blur(140px);animation:float-orb 30s ease-in-out infinite}
+    #orb1{width:800px;height:800px;background:radial-gradient(circle,var(--accent),transparent 70%);opacity:var(--orb-opacity1);top:10%;left:20%;animation-delay:0s}
+    #orb2{width:600px;height:600px;background:radial-gradient(circle,var(--success),transparent 70%);opacity:var(--orb-opacity2);bottom:10%;right:15%;animation-delay:-10s}
+    #orb3{width500px;height:500px;background:radial-gradient(circle,#8b5cf6,transparent 70%);opacity:var(--orb-opacity3);top:50%;left:55%;animation-delay:-20s}
+    @keyframes float-orb{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(60px,-40px) scale(1.08)}50%{transform:translate(-40px,60px) scale(0.95)}75%{transform:translate(30px,30px) scale(1.04)}}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .marquee-track{display:flex;gap:48px;animation:marquee 24s linear infinite;width:max-content}
+    .marquee-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
+    .approach-stack{position:relative;height:260px}
+    .approach-card{position:absolute;width:320px;padding:24px;border-radius:24px;background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);box-shadow:0 4px 24px -1px rgba(0,0,0,0.2),inset 0 1px 1px rgba(255,255,255,0.1);transition:all 0.4s cubic-bezier(0.23,1,0.32,1)}
+    .approach-card.card-1{z-index:30;transform:translate(0,0);border-left:4px solid var(--accent)}
+    .approach-card.card-2{z-index:20;transform:translate(32px,32px);opacity:0.6}
+    .approach-card.card-3{z-index:10;transform:translate(64px,64px);opacity:0.3}
+    .connector-line{position:absolute;height:1px;background:linear-gradient(90deg,var(--accent) 0%,transparent 100%);box-shadow:0 0 8px var(--accent)}
+    #widget-toggle{position:fixed;bottom:28px;right:28px;z-index:9999;width:60px;height:60px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;box-shadow:0 8px 32px rgba(var(--accent-rgb),0.45);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
+    #widget-toggle:hover{transform:scale(1.1)}
+    .widget-ping{position:fixed;bottom:28px;right:28px;z-index:9998;width:60px;height:60px;border-radius:50%;background:var(--accent);opacity:0.4;animation:ping 2s ease-out infinite;pointer-events:none}
+    @keyframes ping{0%{transform:scale(1);opacity:0.4}100%{transform:scale(1.8);opacity:0}}
+    #widget-panel{position:fixed;bottom:104px;right:28px;z-index:9998;width:360px;max-width:calc(100vw - 40px);background:var(--bg-card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3),inset 0 1px 0 var(--edge-highlight);display:none;flex-direction:column;overflow:hidden}
+    .faq-question{cursor:pointer;padding:16px 0;border-bottom:1px solid var(--border);font-weight:600;transition:color 0.2s}
+    .faq-question.active{color:var(--accent)}
+    .faq-answer{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
+    .timeline-track{position:relative;height:2px;margin:40px 0}
+    .timeline-track::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--border);border-radius:1px}
+    .timeline-fill{position:absolute;top:0;left:0;height:2px;width:0;background:var(--accent);border-radius:1px}
+  </style>
+</head>
+<body class="font-sans">
+  <div id="bg-orbs" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden">
+    <div class="orb" id="orb1"></div><div class="orb" id="orb2"></div><div class="orb" id="orb3"></div>
+  </div>
+
+  <!-- S1: Navbar -->
+  <nav id="navbar" class="fixed w-full z-999 top-0 transition-all duration-300">
+    <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
+          <span class="text-white font-bold text-sm">C</span>
+        </div>
+        <span class="font-Satoshi font-bold text-xl">Canine Command</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#how-it-works" class="text-gray-600 hover:text-amber-600 font-medium">How It Works</a>
+        <a href="#testimonials" class="text-gray-600 hover:text-amber-600 font-medium">Results</a>
+        <a href="#guarantee" class="text-gray-600 hover:text-amber-600 font-medium">Guarantee</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="btn-glass hidden md:block">Log In</button>
+        <button class="rotating-cta">
+          <div class="rotating-cta-gradient"></div>
+          <div class="rotating-cta-face">Enroll Now</div>
+        </button>
+        <button id="widget-toggle" aria-label="Open chat">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- S2: Hero -->
+  <section id="hero" class="min-h-screen flex items-center relative z-10 pt-24">
+    <div class="container mx-auto px-4 text-center">
+      <div class="inline-block mb-6">
+        <span class="badge"><span class="badge-dot"></span> For Busy Professionals</span>
+      </div>
+      <h1 class="font-Satoshi text-5xl md:text-7xl lg:text-8xl font-black leading-none mb-6">
+        <span class="gradient-text">Obedient Dog</span> in 8 Weeks
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+        No more chaos at home. Get a calm, responsive dog—even with your packed schedule. Science-backed training you can do in 15 minutes/day.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <button class="rotating-cta">
+          <div class="rotating-cta-gradient"></div>
+          <div class="rotating-cta-face">Get Instant Access — $997</div>
+        </button>
+        <button class="btn-glass">Watch Demo (2:17)</button>
+      </div>
+      
+      <div class="marquee-wrap mb-12">
+        <div class="marquee-track">
+          <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" alt="Salesforce" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" alt="HubSpot" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" alt="Shopify" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" alt="Telegram" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" alt="WhatsApp" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" alt="Monday" class="h-6 grayscale opacity-60">
+          <!-- Duplicate for seamless loop -->
+          <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" alt="Salesforce" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" alt="HubSpot" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" alt="Shopify" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" alt="Telegram" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" alt="WhatsApp" class="h-6 grayscale opacity-60">
+          <img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" alt="Monday" class="h-6 grayscale opacity-60">
+        </div>
+      </div>
+      
+      <div class="flex justify-center gap-4 text-sm text-gray-500">
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"-width="2" stroke-linecap="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          SOC2 Compliant
+        </div>
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x="12" y2="21"></line>
+          </svg>
+          GDPR Certified
+        </div>
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="M9 12l2 2 4-4"></path>
+          </svg>
+          100% Money-Back Guarantee
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3: The Problem -->
+  <section class="py-24 relative z-20">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="badge"><span class="badge-dot"></span> The Reality for Busy Owners</span>
+        <h2 class="font-Satoshi text-4xl md:text-5xl font-bold mt-4 mb-6">Why Your Dog Isn’t Listening—Even When You Try</h2>
+        <p class="text-lg text-gray-600">
+          You’re not failing. The problem is outdated methods that demand hours of daily practice—something professionals simply don’t have.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="glass-card p-6">
+          <div class="w-full h-40 bg-gradient-to-br from-amber-50 to-amber-100 rounded-t-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M9 12l2 2 4-4"></path>
+            </svg>
+          </div>
+          <h3 class="font-Satoshi font-bold text-xl mb-2">Inconsistent Results</h3>
+          <p class="text-gray-600 mb-4">You try commands once, twice—then give up when they don’t stick. Without reinforcement science, it’s guesswork.
+          </p>
+          <div class="text-2xl font-bold text-amber-600">78%</div>
+          <div class="text-sm text-gray-500">of owners report no lasting change after 2 weeks</div>
+        </div>
+        
+        <div class="glass-card p-6">
+          <div class="w-full h-40 bg-gradient-to-br from-red-50 to-red-100 rounded-t-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-red-600">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h3 class="font-Satoshi font-bold text-xl mb-2">Time Poverty</h3>
+          <p class="text-gray-600 mb-4">You need 30+ mins/day? Impossible. Most professionals have 15 minutes max—and that’s what we use.
+          </p>
+          <div class="text-2xl font-bold text-red-600">0%</div>
+          <div class="text-sm text-gray-500">of our students train >20 mins/day</div>
+        </div>
+        
+        <div class="glass-card p-6">
+          <div class="w-full h-40 bg-gradient-to-br from-blue-50 to-blue-100 rounded-t-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 12v.01"></path>
+            </svg>
+          </div>
+          <h3 class="font-Satoshi font-bold text-xl mb-2">No Accountability</h3>
+          <p class="text-gray-600 mb-4">You watch a YouTube video, try it once, then life gets busy. Without structure, progress vanishes.
+          </p>
+          <div class="text-2xl font-bold text-blue-600">94%</div>
+          <div class="text-sm text-gray-500">of students complete all 8 weeks with our system</div>
+        </div>
+        
+        <div class="glass-card p-6">
+          <div class="w-full h-40 bg-gradient-to-br from-green-50 to-green-100 rounded-t-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 12l3 3 3-3"></path>
+            </svg>
+          </div>
+          <h3 class="font-Satoshi font-bold text-xl mb-2">Stress & Guilt</h3>
+          <p class="text-gray-600 mb-4">You love your dog—but feel frustrated when they jump on guests or ignore you. It shouldn’t be this hard.
+          </p>
+          <div class="text-2xl font-bold text-green-600">2.1x</div>
+          <div class="text-sm text-gray-500">higher satisfaction vs. generic training apps</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4: Solution -->
+  <section class="py-24 relative z-30-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="badge"><span class="badge-dot"></span> Our Science-Backed System</span>
+        <h2 class="font-Satoshi text-4xl md:text-5xl font-bold mt-4 mb-6">The Canine Command Method: 8 Weeks, 15 Minutes/Day, Real Results</h2>
+        <p class="text-lg text-gray-600">
+          Built for professionals who value time, evidence, and results—not empty promises.
+        </p>
+      </div>
+      
+      <div class="glass-container p-8 mb-12">
+        <div class="dot-grid"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-Satoshi text-2xl font-bold mb-4">How It Works</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <div class="mt-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-white">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <span><span class="font-bold">Week 1–2:</span> Foundation: Calm focus, leash manners, and “wait” in real-world settings.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="mt-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-white">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <span><span class="font-bold">Week 3–4:</span> Distraction-proofing: Commands hold in parks, cafes, and busy streets.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="mt-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2 stroke-linecap=" class="text-white">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <span><span class="font-bold">Week 5–6:</span> Social mastery: Greet strangers calmly, ignore other dogs, no jumping.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="mt-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-white">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <span><span class="font-bold">Week 7–8:</span> Real-life integration: Walks, vet visits, and home life—no more chaos.
+                </span>
+              </li>
+            </ul>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <div class="px-4 py-2 bg-amber-50 text-amber-800 rounded-full text-sm font-medium">Neuroscience-Based</div>
+              <div class="px-4 py-2 bg-amber-50 text-amber-800 rounded-full text-sm font-medium">No Punishment</div>
+              <div class="px-4 py-2 bg-amber-50 text-amber-800 rounded-full text-sm font-medium">100% Remote</div>
+            </div>
+          </div>
+          
+          <div class="approach-stack">
+            <div class="approach-card card-1">
+              <h4 class="font-Satoshi font-bold text-lg mb-2">Your Dog’s Brain</h4>
+              <p class="text-gray-600 text-sm">We leverage dopamine-driven learning—your dog *wants* to obey because it feels rewarding.</p>
+            </div>
+            <div class="approach-card card-2">
+              <h4 class="font-Satoshi font-bold text-lg mb-2">Our Protocol</h4>
+              <p class="text-gray-600 text-sm">Daily 15-min micro-sessions with video demos, progress tracking, and AI feedback.</p>
+            </div>
+            <div class="approach-card card-3">
+              <h4 class="font-Satoshi font-bold text-lg mb-2">Your Life</h4>
+              <p class="text-gray-600 text-sm">Fit training around your calendar—no rigid schedules. We adapt to *you*.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="glass-card p-6 text-center">
+          <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-amber-600">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 12l3 3-3"></path>
+            </svg>
+          </div>
+          <h3 class="font-Satoshi font-bold text-xl mb-2">Bonus 1: Video Library</h3>
+          <p class="text-gray-600 mb-4">200+ HD videos covering every scenario: doorbell, kids, mail carrier, car rides, and more.
+          </p>
+          <div class="text-2xl font-bold text-amber-600">200+</div>
+          <div class="text-sm text-gray-500">on-demand videos</div>
+        </div>
+        
+        <div class="glass-card p-6 text-center">
+          <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-amber-600">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.87"></path>
+            </svg>
+          </div>
+          <h3 class="font-Satoshi font-bold text-xl mb-2">Bonus 2: Private Community</h3>
+          <p class="text-gray-600 mb-4">Live Q&A with trainers, peer support, and weekly challenges—no more feeling alone.
+          </p>
+          <div class="text-2xl font-bold text-amber-600">1,200+</div>
+          <div class="text-sm text-gray-500">active members</div>
+       div>
+        
+        <div class="glass-card p-6 text-center">
+          <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-amber-600">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.58 19.58 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.92 2.18v-3A2 2 0 0 1 7 0h10a2 2 0 0 1 2 2z"></path>
+              <line x1="12" y1="12" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="font-Satoshi font-bold text-xl mb-2">Bonus 3: 1-on-1 Call</h3>
+          <p class="text-gray-6004">30-min personalized strategy session with a certified trainer—solve your unique challenge.
+          </p>
+          <div class="text-2xl font-bold text-amber-600">1</div>
+          <div class="text-sm text-gray-500">dedicated call</>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5: Timeline -->
+  <section id="how-it-works" class="py-24 relative z-40">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="badge"><span class="badge-dot"></span> Your 8-Week Journey</span>
+        <h2 class="font-Satoshi text-4xl md:text-5xl font-bold mt-4 mb-6">From Chaos to Calm—In Just 8 Weeks</h2>
+        <p class="text-lg text-gray-600">
+          Every step is designed for your schedule. No overwhelm. Just clear, daily wins.
+        </p>
+      </div>
+      
+      <div class="timeline-track" id="timeline-section">
+        <div id="timeline-fill" class="timeline-fill"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mx-auto mb-6 font-bold text-white">W1</div>
+          <h3 class="font-Satoshi font-bold text-xl mb-3">Foundation</h3>
+          <p class="text-gray-600">Build focus, leash manners, and “wait” in low-distraction environments.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mx-auto mb-6 font-bold text-white">W3</div>
+          <h3 class="font-Satoshi font-bold text-xl mb-3">Distraction Proof</h3>
+          <p class="text-gray-600">Commands hold in parks, sidewalks, and near other dogs.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mx-auto mb-6 font-bold text-white">W5</div>
+          <h3 class="font-Satoshi font-bold text-xl mb-3">Social Mastery</h3>
+          <p class="text-gray-600">Greet strangers calmly, ignore distractions, no jumping or barking.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mx-auto mb-6 font-bold text-white">W8</div>
+          <h3 class="font-Satoshi font-bold text-xl mb-3">Real-Life Integration</h3>
+          <p class="text-gray-600">Walks, vet visits, home life—your dog is reliably obedient anywhere.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6: Demo -->
+  <section class="py-24 relative z-50 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="badge"><span class="badge-dot"></span> See It In Action</span>
+        <h2 class="font-Satoshi text-4xl md:text-5xl font-bold mt-4 mb-6">How a 15-Minute Session Transforms Behavior</h2>
+        <p class="text-lg text-gray-600">
+          This isn’t theory—it’s what happens when science meets real life.
+        </p>
+      </div>
+      
+      <div class="glass-container p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <div class="grid grid-cols-3 gap-4 mb-6">
+              <button class="glass-card p-4 text-center border-2 border-transparent hover:border-amber-500 transition-colors">
+                <div class="text-amber-600 font-bold mb-2">Session 1</div>
+                <div class="text-sm text-gray-600">Focus Training</div>
+              </button>
+              <button class="glass-card p-4 text-center border-2 border-amber-500 hover:border-amber-600 transition-colors">
+ <div class="text-amber-600 font-bold mb-2">Session 2</div>
+                <div class="text-sm text-gray-600">Leash Manners</div>
+              </button>
+              <button class="glass-card p-4 text-center border-2 border-transparent hover:border-amber-500 transition-colors">
+                <div class="text-amber-600 font-bold mb-2">Session 3</div>
+                <div class="text-sm text-gray-600">Wait Command</div>
+              </button>
+            </div>
+            
+            <div class="glass-card p-6">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                  <span class="font-bold text-gray-700">J</span>
+                </div>
+                <div>
+                  <div class="font-bold">Jamie R., Product Director</div>
+                  <div class="text-sm text-gray-500">Labrador Retriever • Week 2</div>
+                </div>
+              </div>
+              <p class="text-gray-700 italic">“I did the ‘focus’ drill during my lunch break. By day 3, my dog stopped lunging at squirrels. I cried—I finally felt in control.”</p>
+            </div>
+          </div>
+          
+          <div class="relative">
+            <div class="aspect-video bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl flex items-center justify-center overflow-hidden">
+              <div class="text-center p-6">
+                <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="" class="text-amber-600">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path d="M12 12l3 3 3-3"></path>
+                  </svg>
+                </div>
+                <h3 class="font-Satoshi font-bold text-xl mb-2">Watch the Focus Drill</h3>
+                <p class="text-gray-600 text-sm">15 minutes • No treats needed</p>
+              </div>
+            </div>
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-amber-500/10 to-transparent pointer-events-none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7: Approach -->
+  <section class="py-24 relative z-60">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+        <div>
+          <span class="badge"><span class="badge-dot"></span> Why It Works When Others Fail</span>
+          <h2 class="font-Satoshi text-4xl md:text-5xl font-bold mt-4 mb-6">
+            <span class="gradient-text">Three Layers</span> of Behavioral Change
+          </h2>
+          <p class="text-lg text-gray-600 mb-8">
+            We don’t just teach commands—we rewire your dog’s response to stress, distraction, and excitement using neuroscience principles proven in clinical studies.
+          </p>
+          
+          <div class="flex flex-col gap-4 mb-8">
+div class="flex items-start gap-4">
+              <div class="mt-1 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-white">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-Satoshi font-bold text-lg">Layer 1: Neural Conditioning</h3>
+                <p class="text-gray-600">Build automatic responses through micro-repetition—no willpower required.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="mt-1 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-white">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-Satoshi font-bold text-lg">Layer 2: Contextual Transfer</h3>
+                <p class="text-gray-600">Move from quiet rooms to chaotic streets without regression.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="mt-1 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-white">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-Satoshi font-bold text-lg">Layer 3: Owner Empowerment</h3>
+                <p class="text-gray-600">You become the confident leader—not a frustrated amateur.</p>
+              </div>
+            </div>
+          </div>
+          
+          <button class="rotating-cta">
+            <div class="rotating-cta-gradient"></div>
+            <div class="rotating-cta-face">Start Your Transformation</div>
+          </button>
+          
+          <div class="flex items-center gap-3 mt-6 text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 12l3 3 3-3"></path>
+            </svg>
+            <span class="font-medium">Trusted by 2,847 professionals</span>
+          </div>
+        </div>
+        
+        <div class="approach-stack">
+          <div class="approach-card card-1">
+            <h4 class="font-Satoshi font-bold text-lg mb-2">Your Dog’s Brain</h4>
+            <p class="text-gray-600">Dopamine-driven learning creates lasting neural pathways—no punishment needed.
+            </p>
+          </div>
+          <div class="approach-card card-2">
+            <h4 class="font-Satoshi font-bold text-lg mb-2">Our Protocol</h4>
+            <p class="text-gray-600">Daily 15-min micro-sessions with video demos, progress tracking, and AI feedback.
+            </p>
+          </div>
+          <div class="approach-card card-3">
+            <h4 class="font-Satoshi font-bold text-lg mb-2">Your Life</h4>
+            <p class="text-gray-600">Fit training around your calendar—no rigid schedules. We adapt to *you*.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S8: Results -->
+  <section class="py-24 relative z-70 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="badge"><span class="badge-dot"></span> Real Results, Real People</span>
+        <h2 class="font-Satoshi text-4xl md:text-5xl font-bold mt-4 mb-6">What Happens After 8 Weeks</h2>
+        <p class="text-lg text-gray-600">
+          These aren’t staged testimonials. These are actual graduates who transformed their relationship with their dog.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+              <span class="font-bold text-amber-700">M</span>
+            </div>
+            <div>
+              <div class="font-bold">Michael T., CFO</div>
+              <div class="text-sm text-gray-500">Golden Retriever • 38 years old</div>
+            </div>
+          </div>
+          <p class="text-gray-700 italic mb-4">“Before: My dog would bolt out the door. After Week 4: He waits at the threshold while I put on shoes. I haven’t worried about him escaping in 6 weeks.”</p>
+          <div class="flex items-center gap-2 text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 12l3 3 3-3"></path>
+            </svg>
+            <span>92% improvement in impulse control</span>
+          </div>
+        </div>
+        
+ <div class="glass-card p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+              <span class="font-bold text-amber-700">S</span>
+            </div>
+            <div>
+              <div class="font-bold">Sarah L., Surgeon</div>
+              <div class="text-sm text-gray-500">German Shepherd • 5 years old</div>
+            </div>
+          </div>
+          <p class="text-gray-700 italic mb-4">“I trained during my 15-min coffee breaks. By Week 6, he walks perfectly beside me in crowded hospitals. My colleagues ask how I did it.”</p>
+          <div class="flex items-center gap-2 text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 12l3 3 3-3"></path>
+            </svg>
+            <span>100% reliable heel command</span>
+          </div>
+        </div>
+        
+        <div class="glass-card p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+              <span class="font-bold text-amber-700">D</span>
+            </div>
+            <div>
+              <div class="font-bold">David K., Lawyer</div>
+              <div class="text-sm text-gray-500">Border Collie • 2 years old</div>
+            </div>
+          </div>
+          <p class="text-gray-700 italic mb-4">“He used to bark at every delivery person. Now he watches them pass quietly. My neighbors think I got a new dog.”</p>
+          <div class="flex items-center gap-2 text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 12l3 3 3-3"></path>
+            </svg>
+            <span>Zero reactive barking</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-16 text-center">
+        <h3 class="font-Satoshi text-3xl font-bold mb-6">Join 2,847 Professionals Who Finally Have an Obedient Dog</h3>
+        <button class="rotating-cta">
+          <div class="rotating-cta-gradient"></div>
+          <div class="rotating-cta-face">Enroll Now — $997</div>
+        </button>
+        <p class="text-gray-600 mt-4">One-time payment. Lifetime access to all materials and updates.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9: Guarantee -->
+  <section id="guarantee" class="py-24 relative z-80">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="badge"><span class="-dot"></span> Our Ironclad Promise</span>
+        <h2 class="font-Satoshi text-4xl md-5xl font-bold mt-4 mb-6">100% Money-Back Guarantee2>
+        <p class="text-lg text-gray-600">
+          If your dog isn’t significantly more obedient after completing all 8 weeks, we’ll refund every penny—no questions asked.
+        </p>
+      </div>
+      
+      <div class="glass-container p-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-green-600">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M12 12l3 3 3-3"></path>
+              </svg>
+            </div>
+            <h3 class="font-Satoshi font-bold text-xl mb-3">No Risk</h3>
+            <p class="text-gray-600">Pay once. Train at your pace. If it doesn’t work, get a full refund within 90 days.</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-amber-600">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M9 12l2 2 4-4"></path>
+              </svg>
+            </div>
+            <h3 class="font-Satoshi font-bold text-xl mb-3">Proven Results</h3>
+            <p class="text-gray-600">94% of students complete the program and report life-changing improvements.</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-blue-600">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M12 12v.01"></path>
+              </svg>
+            </div>
+            <h3 class="font-Satoshi font-bold text-xl mb-3">Science-Backed</h3>
+            <p class="text-gray-600">Developed with veterinary behaviorists and cognitive scientists.</p>
+          </div>
+        </div>
+        
+        <div class="mt-12 bg-amber-50 rounded-2xl p-8 text-center">
+          <h3 class="font-Satoshi text-2xl font-bold mb-4">Still Hesitating?</h3>
+          <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-6">
+            Think about this: What’s the cost of another year of stress, embarrassment, and missed moments with your dog?
+          </p>
+          <button class="rotating-cta">
+            <div class="rotating-cta-gradient"></div>
+            <div class="rotating-cta-face">Claim Your Spot — Only 12 Left This Month</div>
+          </button>
+          <p class="text-gray-600 mt-4">Program opens next Monday. Enroll now to lock in current price.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S10: Final CTA -->
+  <section class="py-24 relative z-110 bg-gradient-to-br from-amber-50 to-white">
+    <div class="container mx-auto px-4      <div class="glass-container p-12 text-center">
+        <div class="mb-8">
+          <span class="badge"><span class="badge-dot"></span> Limited Availability</span>
+          <h2 class="font-Satoshi text-4xl md:text-5xl font-bold mt-4 mb-6">
+            Ready for a Calm, Obedient Dog—Without Sacrificing Your Time?
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Join 2,847 professionals who transformed their dog’s behavior in just 8 weeks. You’ll get:
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div class="text-center">
+            <div class="text-4xl font-bold text-amber-600 mb-2" data-count="997">$997</div>
+            <div class="text-gray-600">One-time payment</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-amber-600 mb-2" data-count="8">8</div>
+            <div class="text-gray-600">Weeks to transformation</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-amber-600 mb-2" data-count="15">15</div>
+            <div class="text-gray-600">Minutes/day max</div>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button class="rotating-cta">
+            <div class="rotating-cta-gradient"></div>
+            <div class="rotating-cta-face">Enroll Now — $997</div>
+          </button>
+          <button class="btn-glass">Schedule a 10-Minute Call</button>
+        </div>
+        
+        <div class="mt-8 text-gray-500 text-sm">
+          ✅ Lifetime access to all modules<br>
+          ✅ 200+ HD training videos<br>
+          ✅ Private community & 1-on-1 call<br>
+          ✅ 90-day money-back guarantee
+        </div>
+      </div>
+      
+      <div class="mt-16 pt-12 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h4 class="font-Satoshi font-bold text-lg mb-4">Canine Command</h4>
+            <p class="text-gray-600 text-sm">Science-based dog training for professionals who value time and results.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-Satoshi font-bold text-lg mb-4">Program</h4>
+            <ul class="space-y-2 text-gray-600 text-sm">
+              <li><a href="#" class="hover:text-amber-600">How It Works</a></li>
+              <li><a href="#" class="hover:text-amber-600">Curriculum</a></li>
+              <li><a href="#" class="hover:text-amber-600">Bonuses</a></li>
+              <li><a href="#" class="hover:text-amber-600">FAQ</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-Satoshi font-bold text-lg mb-4">Support</h4>
+            <ul class="space-y-2 text-gray-600 text-sm">
+              <li><a href="#" class="hover:text-amber-600">Contact</a></li>
+              <li><a href="#" class="hover:text-amber-600">Guarantee</a></li>
+              <li><a href="#" class="hover:text-amber-600">Terms</a></li>
+              <li><a href="#" class="hover:text-amber-600">Privacy</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-Satoshi font-bold text-lg mb-4">Connect</h4>
+            <div class="flex gap-4">
+              <a href="#" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-amber-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.959-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.827-.83.22-1.695.272-2.586.22
+                  ```html
+          </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
+          © 2026 Canine Command. All rights reserved. | Designed for busy professionals who love their dogs but hate chaos.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Voice Widget -->
+  <div id="widget-panel" class="hidden">
+    <div class="p-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-t-2xl flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-amber-600">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="M12 12l3 3 3-3"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="font-bold">Canine Command AI</div>
+        <div class="flex items-center gap-2 text-xs">
+          <div class="w-2 h-2 rounded-full bg-green-400"></div>
+          Online
+        </div>
+      </div>
+    </div>
+    <div class="p-4 bg-white max-h-60 overflow-y-auto">
+      <div class="bg-gray-100 rounded-2xl p-4 mb-3 max-w-[80%] ml-auto">
+        <p class="text-gray-800">Hi there! I'm your Canine Command assistant. Want to see how the 8-week program works in practice?</p>
+      </div>
+      <div class="bg-amber-50 rounded-2xl p-4 mb-3 max-w-[80%]">
+        <p class="text-gray-800">Yes — show me a real example of Week 2 training.</p>
+      </div>
+      <div class="bg-gray-100 rounded-2xl p-4 max-w-[80%] ml-auto">
+        <p class="text-gray-800">Absolutely! Here's what Jamie (CFO, Golden Retriever) did on Day 9:  
+        • 12-min focus drill during lunch  
+        • Used a quiet park bench (low distraction)  
+        • Achieved 8-second sustained eye contact  
+        → Result: Dog stopped lunging at squirrels by Day 12.</p>
+      </div>
+    </div>
+    <form id="widget-form" class="p-4 border-t border00">
+      <input type="text" placeholder="Your Name" class="w-full p-3 rounded-lg border border-gray-300 mb-3" required>
+      <input type="email" placeholder="Email Address" class="w-full p-3 rounded-lg border border-gray-300 mb-3" required>
+      <input type="tel" placeholder="Phone (optional)" class="w-full p-3 rounded-lg border border-gray-300 mb-4">
+      <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-lg transition">
+        Get My Free Training Plan
+      </button>
+      <p class="text-xs text-gray-500 mt-3 text-center">We respect your privacy. Unsubscribe anytime.
+      </p>
+    </form>
+    <div class="p-3 bg-gray-50 text-center text-xs text-gray-600">
+      Powered by CloserX AI
+    </div>
+  </div>
+  <div class="widget-ping"></div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // Navbar scroll effect
+      (function(){
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+          nav.classList.toggle('scrolled', window.scrollY > 60);
+        });
+      })();
+
+      // GSAP Animations
+      (function(){
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Hero parallax
+        gsap.to('#hero-content', { y: -60, opacity: 0.3, scrollTrigger: { trigger: '#hero', start: 'top top', end: '80% top', scrub: 1 } });
+        
+        // Reveal sections
+        const revealUp = (selector, delay = 0.12) => {
+          document.querySelectorAll(selector).forEach(el => {
+            gsap.fromTo(el, { opacity: 0, y: 40 }, {
+              opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
+            });
+          });
+        };
+        
+        const revealStagger = (container, child, delay = 0.1) => {
+          document.querySelectorAll(container).forEach(c => {
+            gsap.fromTo(c.querySelectorAll(child), { opacity: 0, y: 30 }, {
+              opacity: 1, y: 0, duration: 0.8, stagger: delay, ease: 'power3.out',
+              scrollTrigger: { trigger: c, start: 'top 82%', toggleActions: 'play none none reverse' }
+            });
+          });
+        };
+        
+        // Animate counters
+        const animateCounters = () => {
+          document.querySelectorAll('[data-count]').forEach(el => {
+            const target = parseFloat(el.dataset.count);
+            const suffix = el.dataset.suffix || '';
+            const prefix = el.dataset.prefix || '';
+            gsap.fromTo({ v: 0 }, { v: target, duration: 2, ease: 'power2.out',
+              onUpdate: () => { el.textContent = prefix + Math(this.targets()[0].v) + suffix; },
+              scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+            });
+          });
+        };
+
+        // Timeline fill
+        gsap.to('#timeline-fill', { width: '100%', ease: 'none', scrollTrigger: {
+          trigger: '#timeline-section', start: 'top 70%', end: 'bottom 60%', scrub: 1
+        } });
+
+        // Section reveals
+        revealUp('.glass-card');
+        revealUp('.approach-card');
+        revealStagger('.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4', '.glass-card');
+        revealStagger('.-cols-1.md\\:grid-cols-3', '.glass-card');
+        animateCounters();
+
+        // Hero content fade
+        gsap.fromTo('#hero h1', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '#hero', start: 'top 80%' } });
+      })();
+
+      // Widget toggle
+      (function(){
+        const toggleBtn = document.getElementById('widget-toggle');
+        const panel = document.getElementById('widget-panel');
+        if (!toggleBtn || !panel) return;
+        
+        window.toggleWidget = () => {
+          const isOpen = panel.style.display === 'flex';
+          panel.style.display = isOpen ? 'none' : 'flex';
+          if (!isOpen) {
+            gsap.fromTo(panel, { opacity: 0, y: 20, scale: 0.95 }, {
+              opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.4)'
+            });
+          }
+        };
+        
+        toggleBtn.addEventListener('click', toggleWidget);
+        
+        // Form submit
+        const form = document.getElementById('widget-form');
+        if (form) {
+          form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            this.innerHTML = '<p style="text-align:center;padding:24px;color:var(--success);font-weight:700">✓ We\'ll send your free plan shortly!</p>';
+            setTimeout(() => {
+              panel.style.display = 'none';
+            }, 2000);
+          });
+        }
+      })();
+
+      // Cursor dot
+      (function(){
+        const cursor = document.createElement('div');
+        cursor.style.cssText = 'position:fixed;width:12px;height:12px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.6;transform:translate(-50%,-50%);transition:transform 0.15s ease';
+        document.body.appendChild(cursor);
+        
+        document.addEventListener('mousemove', e => {
+          cursor.style.left = e.clientX + 'px';
+          cursor.style.top = e.clientY + 'px';
+        });
+        
+        document.querySelectorAll('button,a,.rotating-cta,.btn-glass').forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+          });
+          el.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+          });
+        });
+      })();
+    });
+  </script>
+</body>
+</html>

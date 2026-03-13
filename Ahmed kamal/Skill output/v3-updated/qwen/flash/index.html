@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Dog Training | AtomicX Funnel</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind & GSAP -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* THEME SYSTEM */
+        :root {
+            --bg: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.65);
+            --bg-card-hover: rgba(255, 255, 255, 0.9);
+            --bg-elevated: rgba(255, 255, 255, 0.9);
+            --fg: #0f172a;
+            --fg-muted: #475569;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.14);
+            --edge-highlight: rgba(255, 255, 255, 0.95);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            --navbar-bg: rgba(248, 250, 252, 0.85);
+            --footer-bg: #0f172a;
+            --orb-opacity1: 0.08;
+            --orb-opacity2: 0.05;
+            --orb-opacity3: 0.04;
+            --accent: #eab308; /* Golden Yellow for Coaching/Pets */
+            --accent-rgb: 234, 179, 8;
+            --success: #16a34a;
+        }
+
+        body.theme-dark {
+            --bg: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --bg-elevated: rgba(255, 255, 255, 0.08);
+            --fg: #f1f5f9;
+            --fg-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-strong: rgba(255, 255, 255, 0.18);
+            --edge-highlight: rgba(255, 255, 255, 0.08);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            --navbar-bg: rgba(10, 10, 10, 0.85);
+            --footer-bg: #030712;
+            --orb-opacity1: 0.12;
+            --orb-opacity2: 0.08;
+            --orb-opacity3: 0.06;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Satoshi', sans-serif;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+
+        /* GLASS CARD SYSTEM */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-card);
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--edge-highlight) 40%, var(--edge-highlight) 60%, transparent 100%);
+            pointer-events: none;
+        }
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.04) 0%, transparent 50%, rgba(var(--accent-rgb), 0.04) 100%);
+            pointer-events: none;
+        }
+        .glass-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card), 0 0 40px rgba(var(--accent-rgb), 0.1);
+        }
+
+        .glass-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), inset 0 1px 0 var(--edge-highlight);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .dot-grid {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+            background-size: 40px 40px;
+            -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+            mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+            pointer-events: none;
+        }
+
+        /* ORBS */
+        #bg-orbs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            animation: float-orb 30s ease-in-out infinite;
+        }
+        #orb1 { width: 800px; height: 800px; background: radial-gradient(circle, var(--accent), transparent 70%); opacity: var(--orb-opacity1); top: 10%; left: 20%; animation-delay: 0s; }
+        #orb2 { width: 600px; height: 600px; background: radial-gradient(circle, var(--success), transparent 70%); opacity: var(--orb-opacity2); bottom: 10%; right: 15%; animation-delay: -10s; }
+        #orb3 { width: 500px; height: 500px; background: radial-gradient(circle, #8b5cf6, transparent 70%); opacity: var(--orb-opacity3); top: 50%; left: 55%; animation-delay: -20s; }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -40px) scale(1.08); }
+            50% { transform: translate(-40px, 60px) scale(0.95); }
+            75% { transform: translate(30px, 30px) scale(1.04); }
+        }
+
+        /* COMPONENTS */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 1px solid rgba(var(--accent-rgb), 0.25);
+            color: var(--accent);
+            background: rgba(var(--accent-rgb), 0.08);
+        }
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.5); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent), rgba(var(--accent-rgb), 0.5));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ROTATING CTA */
+        .rotating-cta {
+            position: relative;
+            display: inline-flex;
+            padding: 2px;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 24px rgba(var(--accent-rgb), 0.35);
+        }
+        .rotating-cta-gradient {
+            position: absolute;
+            inset: -100%;
+            animation: spin 4s linear infinite;
+        }
+        body:not(.theme-dark) .rotating-cta-gradient {
+            background: conic-gradient(from 0deg, transparent 30%, var(--accent) 50%, transparent 70%);
+        }
+        .rotating-cta-face {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 40px;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.05em;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
+            font-family: 'Satoshi', sans-serif;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        body:not(.theme-dark) .rotating-cta { animation: pulse-light 3s ease-in-out infinite; }
+        @keyframes pulse-light { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+
+        .btn-glass {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: rgba(var(--accent-rgb), 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(var(--accent-rgb), 0.3);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.25s;
+        }
+        .btn-glass:hover {
+            background: rgba(var(--accent-rgb), 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* MARQUEE */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            display: flex;
+            gap: 48px;
+            animation: marquee 24s linear infinite;
+            width: max-content;
+        }
+        .marquee-wrap {
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        /* TIMELINE */
+        .timeline-step {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .timeline-step:hover {
+            transform: translateY(-4px);
+        }
+
+        /* FAQ ACCORDION */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease-out;
+        }
+
+        /* WIDGET */
+        #widget-toggle {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 9999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        #widget-toggle:hover { transform: scale(1.1); }
+        #widget-panel {
+            position: fixed;
+            bottom: 104px;
+            right: 28px;
+            z-index: 9998;
+            width: 360px;
+            max-width: calc(100vw - 40px);
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 var(--edge-highlight);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* UTILS */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        section { position: relative; z-index: 10; padding: 72px 0; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- BACKGROUND ORBS -->
+    <div id="bg-orbs">
+        <div class="orb" id="orb1"></div>
+        <div class="orb" id="orb2"></div>
+        <div class="orb" id="orb3"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav id="navbar" class="fixed w-full z-[999] transition-all duration-300 py-4 px-6 lg:px-0" style="background:transparent;">
+        <div class="container flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-yellow-500 flex items-center justify-center shadow-lg">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                </div>
+                <span class="font-satoshi font-bold text-xl tracking-tight">K9<span class="text-yellow-500">PRO</span></span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#method" class="text-sm font-medium hover:text-yellow-500 transition-colors">The Method</a>
+                <a href="#curriculum" class="text-sm font-medium hover:text-yellow-500 transition-colors">Curriculum</a>
+                <a href="#results" class="text-sm font-medium hover:text-yellow-500 transition-colors">Results</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#pricing" class="hidden md:inline-flex btn-glass">Login</a>
+                <button class="md:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="min-h-screen flex flex-col justify-center pt-20 pb-12 relative">
+        <div class="container text-center z-10 mx-auto max-w-4xl">
+            <div class="mb-6 animate-fade-in-up">
+                <span class="badge"><span class="badge-dot"></span> For Busy Professionals</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
+                Stop Managing Chaos.<br>
+                Start Enjoying Your<br>
+                <span class="gradient-text">Dog Again.</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                The $997 comprehensive 8-week system designed for professionals who want a calm, obedient dog without spending their weekends on training drills.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="#pricing" class="rotating-cta">
+                    <div class="rotating-cta-gradient"></div>
+                    <div class="rotating-cta-face">Get Access Now</div>
+                </a>
+                <a href="#curriculum" class="text-sm font-semibold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors underline decoration-transparent hover:decoration-current">See how it works ↓</a>
+            </div>
+
+            <!-- TRUST LOGOS -->
+            <div class="mt-12">
+                <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Trusted by owners from</p>
+                <div class="marquee-wrap">
+                    <div class="marquee-track">
+                        <!-- Duplicate set for seamless loop -->
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" class="h-6 grayscale opacity-50" alt="Google">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png" class="h-6 grayscale opacity-50" alt="IBM">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/2560px-Netflix_2015_logo.svg.png" class="h-6 grayscale opacity-50" alt="Netflix">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" class="h-6 grayscale opacity-50" alt="Amazon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" class="h-6 grayscale opacity-50" alt="Google">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png" class="h-6 grayscale opacity-50" alt="IBM">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" class="h-6 grayscale opacity-50" alt="Google">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png" class="h-6 grayscale opacity-50" alt="IBM">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM / JOURNEY -->
+    <section id="problem" class="relative z-20">
+        <div class="container">
+            <div class="text-center mb-12">
+                <span class="badge">The Reality Check</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-4">Why Most Training Fails</h2>
+                <p class="text-gray-500 mt-4 max-w-2xl mx-auto">You don't need more time. You need a better protocol.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card group">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Dog jumping">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">LOST MOMENTUM</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Inconsistent Reinforcement</h3>
+                        <p class="text-sm text-gray-500 mb-4">Training once a week and practicing inconsistently creates confusion. Your dog learns that rules only apply when you are home.</p>
+                        <div class="text-xs font-mono text-red-500 bg-red-500/10 px-2 py-1 rounded">Result: Regression</div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card group">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Stressed owner">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">HIGH STRESS</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">The "Busy Professional" Gap</h3>
+                        <p class="text-sm text-gray-500 mb-4">You work 60 hours a week. By the time you get home, you have zero energy for patience-based correction methods.</p>
+                        <div class="text-xs font-mono text-red-500 bg-red-500/10 px-2 py-1 rounded">Result: Frustration</div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card group">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Messy house">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">PROPERTY DAMAGE</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Anxiety-Based Destruction</h3>
+                        <p class="text-sm text-gray-500 mb-4">Separation anxiety isn't just barking. It's chewing drywall, scratching floors, and destroying your peace of mind.</p>
+                        <div class="text-xs font-mono text-red-500 bg-red-500/10 px-2 py-1 rounded">Result: Costly Repairs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTION / MODULES -->
+    <section id="curriculum" class="relative z-20">
+        <div class="glass-container p-8 md:p-12 mb-12">
+            <div class="dot-grid"></div>
+            <div class="container relative z-10">
+                <div class="text-center mb-16">
+                    <span class="badge">The Curriculum</span>
+                    <h2 class="text-3xl md:text-5xl font-bold mt-4">8 Weeks to a <span class="gradient-text">Peaceful Home</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Module 1 -->
+                    <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-600 font-bold mb-4">01</div>
+                        <h4 class="font-bold text-lg mb-2">Foundation & Mindset</h4>
+                        <p class="text-sm text-gray-500 mb-4">Stop speaking "dog" incorrectly. Learn the language of leadership in 3 days.</p>
+                        <ul class="text-xs space-y-2 text-gray-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Calm Energy Control</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Resource Guarding Fix</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-600 font-bold mb-4">02</div>
+                        <h4 class="font-bold text-lg mb-2">The Leash Walk</h4>
+                        <p class="text-sm text-gray-500 mb-4">Never pull again. A protocol that works even with high-distraction dogs.</p>
+                        <ul class="text-xs space-y-2 text-gray-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Loose Leash Walking</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Recall Mastery</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 3 -->
+                    <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-600 font-bold mb-4">03</div>
+                        <h4 class="font-bold text-lg mb-2">Impulse Control</h4>
+                        <p class="text-sm text-gray-500 mb-4">Teach your dog to wait, stay, and settle while you eat or work.</p>
+                        <ul class="text-xs space-y-2 text-gray-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> The "Place" Command</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Doorway Manners</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 4 -->
+                    <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-600 font-bold mb-4">04</div>
+                        <h4 class="font-bold text-lg mb-2">Anxiety & Separation</h4>
+                        <p class="text-sm text-gray-500 mb-4">The specific desensitization protocol for working professionals.</p>
+                        <ul class="text-xs space-y-2 text-gray-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Quiet Crate Training</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Departure Rituals</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button class="text-sm font-semibold text-gray-500 hover:text-yellow-500 transition-colors">View Full Syllabus →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ONBOARDING TIMELINE -->
+    <section id="onboarding" class="relative z-20">
+        <div class="container">
+            <div class="text-center mb-12">
+                <span class="badge">Timeline</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-4">From Chaos to <span class="gradient-text">Control</span></h2>
+            </div>
+
+            <div class="relative pl-8 md:pl-0">
+                <!-- Line -->
+                <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gray-200 -translate-x-1/2"></div>
+
+                <!-- Step 1 -->
+                <div class="relative mb-12 md:odd:pr-12 md:even:pl-12 md:odd:pl-0 md:even:pr-0 md:w-1/2 timeline-step">
+                    <div class="absolute left-[-24px] md:left-1/2 w-6 h-6 rounded-full bg-yellow-500 border-4 border-white shadow-md -translate-x-1/2"></div>
+                    <div class="glass-card p-6">
+                        <h4 class="font-bold text-lg mb-1">Week 1: Assessment & Reset</h4>
+                        <p class="text-sm text-gray-500">We identify triggers and reset your home environment. No heavy lifting required.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative mb-12 md:odd:pr-12 md:even:pl-12 md:odd:pl-0 md:even:pr-0 md:w-1/2 timeline-step">
+                    <div class="absolute left-[-24px] md:left-1/2 w-6 h-6 rounded-full bg-yellow-500 border-4 border-white shadow-md -translate-x-1/2"></div>
+                    <div class="glass-card p-6">
+                        <h4 class="font-bold text-lg mb-1">Week 2-4: Core Obedience</h4>
+                        <p class="text-sm text-gray-500">Daily 15-minute sessions. Focus on focus, leash manners, and impulse control.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative mb-12 md:odd:pr-12 md:even:pl-12 md:odd:pl-0 md:even:pr-0 md:w-1/2 timeline-step">
+                    <div class="absolute left-[-24px] md:left-1/2 w-6 h-6 rounded-full bg-yellow-500 border-4 border-white shadow-md -translate-x-1/2"></div>
+                    <div class="glass-card p-6">
+                        <h4 class="font-bold text-lg mb-1">Week 5-7: Distraction Proofing</h4>
+                        <p class="text-sm text-gray-500">Real world scenarios. Parks, busy streets, and guests visiting.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative md:odd:pr-12 md:even:pl-12 md:odd:pl-0 md:even:pr-0 md:w-1/2 timeline-step">
+                    <div class="absolute left-[-24px] md:left-1/2 w-6 h-6 rounded-full bg-green-500 border-4 border-white shadow-md -translate-x-1/2"></div>
+                    <div class="glass-card p-6 border-green-500/30">
+                        <h4 class="font-bold text-lg mb-1">Week 8: Graduation</h4>
+                        <p class="text-sm text-gray-500">Your dog is now independent. We hand over the keys to lifelong maintenance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APPROACH / PHILOSOPHY (2 Col) -->
+    <section id="method" class="relative z-20">
+        <div class="container">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Text -->
+                <div>
+                    <span class="badge mb-4">Our Philosophy</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Not Force. Not Fear. Just <span class="gradient-text">Clarity.</span></h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Traditional training often relies on dominance theory that doesn't fit modern homes. We use science-based positive reinforcement mixed with clear boundary setting.
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        This method respects your dog's nature while firmly establishing your role as the leader. It's efficient, kind, and incredibly effective for high-energy breeds.
+                    </p>
+                    <button class="btn-glass">Read Our Manifesto</button>
+                    
+                    <div class="mt-8 flex items-center gap-2 text-sm text-gray-500">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        Verified by K9 Behaviorists
+                    </div>
+                </div>
+
+                <!-- Right Stack (Optical Depth) -->
+                <div class="approach-stack">
+                    <div class="glass-card approach-card card-1">
+                        <div class="w-10 h-10 rounded bg-yellow-500/20 flex items-center justify-center mb-3">
+                            <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-lg">Leadership</h4>
+                        <p class="text-xs text-gray-500 mt-2">Setting boundaries creates safety.</p>
+                    </div>
+                    <div class="glass-card approach-card card-2">
+                        <div class="w-10 h-10 rounded bg-blue-500/20 flex items-center justify-center mb-3">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-lg">Efficiency</h4>
+                        <p class="text-xs text-gray-500 mt-2">Short bursts for busy lives.</p>
+                    </div>
+                    <div class="glass-card approach-card card-3">
+                        <div class="w-10 h-10 rounded bg-green-500/20 flex items-center justify-center mb-3">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-lg">Bonding</h4>
+                        <p class="text-xs text-gray-500 mt-2">A happy dog is a good dog.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="results" class="relative z-20">
+        <div class="container">
+            <div class="text-center mb-12">
+                <span class="badge">Success Stories</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-4">Real Results. Real Dogs.</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Review 1 -->
+                <div class="glass-card p-8">
+                    <div class="flex gap-1 text-yellow-500 mb-4">★★★★★</div>
+                    <p class="text-gray-700 italic mb-6">"I was about to give up on my German Shepherd. After 3 weeks of this program, he walks beside me perfectly. Worth every penny."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" class="w-full h-full object-cover" alt="User">
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm">Mark D.</div>
+                            <div class="text-xs text-gray-500">Tech Executive</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="glass-card p-8">
+                    <div class="flex gap-1 text-yellow-500 mb-4">★★★★★</div>
+                    <p class="text-gray-700 italic mb-6">"The separation anxiety module saved my furniture. I can finally leave for work without worrying about the destruction waiting for me."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100" class="w-full h-full object-cover" alt="User">
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm">Sarah L.</div>
+                            <div class="text-xs text-gray-500">Lawyer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="glass-card p-8">
+                    <div class="flex gap-1 text-yellow-500 mb-4">★★★★★</div>
+                    <p class="text-gray-700 italic mb-6">"Simple, direct, and effective. No confusing jargon. Just actionable steps I could do during my lunch break."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100" class="w-full h-full object-cover" alt="User">
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm">James R.</div>
+                            <div class="text-xs text-gray-500">Architect</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING / OFFER -->
+    <section id="pricing" class="relative z-20">
+        <div class="container">
+            <div class="max-w-4xl mx-auto glass-container p-8 md:p-12 relative overflow-hidden">
+                <!-- Background Glow -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                    <!-- Left: Content -->
+                    <div>
+                        <span class="badge mb-4">Complete System</span>
+                        <h2 class="text-4xl font-bold mb-2">The Pro Plan</h2>
+                        <p class="text-gray-500 mb-6">Everything you need to fix behavior permanently.</p>
+                        
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div>
+                                    <strong class="block text-sm">8-Week Video Course</strong>
+                                    <span class="text-xs text-gray-500">Step-by-step modules</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div>
+                                    <strong class="block text-sm">Private Community</strong>
+                                    <span class="text-xs text-gray-500">24/7 support access</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div>
+                                    <strong class="block text-sm">Video Library</strong>
+                                    <span class="text-xs text-gray-500">Over 50+ extra drills</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div>
+                                    <strong class="block text-sm">1-on-1 Call</strong>
+                                    <span class="text-xs text-gray-500">Personal troubleshooting session</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="inline-block p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20 mb-8">
+                            <p class="text-xs text-yellow-600 font-bold uppercase tracking-wide mb-1">Money-Back Guarantee</p>
+                            <p class="text-sm text-gray-600">Try it for 30 days. If your dog isn't calmer, we refund you 100%. No questions asked.</p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Price Box -->
+                    <div class="flex flex-col justify-center items-center text-center">
+                        <div class="text-sm text-gray-500 mb-2">One-time payment</div>
+                        <div class="text-6xl font-black text-gray-900 dark:text-white">$997</div>
+                        <div class="text-sm text-gray-400 line-through mb-6">$1,497</div>
+                        
+                        <button class="rotating-cta w-full mb-4">
+                            <div class="rotating-cta-gradient"></div>
+                            <div class="rotating-cta-face w-full justify-center">Enroll Now</div>
+                        </button>
+                        
+                        <p class="text-xs text-gray-400 mt-4">Secure checkout via Stripe</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="relative z-20 bg-[#0f172a] text-white pt-20 pb-10 border-t border-gray-800">
+        <div class="container">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-6 h-6 rounded bg-yellow-500 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        </div>
+                        <span class="font-satoshi font-bold text-lg">K9<span class="text-yellow-500">PRO</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Helping busy professionals build unbreakable bonds with their dogs through science-based training.</p>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4">Program</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-yellow-500">Curriculum</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Pricing</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="font-bold mb-4">Support</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-yellow-500">Login</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Refund Policy</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="font-bold mb-4">Legal</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-yellow-500">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-gray-500">© 2023 K9Pro Training. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-500 hover:text-white"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                    <a href="#" class="text-gray-500 hover:text-white"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING WIDGET -->
+    <button id="widget-toggle" onclick="toggleWidget()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+    </button>
+
+    <div id="widget-panel">
+        <div class="bg-yellow-500 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-white font-bold">
+                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                Chat Support
+            </div>
+            <button onclick="toggleWidget()" class="text-white hover:bg-white/20 rounded p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        </div>
+        <div class="p-4 space-y-3 bg-gray-50/50 min-h-[200px]">
+            <div class="flex gap-2">
+                <div class="w-8 h-8 rounded-full bg-yellow-500 flex-shrink-0 flex items-center justify-center text-white text-xs">AI</div>
+                <div class="bg-white p-3 rounded-r-lg rounded-bl-lg shadow-sm text-sm text-gray-700">Hi there! 👋 Looking for help with your dog's training?</div>
+            </div>
+            <div class="flex gap-2 justify-end">
+                <div class="bg-yellow-100 p-3 rounded-l-lg rounded-br-lg shadow-sm text-sm text-gray-700">Yes, I'm interested in the $997 course.</div>
+            </div>
+        </div>
+        <form id="widget-form" class="p-4 border-t border-gray-200">
+            <input type="email" placeholder="Enter your email" class="w-full px-3 py-2 border rounded-lg text-sm mb-2 focus:outline-none focus:border-yellow-500">
+            <button type="submit" class="w-full bg-gray-900 text-white text-sm font-bold py-2 rounded-lg hover:bg-gray-800">Get Info</button>
+        </form>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            
+            // Navbar Scroll Effect
+            (function(){
+                const nav = document.getElementById('navbar');
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 60) {
+                        nav.classList.add('scrolled');
+                        nav.style.background = 'var(--navbar-bg)';
+                        nav.style.backdropFilter = 'blur(20px)';
+                        nav.style.borderBottom = '1px solid var(--border)';
+                    } else {
+                        nav.classList.remove('scrolled');
+                        nav.style.background = 'transparent';
+                        nav.style.backdropFilter = 'none';
+                        nav.style.borderBottom = 'none';
+                    }
+                });
+            })();
+
+            // GSAP Setup
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero Parallax
+            gsap.to('#hero-content', {
+                y: -60,
+                opacity: 0.3,
+                scrollTrigger: {
+                    trigger: '#hero',
+                    start: 'top top',
+                    end: '80% top',
+                    scrub: 1
+                }
+            });
+
+            // Reveal Sections
+            const revealUp = (sel, st = 0.12) => {
+                document.querySelectorAll(sel).forEach(el => 
+                    gsap.fromTo(el, {opacity:0,y:40}, {opacity:1,y:0,duration:0.9,ease:'power3.out', scrollTrigger:{trigger:el,start:'top 88%', toggleActions:'play none none reverse'}})
+                );
+            };
+
+            revealUp('.glass-card');
+            revealUp('.timeline-step');
+
+            // Timeline Fill Animation
+            gsap.to('#timeline-fill', {
+                width: '100%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '#onboarding',
+                    start: 'top 70%',
+                    end: 'bottom 60%',
+                    scrub: 1
+                }
+            });
+
+            // Widget Toggle
+            (function(){
+                const panel = document.getElementById('widget-panel');
+                window.toggleWidget = () => {
+                    const open = panel.style.display === 'flex';
+                    panel.style.display = open ? 'none' : 'flex';
+                    if(!open) gsap.fromTo(panel, {opacity:0,y:20,scale:0.95}, {opacity:1,y:0,scale:1,duration:0.3,ease:'back.out(1.4)'});
+                };
+            })();
+
+            // Cursor Dot
+            (function(){
+                const c = document.createElement('div');
+                c.style.cssText = 'position:fixed;width:12px;height:12px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.6;transform:translate(-50%,-50%);transition:transform 0.15s ease';
+                document.body.appendChild(c);
+                document.addEventListener('mousemove', e => {
+                    c.style.left = e.clientX + 'px';
+                    c.style.top = e.clientY + 'px';
+                });
+                document.querySelectorAll('button,a').forEach(el => {
+                    el.addEventListener('mouseenter', () => c.style.transform = 'translate(-50%,-50%) scale(2.5)');
+                    el.addEventListener('mouseleave', () => c.style.transform = 'translate(-50%,-50%) scale(1)');
+                });
+            })();
+
+        });
+    </script>
+</body>
+</html>

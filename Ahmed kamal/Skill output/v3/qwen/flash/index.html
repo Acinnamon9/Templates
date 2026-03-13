@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawPerfection | Elite Dog Training for Professionals</title>
+    
+    <!-- CDN Stack -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.65);
+            --bg-card-hover: rgba(255, 255, 255, 0.85);
+            --bg-elevated: rgba(255, 255, 255, 0.85);
+            --fg: #0f172a;
+            --fg-muted: #475569;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.14);
+            --edge-highlight: rgba(255, 255, 255, 0.95);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            --navbar-bg: rgba(248, 250, 252, 0.85);
+            --footer-bg: #0f172a;
+            --orb-opacity1: 0.08;
+            --orb-opacity2: 0.05;
+            --orb-opacity3: 0.04;
+            --accent: #eab308; /* Coaching/Yellow */
+            --accent-rgb: 234, 179, 8;
+            --success: #16a34a;
+        }
+
+        body { background: var(--bg); color: var(--fg); font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        
+        /* Typography */
+        h1, h2, h3, h4, .font-satoshi { font-family: 'Satoshi', sans-serif; letter-spacing: -0.02em; line-height: 1.05; }
+        .gradient-text { background: linear-gradient(135deg, var(--accent), rgba(var(--accent-rgb), 0.6)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Glass Card System */
+        .glass-card {
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-card);
+            transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .glass-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--edge-highlight) 40%, var(--edge-highlight) 60%, transparent 100%); pointer-events: none;
+        }
+        .glass-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: inherit;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.04) 0%, transparent 50%, rgba(var(--accent-rgb), 0.04) 100%); pointer-events: none;
+        }
+        .glass-card:hover { background: var(--bg-card-hover); transform: translateY(-4px); box-shadow: var(--shadow-card), 0 0 40px rgba(var(--accent-rgb), 0.1); }
+        
+        .glass-container {
+            background: var(--bg-card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), inset 0 1px 0 var(--edge-highlight);
+            position: relative; overflow: hidden; padding: 40px;
+        }
+        .glass-container::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.05) 0%, transparent 60%); pointer-events: none; }
+
+        /* Background Orbs */
+        #bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(140px); animation: float-orb 30s ease-in-out infinite; }
+        #orb1 { width: 800px; height: 800px; background: radial-gradient(circle, var(--accent), transparent 70%); opacity: var(--orb-opacity1); top: 10%; left: 20%; animation-delay: 0s; }
+        #orb2 { width: 600px; height: 600px; background: radial-gradient(circle, #86efac, transparent 70%); opacity: var(--orb-opacity2); bottom: 10%; right: 15%; animation-delay: -10s; }
+        #orb3 { width: 500px; height: 500px; background: radial-gradient(circle, #cbd5e1, transparent 70%); opacity: var(--orb-opacity3); top: 50%; left: 55%; animation-delay: -20s; }
+        @keyframes float-orb { 0%, 100% { transform: translate(0, 0) scale(1); } 25% { transform: translate(60px, -40px) scale(1.08); } 50% { transform: translate(-40px, 60px) scale(0.95); } 75% { transform: translate(30px, 30px) scale(1.04); } }
+
+        /* Components */
+        .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 9999px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; border: 1px solid rgba(var(--accent-rgb), 0.25); color: var(--accent); background: rgba(var(--accent-rgb), 0.08); }
+        .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse-dot 2s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.5); } }
+
+        .rotating-cta { position: relative; display: inline-flex; padding: 2px; border-radius: 14px; overflow: hidden; cursor: pointer; border: none; box-shadow: 0 4px 24px rgba(var(--accent-rgb), 0.35); animation: pulse-scale 3s ease-in-out infinite; }
+        .rotating-cta-gradient { position: absolute; inset: -100%; background: conic-gradient(from 0deg, transparent 40%, var(--accent) 50%, transparent 60%); animation: spin 4s linear infinite; }
+        .rotating-cta-face { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 10px; padding: 14px 40px; font-weight: 900; font-size: 16px; letter-spacing: 0.05em; border-radius: 12px; background: var(--accent); color: #fff; font-family: 'Satoshi', sans-serif; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-scale { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+        .btn-glass { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: 14px; border: none; cursor: pointer; background: rgba(var(--accent-rgb), 0.12); backdrop-filter: blur(12px); border: 1px solid rgba(var(--accent-rgb), 0.3); color: var(--accent); font-weight: 700; font-size: 15px; transition: all 0.25s; }
+        .btn-glass:hover { background: rgba(var(--accent-rgb), 0.2); transform: translateY(-2px); }
+
+        /* Journey Cards (Flat) */
+        .journey-card img { height: 200px; object-fit: cover; border-radius: 12px 12px 0 0; }
+        .status-badge { position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .status-won { background: rgba(22, 163, 74, 0.1); color: #16a34a; border: 1px solid rgba(22, 163, 74, 0.2); }
+        .status-lost { background: rgba(225, 29, 72, 0.1); color: #e11d48; border: 1px solid rgba(225, 29, 74, 0.2); }
+
+        /* Approach Stack */
+        .approach-stack { position: relative; height: 300px; perspective: 1000px; }
+        .approach-card { position: absolute; width: 280px; padding: 24px; border-radius: 24px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        .approach-card.card-1 { z-index: 30; transform: translate(0, 0); border-left: 4px solid var(--accent); }
+        .approach-card.card-2 { z-index: 20; transform: translate(40px, 40px); opacity: 0.7; }
+        .approach-card.card-3 { z-index: 10; transform: translate(80px, 80px); opacity: 0.4; }
+
+        /* Cursor */
+        #cursor-dot { position: fixed; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); pointer-events: none; z-index: 99999; opacity: 0.6; transform: translate(-50%, -50%); transition: transform 0.15s ease; mix-blend-mode: multiply; }
+
+        /* Widget */
+        #widget-toggle { position: fixed; bottom: 28px; right: 28px; z-index: 9999; width: 60px; height: 60px; border-radius: 50%; background: var(--accent); color: #fff; border: none; cursor: pointer; box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.45); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        #widget-panel { position: fixed; bottom: 104px; right: 28px; z-index: 9998; width: 360px; max-width: calc(100vw - 40px); background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); display: none; flex-direction: column; overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <!-- Background Orbs -->
+    <div id="bg-orbs">
+        <div class="orb" id="orb1"></div><div class="orb" id="orb2"></div><div class="orb" id="orb3"></div>
+    </div>
+    <div id="cursor-dot"></div>
+
+    <!-- S1: Navbar -->
+    <nav id="navbar" class="fixed w-full z-[999] top-0 transition-all duration-300 py-4 px-6 lg:px-12 flex items-center justify-between glass-container !rounded-none !border-b !border-transparent">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold">P</div>
+            <span class="text-xl font-satoshi font-bold tracking-tight">Paw<span class="text-yellow-500">Perfection</span></span>
+        </div>
+        <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+            <a href="#problem" class="hover:text-yellow-600 transition-colors">The Problem</a>
+            <a href="#method" class="hover:text-yellow-600 transition-colors">The Method</a>
+            <a href="#results" class="hover:text-yellow-600 transition-colors">Results</a>
+            <button class="btn-glass ml-4">Get Started</button>
+        </div>
+        <button class="md:hidden text-2xl text-slate-700">☰</button>
+    </nav>
+
+    <!-- S2: Hero -->
+    <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center pt-20 pb-12 z-10">
+        <div class="container text-center space-y-8">
+            <div class="inline-flex animate-fade-in-up">
+                <span class="badge"><span class="badge-dot"></span> For Busy Professionals Only</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-satoshi font-black leading-[0.95] tracking-tighter">
+                Stop Yelling.<br>
+                Start <span class="gradient-text">Leading.</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                The elite 8-week training protocol designed for executives who need a calm, obedient companion—not another dog park disaster. Guaranteed results or your money back.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+                <a href="#pricing" class="rotating-cta group">
+                    <div class="rotating-cta-gradient"></div>
+                    <div class="rotating-cta-face">Secure Your Spot ($997)</div>
+                </a>
+                <a href="#video-teaser" class="text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center gap-2">
+                    Watch Demo ↓
+                </a>
+            </div>
+
+            <!-- Trust Logos -->
+            <div class="mt-16 pt-8 border-t border-slate-200/50">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Trusted by professionals at</p>
+                <div class="flex flex-wrap justify-center gap-8 md:gap-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                    <!-- Simple SVG Placeholders for Logos -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" alt="Google" class="h-6 object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png" alt="IBM" class="h-6 object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" alt="Amazon" class="h-6 object-contain">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/2560px-Netflix_2015_logo.svg.png" alt="Netflix" class="h-6 object-contain">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S3: Journey / The Problem -->
+    <section id="problem" class="py-24 relative z-20">
+        <div class="container">
+            <div class="mb-12">
+                <span class="badge">The Reality Check</span>
+                <h2 class="text-4xl font-satoshi font-bold mt-4">Why Most Dogs Fail in High-Stress Homes</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card journey-card group">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=400" alt="Stressed Owner">
+                        <div class="status-badge status-lost">✗ Common Outcome</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-satoshi font-bold text-xl mb-2">The Weekend Reset</h3>
+                        <p class="text-slate-500 text-sm mb-4">You spend Saturday morning fixing the messes from Friday night. The dog ignores commands until you are home from work.</p>
+                        <div class="text-xs font-mono text-red-500 bg-red-50 p-2 rounded">Result: High Cortisol Levels</div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card journey-card group">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=400" alt="Reactive Dog">
+                        <div class="status-badge status-lost">✗ Social Barrier</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-satoshi font-bold text-xl mb-2">Social Isolation</h3>
+                        <p class="text-slate-500 text-sm mb-4">Fear of walking past other dogs. You avoid social gatherings because your pet might bark or jump on guests.</p>
+                        <div class="text-xs font-mono text-red-500 bg-red-50 p-2 rounded">Result: Lost Social Opportunities</div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card journey-card group">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1535930749574-1399327ce78f?auto=format&fit=crop&q=80&w=400" alt="Training Failure">
+                        <div class="status-badge status-lost">✗ Inconsistency</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-satoshi font-bold text-xl mb-2">Inconsistent Leadership</h3>
+                        <p class="text-slate-500 text-sm mb-4">Family members give mixed signals. "No" means something different depending on who says it.</p>
+                        <div class="text-xs font-mono text-red-500 bg-red-50 p-2 rounded">Result: Confused Canine</div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-card journey-card group">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=400" alt="Success">
+                        <div class="status-badge status-won">✓ PawPerfection Result</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-satoshi font-bold text-xl mb-2">The Calm Companion</h3>
+                        <p class="text-slate-500 text-sm mb-4">Your dog waits patiently while you cook, walks calmly past distractions, and greets guests politely.</p>
+                        <div class="text-xs font-mono text-green-600 bg-green-50 p-2 rounded">Result: Peace of Mind</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S4: Solution / Workforce -->
+    <section id="method" class="py-24 relative z-20">
+        <div class="container">
+            <div class="glass-container">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                    <div>
+                        <span class="badge">The Protocol</span>
+                        <h2 class="text-4xl font-satoshi font-bold mt-4">Not Just "Obedience". <span class="gradient-text">Psychological Alignment.</span></h2>
+                    </div>
+                    <button class="btn-glass mt-6 md:mt-0">View Full Syllabus →</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Module 1 -->
+                    <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mb-4 font-bold">1</div>
+                        <h3 class="font-satoshi font-bold text-xl mb-2">Weeks 1-2: Foundation</h3>
+                        <p class="text-slate-500 text-sm mb-4">Establishing leadership through resource control. We stop the chaos before it starts.</p>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Impulse Control</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> The "Leave It" Command</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mb-4 font-bold">2</div>
+                        <h3 class="font-satoshi font-bold text-xl mb-2">Weeks 3-4: Leash Skills</h3>
+                        <p class="text-slate-500 text-sm mb-4">Walking like a pro, not a tug-of-war. Perfect for busy mornings and weekend strolls.</p>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Loose Leash Walking</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Distraction Proofing</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 3 -->
+                    <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mb-4 font-bold">3</div>
+                        <h3 class="font-satoshi font-bold text-xl mb-2">Weeks 5-6: Home Harmony</h3>
+                        <p class="text-slate-500 text-sm mb-4">Managing separation anxiety and household boundaries without negative reinforcement.</p>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Crate Training Mastery</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> No Jumping Protocol</li>
+                        </ul>
+                    </div>
+
+                     <!-- Module 4 -->
+                     <div class="glass-card p-6">
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mb-4 font-bold">4</div>
+                        <h3 class="font-satoshi font-bold text-xl mb-2">Weeks 7-8: Real World</h3>
+                        <p class="text-slate-500 text-sm mb-4">Generalizing skills to parks, restaurants, and high-stress environments.</p>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Public Access Manners</li>
+                            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Emergency Recall</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S5: Onboarding Timeline -->
+    <section class="py-24 relative z-20">
+        <div class="container">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-satoshi font-bold">From Chaos to Calm in <span class="gradient-text">8 Weeks</span></h2>
+            </div>
+            
+            <div class="relative max-w-4xl mx-auto">
+                <!-- Line -->
+                <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-slate-200 transform -translate-x-1/2"></div>
+                
+                <!-- Step 1 -->
+                <div class="relative flex flex-col md:flex-row items-center mb-12 md:odd:flex-row-reverse">
+                    <div class="w-full md:w-1/2 md:px-12 order-2 md:order-1">
+                        <div class="glass-card p-6">
+                            <span class="text-xs font-bold text-yellow-600 uppercase">Phase 1</span>
+                            <h3 class="font-satoshi font-bold text-xl mt-1">Consultation & Audit</h3>
+                            <p class="text-slate-500 text-sm mt-2">We analyze your lifestyle, your dog's triggers, and build a custom roadmap.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-yellow-500 border-4 border-white shadow-md transform -translate-x-1/2 z-10"></div>
+                    <div class="w-full md:w-1/2 md:px-12 order-1 md:order-2"></div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative flex flex-col md:flex-row items-center mb-12 md:odd:flex-row-reverse">
+                    <div class="w-full md:w-1/2 md:px-12 order-2 md:order-1">
+                        <div class="glass-card p-6">
+                            <span class="text-xs font-bold text-yellow-600 uppercase">Phase 2</span>
+                            <h3 class="font-satoshi font-bold text-xl mt-1">Live Coaching Calls</h3>
+                            <p class="text-slate-500 text-sm mt-2">Bi-weekly Zoom sessions to troubleshoot specific behavioral hurdles in real-time.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-slate-300 border-4 border-white shadow-md transform -translate-x-1/2 z-10"></div>
+                    <div class="w-full md:w-1/2 md:px-12 order-1 md:order-2"></div>
+                </div>
+
+                 <!-- Step 3 -->
+                 <div class="relative flex flex-col md:flex-row items-center mb-12 md:odd:flex-row-reverse">
+                    <div class="w-full md:w-1/2 md:px-12 order-2 md:order-1">
+                        <div class="glass-card p-6">
+                            <span class="text-xs font-bold text-yellow-600 uppercase">Phase 3</span>
+                            <h3 class="font-satoshi font-bold text-xl mt-1">Graduation</h3>
+                            <p class="text-slate-500 text-sm mt-2">Final assessment and lifetime access to our alumni support network.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-slate-300 border-4 border-white shadow-md transform -translate-x-1/2 z-10"></div>
+                    <div class="w-full md:w-1/2 md:px-12 order-1 md:order-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S6: Interactive Demo (Mockup) -->
+    <section class="py-24 relative z-20">
+        <div class="container">
+            <div class="glass-container">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-satoshi font-bold mb-6">See the Difference in Action</h2>
+                        <div class="space-y-4">
+                            <div class="feature-item active cursor-pointer p-4 rounded-xl border border-yellow-500 bg-yellow-50/50 transition-all">
+                                <h4 class="font-bold text-lg">Before: Pulling on Leash</h4>
+                                <p class="text-sm text-slate-600">Owner struggling to control dog.</p>
+                            </div>
+                            <div class="feature-item cursor-pointer p-4 rounded-xl border border-transparent hover:bg-slate-50 transition-all">
+                                <h4 class="font-bold text-lg">After: Heel Position</h4>
+                                <p class="text-sm text-slate-600">Dog walking calmly beside owner.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card h-80 flex items-center justify-center bg-slate-100 relative overflow-hidden group">
+                        <!-- Placeholder for Video/Image Swap -->
+                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=600" class="object-cover w-full h-full opacity-80 group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center pl-1 shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                                ▶
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S7: Philosophy / Approach -->
+    <section class="py-24 relative z-20">
+        <div class="container">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="badge">Our Philosophy</span>
+                    <h2 class="text-4xl font-satoshi font-bold mt-4 mb-6">Positive Reinforcement meets <span class="gradient-text">Clear Boundaries</span></h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        Traditional methods rely on fear. We rely on communication. Our program teaches your dog that listening to you is the most rewarding thing they can do.
+                    </p>
+                    <div class="flex gap-4">
+                        <button class="btn-glass">Read Our Story</button>
+                    </div>
+                </div>
+                
+                <div class="approach-stack">
+                    <div class="approach-card card-1">
+                        <h4 class="font-bold text-lg mb-2">Step 1: Connection</h4>
+                        <p class="text-sm text-slate-500">Building trust so the dog actually wants to listen.</p>
+                    </div>
+                    <div class="approach-card card-2">
+                        <h4 class="font-bold text-lg mb-2">Step 2: Communication</h4>
+                        <p class="text-sm text-slate-500">Translating human commands into canine language.</p>
+                    </div>
+                    <div class="approach-card card-3">
+                        <h4 class="font-bold text-lg mb-2">Step 3: Consistency</h4>
+                        <p class="text-sm text-slate-500">Embedding habits that last a lifetime.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S8: Industry Solutions (Target Audience) -->
+    <section class="py-24 relative z-20">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-satoshi font-bold">Tailored for <span class="gradient-text">Your Lifestyle</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-lg">The Executive</h3>
+                        <p class="text-sm text-slate-500 mt-2">Short attention spans due to long work hours. Focus on independence.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-lg">The Parent</h3>
+                        <p class="text-sm text-slate-500 mt-2">Safety first. Focus on recall and gentleness with children.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-lg">The Urbanite</h3>
+                        <p class="text-sm text-slate-500 mt-2">Apartment living. Focus on quiet manners and elevator etiquette.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S9: Testimonials (Social Proof) -->
+    <section id="results" class="py-24 relative z-20">
+        <div class="container">
+            <span class="badge">Success Stories</span>
+            <h2 class="text-4xl font-satoshi font-bold mt-6 mb-12">Don't Just Take Our Word For It</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Review 1 -->
+                <div class="glass-card p-8">
+                    <div class="flex text-yellow-500 mb-4">★★★★★</div>
+                    <p class="text-slate-600 italic mb-6">"I thought my Golden Retriever was too old to learn new tricks. I was wrong. After 4 weeks, he walks perfectly on a leash now. Best investment I've made."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-12 h-12 rounded-full" alt="User">
+                        <div>
+                            <h4 class="font-bold text-sm">Marcus T.</h4>
+                            <p class="text-xs text-slate-500">CEO, TechStart</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="glass-card p-8">
+                    <div class="flex text-yellow-500 mb-4">★★★★★</div>
+                    <p class="text-slate-600 italic mb-6">"The 1-on-1 calls saved us. My dog had severe reactivity issues. The trainers gave me specific scripts to use. It works."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full" alt="User">
+                        <div>
+                            <h4 class="font-bold text-sm">Sarah J.</h4>
+                            <p class="text-xs text-slate-500">Attorney</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="glass-card p-8">
+                    <div class="flex text-yellow-500 mb-4">★★★★★</div>
+                    <p class="text-slate-600 italic mb-6">"Worth every penny. The community access alone is worth the price. I have a safe space to ask questions anytime."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://randomuser.me/api/portraits/men/85.jpg" class="w-12 h-12 rounded-full" alt="User">
+                        <div>
+                            <h4 class="font-bold text-sm">David L.</h4>
+                            <p class="text-xs text-slate-500">Architect</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S10: Pricing / CTA -->
+    <section id="pricing" class="py-24 relative z-20">
+        <div class="container">
+            <div class="max-w-4xl mx-auto glass-container border-2 border-yellow-500/30">
+                <div class="text-center mb-10">
+                    <span class="badge">Limited Enrollment</span>
+                    <h2 class="text-5xl font-satoshi font-bold mt-4 mb-2">$997 <span class="text-2xl font-normal text-slate-500">/ Program</span></h2>
+                    <p class="text-slate-500">8 Weeks • 2 Live Calls • Lifetime Access</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+                            <span class="font-medium">Full 8-Week Video Curriculum</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+                            <span class="font-medium">Two 60-min 1-on-1 Strategy Calls</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+                            <span class="font-medium">Private Community Access</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+                            <span class="font-medium">Video Library of 50+ Specific Scenarios</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+                            <span class="font-medium">Behavioral Assessment Checklist</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+                            <span class="font-medium"><strong>100% Money-Back Guarantee</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <a href="#" class="rotating-cta inline-block">
+                        <div class="rotating-cta-gradient"></div>
+                        <div class="rotating-cta-face">Enroll Now - $997</div>
+                    </a>
+                    <p class="mt-4 text-xs text-slate-400">30-day unconditional refund policy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S11: FAQ Stub -->
+    <section class="py-24 relative z-20">
+        <div class="container">
+            <h2 class="text-3xl font-satoshi font-bold mb-8 text-center">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto space-y-4">
+                <details class="glass-card p-6 group">
+                    <summary class="font-bold list-none flex justify-between items-center cursor-pointer">
+                        Does this work for aggressive dogs?
+                        <span class="transform group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <p class="text-slate-500 mt-4 text-sm">Yes. While we focus on positive reinforcement, we handle aggression by modifying the underlying emotional state. Please book a consultation first.</p>
+                </details>
+                <details class="glass-card p-6 group">
+                    <summary class="font-bold list-none flex justify-between items-center cursor-pointer">
+                        What if I miss a live call?
+                        <span class="transform group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <p class="text-slate-500 mt-4 text-sm">All calls are recorded and uploaded to your dashboard within 24 hours.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- S12: Footer -->
+    <footer class="bg-[#0f172a] text-white pt-20 pb-10 relative z-20">
+        <div class="container">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold">P</div>
+                        <span class="text-xl font-satoshi font-bold">Paw<span class="text-yellow-500">Perfection</span></span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Raising the standard for modern dog ownership. Professional training for people with standards.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Program</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-yellow-500">Curriculum</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Investment</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Success Stories</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-yellow-500">About Us</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Careers</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-yellow-500">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-yellow-500">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-center text-xs text-slate-500">
+                &copy; 2023 PawPerfection Inc. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Widget -->
+    <button id="widget-toggle" onclick="toggleWidget()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+        </svg>
+    </button>
+
+    <div id="widget-panel">
+        <div class="bg-yellow-500/10 p-4 border-b border-white/10 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-black font-bold">AI</div>
+            <div>
+                <h4 class="font-bold text-sm">Training Assistant</h4>
+                <p class="text-xs text-green-500 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> Online</p>
+            </div>
+        </div>
+        <div class="p-4 space-y-3 h-48 overflow-y-auto">
+            <div class="bg-slate-100 p-3 rounded-lg rounded-tl-none text-sm text-slate-700">Hello! I'm the AI assistant. Do you have a question about the curriculum?</div>
+        </div>
+        <form id="widget-form" class="p-4 border-t border-white/10">
+            <input type="text" placeholder="Name" class="w-full bg-slate-800/50 border border-slate-700 rounded px-3 py-2 text-sm mb-2 focus:outline-none focus:border-yellow-500">
+            <input type="email" placeholder="Email" class="w-full bg-slate-800/50 border border-slate-700 rounded px-3 py-2 text-sm mb-2 focus:outline-none focus:border-yellow-500">
+            <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 rounded text-sm transition-colors">Send Message</button>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- CSS Variables Setup based on Theme Logic ---
+        // Default Light Theme variables applied in :root above.
+
+        // --- GSAP Animations ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Reveal Up Animation
+        const revealUp = (selector, stagger = 0.1) => {
+            gsap.fromTo(selector, 
+                { opacity: 0, y: 40 }, 
+                { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: stagger, scrollTrigger: { trigger: selector, start: 'top 88%' } }
+            );
+        };
+
+        // Hero Parallax
+        gsap.to('#hero-content', { y: -60, opacity: 0.3, scrollTrigger: { trigger: '#hero', start: 'top top', end: '80% top', scrub: 1 } });
+
+        // Section Animations
+        document.querySelectorAll('.glass-card').forEach(el => revealUp(el, 0.1));
+        document.querySelectorAll('h2').forEach(el => gsap.fromTo(el, {opacity:0,y:20}, {opacity:1,y:0,duration:0.8,scrollTrigger:{trigger:el,start:'top 85%'}}));
+
+        // --- Navbar Scroll Effect ---
+        (function(){
+            const nav = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if(window.scrollY > 50) {
+                    nav.classList.add('glass-container', '!border-b', '!border-slate-200');
+                    nav.classList.remove('!border-transparent');
+                } else {
+                    nav.classList.remove('glass-container', '!border-b', '!border-slate-200');
+                    nav.classList.add('!border-transparent');
+                }
+            });
+        })();
+
+        // --- Feature Switcher (Interactive Demo) ---
+        (function(){
+            const features = document.querySelectorAll('.feature-item');
+            const previewImg = document.querySelector('.group img');
+            
+            features.forEach(feat => {
+                feat.addEventListener('click', function() {
+                    features.forEach(f => f.classList.remove('border-yellow-500', 'bg-yellow-50/50'));
+                    this.classList.add('border-yellow-500', 'bg-yellow-50/50');
+                    
+                    // Mock Image Swap
+                    gsap.to(previewImg, {opacity: 0, duration: 0.2, onComplete: () => {
+                        previewImg.src = this.querySelector('h4').innerText.includes("Before") 
+                            ? "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=600"
+                            : "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=600";
+                        gsap.to(previewImg, {opacity: 0.8, duration: 0.3});
+                    }});
+                });
+            });
+        })();
+
+        // --- Cursor Dot ---
+        (function(){
+            const c = document.getElementById('cursor-dot');
+            document.addEventListener('mousemove', e => {
+                c.style.left = e.clientX + 'px';
+                c.style.top = e.clientY + 'px';
+            });
+            document.querySelectorAll('a, button').forEach(el => {
+                el.addEventListener('mouseenter', () => c.style.transform = 'translate(-50%, -50%) scale(2.5)');
+                el.addEventListener('mouseleave', () => c.style.transform = 'translate(-50%, -50%) scale(1)');
+            });
+        })();
+
+        // --- Widget Toggle ---
+        (function(){
+            const panel = document.getElementById('widget-panel');
+            window.toggleWidget = () => {
+                const open = panel.style.display === 'flex';
+                panel.style.display = open ? 'none' : 'flex';
+                if(!open) {
+                    gsap.fromTo(panel, {opacity:0, y:20, scale:0.95}, {opacity:1, y:0, scale:1, duration:0.3, ease:'back.out(1.4)'});
+                }
+            };
+            document.getElementById('widget-form')?.addEventListener('submit', function(e){
+                e.preventDefault();
+                this.innerHTML = '<p style="text-align:center;padding:16px;color:#16a34a;font-weight:bold">Message Sent!</p>';
+            });
+        })();
+
+    </script>
+</body>
+</html>

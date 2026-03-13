@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PackAlpha | 8-Week Obedience Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root{--bg:#f8fafc;--bg-card:rgba(255,255,255,0.65);--bg-card-hover:rgba(255,255,255,0.85);--bg-elevated:rgba(255,255,255,0.85);--fg:#0f172a;--fg-muted:#475569;--border:rgba(0,0,0,0.08);--border-strong:rgba(0,0,0,0.14);--edge-highlight:rgba(255,255,255,0.95);--shadow-card:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);--navbar-bg:rgba(248,250,252,0.85);--footer-bg:#0f172a;--orb-opacity1:0.08;--orb-opacity2:0.05;--orb-opacity3:0.04;--accent:#eab308;--accent-rgb:234,179,8;--success:#16a34a}
+        body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;overflow-x:hidden}
+        h1,h2,h3,h4,h5,h6{font-family:'Satoshi',sans-serif;letter-spacing:-0.02em;line-height:1.05}
+        
+        /* Glass System */
+        .glass-card{background:var(--bg-card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-card);transition:all 0.3s ease;position:relative;overflow:hidden}
+        .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--edge-highlight) 40%,var(--edge-highlight) 60%,transparent 100%);pointer-events:none}
+        .glass-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(var(--accent-rgb),0.04) 0%,transparent 50%,rgba(var(--accent-rgb),0.04) 100%);pointer-events:none}
+        .glass-card:hover{background:var(--bg-card-hover);transform:translateY(-4px);box-shadow:var(--shadow-card),0 0 40px rgba(var(--accent-rgb),0.1)}
+        .glass-container{background:var(--bg-card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,0.25),inset 0 1px 0 var(--edge-highlight);position:relative;overflow:hidden}
+        .glass-container::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(var(--accent-rgb),0.05) 0%,transparent 60%);pointer-events:none}
+        .dot-grid{position:absolute;inset:0;opacity:0.03;background-image:radial-gradient(circle,currentColor 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:radial-gradient(ellipse at center,black,transparent 80%);mask-image:radial-gradient(ellipse at center,black,transparent 80%);pointer-events:none}
+
+        /* Orbs */
+        #bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+        .orb{position:absolute;border-radius:50%;filter:blur(140px);animation:float-orb 30s ease-in-out infinite}
+        #orb1{width:800px;height:800px;background:radial-gradient(circle,var(--accent),transparent 70%);opacity:var(--orb-opacity1);top:10%;left:20%;animation-delay:0s}
+        #orb2{width:600px;height:600px;background:radial-gradient(circle,var(--success),transparent 70%);opacity:var(--orb-opacity2);bottom:10%;right:15%;animation-delay:-10s}
+        #orb3{width:500px;height:500px;background:radial-gradient(circle,#8b5cf6,transparent 70%);opacity:var(--orb-opacity3);top:50%;left:55%;animation-delay:-20s}
+        @keyframes float-orb{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(60px,-40px) scale(1.08)}50%{transform:translate(-40px,60px) scale(0.95)}75%{transform:translate(30px,30px) scale(1.04)}}
+
+        /* Components */
+        .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:9999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;border:1px solid rgba(var(--accent-rgb),0.25);color:var(--accent);background:rgba(var(--accent-rgb),0.08)}
+        .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease-in-out infinite}
+        @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.5)}}
+        .gradient-text{background:linear-gradient(135deg,var(--accent),rgba(var(--accent-rgb),0.5));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        
+        /* Rotating CTA - Light Theme Arc */
+        .rotating-cta{position:relative;display:inline-flex;padding:2px;border-radius:14px;overflow:hidden;cursor:pointer;border:none;box-shadow:0 4px 24px rgba(var(--accent-rgb),0.35)}
+        .rotating-cta-gradient{position:absolute;inset:-100%;animation:spin 4s linear infinite;background:conic-gradient(from 0deg,transparent 30%,var(--accent) 50%,transparent 70%)}
+        .rotating-cta-face{position:relative;z-index:1;display:inline-flex;align-items:center;gap:10px;padding:14px 40px;font-weight:900;font-size:16px;letter-spacing:0.05em;border-radius:12px;background:var(--accent);color:#fff;font-family:'Satoshi',sans-serif}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .rotating-cta{animation:pulse-light 3s ease-in-out infinite}
+        @keyframes pulse-light{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+        .btn-glass{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:14px;border:none;cursor:pointer;background:rgba(var(--accent-rgb),0.12);backdrop-filter:blur(12px);border:1px solid rgba(var(--accent-rgb),0.3);color:var(--accent);font-weight:700;font-size:15px;transition:all 0.25s}
+        .btn-glass:hover{background:rgba(var(--accent-rgb),0.2);transform:translateY(-2px)}
+
+        /* Marquee */
+        @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .marquee-track{display:flex;gap:48px;animation:marquee 24s linear infinite;width:max-content}
+        .marquee-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
+
+        /* Approach Stack */
+        .approach-stack{position:relative;height:260px}
+        .approach-card{position:absolute;width:320px;padding:24px;border-radius:24px;background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);box-shadow:0 4px 24px -1px rgba(0,0,0,0.2),inset 0 1px 1px rgba(255,255,255,0.1);transition:all 0.4s cubic-bezier(0.23,1,0.32,1)}
+        .approach-card.card-1{z-index:30;transform:translate(0,0);border-left:4px solid var(--accent)}
+        .approach-card.card-2{z-index:20;transform:translate(32px,32px);opacity:0.6}
+        .approach-card.card-3{z-index:10;transform:translate(64px,64px);opacity:0.3}
+        
+        /* Widget */
+        #widget-toggle{position:fixed;bottom:28px;right:28px;z-index:9999;width:60px;height:60px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;box-shadow:0 8px 32px rgba(var(--accent-rgb),0.45);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
+        #widget-toggle:hover{transform:scale(1.1)}
+        .widget-ping{position:fixed;bottom:28px;right:28px;z-index:9998;width:60px;height:60px;border-radius:50%;background:var(--accent);opacity:0.4;animation:ping 2s ease-out infinite;pointer-events:none}
+        @keyframes ping{0%{transform:scale(1);opacity:0.4}100%{transform:scale(1.8);opacity:0}}
+        #widget-panel{position:fixed;bottom:104px;right:28px;z-index:9998;width:360px;max-width:calc(100vw - 40px);background:var(--bg-card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3),inset 0 1px 0 var(--edge-highlight);display:none;flex-direction:column;overflow:hidden}
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:4px}
+    </style>
+</head>
+<body class="antialiased selection:bg-yellow-200 selection:text-black">
+
+    <!-- Background -->
+    <div id="bg-orbs"><div class="orb" id="orb1"></div><div class="orb" id="orb2"></div><div class="orb" id="orb3"></div></div>
+
+    <!-- S1 Navbar -->
+    <nav id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:999;padding:20px 0;transition:all 0.3s ease;">
+        <div class="container mx-auto max-w-[1200px] px-6 flex justify-between items-center">
+            <div style="font-family:'Satoshi';font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--fg)">Pack<span style="color:var(--accent)">Alpha</span>.</div>
+            <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
+                <a href="#method" class="hover:text-var(--accent)">Method</a>
+                <a href="#timeline" class="hover:text-var(--accent)">Timeline</a>
+                <a href="#bonuses" class="hover:text-var(--accent)">Bonuses</a>
+                <a href="#results" class="hover:text-var(--accent)">Results</a>
+            </div>
+            <button onclick="toggleWidget()" class="btn-glass hidden sm:inline-flex">Join Waitlist</button>
+            <button class="md:hidden text-slate-800" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">☰</button>
+        </div>
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white/90 backdrop-blur border-b border-slate-200 p-6 flex-col gap-4 shadow-lg z-50">
+            <a href="#method" class="block text-slate-800 font-bold">Method</a>
+            <a href="#timeline" class="block text-slate-800 font-bold">Timeline</a>
+            <a href="#bonuses" class="block text-slate-800 font-bold">Bonuses</a>
+            <button onclick="toggleWidget()" class="w-full py-3 bg-yellow-500 text-white rounded-xl font-bold">Join Now</button>
+        </div>
+    </nav>
+
+    <!-- S2 Hero -->
+    <section id="hero" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:80px;z-index:10;position:relative">
+        <div class="container max-w-[1200px] px-6 text-center flex flex-col items-center">
+            <div class="badge mb-6 animate-fade-in-up"><div class="badge-dot"></div>For Busy Professionals</div>
+            <h1 style="font-size:clamp(40px,5.5vw,78px);font-weight:900;margin-bottom:24px;line-height:1.05">Turn Your Chaos Into A <br><span class="gradient-text">Calm, Obedient Partner</span></h1>
+            <p style="font-size:clamp(16px,2vw,20px);color:var(--fg-muted);max-width:600px;margin-bottom:40px;line-height:1.6">The 8-week executive training program designed for high-performers who want a disciplined dog without spending hours at the park.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                <button onclick="toggleWidget()" class="rotating-cta"><div class="rotating-cta-gradient"></div><div class="rotating-cta-face">Start Training →</div></button>
+                <a href="#method" class="btn-glass">See How It Works ↓</a>
+            </div>
+
+            <!-- Trust Logos -->
+            <div class="w-full max-w-4xl mb-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="marquee-wrap"><div class="marquee-track">
+                    <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" height="24" alt="Logo">
+                    <!-- Duplicate -->
+                    <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" height="24" alt="Logo">
+                    <img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" height="24" alt="Logo">
+                </div></div>
+            </div>
+            
+            <div class="flex gap-6 text-xs font-bold uppercase tracking-widest text-slate-400">
+                <span>Vet Approved</span>•<span>Certified Trainers</span>•<span>Science Based</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- S3 Journey / Problem -->
+    <section id="method" style="padding:72px 0;z-index:20;position:relative">
+        <div class="container max-w-[1200px] px-6">
+            <div class="text-center mb-12">
+                <div class="badge mb-4">The Reality Check</div>
+                <h2 style="font-size:42px;font-weight:800;margin-bottom:16px">Where Your Energy Is Leaking</h2>
+                <p style="color:var(--fg-muted);max-width:500px;margin:0 auto">You're busy building your career, not wrestling a leash. Here is where most owners fail.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <div class="glass-card group cursor-pointer">
+                    <div class="relative h-48 overflow-hidden rounded-t-2xl">
+                        <img src="https://vite-react-one-jet-80.vercel.app/assets/FRICTION%20EXIT.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Walking chaos">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">✗ LOST</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">The Morning Walk Struggle</h3>
+                        <p style="color:var(--fg-muted);font-size:14px;line-height:1.5;margin-bottom:12px">Constant pulling and lunging makes you dread taking them out before work.</p>
+                        <div class="text-xs font-bold text-red-500 bg-red-50 inline-block px-2 py-1 rounded">Stress Level: Critical</div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="glass-card group cursor-pointer">
+                    <div class="relative h-48 overflow-hidden rounded-t-2xl">
+                        <img src="https://vite-react-one-jet-80.vercel.app/assets/FOLLOW-UP%20DECAY.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Destruction">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">✗ LOST</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">Separation Anxiety</h3>
+                        <p style="color:var(--fg-muted);font-size:14px;line-height:1.5;margin-bottom:12px">Coming home to chewed furniture or barking complaints from neighbors.</p>
+                        <div class="text-xs font-bold text-red-500 bg-red-50 inline-block px-2 py-1 rounded">Cost: $$$$</div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="glass-card group cursor-pointer">
+                    <div class="relative h-48 overflow-hidden rounded-t-2xl">
+                        <img src="https://vite-react-one-jet-80.vercel.app/assets/FRAGMENTATION.jpeg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Ignoring commands">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">✗ LOST</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">Selective Hearing</h3>
+                        <p style="color:var(--fg-muted);font-size:14px;line-height:1.5;margin-bottom:12px">They know "sit", but choose to ignore it when guests arrive or food drops.</p>
+                        <div class="text-xs font-bold text-red-500 bg-red-50 inline-block px-2 py-1 rounded">Embarrassment: High</div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="glass-card group cursor-pointer border-green-500/30">
+                    <div class="relative h-48 overflow-hidden rounded-t-2xl">
+                        <img src="https://vite-react-one-jet-80.vercel.app/assets/Peak%20Interest%20Window.jpg" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Peaceful dog">
+                        <div class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">✓ WON</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">The PackAlpha Way</h3>
+                        <p style="color:var(--fg-muted);font-size:14px;line-height:1.5;margin-bottom:12px">A calm, focused companion that respects boundaries and settles on command.</p>
+                        <div class="text-xs font-bold text-green-600 bg-green-50 inline-block px-2 py-1 rounded">Result: Freedom</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S4 Solution / Workforce -->
+    <section style="padding:72px 0;z-index:30;position:relative">
+        <div class="glass-container container max-w-[1200px] px-6 py-12 relative">
+            <div class="dot-grid"></div>
+            <div class="text-center mb-12 relative z-10">
+                <div class="badge mb-4">The Curriculum</div>
+                <h2 style="font-size:42px;font-weight:800">8 Weeks To Total Control</h2>
+                <p style="color:var(--fg-muted)">Micro-learning modules designed for 15-minute daily sessions.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+                <!-- Module 1 -->
+                <div class="glass-card p-0 overflow-hidden reveal-card">
+                    <img src="https://vite-react-one-jet-80.vercel.app/assets/Sales%20representative.png" class="w-full h-40 object-cover" alt="Foundation">
+                    <div class="p-5">
+                        <div class="text-xs font-bold text-slate-400 mb-1">WEEKS 1-2</div>
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">Foundation & Focus</h3>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> The "Name Game"</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Eye Contact Protocol</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Impulse Control Basics</li>
+                        </ul>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">VIDEO</span>
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">PDF</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Module 2 -->
+                <div class="glass-card p-0 overflow-hidden reveal-card">
+                    <img src="https://vite-react-one-jet-80.vercel.app/assets/Customer%20service.png" class="w-full h-40 object-cover" alt="Obedience">
+                    <div class="p-5">
+                        <div class="text-xs font-bold text-slate-400 mb-1">WEEKS 3-4</div>
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">Core Commands</h3>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Bulletproof Recall</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Heel Position</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Place Command</li>
+                        </ul>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">VIDEO</span>
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">QUIZ</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Module 3 -->
+                <div class="glass-card p-0 overflow-hidden reveal-card">
+                    <img src="https://vite-react-one-jet-80.vercel.app/assets/Lead%20Nurturer.png" class="w-full h-40 object-cover" alt="Behavior">
+                    <div class="p-5">
+                        <div class="text-xs font-bold text-slate-400 mb-1">WEEKS 5-6</div>
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">Behavior Correction</h3>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Stopping Jumps</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Leash Manners</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Guest Greetings</li>
+                        </ul>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">LIVE</span>
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">CHECKLIST</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Module 4 -->
+                <div class="glass-card p-0 overflow-hidden reveal-card">
+                    <img src="https://vite-react-one-jet-80.vercel.app/assets/Onboarding%20specialist.png" class="w-full h-40 object-cover" alt="Advanced">
+                    <div class="p-5">
+                        <div class="text-xs font-bold text-slate-400 mb-1">WEEKS 7-8</div>
+                        <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">Real World Proofing</h3>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Distraction Training</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Off-Leash Safety</li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600"><span class="text-green-500">✓</span> Long-term Maintenance</li>
+                        </ul>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">VIDEO</span>
+                            <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">CERTIFICATE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S5 Timeline -->
+    <section id="timeline" style="padding:72px 0;z-index:40;position:relative">
+        <div class="container max-w-[1200px] px-6">
+            <div class="text-center mb-16">
+                <h2 style="font-size:36px;font-weight:800">Your Roadmap To Freedom</h2>
+            </div>
+            
+            <div class="relative">
+                <div class="timeline-track" style="position:relative;height:2px;margin:40px 0;background:var(--border);border-radius:1px">
+                    <div id="timeline-fill" style="position:absolute;top:0;left:0;height:100%;width:0;background:var(--accent);border-radius:1px"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <div class="text-center step-item">
+                        <div class="w-4 h-4 bg-white border-4 border-slate-300 rounded-full mx-auto mb-4 relative z-20"></div>
+                        <h3 style="font-weight:700;margin-bottom:8px">Assessment</h3>
+                        <p style="font-size:14px;color:var(--fg-muted)">We analyze your dog's specific triggers and your lifestyle constraints.</p>
+                    </div>
+                    <div class="text-center step-item">
+                        <div class="w-4 h-4 bg-white border-4 border-slate-300 rounded-full mx-auto mb-4 relative z-20"></div>
+                        <h3 style="font-weight:700;margin-bottom:8px">Foundation</h3>
+                        <p style="font-size:14px;color:var(--fg-muted)">Building the language of communication between you and your dog.</p>
+                    </div>
+                    <div class="text-center step-item">
+                        <div class="w-4 h-4 bg-white border-4 border-slate-300 rounded-full mx-auto mb-4 relative z-20"></div>
+                        <h3 style="font-weight:700;margin-bottom:8px">Correction</h3>
+                        <p style="font-size:14px;color:var(--fg-muted)">Addressing bad habits and replacing them with desired behaviors.</p>
+                    </div>
+                    <div class="text-center step-item">
+                        <div class="w-4 h-4 bg-white border-4 border-slate-300 rounded-full mx-auto mb-4 relative z-20"></div>
+                        <h3 style="font-weight:700;margin-bottom:8px">Mastery</h3>
+                        <p style="font-size:14px;color:var(--fg-muted)">Proofing skills in high-distraction environments for life-long obedience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S6 Interactive Demo (Bonuses) -->
+    <section id="bonuses" style="padding:72px 0;z-index:50;position:relative">
+        <div class="glass-container container max-w-[1200px] px-6 py-12">
+            <div class="text-center mb-12">
+                <div class="badge mb-4 text-purple-600 border-purple-200 bg-purple-50">Exclusive Bonuses</div>
+                <h2 style="font-size:36px;font-weight:800">Everything You Need To Succeed</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div class="glass-card p-6 cursor-pointer bonus-trigger active-bonus" data-target="bonus1">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center font-bold shrink-0">1</div>
+                            <div>
+                                <h3 style="font-weight:700;font-size:18px">The Video Library ($297 Value)</h3>
+                                <p style="color:var(--fg-muted);font-size:14px;margin-top:4px">Lifetime access to our library of 50+ specific behavior troubleshooting videos.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 cursor-pointer bonus-trigger" data-target="bonus2">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold shrink-0">2</div>
+                            <div>
+                                <h3 style="font-weight:700;font-size:18px">Private Community Access ($197 Value)</h3>
+                                <p style="color:var(--fg-muted);font-size:14px;margin-top:4px">Join 2,000+ other professionals sharing tips, wins, and support 24/7.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 cursor-pointer bonus-trigger" data-target="bonus3">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold shrink-0">3</div>
+                            <div>
+                                <h3 style="font-weight:700;font-size:18px">1-on-1 Strategy Call ($497 Value)</h3>
+                                <p style="color:var(--fg-muted);font-size:14px;margin-top:4px">A 45-minute private Zoom session with a senior trainer to audit your progress.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card relative overflow-hidden min-h-[400px] flex items-center justify-center bg-slate-50">
+                    <div id="bonus-display" class="absolute inset-0 p-8 flex flex-col justify-center transition-opacity duration-300 opacity-100">
+                        <div class="text-6xl mb-4">📚</div>
+                        <h3 style="font-size:24px;font-weight:800;margin-bottom:12px">Video Library</h3>
+                        <p style="color:var(--fg-muted)">Searchable database of solutions for every common problem: jumping, biting, barking, and more.</p>
+                        <div class="mt-6 flex gap-2">
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">HD Quality</span>
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">Mobile Friendly</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S7 Approach / Philosophy -->
+    <section style="padding:72px 0;z-index:60;position:relative">
+        <div class="container max-w-[1200px] px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="badge mb-6">Our Philosophy</div>
+                    <h2 style="font-size:42px;font-weight:800;margin-bottom:24px">Science-Based, <span class="gradient-text">Compassion-First</span></h2>
+                    <p style="color:var(--fg-muted);font-size:16px;line-height:1.7;margin-bottom:24px">We don't use shock collars or dominance theory. We use modern behavioral psychology to teach your dog that obedience is the most rewarding choice they can make.</p>
+                    <p style="color:var(--fg-muted);font-size:16px;line-height:1.7;margin-bottom:32px">Perfect for the busy professional who wants results without the guilt or the hassle of hour-long training sessions.</p>
+                    
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-xl">✓</div>
+                        <div>
+                            <div style="font-weight:700">Certified Professional Dog Trainers</div>
+                            <div style="font-size:13px;color:var(--fg-muted)">CPDT-KA & IAABC Certified</div>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleWidget()" class="btn-glass">Get Started Today</button>
+                </div>
+
+                <div class="approach-stack hidden lg:block">
+                    <div class="approach-card card-3">
+                        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--fg-muted);margin-bottom:8px">Layer 3</div>
+                        <div style="font-weight:700;font-size:18px">Environment Management</div>
+                        <p style="font-size:13px;color:var(--fg-muted);margin-top:8px">Setting your dog up for success by controlling their surroundings.</p>
+                    </div>
+                    <div class="approach-card card-2">
+                        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--fg-muted);margin-bottom:8px">Layer 2</div>
+                        <div style="font-weight:700;font-size:18px">Positive Reinforcement</div>
+                        <p style="font-size:13px;color:var(--fg-muted);margin-top:8px">Rewarding good behavior to make it happen more often.</p>
+                    </div>
+                    <div class="approach-card card-1">
+                        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Layer 1</div>
+                        <div style="font-weight:700;font-size:18px">Clear Communication</div>
+                        <p style="font-size:13px;color:var(--fg-muted);margin-top:8px">Teaching your dog exactly what you want using consistent cues.</p>
+                    </div>
+                    <div class="connector-line" style="top:50%;left:0;right:0"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S9 ROI Calculator (Value Proposition) -->
+    <section style="padding:72px 0;z-index:80;position:relative">
+        <div class="glass-container container max-w-[1000px] px-6 py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <div class="badge mb-4">Investment</div>
+                    <h2 style="font-size:36px;font-weight:800;margin-bottom:16px">Less Than A Week Of <span class="gradient-text">Doggy Daycare</span></h2>
+                    <p style="color:var(--fg-muted);line-height:1.6;margin-bottom:24px">Most owners spend $1,500+ on reactive vet visits, destroyed furniture, and endless daycare just to tire their dog out. Get a lifetime of obedience for one flat fee.</p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                            <span style="color:var(--fg-muted)">Program Cost</span>
+                            <span style="font-weight:700">$997</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                            <span style="color:var(--fg-muted)">Bonus Value</span>
+                            <span style="font-weight:700 text-green-600">+$991</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <span style="font-weight:800;font-size:18px">Total Value</span>
+                            <span style="font-weight:800;font-size:18px">$1,988</span>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleWidget()" class="rotating-cta w-full sm:w-auto"><div class="rotating-cta-gradient"></div><div class="rotating-cta-face">Secure Your Spot</div></button>
+                    <p style="font-size:12px;color:var(--fg-muted);margin-top:12px;text-align:center">30-Day Money-Back Guarantee included.</p>
+                </div>
+
+                <div class="glass-card p-8 bg-white/50">
+                    <h3 style="font-weight:700;margin-bottom:24px">Calculate Your Savings</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-xs font-bold text-slate-500 mb-2">Hours spent training weekly</label>
+                        <input type="range" id="roi-hours" min="1" max="20" value="5" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-yellow-500">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1"><span>1 hr</span><span>20 hrs</span></div>
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block text-xs font-bold text-slate-500 mb-2">Hourly Rate (Your Time Value)</label>
+                        <input type="range" id="roi-rate" min="50" max="500" value="150" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-yellow-500">
+                        <div class="flex justify-between text-xs text-slate-400 mt-1"><span>$50</span><span>$500</span></div>
+                    </div>
+
+                    <div class="bg-slate-100 rounded-xl p-6 text-center">
+                        <div style="font-size:14px;color:var(--fg-muted);margin-bottom:4px">Time Saved In 8 Weeks</div>
+                        <div id="roi-output" style="font-size:32px;font-weight:900;color:var(--accent)">$6,000</div>
+                        <div style="font-size:12px;color:var(--fg-muted);margin-top:4px">Value of your reclaimed weekends</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S10 Social Proof -->
+    <section id="results" style="padding:72px 0;z-index:90;position:relative">
+        <div class="container max-w-[1200px] px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="badge mb-4">Success Stories</div>
+                    <h2 style="font-size:36px;font-weight:800">Real Results From <span class="gradient-text">Busy Owners</span></h2>
+                    <p style="color:var(--fg-muted)">Don't take our word for it. Here is what executives just like you are saying.</p>
+                    
+                    <div class="flex flex-col gap-3 mt-8">
+                        <button class="case-tab active text-left p-4 rounded-xl bg-white border border-yellow-200 shadow-sm transition-all" data-target="case1">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden"><img src="https://i.pravatar.cc/100?img=11" class="w-full h-full object-cover"></div>
+                                <div>
+                                    <div style="font-weight:700;font-size:14px">Sarah Jenkins</div>
+                                    <div style="font-size:12px;color:var(--fg-muted)">Marketing Director</div>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="case-tab text-left p-4 rounded-xl hover:bg-white/50 border border-transparent transition-all" data-target="case2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden"><img src="https://i.pravatar.cc/100?img=33" class="w-full h-full object-cover"></div>
+                                <div>
+                                    <div style="font-weight:700;font-size:14px">Marcus Chen</div>
+                                    <div style="font-size:12px;color:var(--fg-muted)">Software Engineer</div>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="case-tab text-left p-4 rounded-xl hover:bg-white/50 border border-transparent transition-all" data-target="case3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden"><img src="https://i.pravatar.cc/100?img=5" class="w-full h-full object-cover"></div>
+                                <div>
+                                    <div style="font-weight:700;font-size:14px">Elena Rodriguez</div>
+                                    <div style="font-size:12px;color:var(--fg-muted)">Attorney</div>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8">
+                    <div id="case-display" class="glass-card p-8 md:p-12 h-full flex flex-col justify-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 opacity-10 text-9xl font-serif text-slate-400">"</div>
+                        
+                        <div id="case-content-1" class="case-content block animate-fade">
+                            <p style="font-size:22px;line-height:1.6;font-style:italic;margin-bottom:32px;font-family:'Satoshi'">"I was skeptical about online training, but the 15-minute modules fit perfectly into my morning routine. Within 3 weeks, my Golden Retriever stopped pulling on the leash entirely. Best investment I've made for my sanity."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="flex gap-1 text-yellow-500">★★★★★</div>
+                                <div style="font-weight:700">Sarah Jenkins</div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-200">
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="21">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">Days To Fix</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="100">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">% Satisfaction</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="0">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">Pulling Incidents</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="case-content-2" class="case-content hidden animate-fade">
+                            <p style="font-size:22px;line-height:1.6;font-style:italic;margin-bottom:32px;font-family:'Satoshi'">"My rescue dog had severe anxiety. The community support and the specific 'calm place' module changed our lives. I can finally work from home without him pacing around my desk."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="flex gap-1 text-yellow-500">★★★★★</div>
+                                <div style="font-weight:700">Marcus Chen</div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-200">
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="14">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">Days To Calm</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="5">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">Hours Saved/Wk</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="1">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">Happy Home</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="case-content-3" class="case-content hidden animate-fade">
+                            <p style="font-size:22px;line-height:1.6;font-style:italic;margin-bottom:32px;font-family:'Satoshi'">"The 1-on-1 call was worth the price alone. The trainer identified a subtle cue I was giving that was confusing my dog. Fixed immediately. Highly recommend for busy professionals."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="flex gap-1 text-yellow-500">★★★★★</div>
+                                <div style="font-weight:700">Elena Rodriguez</div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-200">
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="3">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">Weeks To Mastery</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="1">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">Call Needed</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-slate-800" data-count="100">0</div>
+                                    <div class="text-xs text-slate-500 uppercase font-bold">% Recommend</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S11 FAQ -->
+    <section style="padding:72px 0;z-index:100;position:relative">
+        <div class="glass-container container max-w-[800px] px-6 py-12">
+            <div class="text-center mb-12">
+                <h2 style="font-size:36px;font-weight:800">Frequently Asked Questions</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="faq-item border-b border-slate-200 pb-4">
+                    <button class="faq-question w-full text-left flex justify-between items-center py-4 font-bold text-lg focus:outline-none">
+                        <span>Is this suitable for puppies?</span>
+                        <span class="text-yellow-500 text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer overflow-hidden" style="max-height:0">
+                        <p style="color:var(--fg-muted);line-height:1.6;padding-bottom:12px">Absolutely. In fact, starting early is ideal. However, the program works equally well for adult dogs with established bad habits. We have specific modules for both age groups.</p>
+                    </div>
+                </div>
+                <div class="faq-item border-b border-slate-200 pb-4">
+                    <button class="faq-question w-full text-left flex justify-between items-center py-4 font-bold text-lg focus:outline-none">
+                        <span>How much time do I need daily?</span>
+                        <span class="text-yellow-500 text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer overflow-hidden" style="max-height:0">
+                        <p style="color:var(--fg-muted);line-height:1.6;padding-bottom:12px">The program is designed for busy schedules. You only need 15 minutes of focused training per day. The rest of the learning happens through 'lifestyle integration' techniques we teach you.</p>
+                    </div>
+                </div>
+                <div class="faq-item border-b border-slate-200 pb-4">
+                    <button class="faq-question w-full text-left flex justify-between items-center py-4 font-bold text-lg focus:outline-none">
+                        <span>What if my dog doesn't respond?</span>
+                        <span class="text-yellow-500 text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer overflow-hidden" style="max-height:0">
+                        <p style="color:var(--fg-muted);line-height:1.6;padding-bottom:12px">Every dog is different. That's why we include the 1-on-1 strategy call bonus. If you follow the protocol and don't see results, we offer a 30-day money-back guarantee. No questions asked.</p>
+                    </div>
+                </div>
+                <div class="faq-item border-b border-slate-200 pb-4">
+                    <button class="faq-question w-full text-left flex justify-between items-center py-4 font-bold text-lg focus:outline-none">
+                        <span>Do I get lifetime access?</span>
+                        <span class="text-yellow-500 text-2xl">+</span>
+                    </button>
+                    <div class="faq-answer overflow-hidden" style="max-height:0">
+                        <p style="color:var(--fg-muted);line-height:1.6;padding-bottom:12px">Yes! Once you enroll, you keep the course materials, video library, and community access forever. You can revisit the lessons anytime you need a refresher.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S12 Final CTA + Footer -->
+    <section style="padding:72px 0 0;z-index:110;position:relative;background:rgba(234,179,8,0.04)">
+        <div class="container max-w-[1200px] px-6 text-center pb-20">
+            <div class="badge mb-6" style="background:#fee2e2;color:#ef4444;border-color:#fca5a5"><div class="badge-dot" style="background:#ef4444"></div>Limited Spots Available</div>
+            <h2 style="font-size:clamp(32px,4vw,56px);font-weight:900;margin-bottom:24px">Ready To Reclaim Your <span class="gradient-text">Weekends?</span></h2>
+            <p style="font-size:18px;color:var(--fg-muted);max-width:600px;margin:0 auto 40px">Join the program today and get instant access to all modules plus the 3 exclusive bonuses.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <button onclick="toggleWidget()" class="rotating-cta"><div class="rotating-cta-gradient"></div><div class="rotating-cta-face">Enroll Now - $997</div></button>
+                <div class="flex items-center gap-2 text-sm font-bold text-slate-500">
+                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    30-Day Money-Back Guarantee
+                </div>
+            </div>
+
+            <footer style="border-top:1px solid var(--border);padding-top:60px" class="text-left">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                    <div>
+                        <div style="font-family:'Satoshi';font-weight:800;font-size:20px;margin-bottom:16px;color:var(--fg)">Pack<span style="color:var(--accent)">Alpha</span>.</div>
+                        <p style="font-size:14px;color:var(--fg-muted);line-height:1.6">Professional dog training for the modern executive.</p>
+                    </div>
+                    <div>
+                        <h4 style="font-weight:700;margin-bottom:16px">Program</h4>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-var(--accent)">Curriculum</a></li>
+                            <li><a href="#" class="hover:text-var(--accent)">Bonuses</a></li>
+                            <li><a href="#" class="hover:text-var(--accent)">Pricing</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="font-weight:700;margin-bottom:16px">Company</h4>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-var(--accent)">About Us</a></li>
+                            <li><a href="#" class="hover:text-var(--accent)">Contact</a></li>
+                            <li><a href="#" class="hover:text-var(--accent)">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="font-weight:700;margin-bottom:16px">Legal</h4>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li><a href="#" class="hover:text-var(--accent)">Terms of Service</a></li>
+                            <li><a href="#" class="hover:text-var(--accent)">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-var(--accent)">Guarantee</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-center text-xs text-slate-400 pt-8 border-t border-slate-200">
+                    &copy; 2023 PackAlpha Training. All rights reserved.
+                </div>
+            </footer>
+        </div>
+    </section>
+
+    <!-- Widget -->
+    <div class="widget-ping"></div>
+    <button id="widget-toggle" onclick="toggleWidget()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </button>
+    <div id="widget-panel">
+        <div class="p-4 bg-yellow-50 border-b border-yellow-100 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white font-bold">P</div>
+                <div>
+                    <div style="font-weight:700;font-size:14px">PackAlpha Support</div>
+                    <div class="flex items-center gap-1 text-xs text-green-600"><div class="w-2 h-2 bg-green-500 rounded-full"></div> Online</div>
+                </div>
+            </div>
+            <button onclick="toggleWidget()" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <div class="p-4 flex-1 overflow-y-auto max-h-[300px] space-y-4 bg-white/50">
+            <div class="flex gap-2">
+                <div class="w-8 h-8 rounded-full bg-yellow-100 flex-shrink-0 flex items-center justify-center text-xs font-bold">AI</div>
+                <div class="bg-white p-3 rounded-r-xl rounded-bl-xl shadow-sm text-sm border border-slate-100">Hi there! Ready to transform your dog's behavior? Enter your details below to get started.</div>
+            </div>
+        </div>
+        <form id="widget-form" class="p-4 bg-white border-t border-slate-100 space-y-3">
+            <input type="text" placeholder="Full Name" required class="w-full px-4 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-yellow-500">
+            <input type="email" placeholder="Email Address" required class="w-full px-4 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-yellow-500">
+            <button type="submit" class="w-full py-3 bg-yellow-500 text-white rounded-lg font-bold text-sm hover:bg-yellow-600 transition-colors">Get Access Now</button>
+            <div class="text-[10px] text-center text-slate-400">Powered by PackAlpha AI</div>
+        </form>
+    </div>
+
+    <!-- Cursor Follower -->
+    <div id="cursor-dot" style="position:fixed;width:12px;height:12px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.6;transform:translate(-50%,-50%);transition:transform 0.15s ease;display:none"></div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+
+            // Navbar Scroll
+            (function(){
+                const nav=document.getElementById('navbar');
+                window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60));
+            })();
+
+            // GSAP Animations
+            (function(){
+                gsap.registerPlugin(ScrollTrigger);
+                
+                // Hero Parallax
+                gsap.to('#hero-content',{y:-60,opacity:0.3,scrollTrigger:{trigger:'#hero',start:'top top',end:'80% top',scrub:1}});
+                
+                // Timeline Fill
+                gsap.to('#timeline-fill',{width:'100%',ease:'none',scrollTrigger:{trigger:'#timeline',start:'top 70%',end:'bottom 60%',scrub:1}});
+                
+                // Reveal Cards
+                gsap.utils.toArray('.reveal-card').forEach((card,i)=>{
+                    gsap.fromTo(card,{opacity:0,y:30},{opacity:1,y:0,duration:0.6,delay:i*0.1,ease:'power3.out',scrollTrigger:{trigger:card,start:'top 85%'}});
+                });
+
+                // Approach Stack Animation
+                gsap.fromTo('.approach-card',{opacity:0,x:50},{opacity:1,x:0,duration:0.8,stagger:0.2,ease:'power3.out',scrollTrigger:{trigger:'.approach-stack',start:'top 75%'}});
+
+                // Counters
+                gsap.utils.toArray('[data-count]').forEach(el=>{
+                    const t=parseFloat(el.dataset.count);
+                    gsap.fromTo({v:0},{v:t,duration:2,ease:'power2.out',onUpdate:function(){el.textContent=pf=Math.round(this.targets()[0].v)+(el.dataset.suffix||'')},scrollTrigger:{trigger:el,start:'top 85%',once:true}});
+                });
+            })();
+
+            // Bonus Tabs
+            (function(){
+                const triggers=document.querySelectorAll('.bonus-trigger');
+                const display=document.getElementById('bonus-display');
+                const contents={
+                    bonus1:`<div class="text-6xl mb-4">📚</div><h3 style="font-size:24px;font-weight:800;margin-bottom:12px">Video Library</h3><p style="color:var(--fg-muted)">Searchable database of solutions for every common problem: jumping, biting, barking, and more.</p><div class="mt-6 flex gap-2"><span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">HD Quality</span><span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">Mobile Friendly</span></div>`,
+                    bonus2:`<div class="text-6xl mb-4">👥</div><h3 style="font-size:24px;font-weight:800;margin-bottom:12px">Private Community</h3><p style="color:var(--fg-muted)">Join 2,000+ other professionals sharing tips, wins, and support 24/7. Get feedback on your training videos.</p><div class="mt-6 flex gap-2"><span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">24/7 Access</span><span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">Expert Mods</span></div>`,
+                    bonus3:`<div class="text-6xl mb-4">🎥</div><h3 style="font-size:24px;font-weight:800;margin-bottom:12px">1-on-1 Strategy Call</h3><p style="color:var(--fg-muted)">A 45-minute private Zoom session with a senior trainer to audit your progress and fix specific issues.</p><div class="mt-6 flex gap-2"><span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">45 Mins</span><span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-bold text-slate-500">Senior Trainer</span></div>`
+                };
+                triggers.forEach(t=>{
+                    t.addEventListener('click',()=>{
+                        triggers.forEach(tr=>tr.classList.remove('active-bonus','border-yellow-500'));
+                        t.classList.add('active-bonus','border-yellow-500');
+                        display.style.opacity='0';
+                        setTimeout(()=>{display.innerHTML=contents[t.dataset.target];display.style.opacity='1'},300);
+                    });
+                });
+            })();
+
+            // Case Study Tabs
+            (function(){
+                const tabs=document.querySelectorAll('.case-tab');
+                const contents=document.querySelectorAll('.case-content');
+                tabs.forEach(tab=>{
+                    tab.addEventListener('click',()=>{
+                        tabs.forEach(t=>{t.classList.remove('active','bg-white','border-yellow-200','shadow-sm');t.classList.add('border-transparent')});
+                        tab.classList.add('active','bg-white','border-yellow-200','shadow-sm');tab.classList.remove('border-transparent');
+                        contents.forEach(c=>c.classList.add('hidden'));
+                        const target=document.getElementById(tab.dataset.target);
+                        target.classList.remove('hidden');
+                        gsap.fromTo(target,{opacity:0,y:10},{opacity:1,y:0,duration:0.4});
+                        // Reset counters for animation
+                        target.querySelectorAll('[data-count]').forEach(el=>{
+                            const t=parseFloat(el.dataset.count);
+                            gsap.fromTo({v:0},{v:t,duration:1.5,ease:'power2.out',onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)},overwrite:true});
+                        });
+                    });
+                });
+            })();
+
+            // FAQ Accordion
+            (function(){
+                document.querySelectorAll('.faq-question').forEach(q=>{
+                    q.addEventListener('click',()=>{
+                        const a=q.nextElementSibling,open=q.classList.contains('active');
+                        document.querySelectorAll('.faq-question.active').forEach(o=>{
+                            o.classList.remove('active');o.querySelector('span').textContent='+';
+                            gsap.to(o.nextElementSibling,{maxHeight:0,duration:0.3,ease:'power2.in'});
+                        });
+                        if(!open){
+                            q.classList.add('active');q.querySelector('span').textContent='−';
+                            gsap.to(a,{maxHeight:a.scrollHeight,duration:0.35,ease:'power2.out'});
+                        }
+                    });
+                });
+            })();
+
+            // ROI Calculator
+            (function(){
+                const hours=document.getElementById('roi-hours'),rate=document.getElementById('roi-rate'),out=document.getElementById('roi-output');
+                if(!hours)return;
+                function calc(){
+                    const val=parseInt(hours.value)*parseInt(rate.value)*8; // 8 weeks
+                    out.textContent='$'+val.toLocaleString();
+                    // Update slider backgrounds
+                    const hp=(hours.value-hours.min)/(hours.max-hours.min)*100;
+                    hours.style.background=`linear-gradient(to right,var(--accent) ${hp}%,var(--border) ${hp}%)`;
+                    const rp=(rate.value-rate.min)/(rate.max-rate.min)*100;
+                    rate.style.background=`linear-gradient(to right,var(--accent) ${rp}%,var(--border) ${rp}%)`;
+                }
+                [hours,rate].forEach(s=>{s.addEventListener('input',calc);s.dispatchEvent(new Event('input'))});
+            })();
+
+            // Widget Toggle
+            (function(){
+                const panel=document.getElementById('widget-panel');
+                window.toggleWidget=()=>{
+                    const open=panel.style.display==='flex';
+                    panel.style.display=open?'none':'flex';
+                    if(!open)gsap.fromTo(panel,{opacity:0,y:20,scale:0.95},{opacity:1,y:0,scale:1,duration:0.3,ease:'back.out(1.4)'});
+                };
+                document.getElementById('widget-form')?.addEventListener('submit',function(e){
+                    e.preventDefault();
+                    this.innerHTML='<p style="text-align:center;padding:24px;color:var(--success);font-weight:700">✓ We\'ll be in touch shortly.</p>';
+                });
+            })();
+
+            // Cursor Dot (Desktop Only)
+            (function(){
+                if(window.matchMedia("(pointer:fine)").matches){
+                    const c=document.createElement('div');c.id='cursor-dot';c.style.cssText='position:fixed;width:12px;height:12px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.6;transform:translate(-50%,-50%);transition:transform 0.15s ease';
+                    document.body.appendChild(c);
+                    document.addEventListener('mousemove',e=>{c.style.left=e.clientX+'px';c.style.top=e.clientY+'px'});
+                    document.querySelectorAll('button,a,.cursor-pointer').forEach(el=>{
+                        el.addEventListener('mouseenter',()=>c.style.transform='translate(-50%,-50%) scale(2.5)');
+                        el.addEventListener('mouseleave',()=>c.style.transform='translate(-50%,-50%) scale(1)');
+                    });
+                }
+            })();
+
+        });
+    </script>
+</body>
+</html>
+

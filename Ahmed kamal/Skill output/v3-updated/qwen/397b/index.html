@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProK9 Elite | 8-Week Dog Training for Busy Professionals</title>
+  
+  <!-- CDNs -->
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Config & Styles -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Satoshi', 'sans-serif'] },
+          colors: { accent: '#eab308' } // Coaching Yellow
+        }
+      }
+    }
+  </script>
+  <style>
+    :root{--bg:#f8fafc;--bg-card:rgba(255,255,255,0.65);--bg-card-hover:rgba(255,255,255,0.85);--bg-elevated:rgba(255,255,255,0.85);--fg:#0f172a;--fg-muted:#475569;--border:rgba(0,0,0,0.08);--border-strong:rgba(0,0,0,0.14);--edge-highlight:rgba(255,255,255,0.95);--shadow-card:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);--navbar-bg:rgba(248,250,252,0.85);--footer-bg:#0f172a;--orb-opacity1:0.08;--orb-opacity2:0.05;--orb-opacity3:0.04;--accent:#eab308;--accent-rgb:234,179,8;--success:#16a34a}
+    body{background:var(--bg);color:var(--fg);overflow-x:hidden}
+    
+    /* Glass System */
+    .glass-card{background:var(--bg-card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-card);transition:all 0.3s ease;position:relative;overflow:hidden}
+    .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--edge-highlight) 40%,var(--edge-highlight) 60%,transparent 100%);pointer-events:none}
+    .glass-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(var(--accent-rgb),0.04) 0%,transparent 50%,rgba(var(--accent-rgb),0.04) 100%);pointer-events:none}
+    .glass-card:hover{background:var(--bg-card-hover);transform:translateY(-4px);box-shadow:var(--shadow-card),0 0 40px rgba(var(--accent-rgb),0.1)}
+    .glass-container{background:var(--bg-card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,0.25),inset 0 1px 0 var(--edge-highlight);position:relative;overflow:hidden}
+    .dot-grid{position:absolute;inset:0;opacity:0.03;background-image:radial-gradient(circle,currentColor 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:radial-gradient(ellipse at center,black,transparent 80%);mask-image:radial-gradient(ellipse at center,black,transparent 80%);pointer-events:none}
+
+    /* Orbs */
+    #bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(140px);animation:float-orb 30s ease-in-out infinite}
+    #orb1{width:800px;height:800px;background:radial-gradient(circle,var(--accent),transparent 70%);opacity:var(--orb-opacity1);top:10%;left:20%;animation-delay:0s}
+    #orb2{width:600px;height:600px;background:radial-gradient(circle,var(--success),transparent 70%);opacity:var(--orb-opacity2);bottom:10%;right:15%;animation-delay:-10s}
+    #orb3{width:500px;height:500px;background:radial-gradient(circle,#8b5cf6,transparent 70%);opacity:var(--orb-opacity3);top:50%;left:55%;animation-delay:-20s}
+    @keyframes float-orb{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(60px,-40px) scale(1.08)}50%{transform:translate(-40px,60px) scale(0.95)}75%{transform:translate(30px,30px) scale(1.04)}}
+
+    /* Components */
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:9999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;border:1px solid rgba(var(--accent-rgb),0.25);color:var(--accent);background:rgba(var(--accent-rgb),0.08)}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease-in-out infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.5)}}
+    .gradient-text{background:linear-gradient(135deg,var(--accent),rgba(var(--accent-rgb),0.5));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    
+    .rotating-cta{position:relative;display:inline-flex;padding:2px;border-radius:14px;overflow:hidden;cursor:pointer;border:none;box-shadow:0 4px 24px rgba(var(--accent-rgb),0.35)}
+    .rotating-cta-gradient{position:absolute;inset:-100%;animation:spin 4s linear infinite;background:conic-gradient(from 0deg,transparent 30%,var(--accent) 50%,transparent 70%)}
+    .rotating-cta-face{position:relative;z-index:1;display:inline-flex;align-items:center;gap:10px;padding:14px 40px;font-weight:900;font-size:16px;letter-spacing:0.05em;border-radius:12px;background:var(--accent);color:#fff;font-family:'Satoshi',sans-serif}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .rotating-cta{animation:pulse-light 3s ease-in-out infinite}
+    @keyframes pulse-light{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+    .btn-glass{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:14px;border:none;cursor:pointer;background:rgba(var(--accent-rgb),0.12);backdrop-filter:blur(12px);border:1px solid rgba(var(--accent-rgb),0.3);color:var(--accent);font-weight:700;font-size:15px;transition:all 0.25s}
+    .btn-glass:hover{background:rgba(var(--accent-rgb),0.2);transform:translateY(-2px)}
+
+    /* Marquee */
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .marquee-track{display:flex;gap:48px;animation:marquee 24s linear infinite;width:max-content}
+    .marquee-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
+
+    /* Approach Stack */
+    .approach-stack{position:relative;height:260px}
+    .approach-card{position:absolute;width:320px;padding:24px;border-radius:24px;background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);box-shadow:0 4px 24px -1px rgba(0,0,0,0.2),inset 0 1px 1px rgba(255,255,255,0.1);transition:all 0.4s cubic-bezier(0.23,1,0.32,1)}
+    .approach-card.card-1{z-index:30;transform:translate(0,0);border-left:4px solid var(--accent)}
+    .approach-card.card-2{z-index:20;transform:translate(32px,32px);opacity:0.6}
+    .approach-card.card-3{z-index:10;transform:translate(64px,64px);opacity:0.3}
+
+    /* Widget */
+    #widget-toggle{position:fixed;bottom:28px;right:28px;z-index:9999;width:60px;height:60px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;box-shadow:0 8px 32px rgba(var(--accent-rgb),0.45);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
+    #widget-toggle:hover{transform:scale(1.1)}
+    .widget-ping{position:fixed;bottom:28px;right:28px;z-index:9998;width:60px;height:60px;border-radius:50%;background:var(--accent);opacity:0.4;animation:ping 2s ease-out infinite;pointer-events:none}
+    @keyframes ping{0%{transform:scale(1);opacity:0.4}100%{transform:scale(1.8);opacity:0}}
+    #widget-panel{position:fixed;bottom:104px;right:28px;z-index:9998;width:360px;max-width:calc(100vw - 40px);background:var(--bg-card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3),inset 0 1px 0 var(--edge-highlight);display:none;flex-direction:column;overflow:hidden}
+    
+    /* Nav */
+    #navbar.scrolled{background:var(--navbar-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    h1,h2,h3,h4{font-family:'Satoshi',sans-serif;letter-spacing:-0.02em;line-height:1.05}
+  </style>
+</head>
+<body class="antialiased selection:bg-yellow-200 selection:text-black">
+
+  <!-- S1 Navbar -->
+  <nav id="navbar" style="position:fixed;top:0;left:0;width:100%;z-index:999;padding:20px 0;transition:all 0.3s ease">
+    <div class="container mx-auto max-w-[1200px] px-6 flex justify-between items-center">
+      <div style="font-family:'Satoshi';font-weight:900;font-size:24px;color:var(--fg)">ProK9<span style="color:var(--accent)">.</span></div>
+      <div class="hidden md:flex gap-8 font-medium text-sm text-var(--fg-muted)">
+        <a href="#program" class="hover:text-var(--accent) transition">The Program</a>
+        <a href="#results" class="hover:text-var(--accent) transition">Results</a>
+        <a href="#bonuses" class="hover:text-var(--accent) transition">Bonuses</a>
+      </div>
+      <button onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" class="btn-glass hidden sm:flex">Start Training</button>
+      <button class="md:hidden p-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    </div>
+  </nav>
+
+  <!-- Background Orbs -->
+  <div id="bg-orbs">
+    <div class="orb" id="orb1"></div><div class="orb" id="orb2"></div><div class="orb" id="orb3"></div>
+  </div>
+
+  <!-- S2 Hero -->
+  <section id="hero" style="min-height:100vh;display:flex;align-items:center;position:relative;z-index:10;padding-top:80px">
+    <div class="container mx-auto max-w-[1200px] px-6 text-center">
+      <div class="badge mb-6 mx-auto"><span class="badge-dot"></span>For Busy Professionals</div>
+      <h1 style="font-size:clamp(40px,5.5vw,78px);font-weight:900;margin-bottom:24px" class="reveal-hero">
+        Transform Your Chaos into a<br>
+        <span class="gradient-text">Perfectly Obedient Companion</span>
+      </h1>
+      <p style="font-size:clamp(16px,2vw,22px);color:var(--fg-muted);max-width:700px;margin:0 auto 40px" class="reveal-hero">
+        The 8-week executive dog training system designed for your schedule. Get a calm, obedient dog without spending hours on the floor.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 reveal-hero">
+        <button class="rotating-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">
+          <div class="rotating-cta-gradient"></div>
+          <div class="rotating-cta-face">Get Started — $997</div>
+        </button>
+        <a href="#how-it-works" style="color:var(--fg-muted);text-decoration:none;font-weight:600" class="flex items-center gap-2 hover:text-var(--accent) transition">See how it works ↓</a>
+      </div>
+      
+      <!-- Trust Logos -->
+      <div class="mb-16 opacity-60 grayscale hover:grayscale-0 transition duration-500">
+        <div class="marquee-wrap"><div class="marquee-track">
+          <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" alt="logo" style="height:24px;opacity:0.6">
+          <img src="https://a.storyblok.com/f/336825/16x16/1cd2862772/salesforce.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/ac29a03cf8/hubspot.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/71024255bb/shopify.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/acc6cdc2e9/telegram.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/16x16/dd632446e4/whatsapp.svg" alt="logo" style="height:24px;opacity:0.6"><img src="https://a.storyblok.com/f/336825/500x500/df28baf91e/monday.webp" alt="logo" style="height:24px;opacity:0.6">
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3 Journey / Problem -->
+  <section id="journey" style="padding:72px 0;position:relative;z-index:20">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="text-center mb-12">
+        <div class="badge mb-4">Why Most Training Fails</div>
+        <h2 style="font-size:42px;font-weight:800;margin-bottom:16px">The "Busy Professional" Trap</h2>
+        <p style="color:var(--fg-muted);max-width:600px;margin:0 auto">You love your dog, but you don't have 4 hours a day to train. Here is where traditional methods break down.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-6 reveal-up">
+          <img src="https://vite-react-one-jet-80.vercel.app/assets/Lead%20Goes%20Cold.jpg" alt="Inconsistency" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:16px">
+          <div class="absolute top-8 left-8 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">✗ LOST</div>
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Inconsistent Schedule</h3>
+          <p style="color:var(--fg-muted);font-size:14px">Training requires daily consistency. When work gets busy, training stops, and bad habits return immediately.</p>
+        </div>
+        <div class="glass-card p-6 reveal-up">
+          <img src="https://vite-react-one-jet-80.vercel.app/assets/FRICTION%20EXIT.jpeg" alt="Confusion" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:16px">
+          <div class="absolute top-8 left-8 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">✗ LOST</div>
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Communication Gap</h3>
+          <p style="color:var(--fg-muted);font-size:14px">Dogs speak a different language. Without understanding canine psychology, you're just making noise.</p>
+        </div>
+        <div class="glass-card p-6 reveal-up">
+          <img src="https://vite-react-one-jet-80.vercel.app/assets/Peak%20Interest%20Window.jpg" alt="Success" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:16px">
+          <div class="absolute top-8 left-8 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">✓ WON</div>
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">The ProK9 Method</h3>
+          <p style="color:var(--fg-muted);font-size:14px">Micro-habit training integrated into your existing routine. High impact, low time commitment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 Solution / Workforce -->
+  <section id="program" style="padding:72px 0;position:relative;z-index:30">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="glass-container p-12 relative overflow-hidden">
+        <div class="dot-grid"></div>
+        <div class="text-center mb-12">
+          <div class="badge mb-4">The Curriculum</div>
+          <h2 style="font-size:42px;font-weight:800;margin-bottom:16px">8 Weeks to Total Control</h2>
+          <p style="color:var(--fg-muted);max-width:600px;margin:0 auto">A structured roadmap designed for efficiency.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="workforce-grid">
+          <!-- Card 1 -->
+          <div class="glass-card group reveal-stagger">
+            <div style="height:180px;overflow:hidden;border-radius:12px 12px 0 0">
+              <img src="https://vite-react-one-jet-80.vercel.app/assets/Sales%20representative.png" alt="Foundation" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s" class="group-hover:scale-110">
+            </div>
+            <div class="p-6">
+              <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">Weeks 1-2: Foundation</h3>
+              <ul class="space-y-2 mb-4 text-sm text-var(--fg-muted)">
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Name Recognition</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Focus & Eye Contact</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Crate Training Basics</li>
+              </ul>
+              <div class="flex gap-2">
+                <span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 text-gray-600">Essential</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="glass-card group reveal-stagger">
+            <div style="height:180px;overflow:hidden;border-radius:12px 12px 0 0">
+              <img src="https://vite-react-one-jet-80.vercel.app/assets/Lead%20Nurturer.png" alt="Obedience" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s" class="group-hover:scale-110">
+            </div>
+            <div class="p-6">
+              <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">Weeks 3-4: Obedience</h3>
+              <ul class="space-y-2 mb-4 text-sm text-var(--fg-muted)">
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Sit, Stay, Down</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Loose Leash Walking</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Recall (Come)</li>
+              </ul>
+              <div class="flex gap-2">
+                <span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 text-gray-600">Core</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="glass-card group reveal-stagger">
+            <div style="height:180px;overflow:hidden;border-radius:12px 12px 0 0">
+              <img src="https://vite-react-one-jet-80.vercel.app/assets/Customer%20service.png" alt="Distraction" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s" class="group-hover:scale-110">
+            </div>
+            <div class="p-6">
+              <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">Weeks 5-6: Distraction</h3>
+              <ul class="space-y-2 mb-4 text-sm text-var(--fg-muted)">
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Public Proofing</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Ignore Other Dogs</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Place Command</li>
+              </ul>
+              <div class="flex gap-2">
+                <span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 text-gray-600">Advanced</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="glass-card group reveal-stagger">
+            <div style="height:180px;overflow:hidden;border-radius:12px 12px 0 0">
+              <img src="https://vite-react-one-jet-80.vercel.app/assets/Receptionist.png" alt="Lifestyle" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s" class="group-hover:scale-110">
+            </div>
+            <div class="p-6">
+              <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">Weeks 7-8: Lifestyle</h3>
+              <ul class="space-y-2 mb-4 text-sm text-var(--fg-muted)">
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Off-Leash Reliability</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Guest Manners</li>
+                <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Maintenance Plan</li>
+              </ul>
+              <div class="flex gap-2">
+                <span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 text-gray-600">Mastery</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 Timeline -->
+  <section id="timeline-section" style="padding:72px 0;position:relative;z-index:40">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="text-center mb-16">
+        <h2 style="font-size:42px;font-weight:800">Live Results in <span class="gradient-text">8 Weeks</span></h2>
+      </div>
+      
+      <div style="position:relative;height:2px;margin:40px 0;background:var(--border);border-radius:1px">
+        <div id="timeline-fill" style="position:absolute;top:0;left:0;height:100%;width:0;background:var(--accent);border-radius:1px"></div>
+        
+        <!-- Step 1 -->
+        <div class="step-dot absolute top-1/2 -mt-3 left-0 w-6 h-6 bg-white border-4 border-var(--accent) rounded-full z-10"></div>
+        <div class="step-card glass-card p-6 absolute top-12 left-0 w-64 reveal-step" style="transform:translateX(-50%)">
+          <h4 style="font-weight:700;margin-bottom:4px">Day 1: Assessment</h4>
+          <p style="font-size:13px;color:var(--fg-muted)">We analyze your dog's triggers and build a custom plan.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-dot absolute top-1/2 -mt-3 left-[33%] w-6 h-6 bg-white border-4 border-gray-300 rounded-full z-10"></div>
+        <div class="step-card glass-card p-6 absolute bottom-12 left-[33%] w-64 reveal-step" style="transform:translateX(-50%)">
+          <h4 style="font-weight:700;margin-bottom:4px">Week 2: Momentum</h4>
+          <p style="font-size:13px;color:var(--fg-muted)">First major breakthroughs in focus and impulse control.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-dot absolute top-1/2 -mt-3 left-[66%] w-6 h-6 bg-white border-4 border-gray-300 rounded-full z-10"></div>
+        <div class="step-card glass-card p-6 absolute top-12 left-[66%] w-64 reveal-step" style="transform:translateX(-50%)">
+          <h4 style="font-weight:700;margin-bottom:4px">Week 5: Real World</h4>
+          <p style="font-size:13px;color:var(--fg-muted)">Taking commands outside the home environment.</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-dot absolute top-1/2 -mt-3 left-[100%] w-6 h-6 bg-white border-4 border-gray-300 rounded-full z-10"></div>
+        <div class="step-card glass-card p-6 absolute bottom-12 left-[100%] w-64 reveal-step" style="transform:translateX(-100%)">
+          <h4 style="font-weight:700;margin-bottom:4px">Week 8: Graduation</h4>
+          <p style="font-size:13px;color:var(--fg-muted)">Your dog is now a certified member of your executive team.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6 Interactive Demo -->
+  <section id="demo" style="padding:72px 0;position:relative;z-index:50">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="glass-container p-8 md:p-12">
+        <div class="text-center mb-12">
+          <div class="badge mb-4">Methodology</div>
+          <h2 style="font-size:42px;font-weight:800">How We Train</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Left Controls -->
+          <div class="space-y-4">
+            <div class="glass-card p-6 cursor-pointer feature-card active-feature border-var(--accent)" data-img="https://vite-react-one-jet-80.vercel.app/assets/Sales%20representative.png">
+              <div class="flex items-center gap-4">
+                <div class="w-8 h-8 rounded-full bg-var(--accent) text-white flex items-center justify-center font-bold">1</div>
+                <div>
+                  <h3 style="font-weight:700">Positive Reinforcement</h3>
+                  <p style="font-size:14px;color:var(--fg-muted)">Science-based reward systems that build confidence.</p>
+                </div>
+              </div>
+            </div>
+            <div class="glass-card p-6 cursor-pointer feature-card border-transparent hover:border-var(--accent)/30" data-img="https://vite-react-one-jet-80.vercel.app/assets/Lead%20Nurturer.png">
+              <div class="flex items-center gap-4">
+                <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">2</div>
+                <div>
+                  <h3 style="font-weight:700">Marker Training</h3>
+                  <p style="font-size:14px;color:var(--fg-muted)">Precise communication using clickers or verbal markers.</p>
+                </div>
+              </div>
+            </div>
+            <div class="glass-card p-6 cursor-pointer feature-card border-transparent hover:border-var(--accent)/30" data-img="https://vite-react-one-jet-80.vercel.app/assets/Customer%20service.png">
+              <div class="flex items-center gap-4">
+                <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">3</div>
+                <div>
+                  <h3 style="font-weight:700">Environmental Management</h3>
+                  <p style="font-size:14px;color:var(--fg-muted)">Setting up your home for success before training begins.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Preview -->
+          <div class="glass-card relative overflow-hidden min-h-[400px] flex items-center justify-center bg-gray-900">
+             <img id="demo-preview" src="https://vite-react-one-jet-80.vercel.app/assets/Sales%20representative.png" alt="Preview" style="width:100%;height:100%;object-fit:cover;opacity:0.8">
+             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+             <div class="absolute bottom-8 left-8 text-white">
+               <h3 id="demo-title" style="font-size:24px;font-weight:700">Positive Reinforcement</h3>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7 Approach / Philosophy -->
+  <section id="approach" style="padding:72px 0;position:relative;z-index:60">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal-left">
+          <div class="badge mb-4">Our Philosophy</div>
+          <h2 style="font-size:42px;font-weight:800;margin-bottom:24px">Built for the <span class="gradient-text">Modern Lifestyle</span></h2>
+          <p style="color:var(--fg-muted);margin-bottom:24px;line-height:1.7">We don't believe in dominating your dog. We believe in partnership. Our methods are designed to fit into a 60-hour work week, utilizing micro-sessions that yield macro results.</p>
+          <p style="color:var(--fg-muted);margin-bottom:32px;line-height:1.7">No complex equipment. No hour-long drills. Just clear communication and consistent boundaries.</p>
+          <button class="btn-glass">Learn More</button>
+          <div class="mt-8 flex items-center gap-3">
+            <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+            <span style="font-size:14px;font-weight:600;color:var(--fg-muted)">Trusted by 500+ Executives</span>
+          </div>
+        </div>
+        
+        <div class="approach-stack reveal-right">
+          <div class="approach-card card-1">
+            <h4 style="font-weight:700;margin-bottom:8px">Behavioral Psychology</h4>
+            <p style="font-size:14px;color:var(--fg-muted)">Understanding the 'why' behind the bark.</p>
+          </div>
+          <div class="approach-card card-2">
+            <h4 style="font-weight:700;margin-bottom:8px">Habit Stacking</h4>
+            <p style="font-size:14px;color:var(--fg-muted)">Integrating training into coffee breaks.</p>
+          </div>
+          <div class="approach-card card-3">
+            <h4 style="font-weight:700;margin-bottom:8px">Long-term Retention</h4>
+            <p style="font-size:14px;color:var(--fg-muted)">Ensuring skills stick for life.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S8 Bonuses (Industry Solutions adapted) -->
+  <section id="bonuses" style="padding:72px 0;position:relative;z-index:70">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="text-center mb-12">
+        <div class="badge mb-4">Exclusive Bonuses</div>
+        <h2 style="font-size:42px;font-weight:800">Everything You Need to <span class="gradient-text">Succeed</span></h2>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card overflow-hidden reveal-up">
+          <img src="https://vite-react-one-jet-80.vercel.app/Real%20Estate.png" alt="Video Library" style="width:100%;height:220px;object-fit:cover">
+          <div class="p-6">
+            <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">HD Video Library</h3>
+            <p style="color:var(--fg-muted);font-size:14px;margin-bottom:16px">Lifetime access to step-by-step video guides for every command.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs font-bold px-2 py-1 rounded bg-yellow-100 text-yellow-700">Value: $297</span>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card overflow-hidden reveal-up">
+          <img src="https://vite-react-one-jet-80.vercel.app/Healthcare.png" alt="Community" style="width:100%;height:220px;object-fit:cover">
+          <div class="p-6">
+            <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Private Community</h3>
+            <p style="color:var(--fg-muted);font-size:14px;margin-bottom:16px">Connect with other professionals, share wins, and get peer support.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs font-bold px-2 py-1 rounded bg-yellow-100 text-yellow-700">Value: $197</span>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card overflow-hidden reveal-up border-var(--accent) border-2">
+          <img src="https://vite-react-one-jet-80.vercel.app/Automotive.png" alt="1-on-1 Call" style="width:100%;height:220px;object-fit:cover">
+          <div class="p-6">
+            <h3 style="font-size:20px;font-weight:700;margin-bottom:8px">1-on-1 Strategy Call</h3>
+            <p style="color:var(--fg-muted);font-size:14px;margin-bottom:16px">A dedicated 45-minute session with a master trainer to troubleshoot specific issues.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs font-bold px-2 py-1 rounded bg-yellow-100 text-yellow-700">Value: $497</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9 ROI Calculator (Adapted for Value) -->
+  <section id="value-calc" style="padding:72px 0;position:relative;z-index:80">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="glass-container p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="badge mb-4">Investment vs. Cost</div>
+          <h2 style="font-size:36px;font-weight:800;margin-bottom:16px">What is a Bad Dog <span class="gradient-text">Costing You?</span></h2>
+          <p style="color:var(--fg-muted);margin-bottom:32px">Calculate the true cost of behavioral issues vs. the one-time investment in ProK9 Elite.</p>
+          <button class="rotating-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">
+            <div class="rotating-cta-gradient"></div>
+            <div class="rotating-cta-face">Secure Your Spot</div>
+          </button>
+        </div>
+        
+        <div class="glass-card p-8">
+          <div class="mb-6">
+            <label style="font-size:14px;font-weight:700;display:block;margin-bottom:8px">Potential Property Damage ($)</label>
+            <input type="range" id="damage-range" min="0" max="5000" value="1000" style="width:100%;accent-color:var(--accent)">
+          </div>
+          <div class="mb-6">
+            <label style="font-size:14px;font-weight:700;display:block;margin-bottom:8px">Stress/Time Value ($/hr)</label>
+            <input type="range" id="time-range" min="50" max="500" value="150" style="width:100%;accent-color:var(--accent)">
+          </div>
+          <div class="pt-6 border-t border-var(--border)">
+            <div class="flex justify-between items-end">
+              <div>
+                <p style="font-size:14px;color:var(--fg-muted)">Estimated Annual Loss</p>
+                <p id="loss-output" style="font-size:32px;font-weight:900;color:var(--fg)">$2,400</p>
+              </div>
+              <div class="text-right">
+                <p style="font-size:14px;color:var(--fg-muted)">Program Cost</p>
+                <p style="font-size:32px;font-weight:900;color:var(--accent)">$997</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S10 Social Proof -->
+  <section id="results" style="padding:72px 0;position:relative;z-index:90">
+    <div class="container mx-auto max-w-[1200px] px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Sidebar -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="glass-card p-4 cursor-pointer case-tab active-case border-l-4 border-var(--accent) bg-var(--bg-card-hover)" data-id="1">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden"><img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="User"></div>
+              <div>
+                <h4 style="font-weight:700;font-size:16px">Sarah J.</h4>
+                <p style="font-size:12px;color:var(--fg-muted)">Tech CEO • Golden Retriever</p>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card p-4 cursor-pointer case-tab border-l-4 border-transparent hover:bg-var(--bg-card-hover)" data-id="2">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden"><img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User"></div>
+              <div>
+                <h4 style="font-weight:700;font-size:16px">Mark T.</h4>
+                <p style="font-size:12px;color:var(--fg-muted)">Surgeon • German Shepherd</p>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card p-4 cursor-pointer case-tab border-l-4 border-transparent hover:bg-var(--bg-card-hover)" data-id="3">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden"><img src="https://i.pravatar.cc/150?u=a04258114e29026302d" alt="User"></div>
+              <div>
+                <h4 style="font-weight:700;font-size:16px">Elena R.</h4>
+                <p style="font-size:12px;color:var(--fg-muted)">Attorney • Rescue Mix</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="lg:col-span-8">
+          <div class="glass-card p-8 md:p-12 h-full relative">
+            <div id="case-content-1" class="case-content">
+              <div class="flex gap-1 mb-6 text-var(--accent)">★★★★★</div>
+              <p style="font-size:24px;font-style:italic;line-height:1.5;margin-bottom:32px;font-family:'Satoshi'">"I was skeptical about online training, but the structure is incredible. My dog went from pulling on the leash to walking perfectly beside me in 3 weeks. Worth every penny."</p>
+              <div class="grid grid-cols-3 gap-4 mb-8">
+                <div>
+                  <p class="text-3xl font-bold gradient-text" data-count="100">0</p>
+                  <p style="font-size:12px;color:var(--fg-muted)">% Obedience</p>
+                </div>
+                <div>
+                  <p class="text-3xl font-bold gradient-text" data-count="3">0</p>
+                  <p style="font-size:12px;color:var(--fg-muted)">Weeks to Fix</p>
+                </div>
+                <div>
+                  <p class="text-3xl font-bold gradient-text" data-count="0">0</p>
+                  <p style="font-size:12px;color:var(--fg-muted)">Accidents</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" class="w-12 h-12 rounded-full" alt="Sarah">
+                <div>
+                  <p style="font-weight:700">Sarah Jenkins</p>
+                  <p style="font-size:14px;color:var(--fg-muted)">CEO, TechFlow</p>
+                </div>
+              </div>
+            </div>
+            <!-- Hidden contents for tabs would go here in full implementation -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S11 FAQ -->
+  <section id="faq" style="padding:72px 0;position:relative;z-index:100">
+    <div class="container mx-auto max-w-[800px] px-6">
+      <div class="text-center mb-12">
+        <h2 style="font-size:36px;font-weight:800">Frequently Asked Questions</h2>
+      </div>
+      <div class="space-y-4">
+        <div class="glass-card">
+          <button class="faq-question w-full text-left p-6 font-bold flex justify-between items-center">
+            Is this suitable for puppies?
+            <span class="text-xl">+</span>
+          </button>
+          <div class="faq-answer px-6 overflow-hidden" style="max-height:0">
+            <p style="padding-bottom:24px;color:var(--fg-muted)">Absolutely. In fact, starting early is ideal. We have specific modules for puppy socialization and bite inhibition.</p>
+          </div>
+        </div>
+        <div class="glass-card">
+          <button class="faq-question w-full text-left p-6 font-bold flex justify-between items-center">
+            What if I miss a live session?
+            <span class="text-xl">+</span>
+          </button>
+          <div class="faq-answer px-6 overflow-hidden" style="max-height:0">
+            <p style="padding-bottom:24px;color:var(--fg-muted)">All sessions are recorded and added to the video library immediately. You can watch them at your own pace.</p>
+          </div>
+        </div>
+        <div class="glass-card">
+          <button class="faq-question w-full text-left p-6 font-bold flex justify-between items-center">
+            Do you offer a guarantee?
+            <span class="text-xl">+</span>
+          </button>
+          <div class="faq-answer px-6 overflow-hidden" style="max-height:0">
+            <p style="padding-bottom:24px;color:var(--fg-muted)">Yes. If you complete the 8-week program and don't see significant improvement, we offer a full money-back guarantee.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S12 Final CTA + Footer -->
+  <section id="pricing" style="padding:72px 0 0;position:relative;z-index:110;background:rgba(var(--accent-rgb),0.04)">
+    <div class="container mx-auto max-w-[1200px] px-6 text-center pb-24">
+      <div class="badge mb-6 mx-auto" style="background:#fee2e2;color:#ef4444;border-color:#fca5a5"><span class="badge-dot" style="background:#ef4444"></span>Limited Availability</div>
+      <h2 style="font-size:clamp(36px,4vw,56px);font-weight:900;margin-bottom:24px">Ready to Transform Your Dog?</h2>
+      <p style="font-size:20px;color:var(--fg-muted);max-width:600px;margin:0 auto 40px">Join the elite group of professionals who have mastered the art of dog ownership.</p>
+      
+      <div class="glass-card max-w-md mx-auto p-8 mb-12 relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-var(--accent) text-white text-xs font-bold px-3 py-1 rounded-bl-lg">BEST VALUE</div>
+        <h3 style="font-size:24px;font-weight:700;margin-bottom:8px">ProK9 Elite Program</h3>
+        <div class="flex items-baseline justify-center gap-2 mb-6">
+          <span style="font-size:48px;font-weight:900">$997</span>
+          <span style="text-decoration:line-through;color:var(--fg-muted)">$2,400</span>
+        </div>
+        <ul class="text-left space-y-3 mb-8 text-sm">
+          <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> 8-Week Comprehensive Curriculum</li>
+          <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Lifetime Video Library Access</li>
+          <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> Private Community Membership</li>
+          <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> 1-on-1 Strategy Call ($497 Value)</li>
+          <li class="flex items-center gap-2"><span style="color:var(--success)">✓</span> 30-Day Money-Back Guarantee</li>
+        </ul>
+        <button class="rotating-cta w-full justify-center">
+          <div class="rotating-cta-gradient"></div>
+          <div class="rotating-cta-face">Enroll Now</div>
+        </button>
+        <p style="font-size:12px;color:var(--fg-muted);margin-top:16px">Secure checkout via Stripe. Instant access.</p>
+      </div>
+    </div>
+    
+    <footer style="background:var(--footer-bg);color:white;padding:60px 0 24px;border-top:1px solid var(--border)">
+      <div class="container mx-auto max-w-[1200px] px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div>
+          <div style="font-family:'Satoshi';font-weight:900;font-size:24px;margin-bottom:16px">ProK9<span style="color:var(--accent)">.</span></div>
+          <p style="color:#94a3b8;font-size:14px">Premium dog training for the modern professional.</p>
+        </div>
+        <div>
+          <h4 style="font-weight:700;margin-bottom:16px">Program</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">Curriculum</a></li>
+            <li><a href="#" class="hover:text-white">Bonuses</a></li>
+            <li><a href="#" class="hover:text-white">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-weight:700;margin-bottom:16px">Company</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white">About Us</a></li>
+            <li><a href="#" class="hover:text-white">Contact</a></li>
+            <li><a href="#" class="hover:text-white">Privacy</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-weight:700;margin-bottom:16px">Contact</h4>
+          <p style="color:#94a3b8;font-size:14px">support@prok9elite.com</p>
+        </div>
+      </div>
+      <div class="container mx-auto max-w-[1200px] px-6 pt-8 border-t border-gray-800 text-center text-sm text-gray-500">
+        © 2023 ProK9 Elite. All rights reserved.
+      </div>
+    </footer>
+  </section>
+
+  <!-- Voice Widget -->
+  <div class="widget-ping"></div>
+  <button id="widget-toggle" onclick="toggleWidget()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
+  <div id="widget-panel">
+    <div style="background:rgba(var(--accent-rgb),0.1);padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
+      <div class="w-8 h-8 rounded-full bg-var(--accent) flex items-center justify-center text-white font-bold">AI</div>
+      <div>
+        <div style="font-weight:700;font-size:14px">ProK9 Assistant</div>
+        <div style="font-size:12px;color:var(--success);display:flex;align-items:center;gap:4px"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Online</div>
+      </div>
+    </div>
+    <div style="padding:16px;flex:1;overflow-y:auto;max-height:300px">
+      <div style="background:var(--bg-elevated);padding:12px;border-radius:12px;border-top-left-radius:0;margin-bottom:12px;font-size:14px">Hi there! 👋 Ready to train your dog? Ask me anything about the program.</div>
+    </div>
+    <form id="widget-form" style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px">
+      <input type="email" placeholder="Enter your email" required style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:14px;outline:none">
+      <button type="submit" style="background:var(--accent);color:white;border:none;border-radius:8px;padding:0 16px;font-weight:700;cursor:pointer">Go</button>
+    </form>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      
+      // Navbar Scroll
+      (function(){
+        const nav=document.getElementById('navbar');
+        window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60));
+      })();
+
+      // GSAP Setup
+      (function(){
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Hero Parallax
+        gsap.to('#hero-content',{y:-60,opacity:0.3,scrollTrigger:{trigger:'#hero',start:'top top',end:'80% top',scrub:1}});
+        
+        // Reveals
+        const revealUp=(s)=>document.querySelectorAll(s).forEach(el=>gsap.fromTo(el,{opacity:0,y:40},{opacity:1,y:0,duration:0.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none reverse'}}));
+        revealUp('.reveal-up');
+        revealUp('.reveal-hero');
+        revealUp('.reveal-step');
+        
+        // Stagger
+        const revealStagger=(c,ch)=>document.querySelectorAll(c).forEach(c=>gsap.fromTo(c.querySelectorAll(ch),{opacity:0,y:30},{opacity:1,y:0,duration:0.8,stagger:0.1,ease:'power3.out',scrollTrigger:{trigger:c,start:'top 82%',toggleActions:'play none none reverse'}}));
+        revealStagger('#workforce-grid','.glass-card');
+
+        // Timeline Fill
+        gsap.to('#timeline-fill',{width:'100%',ease:'none',scrollTrigger:{trigger:'#timeline-section',start:'top 70%',end:'bottom 60%',scrub:1}});
+        
+        // Approach Stack
+        gsap.fromTo('.approach-stack',{x:30,opacity:0},{x:0,opacity:1,duration:1,scrollTrigger:{trigger:'#approach',start:'top 75%'}});
+        gsap.fromTo('.reveal-left',{x:-30,opacity:0},{x:0,opacity:1,duration:1,scrollTrigger:{trigger:'#approach',start:'top 75%'}});
+
+        // Counters
+        document.querySelectorAll('[data-count]').forEach(el=>{
+          const t=parseFloat(el.dataset.count);
+          gsap.fromTo({v:0},{v:t,duration:2,ease:'power2.out',onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)+(el.dataset.suffix||'')},scrollTrigger:{trigger:el,start:'top 85%',once:true}});
+        });
+      })();
+
+      // Demo Interaction
+      (function(){
+        const cards=document.querySelectorAll('.feature-card');
+        const img=document.getElementById('demo-preview');
+        const title=document.getElementById('demo-title');
+        
+        cards.forEach(card=>{
+          card.addEventListener('click',()=>{
+            cards.forEach(c=>{
+              c.classList.remove('active-feature','border-var(--accent)');
+              c.classList.add('border-transparent');
+              c.querySelector('div:first-child').classList.remove('bg-var(--accent)','text-white');
+              c.querySelector('div:first-child').classList.add('bg-gray-200','text-gray-500');
+            });
+            card.classList.add('active-feature','border-var(--accent)');
+            card.classList.remove('border-transparent');
+            const circle=card.querySelector('div:first-child');
+            circle.classList.remove('bg-gray-200','text-gray-500');
+            circle.classList.add('bg-var(--accent)','text-white');
+            
+            gsap.to(img,{opacity:0,duration:0.2,onComplete:()=>{
+              img.src=card.dataset.img;
+              title.innerText=card.querySelector('h3').innerText;
+              gsap.to(img,{opacity:0.8,duration:0.2});
+            }});
+          });
+        });
+      })();
+
+      // Case Study Tabs
+      (function(){
+        const tabs=document.querySelectorAll('.case-tab');
+        tabs.forEach(tab=>{
+          tab.addEventListener('click',()=>{
+            tabs.forEach(t=>{t.classList.remove('active-case','border-var(--accent)','bg-var(--bg-card-hover)');t.classList.add('border-transparent')});
+            tab.classList.add('active-case','border-var(--accent)','bg-var(--bg-card-hover)');
+            tab.classList.remove('border-transparent');
+            // In a real scenario, swap content here based on data-id
+          });
+        });
+      })();
+
+      // FAQ Accordion
+      (function(){
+        document.querySelectorAll('.faq-question').forEach(q=>{
+          q.addEventListener('click',()=>{
+            const a=q.nextElementSibling,open=q.classList.contains('active');
+            document.querySelectorAll('.faq-question.active').forEach(o=>{
+              o.classList.remove('active');
+              gsap.to(o.nextElementSibling,{maxHeight:0,duration:0.3,ease:'power2.in'});
+              o.querySelector('span').innerText='+';
+            });
+            if(!open){
+              q.classList.add('active');
+              gsap.to(a,{maxHeight:a.scrollHeight,duration:0.35,ease:'power2.out'});
+              q.querySelector('span').innerText='-';
+            }
+          });
+        });
+      })();
+
+      // Value Calculator
+      (function(){
+        const d=document.getElementById('damage-range'),t=document.getElementById('time-range'),o=document.getElementById('loss-output');
+        function calc(){
+          // Mock formula: Damage + (Time * 10 hrs/month * 12 months)
+          const val = parseInt(d.value) + (parseInt(t.value) * 120);
+          o.innerText='$'+val.toLocaleString();
+        }
+        [d,t].forEach(s=>s.addEventListener('input',calc));
+        calc();
+      })();
+
+      // Widget
+      (function(){
+        const panel=document.getElementById('widget-panel');
+        window.toggleWidget=()=>{const open=panel.style.display==='flex';panel.style.display=open?'none':'flex';if(!open)gsap.fromTo(panel,{opacity:0,y:20,scale:0.95},{opacity:1,y:0,scale:1,duration:0.3,ease:'back.out(1.4)'})};
+        document.getElementById('widget-form')?.addEventListener('submit',function(e){e.preventDefault();this.innerHTML='<p style="text-align:center;padding:24px;color:var(--success);font-weight:700">✓ We\'ll be in touch shortly.</p>'});
+      })();
+
+      // Cursor Dot
+      (function(){
+        const c=document.createElement('div');c.style.cssText='position:fixed;width:12px;height:12px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.6;transform:translate(-50%,-50%);transition:transform 0.15s ease';
+        document.body.appendChild(c);
+        document.addEventListener('mousemove',e=>{c.style.left=e.clientX+'px';c.style.top=e.clientY+'px'});
+        document.querySelectorAll('button,a,.cursor-pointer').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='translate(-50%,-50%) scale(2.5)');el.addEventListener('mouseleave',()=>c.style.transform='translate(-50%,-50%) scale(1)')});
+      })();
+
+    });
+  </script>
+</body>
+</html>

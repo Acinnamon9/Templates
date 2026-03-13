@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Dog Training | 8-Week Professional Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.65);
+            --bg-card-hover: rgba(255, 255, 255, 0.85);
+            --bg-elevated: rgba(255, 255, 255, 0.85);
+            --fg: #0f172a;
+            --fg-muted: #475569;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.14);
+            --edge-highlight: rgba(255, 255, 255, 0.95);
+            --shadow-card: 0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+            --navbar-bg: rgba(248, 250, 252, 0.85);
+            --footer-bg: #0f172a;
+            --accent: #22c55e;
+            --accent-rgb: 34, 197, 94;
+            --success: #16a34a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg); 
+            color: var(--fg); 
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-satoshi { font-family: 'Satoshi', sans-serif; letter-spacing: -0.02em; }
+
+        /* Glass Surface System */
+        .glass-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05), inset 0 1px 0 var(--edge-highlight);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--edge-highlight) 40%, var(--edge-highlight) 60%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card), 0 0 40px rgba(var(--accent-rgb), 0.1);
+        }
+
+        /* Orbs */
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(140px);
+            animation: float-orb 30s ease-in-out infinite;
+        }
+        #orb1 { width: 800px; height: 800px; background: radial-gradient(circle, var(--accent), transparent 70%); opacity: 0.08; top: 10%; left: 20%; }
+        #orb2 { width: 600px; height: 600px; background: radial-gradient(circle, #3b82f6, transparent 70%); opacity: 0.05; bottom: 10%; right: 15%; animation-delay: -10s; }
+        #orb3 { width: 500px; height: 500px; background: radial-gradient(circle, #8b5cf6, transparent 70%); opacity: 0.04; top: 50%; left: 55%; animation-delay: -20s; }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -40px) scale(1.08); }
+            50% { transform: translate(-40px, 60px) scale(0.95); }
+            75% { transform: translate(30px, 30px) scale(1.04); }
+        }
+
+        /* Utilities */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent), #15803d);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 14px; border-radius: 9999px;
+            font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+            border: 1px solid rgba(var(--accent-rgb), 0.25);
+            color: var(--accent); background: rgba(var(--accent-rgb), 0.08);
+        }
+
+        .rotating-cta {
+            position: relative; display: inline-flex; padding: 2px;
+            border-radius: 14px; overflow: hidden; cursor: pointer; border: none;
+            box-shadow: 0 4px 24px rgba(var(--accent-rgb), 0.35);
+            animation: pulse-scale 3s ease-in-out infinite;
+        }
+        .rotating-cta-gradient {
+            position: absolute; inset: -100%;
+            background: conic-gradient(from 0deg, transparent 40%, var(--accent) 50%, transparent 60%);
+            animation: spin 4s linear infinite;
+        }
+        .rotating-cta-face {
+            position: relative; z-index: 1;
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 14px 40px; font-weight: 900; font-size: 16px; letter-spacing: 0.05em;
+            border-radius: 12px; background: var(--accent); color: #fff;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-scale { 0%,100%{transform:scale(1);} 50%{transform:scale(1.02);} }
+
+        .btn-glass {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 28px; border-radius: 14px; border: none; cursor: pointer;
+            background: rgba(var(--accent-rgb), 0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(var(--accent-rgb), 0.3);
+            color: var(--accent); font-weight: 700; font-size: 15px;
+            transition: all 0.25s;
+        }
+
+        .dot-grid {
+            position: absolute; inset: 0; opacity: 0.05;
+            background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        section { padding: 72px 0; position: relative; z-index: 10; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* Navbar */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+            transition: all 0.3s ease; padding: 20px 0;
+        }
+        nav.scrolled {
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+        }
+
+        /* Timeline */
+        #timeline-section { position: relative; }
+        .timeline-track { position: relative; height: 4px; background: var(--border); border-radius: 2px; margin: 40px 0; }
+        #timeline-fill { position: absolute; height: 100%; width: 0; background: var(--accent); border-radius: inherit; }
+
+        /* Calculator */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px;
+            background: var(--border); outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+            background: var(--accent); cursor: pointer; border: 2px solid #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Marquee */
+        .marquee-track {
+            display: flex; gap: 40px; width: max-content;
+            animation: marquee 30s linear infinite;
+        }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        #cursor-dot {
+            position: fixed; width: 12px; height: 12px; border-radius: 50%;
+            background: var(--accent); pointer-events: none; z-index: 99999;
+            opacity: 0.4; transform: translate(-50%,-50%);
+            transition: transform 0.15s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-orbs" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
+        <div class="orb" id="orb1"></div>
+        <div class="orb" id="orb2"></div>
+        <div class="orb" id="orb3"></div>
+    </div>
+
+    <nav id="navbar">
+        <div class="container flex items-center justify-between">
+            <div class="text-2xl font-black font-satoshi flex items-center gap-1">
+                ELITE<span class="text-accent text-green-500">PAWS</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+                <a href="#journey">The Method</a>
+                <a href="#modules">Program</a>
+                <a href="#roi">Time Saved</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            <button class="btn-glass px-6 py-2">Join Reserve List</button>
+        </div>
+    </nav>
+
+    <!-- S2: Hero -->
+    <section id="hero" class="min-h-screen flex items-center pt-32">
+        <div class="container text-center">
+            <div class="badge mb-6">
+                <div class="badge-dot w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                NEXT COHORT STARTING SOON
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black font-satoshi mb-6 leading-tight">
+                Obedience for the <br>
+                <span class="gradient-text">Busy Professional</span>
+            </h1>
+            <p class="text-lg md:text-xl text-muted-foreground text-slate-500 max-w-2xl mx-auto mb-10 font-medium">
+                The 8-week blueprint to a perfectly trained companion without the 
+                time-sink of traditional dog schools. 100% Guaranteed results.
+            </p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                <button class="rotating-cta">
+                    <div class="rotating-cta-gradient"></div>
+                    <div class="rotating-cta-face">SECURE YOUR SPOT — $997</div>
+                </button>
+                <div class="flex items-center gap-2 text-sm font-bold text-slate-400">
+                    <span>30-Day Money-Back Guarantee</span>
+                </div>
+            </div>
+            
+            <div class="mt-20 opacity-40 overflow-hidden">
+                <div class="marquee-track">
+                    <span class="text-2xl font-bold px-4">FORBES</span>
+                    <span class="text-2xl font-bold px-4">BLOOMBERG</span>
+                    <span class="text-2xl font-bold px-4">INC.</span>
+                    <span class="text-2xl font-bold px-4">WALL STREET JOURNAL</span>
+                    <span class="text-2xl font-bold px-4">ENTREPRENEUR</span>
+                    <!-- Duplicate for loop -->
+                    <span class="text-2xl font-bold px-4">FORBES</span>
+                    <span class="text-2xl font-bold px-4">BLOOMBERG</span>
+                    <span class="text-2xl font-bold px-4">INC.</span>
+                    <span class="text-2xl font-bold px-4">WALL STREET JOURNAL</span>
+                    <span class="text-2xl font-bold px-4">ENTREPRENEUR</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S3: Journey -->
+    <section id="journey">
+        <div class="container">
+            <div class="text-center mb-16">
+                <div class="badge mb-4">THE TRANSFORMATION</div>
+                <h2 class="text-4xl md:text-5xl font-black font-satoshi">From Chaos to <span class="gradient-text">Command</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8">
+                    <div class="text-3xl font-black text-green-500 mb-4">01</div>
+                    <h3 class="text-xl font-bold mb-2">The Evaluation</h3>
+                    <p class="text-slate-500">We analyze your dog's idiosyncratic triggers and your specific busy schedule.</p>
+                </div>
+                <div class="glass-card p-8">
+                    <div class="text-3xl font-black text-green-500 mb-4">02</div>
+                    <h3 class="text-xl font-bold mb-2">The Training</h3>
+                    <p class="text-slate-500">15 minutes a day using our high-efficacy behavioral science pedagogy.</p>
+                </div>
+                <div class="glass-card p-8">
+                    <div class="text-3xl font-black text-green-500 mb-4">03</div>
+                    <h3 class="text-xl font-bold mb-2">The Mastery</h3>
+                    <p class="text-slate-500">Achieve the quintessential companion ready for any social or professional setting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S4: Modules -->
+    <section id="modules">
+        <div class="container">
+            <div class="glass-container p-12">
+                <div class="dot-grid"></div>
+                <div class="text-center mb-12 relative z-10">
+                    <div class="badge mb-4">THE BONUS VAULT</div>
+                    <h2 class="text-4xl md:text-5xl font-black font-satoshi">What You're Getting</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    <div class="glass-card p-8 flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-green-500/10 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">HD Video Library</h3>
+                        <p class="text-sm text-slate-500">Lifetime access to 50+ modules covering every command and nuance.</p>
+                        <div class="mt-4 px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest italic">FREE BONUS</div>
+                    </div>
+                    <div class="glass-card p-8 flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 005.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">24/7 Community</h3>
+                        <p class="text-sm text-slate-500">Connect with fellow high-performers for real-time support and wins.</p>
+                        <div class="mt-4 px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest italic">FREE BONUS</div>
+                    </div>
+                    <div class="glass-card p-8 flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">1-on-1 Onboarding</h3>
+                        <p class="text-sm text-slate-500">A private session to ensure your home setup is optimized for success.</p>
+                        <div class="mt-4 px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest italic">FREE BONUS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S9: ROI Calculator -->
+    <section id="roi">
+        <div class="container">
+            <div class="glass-container p-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <div class="badge mb-4">TIME EQUITY</div>
+                        <h2 class="text-4xl md:text-5xl font-black font-satoshi mb-6">Buy Back Your <span class="gradient-text">Freedom</span></h2>
+                        <p class="text-slate-500 mb-8">Professional training is an investment in your sanity. See how much time you'll reclaim over a dog's lifetime.</p>
+                        <button class="rotating-cta">
+                            <div class="rotating-cta-gradient"></div>
+                            <div class="rotating-cta-face">START YOUR JOURNEY</div>
+                        </button>
+                    </div>
+                    <div class="glass-card p-8">
+                        <div class="space-y-8">
+                            <div>
+                                <div class="flex justify-between mb-4">
+                                    <span class="font-bold">Dog's Expected Age</span>
+                                    <span id="label-age" class="text-green-500 font-bold">12 Years</span>
+                                </div>
+                                <input type="range" id="input-age" min="5" max="20" value="12">
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-4">
+                                    <span class="font-bold">Daily "Chaos" Mins (Barking/Cleaning)</span>
+                                    <span id="label-chaos" class="text-green-500 font-bold">45 Mins</span>
+                                </div>
+                                <input type="range" id="input-chaos" min="10" max="120" value="45">
+                            </div>
+                            <div class="pt-8 border-t border-slate-200">
+                                <div class="text-center">
+                                    <div class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Total Time Savings</div>
+                                    <div id="projected-savings" class="text-5xl font-black gradient-text">3,285 Hours</div>
+                                    <div class="text-xs font-bold text-slate-400 mt-2">That's 136 full days reclaimed.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S10: Testimonials -->
+    <section id="testimonials">
+        <div class="container">
+            <div class="text-center mb-16">
+                <div class="badge mb-4">ELITE FEEDBACK</div>
+                <h2 class="text-4xl md:text-5xl font-black font-satoshi">From Happy <span class="gradient-text">Executive Owners</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-card p-8">
+                    <p class="italic text-slate-600 mb-6 font-medium">"As a tech CEO, my schedule is ruthless. This program allowed me to integrate training into my morning routine. Spot is now the office favorite."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-200 rounded-full"></div>
+                        <div>
+                            <div class="font-bold">Marcus Chen</div>
+                            <div class="text-xs text-slate-400">Owner of a Golden Retriever</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-8">
+                    <p class="italic text-slate-600 mb-6 font-medium">"The money-back guarantee gave me the confidence to try it. I never thought my high-anxiety Doberman could be this calm."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-200 rounded-full"></div>
+                        <div>
+                            <div class="font-bold">Sarah Jenkins</div>
+                            <div class="text-xs text-slate-400">Owner of a Doberman</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-8">
+                    <p class="italic text-slate-600 mb-6 font-medium">"The 1-on-1 call was the game-changer. It addressed my specific apartment layout issues instantly. Highly recommended for city professionals."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-200 rounded-full"></div>
+                        <div>
+                            <div class="font-bold">Dr. Elena Rossi</div>
+                            <div class="text-xs text-slate-400">Owner of a Frenchie</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0f172a] text-white pt-24 pb-12">
+        <div class="container">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="text-2xl font-black font-satoshi mb-6 tracking-tighter">ELITE<span class="text-green-500">PAWS</span></div>
+                    <p class="text-slate-400 max-w-sm mb-8">Elevating the relationship between elite professionals and their canine companions through science-backed pedagogy.</p>
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-green-500 transition-colors cursor-pointer">IG</div>
+                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-green-500 transition-colors cursor-pointer">TW</div>
+                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-green-500 transition-colors cursor-pointer">YT</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6">Program</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-green-500">Core Curriculum</a></li>
+                        <li><a href="#" class="hover:text-green-500">Bonus Vault</a></li>
+                        <li><a href="#" class="hover:text-green-500">Community Access</a></li>
+                        <li><a href="#" class="hover:text-green-500">Guarantee Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6">Support</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-green-500">Client Portal</a></li>
+                        <li><a href="#" class="hover:text-green-500">1-on-1 Booking</a></li>
+                        <li><a href="#" class="hover:text-green-500">Help Center</a></li>
+                        <li><a href="#" class="hover:text-green-500">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+                <p>&copy; 2024 ELITEPAWS TRAINING. ALL RIGHTS RESERVED.</p>
+                <div class="flex gap-6">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 60) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // Animations
+        gsap.from('#hero .container > *', {
+            y: 50, opacity: 0, duration: 1, stagger: 0.2, ease: 'power4.out'
+        });
+
+        gsap.utils.toArray('.glass-card').forEach(card => {
+            gsap.from(card, {
+                scrollTrigger: { trigger: card, start: 'top 90%' },
+                y: 30, opacity: 0, duration: 0.8, ease: 'power3.out'
+            });
+        });
+
+        // ROI Calculator
+        const ageInput = document.getElementById('input-age');
+        const chaosInput = document.getElementById('input-chaos');
+        const ageLabel = document.getElementById('label-age');
+        const chaosLabel = document.getElementById('label-chaos');
+        const savingsLabel = document.getElementById('projected-savings');
+
+        function updateSlider(s) {
+            const pct = (s.value - s.min) / (s.max - s.min) * 100;
+            s.style.background = `linear-gradient(to right, var(--accent) ${pct}%, var(--border) ${pct}%)`;
+        }
+
+        function recalc() {
+            const age = ageInput.value;
+            const chaos = chaosInput.value;
+            ageLabel.textContent = `${age} Years`;
+            chaosLabel.textContent = `${chaos} Mins`;
+            
+            const totalHours = Math.round((chaos * 365 * age) / 60);
+            savingsLabel.textContent = `${totalHours.toLocaleString()} Hours`;
+            
+            updateSlider(ageInput);
+            updateSlider(chaosInput);
+        }
+
+        [ageInput, chaosInput].forEach(inp => {
+            inp.addEventListener('input', recalc);
+            updateSlider(inp);
+        });
+        recalc();
+
+        // Cursor Dot
+        const cur = document.createElement('div');
+        cur.id = 'cursor-dot';
+        document.body.appendChild(cur);
+        document.addEventListener('mousemove', e => { 
+            cur.style.left = e.clientX + 'px'; 
+            cur.style.top = e.clientY + 'px'; 
+        });
+        document.querySelectorAll('button, a, input').forEach(el => {
+            el.addEventListener('mouseenter', () => cur.style.transform = 'translate(-50%,-50%) scale(2.5)');
+            el.addEventListener('mouseleave', () => cur.style.transform = 'translate(-50%,-50%) scale(1)');
+        });
+
+    </script>
+</body>
+</html>
