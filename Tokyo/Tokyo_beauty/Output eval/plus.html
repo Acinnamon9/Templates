@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Interval | Silent Retreat for Founders</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & Lenis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <style>
+        :root {
+            --color-primary:#e83f43;--color-primary-hover:#c42d2d;
+            --color-background:#f7f3ef;--color-surface:#ffffff;--color-surface-alt:#eeece8;
+            --color-overlay:rgba(26,26,26,0.05);
+            --color-text-primary:#1a1a1a;--color-text-secondary:#5c5854;--color-text-muted:#847f7a;
+            --color-text-inverse:#f7f3ef;
+            --color-border:rgba(26,26,26,0.1);--color-border-subtle:rgba(26,26,26,0.05);
+            --font-primary:"Inter",sans-serif;--font-secondary:"Playfair Display",serif;
+            --t-h1:clamp(2.5rem,8vw,5rem);--t-h2:clamp(1.5rem,4vw,2.5rem);
+            --t-body:clamp(0.9rem,2vw,1.125rem);--t-micro:0.75rem;
+            --line-tight:1.1;--line-normal:1.6;
+            --tracking-tight:-0.02em;
+            --space-2xs:4px;--space-xs:8px;--space-sm:12px;--space-md:16px;
+            --space-lg:24px;--space-xl:32px;--space-2xl:48px;--space-3xl:64px;--space-4xl:96px;
+            --breath:clamp(1.5rem,10vw,8rem);--pulse:clamp(0.8rem,5vw,4rem);
+            --weather:cubic-bezier(0.23,1,0.75,1);
+            --motion-reveal:1200ms var(--weather);--motion-settle:800ms var(--weather);
+            --motion-response:300ms var(--weather);--motion-micro:150ms var(--weather);
+            --container-xl:1200px;--radius-sm:2px;--radius-md:6px;
+        }
+        body{background:var(--color-background);color:var(--color-text-primary);font-family:var(--font-primary);cursor:none;overflow-x:hidden}
+        *{box-sizing:border-box;margin:0;padding:0}
+        
+        /* Atmosphere */
+        .grain-overlay{position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:0.04;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/><feColorMatrix type=%22saturate%22 values=%220%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%221%22/></svg>');background-size:200px}
+        .rain-overlay{position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:0.02;background:repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(0,0,0,0.3) 1px,rgba(0,0,0,0.3) 2px);animation:rain-drift 20s linear infinite}
+        @keyframes rain-drift{from{transform:translateY(-50px)}to{transform:translateY(50px)}}
+
+        /* Cursor */
+        .custom-cursor{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--color-primary);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:none}
+        .cursor-follower{position:fixed;width:40px;height:40px;border-radius:50%;border:1px solid var(--color-primary);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:0.6}
+
+        /* Typography & Utilities */
+        h1,h2,h3,h4{font-family:var(--font-secondary);font-weight:700;line-height:var(--line-tight);letter-spacing:var(--tracking-tight)}
+        .section-label{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted);margin-bottom:var(--space-xl);display:block}
+        .btn-primary{padding:var(--space-lg) var(--space-3xl);background:var(--color-text-primary);color:var(--color-text-inverse);font-family:var(--font-primary);font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;border:none;cursor:none;transition:background var(--motion-response)}
+        .btn-primary:hover{background:var(--color-primary)}
+        .btn-outline{padding:var(--space-lg) var(--space-3xl);background:transparent;color:var(--color-text-primary);font-family:var(--font-primary);font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;border:1px solid var(--color-border);cursor:none;transition:all var(--motion-response)}
+        .btn-outline:hover{border-color:var(--color-primary);color:var(--color-primary)}
+
+        /* Header */
+        #header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:var(--space-lg) var(--breath);mix-blend-mode:difference;transition:background 0.4s var(--weather), backdrop-filter 0.4s var(--weather)}
+        #header.scrolled{mix-blend-mode:normal;background:rgba(247,243,239,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--color-border)}
+        .logo{font-family:var(--font-secondary);font-size:24px;font-style:italic;color:inherit;text-decoration:none}
+        .nav-links{display:flex;gap:var(--space-2xl)}
+        .nav-link{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:inherit;text-decoration:none;opacity:0.8;transition:opacity 0.2s}
+        .nav-link:hover{opacity:1}
+        .audio-toggle{width:40px;height:40px;border:1px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;color:inherit;cursor:none;opacity:0.6;transition:opacity 0.2s}
+        .audio-toggle:hover{opacity:1}
+
+        /* Canvas (Hero) */
+        #canvas{height:100vh;overflow:hidden;position:relative}
+        .slide{position:absolute;inset:0;display:grid;grid-template-columns:1fr 2fr;align-items:center;padding:var(--breath);opacity:0;z-index:1}
+        .slide.active{opacity:1;z-index:2}
+        .content-wrap{max-width:60ch}
+        .slide-title{font-size:var(--t-h1);margin-bottom:var(--space-xl)}
+        .visual-wrap{height:75vh;overflow:hidden;position:relative}
+        .visual-wrap img{width:110%;height:110%;object-fit:cover;transform:translate(-5%,-5%)}
+        .canvas-controls{position:absolute;bottom:var(--space-2xl);right:var(--breath);display:flex;gap:1px;z-index:20}
+        .control-btn{width:80px;height:80px;background:var(--color-surface);border:none;font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;cursor:none;transition:background 0.2s}
+        .control-btn:hover{background:var(--color-primary);color:#fff}
+        .control-btn.active{background:var(--color-text-primary);color:var(--color-text-inverse)}
+        .slide-counter{position:absolute;bottom:var(--space-2xl);left:var(--breath);font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted)}
+
+        /* Lintel */
+        .lintel-section{padding:var(--breath) var(--breath);max-width:var(--container-xl);margin:0 auto}
+        .manifesto-quote{font-family:var(--font-secondary);font-size:var(--t-h1);line-height:var(--line-tight);color:var(--color-text-primary)}
+        .manifesto-quote span{color:var(--color-primary)}
+
+        /* Memory */
+        .memory-grid{display:grid;grid-template-columns:1fr 3fr;gap:var(--breath);align-items:start;padding:var(--breath);max-width:var(--container-xl);margin:0 auto}
+        .memory-stat{font-family:var(--font-secondary);font-size:var(--t-h1);color:var(--color-primary);line-height:1}
+        .memory-column-right{position:relative;height:50vh;overflow:hidden}
+        .memory-column-right img{width:110%;height:110%;object-fit:cover;transform:translate(-5%,-5%);filter:grayscale(1) blur(2px);transition:all 800ms var(--weather)}
+
+        /* Ritual */
+        .ritual-section{padding:var(--breath);max-width:var(--container-xl);margin:0 auto}
+        .ritual-header{text-align:center;margin-bottom:var(--space-4xl)}
+        .ritual-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2xl)}
+        .ritual-step{border-top:1px solid var(--color-border);padding-top:var(--space-xl)}
+        .step-num{font-family:var(--font-secondary);font-size:var(--t-h1);font-weight:700;color:var(--color-border);line-height:1}
+        .step-title{font-family:var(--font-secondary);font-size:var(--t-h2);margin:var(--space-lg) 0 var(--space-md)}
+        .step-desc{color:var(--color-text-secondary);line-height:var(--line-normal);font-size:var(--t-body)}
+
+        /* Artifacts */
+        .artifacts-section{padding:var(--breath);max-width:var(--container-xl);margin:0 auto}
+        .artifacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2xl)}
+        .artifact-card{position:relative;height:45vh;overflow:hidden;cursor:none}
+        .artifact-card img{position:absolute;inset:0;width:110%;height:110%;object-fit:cover;transform:translate(-5%,-5%);transition:transform 0.8s var(--weather)}
+        .artifact-info{position:absolute;bottom:0;left:0;right:0;padding:var(--space-xl);background:linear-gradient(transparent,rgba(0,0,0,0.4));color:#fff}
+        .artifact-title{font-family:var(--font-secondary);font-size:var(--t-h2);font-weight:700}
+        .artifact-meta{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;opacity:0.7;margin-top:var(--space-xs)}
+
+        /* Sanctuary */
+        .sanctuary-section{background:var(--color-text-primary);color:var(--color-text-inverse);padding:var(--breath)}
+        .sanctuary-wrap{display:grid;grid-template-columns:2fr 3fr;gap:var(--breath);align-items:center;max-width:var(--container-xl);margin:0 auto}
+        .sanctuary-media{position:relative;height:60vh;overflow:hidden}
+        .sanctuary-media img{width:100%;height:100%;object-fit:cover}
+        .feature-row{border-top:1px solid rgba(247,243,239,0.1);padding:var(--space-lg) 0;display:flex;gap:var(--space-lg);align-items:flex-start}
+        .feature-icon{color:var(--color-primary);font-size:24px;line-height:1}
+        .feature-title{font-family:var(--font-secondary);font-size:var(--t-h2);margin-bottom:var(--space-xs)}
+        .feature-desc{color:rgba(247,243,239,0.6);font-size:var(--t-body);line-height:var(--line-normal)}
+
+        /* Witness */
+        .witness-hero{position:relative;height:70vh;overflow:hidden;display:flex;align-items:center;justify-content:flex-start}
+        .witness-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;filter:brightness(0.4)}
+        .witness-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(800px circle at var(--mouse-x,50%) var(--mouse-y,50%),transparent 0%,rgba(10,10,10,0.95) 100%);z-index:1;pointer-events:none}
+        .witness-content{position:relative;z-index:2;padding:var(--breath);max-width:60ch}
+        .voyage-count{font-family:var(--font-secondary);font-size:var(--t-h1);font-weight:700;color:var(--color-primary)}
+
+        /* Echoes */
+        .echoes-section{position:relative;overflow:hidden;padding:var(--breath);max-width:var(--container-xl);margin:0 auto}
+        .echoes-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-secondary);font-size:25vw;font-weight:700;background-image:url('https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png');background-clip:text;-webkit-background-clip:text;color:transparent;opacity:0.15;pointer-events:none;z-index:0;white-space:nowrap}
+        .echoes-grid{display:grid;grid-template-columns:2fr 1.5fr;gap:var(--space-4xl);align-items:start;position:relative;z-index:1}
+        .ghost-card{border:1px solid var(--color-border-subtle);padding:var(--space-2xl);opacity:0.3;transition:opacity 0.4s var(--weather),border-color 0.4s,transform 0.4s;background:var(--color-background)}
+        .ghost-card:hover{opacity:1;border-color:var(--color-primary);transform:translateY(-4px)}
+        .ghost-card.large{padding:var(--space-3xl)}
+        .ghost-quote{font-family:var(--font-secondary);font-size:var(--t-h2);line-height:var(--line-normal);margin-bottom:var(--space-lg)}
+        .ghost-author{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.1em;color:var(--color-text-muted)}
+
+        /* Oracle (FAQ) */
+        .oracle-section{padding:var(--breath);max-width:800px;margin:0 auto}
+        .accordion-item{border-bottom:1px solid var(--color-border)}
+        .accordion-trigger{display:flex;justify-content:space-between;align-items:center;width:100%;padding:var(--space-xl) 0;background:none;border:none;font-family:var(--font-secondary);font-size:20px;text-align:left;cursor:none;color:var(--color-text-primary)}
+        .accordion-trigger:hover{color:var(--color-primary)}
+        .accordion-icon{width:20px;height:20px;flex-shrink:0;transition:transform 0.3s var(--weather);font-size:20px}
+        .accordion-content{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s var(--weather)}
+        .accordion-content.open{grid-template-rows:1fr}
+        .accordion-inner{overflow:hidden;padding-bottom:var(--space-xl);color:var(--color-text-secondary);line-height:var(--line-normal)}
+
+        /* Conversion */
+        .conversion-section{text-align:center;display:flex;flex-direction:column;align-items:center;padding:var(--breath);max-width:var(--container-xl);margin:0 auto}
+        .capture-form{margin-top:var(--space-3xl);display:flex;flex-direction:column;align-items:center;gap:var(--space-2xl);width:100%;max-width:600px}
+        .capture-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--color-text-primary);padding:var(--space-lg) 0;font-family:var(--font-secondary);font-size:24px;color:var(--color-text-primary);text-align:center;outline:none;transition:border-color var(--motion-micro)}
+        .capture-input:focus{border-color:var(--color-primary)}
+        .capture-input::placeholder{color:var(--color-text-muted)}
+
+        /* Footer */
+        footer{padding:var(--space-2xl) var(--breath);background:var(--color-surface-alt);border-top:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:flex-end}
+        .footer-brand{font-family:var(--font-secondary);font-size:24px;font-style:italic;color:var(--color-text-primary)}
+        .footer-nav{display:flex;gap:var(--space-xl)}
+        .footer-link{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted);text-decoration:none;transition:color 0.2s}
+        .footer-link:hover{color:var(--color-primary)}
+
+        /* Responsive */
+        @media(max-width:1024px){
+            .slide{grid-template-columns:1fr}
+            .visual-wrap{display:none}
+            .content-wrap{text-align:center;margin:0 auto}
+            .memory-grid,.ritual-grid,.artifacts-grid,.sanctuary-wrap,.echoes-grid{grid-template-columns:1fr}
+            .sanctuary-media{height:40vh;margin-bottom:var(--space-2xl)}
+            .memory-column-right{height:30vh}
+            .nav-links{display:none}
+            .control-btn{width:60px;height:60px}
+        }
+    </style>
+</head>
+<body>
+
+<!-- Atmosphere -->
+<div class="grain-overlay"></div>
+<div class="rain-overlay"></div>
+<div class="custom-cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursor-follower"></div>
+
+<!-- S1: Header -->
+<header id="header">
+    <a href="#" class="logo">The Interval.</a>
+    <nav class="nav-links">
+        <a href="#ethos" class="nav-link">Ethos</a>
+        <a href="#ritual" class="nav-link">Ritual</a>
+        <a href="#sanctuary" class="nav-link">Sanctuary</a>
+        <a href="#apply" class="nav-link">Apply</a>
+    </nav>
+    <button id="audio-toggle" class="audio-toggle" aria-label="Toggle Ambient Sound">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    </button>
+</header>
+
+<!-- S2: Canvas (Hero) -->
+<section id="canvas">
+    <div id="slides-container">
+        <!-- Slide 0 -->
+        <div class="slide active" data-index="0">
+            <div class="content-wrap">
+                <span class="section-label">Canvas · 01</span>
+                <h1 class="slide-title">Silence is not empty.<br>It is full of answers.</h1>
+                <p style="margin-top:var(--space-xl);color:var(--color-text-secondary);line-height:var(--line-normal);font-size:var(--t-body);max-width:44ch">A 4-day silent retreat for founders and executives dealing with burnout. No phones. No agenda. Just re-entry.</p>
+                <div style="margin-top:var(--space-2xl);display:flex;align-items:center;gap:var(--space-xl)">
+                    <a href="#apply" class="btn-primary">Request Invitation</a>
+                    <a href="#ethos" style="font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted);text-decoration:none;border-bottom:1px solid var(--color-border)">Enter ↓</a>
+                </div>
+            </div>
+            <div class="visual-wrap">
+                <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png" alt="">
+            </div>
+        </div>
+        <!-- Slide 1 -->
+        <div class="slide" data-index="1">
+            <div class="content-wrap">
+                <span class="section-label">Canvas · 02</span>
+                <h1 class="slide-title">The outcome is not<br>productivity.</h1>
+                <p style="margin-top:var(--space-xl);color:var(--color-text-secondary);line-height:var(--line-normal);font-size:var(--t-body);max-width:44ch">It is the quiet realization that you are enough without the noise. 8 people maximum. Twice a year.</p>
+                <div style="margin-top:var(--space-2xl);display:flex;align-items:center;gap:var(--space-xl)">
+                    <a href="#apply" class="btn-primary">View Dates</a>
+                </div>
+            </div>
+            <div class="visual-wrap">
+                <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cea717659b9.png" alt="">
+            </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="slide" data-index="2">
+            <div class="content-wrap">
+                <span class="section-label">Canvas · 03</span>
+                <h1 class="slide-title">Portugal.<br>Converted Farmhouse.</h1>
+                <p style="margin-top:var(--space-xl);color:var(--color-text-secondary);line-height:var(--line-normal);font-size:var(--t-body);max-width:44ch">$6,500 all-inclusive. A space designed for stillness, surrounded by nature, far from the demands of the world.</p>
+                <div style="margin-top:var(--space-2xl);display:flex;align-items:center;gap:var(--space-xl)">
+                    <a href="#apply" class="btn-primary">Inquire</a>
+                </div>
+            </div>
+            <div class="visual-wrap">
+                <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="canvas-controls">
+        <button id="slide-prev" class="control-btn">←</button>
+        <button id="slide-next" class="control-btn active">→</button>
+    </div>
+    <div class="slide-counter"><span id="slide-cur">01</span> / 03</div>
+</section>
+
+<!-- S3: Lintel (Ethos) -->
+<section id="ethos" class="lintel-section">
+    <span class="section-label">Ethos · 02</span>
+    <p class="manifesto-quote">We believe that true leadership requires <span>periodic disappearance</span>. You cannot lead from a depleted vessel.</p>
+    <p style="margin-top:var(--space-xl);color:var(--color-text-secondary);max-width:60ch;line-height:var(--line-normal)">The Interval is a sanctuary for those who carry the weight of decisions. Here, we strip away the digital noise to reveal the clarity beneath.</p>
+</section>
+
+<!-- S4: Memory (Credibility) -->
+<section class="memory-grid">
+    <div>
+        <span class="section-label">Memory · 03</span>
+        <h2 style="font-size:var(--t-h2);margin-bottom:var(--space-lg)">Strictly Curated</h2>
+        <p style="color:var(--color-text-secondary);line-height:var(--line-normal);max-width:44ch;margin-bottom:var(--space-2xl)">We limit attendance to ensure deep work and genuine connection. This is not a conference. It is a collective exhale.</p>
+        <div>
+            <div class="memory-stat">08</div>
+            <div style="font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:var(--color-text-muted)">Participants Maximum</div>
+        </div>
+    </div>
+    <div class="memory-column-right">
+        <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png" alt="">
+    </div>
+</section>
+
+<!-- S5: Ritual (Process) -->
+<section id="ritual" class="ritual-section">
+    <div class="ritual-header">
+        <span class="section-label">Ritual · 04</span>
+        <h2 style="font-size:var(--t-h2)">The Structure of Silence</h2>
+    </div>
+    <div class="ritual-grid">
+        <div class="ritual-step">
+            <div class="step-num">01</div>
+            <h3 class="step-title">Arrival & Disconnect</h3>
+            <p class="step-desc">Phones are surrendered at the door. You arrive in Portugal, step into the farmhouse, and leave the world outside.</p>
+        </div>
+        <div class="ritual-step">
+            <div class="step-num">02</div>
+            <h3 class="step-title">Noble Silence</h3>
+            <p class="step-desc">Four days of no speaking, no reading, no writing. Just presence, guided meditation, and walks in the countryside.</p>
+        </div>
+        <div class="ritual-step">
+            <div class="step-num">03</div>
+            <h3 class="step-title">Re-entry</h3>
+            <p class="step-desc">A guided integration session before departure. You return not with a to-do list, but with a reset nervous system.</p>
+        </div>
+    </div>
+</section>
+
+<!-- S6: Artifacts (Offerings) -->
+<section class="artifacts-section">
+    <span class="section-label">Artifacts · 05</span>
+    <div class="artifacts-grid">
+        <div class="artifact-card">
+            <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dafb38ca83408ecb9b.png" alt="">
+            <div class="artifact-info">
+                <h3 class="artifact-title">The Spring Interval</h3>
+                <p class="artifact-meta">April 12–16 · Sold Out</p>
+            </div>
+        </div>
+        <div class="artifact-card">
+            <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dabfc81f2479eeebca.png" alt="">
+            <div class="artifact-info">
+                <h3 class="artifact-title">The Autumn Interval</h3>
+                <p class="artifact-meta">October 10–14 · 3 Spots Left</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- S7: Sanctuary (Benefits) -->
+<section id="sanctuary" class="sanctuary-section">
+    <div class="sanctuary-wrap">
+        <div class="sanctuary-media">
+            <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cdf487659b8.png" alt="">
+        </div>
+        <div>
+            <span class="section-label" style="color:var(--color-primary)">Sanctuary · 06</span>
+            <h2 style="font-size:var(--t-h2);color:#fff;margin-bottom:var(--space-2xl)">All-Inclusive Reclamation</h2>
+            
+            <div class="feature-row">
+                <div class="feature-icon">+</div>
+                <div>
+                    <h4 class="feature-title">Private Accommodation</h4>
+                    <p class="feature-desc">Your own room in a restored 18th-century farmhouse.</p>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="feature-icon">+</div>
+                <div>
+                    <h4 class="feature-title">Farm-to-Table Nutrition</h4>
+                    <p class="feature-desc">Three vegetarian meals daily, prepared from local harvest.</p>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="feature-icon">+</div>
+                <div>
+                    <h4 class="feature-title">Guided Practice</h4>
+                    <p class="feature-desc">Daily meditation and somatic movement sessions.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top:var(--space-3xl)">
+                <a href="#apply" class="btn-primary" style="background:var(--color-primary)">Secure Your Spot — $6,500</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- S8: Witness (Focus Lighting) -->
+<section class="witness-hero">
+    <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png" alt="">
+    <div class="witness-content">
+        <span class="voyage-count" data-count="142">000</span>
+        <p style="font-family:var(--font-secondary);font-size:var(--t-h2);font-style:italic;color:#fff;margin-top:var(--space-lg)">"Founders have walked through these doors."</p>
+        <p style="font-size:var(--t-micro);text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,0.5);margin-top:var(--space-sm)">And left as humans again.</p>
+    </div>
+</section>
+
+<!-- S9: Echoes (Testimonials) -->
+<section class="echoes-section">
+    <div class="echoes-watermark">INTERVAL</div>
+    <div class="echoes-grid">
+        <div class="ghost-card large">
+            <p class="ghost-quote">"I haven't slept more than 4 hours a night in three years. At The Interval, I slept 9. I woke up and didn't reach for my phone. That silence saved my marriage."</p>
+            <p class="ghost-author">CTO, Fintech Unicorn</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-xl)">
+            <div class="ghost-card">
+                <p class="ghost-quote">"The hardest thing I've ever done. And the most necessary."</p>
+                <p class="ghost-author">Founder, DTC Brand</p>
+            </div>
+            <div class="ghost-card">
+                <p class="ghost-quote">"No pitches. No networking. Just being."</p>
+                <p class="ghost-author">VC Partner</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- S10: Oracle (FAQ) -->
+<section class="oracle-section">
+    <span class="section-label">Oracle · 07</span>
+    <h2 style="font-size:var(--t-h2);margin-bottom:var(--space-3xl)">Questions Before Stillness</h2>
+    
+    <div class="accordion-item">
+        <button class="accordion-trigger">
+            Is this suitable for first-time meditators?
+            <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+            <div class="accordion-inner">
+                Absolutely. The practice is guided and accessible. We focus on presence rather than perfection. Many of our guests have never meditated before.
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <button class="accordion-trigger">
+            What happens if there's an emergency?
+            <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+            <div class="accordion-inner">
+                We keep a secure line open for genuine emergencies involving family or business continuity. However, we ask that you designate a proxy to handle issues so you can fully disconnect.
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <button class="accordion-trigger">
+            Can I bring work materials?
+            <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+            <div class="accordion-inner">
+                No. The interval is a digital detox. Laptops, journals, and books are stored upon arrival. The goal is to clear the mental cache, not fill it with new input.
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <button class="accordion-trigger">
+            What is the cancellation policy?
+            <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+            <div class="accordion-inner">
+                Due to the limited capacity (8 guests), we require full payment 60 days prior. Cancellations within 30 days are non-refundable but may be transferred to a future date.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- S11: Conversion -->
+<section id="apply" class="conversion-section">
+    <span class="section-label">Application · 08</span>
+    <h2 style="font-size:var(--t-h1);margin-bottom:var(--space-lg)">Request an Invitation</h2>
+    <p style="color:var(--color-text-secondary);max-width:50ch;line-height:var(--line-normal)">Spaces are limited and vetted. Tell us why you need the silence.</p>
+    
+    <form action="{{FORM_ENDPOINT}}" method="POST" class="capture-form">
+        <input type="email" name="email" placeholder="Email Address" required class="capture-input">
+        <input type="text" name="role" placeholder="Current Role / Title" required class="capture-input">
+        <button type="submit" class="btn-primary" style="width:100%;max-width:300px;margin-top:var(--space-lg)">Submit Inquiry</button>
+    </form>
+</section>
+
+<!-- S12: Footer -->
+<footer>
+    <div>
+        <div class="footer-brand">The Interval.</div>
+        <p style="font-size:var(--t-micro);color:var(--color-text-muted);margin-top:var(--space-sm)">Alentejo, Portugal</p>
+    </div>
+    <nav class="footer-nav">
+        <a href="#" class="footer-link">Instagram</a>
+        <a href="#" class="footer-link">Manifesto</a>
+        <a href="#" class="footer-link">Contact</a>
+    </nav>
+    <div style="font-size:var(--t-micro);color:var(--color-text-muted)">© 2024 The Interval</div>
+</footer>
+
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Lenis Smooth Scroll
+    const lenis=new Lenis({duration:1.8,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+    function raf(t){lenis.raf(t);requestAnimationFrame(raf)}
+    requestAnimationFrame(raf);
+    lenis.on('scroll',ScrollTrigger.update);
+    gsap.ticker.lagSmoothing(0);
+
+    // Custom Cursor
+    const cur=document.getElementById('cursor'),fol=document.getElementById('cursor-follower');
+    document.addEventListener('mousemove',e=>{
+        gsap.to(cur,{x:e.clientX,y:e.clientY,duration:0.1});
+        gsap.to(fol,{x:e.clientX,y:e.clientY,duration:0.6,ease:'cubic-bezier(0.23,1,0.75,1)'});
+    });
+    document.querySelectorAll('a,button,input').forEach(el=>{
+        el.addEventListener('mouseenter',()=>{gsap.to(fol,{scale:1.8,duration:0.3});gsap.to(cur,{scale:0,duration:0.2})});
+        el.addEventListener('mouseleave',()=>{gsap.to(fol,{scale:1,duration:0.3});gsap.to(cur,{scale:1,duration:0.2})});
+    });
+
+    // Header Scroll State
+    const header=document.getElementById('header');
+    window.addEventListener('scroll',()=>{
+        if(window.scrollY>80)header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+    });
+
+    // Canvas Carousel
+    (function(){
+        const slides=document.querySelectorAll('.slide');
+        let cur=0;
+        function gotoSlide(n,dir){
+            const from=slides[cur],to=slides[n];
+            const tl=gsap.timeline();
+            tl.set(to,{zIndex:2,opacity:1})
+              .fromTo(to.querySelector('.visual-wrap'),
+                {clipPath:dir==='next'?'inset(0 100% 0 0)':'inset(0 0 0 100%)'},
+                {clipPath:'inset(0 0% 0 0)',duration:1.2,ease:'cubic-bezier(0.23,1,0.75,1)'})
+              .fromTo(to.querySelector('.content-wrap'),
+                {opacity:0,y:40},{opacity:1,y:0,duration:0.8,ease:'cubic-bezier(0.23,1,0.75,1)'},'-=0.6')
+              .to(from,{opacity:0,duration:0.4},'-=0.8')
+              .set(from,{zIndex:1});
+            cur=n;
+            document.getElementById('slide-cur').textContent=String(cur+1).padStart(2,'0');
+            document.querySelectorAll('.control-btn').forEach((b,i)=>{
+                b.classList.toggle('active',i===(dir==='next'?1:0));
+            });
+            if(n>0)slides[n].dataset.visited='true';
+        }
+        document.getElementById('slide-next')?.addEventListener('click',()=>gotoSlide((cur+1)%slides.length,'next'));
+        document.getElementById('slide-prev')?.addEventListener('click',()=>gotoSlide((cur-1+slides.length)%slides.length,'prev'));
+        
+        // Ken Burns
+        document.querySelectorAll('.visual-wrap img').forEach(img=>{
+            gsap.to(img,{x:'+=30px',y:'+=20px',scale:1.08,duration:25,ease:'sine.inOut',yoyo:true,repeat:-1});
+        });
+    })();
+
+    // Audio Toggle (Mock)
+    (function(){
+        const btn=document.getElementById('audio-toggle');
+        let ctx=null,running=false;
+        btn?.addEventListener('click',()=>{
+            if(!running){
+                if(!ctx)ctx=new AudioContext();
+                const buf=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);
+                const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.15;
+                const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;
+                const g=ctx.createGain();g.gain.value=0;
+                src.connect(g);g.connect(ctx.destination);src.start();
+                gsap.to(g.gain,{value:0.1,duration:1.5});running=true;
+                btn.style.opacity='1';
+            }else{
+                // Stop logic omitted for brevity in single file
+            }
+        });
+    })();
+
+    // Scroll Animations
+    gsap.to('.manifesto-quote',{y:-100,scrollTrigger:{trigger:'.lintel-section',start:'top 80%',end:'bottom top',scrub:1}});
+    
+    const mimg=document.querySelector('.memory-column-right img');
+    if(mimg)ScrollTrigger.create({trigger:'.memory-column-right',start:'top 70%',onEnter:()=>gsap.to(mimg,{filter:'grayscale(0) blur(0px)',duration:0.8,ease:'cubic-bezier(0.23,1,0.75,1)'})});
+
+    gsap.from('.ritual-step',{opacity:0,y:40,duration:1.2,stagger:0.15,ease:'cubic-bezier(0.23,1,0.75,1)',scrollTrigger:{trigger:'.ritual-grid',start:'top 80%'}});
+    
+    gsap.from('.artifact-card',{opacity:0,y:40,duration:1.2,stagger:0.2,ease:'cubic-bezier(0.23,1,0.75,1)',scrollTrigger:{trigger:'.artifacts-grid',start:'top 80%'}});
+    
+    gsap.from('.sanctuary-wrap > *',{opacity:0,y:40,duration:1.2,stagger:0.2,ease:'cubic-bezier(0.23,1,0.75,1)',scrollTrigger:{trigger:'.sanctuary-wrap',start:'top 80%'}});
+
+    gsap.from('.ghost-card',{opacity:0,y:40,duration:1.2,stagger:0.1,ease:'cubic-bezier(0.23,1,0.75,1)',scrollTrigger:{trigger:'.echoes-grid',start:'top 80%'}});
+    gsap.to('.echoes-watermark',{x:-150,scrollTrigger:{trigger:'.echoes-section',start:'top bottom',end:'bottom top',scrub:1}});
+
+    gsap.from('.accordion-item',{opacity:0,y:20,duration:0.8,stagger:0.08,ease:'cubic-bezier(0.23,1,0.75,1)',scrollTrigger:{trigger:'.oracle-section',start:'top 80%'}});
+
+    // Voyage Counter
+    document.querySelectorAll('[data-count]').forEach(el=>{
+        const t=parseFloat(el.dataset.count);
+        gsap.fromTo({v:0},{v:t,duration:3,ease:'power2.out',onUpdate:function(){el.textContent=String(Math.round(this.targets()[0].v)).padStart(3,'0')},scrollTrigger:{trigger:el,start:'top 85%',once:true}});
+    });
+
+    // Artifact Parallax
+    document.querySelectorAll('.artifact-card').forEach(card=>{
+        const img=card.querySelector('img');
+        card.addEventListener('mousemove',e=>{
+            const r=card.getBoundingClientRect();
+            const x=(e.clientX-r.left)/r.width-0.5;
+            const y=(e.clientY-r.top)/r.height-0.5;
+            gsap.to(img,{x:x*-40+'px',y:y*-40+'px',duration:0.8,ease:'power2.out'});
+        });
+        card.addEventListener('mouseleave',()=>gsap.to(img,{x:'-5%',y:'-5%',duration:0.8,ease:'power2.out'}));
+    });
+
+    // Focus Lighting
+    const hero=document.querySelector('.witness-hero');
+    if(hero){
+        hero.addEventListener('mousemove',e=>{
+            const r=hero.getBoundingClientRect();
+            hero.style.setProperty('--mouse-x',`${e.clientX-r.left}px`);
+            hero.style.setProperty('--mouse-y',`${e.clientY-r.top}px`);
+        });
+    }
+
+    // Accordion
+    document.querySelectorAll('.accordion-trigger').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const item=btn.parentElement;const content=item.querySelector('.accordion-content');
+            const isOpen=content.classList.contains('open');
+            document.querySelectorAll('.accordion-content.open').forEach(c=>{c.classList.remove('open');c.parentElement.querySelector('.accordion-icon').style.transform='rotate(0deg)'});
+            if(!isOpen){content.classList.add('open');btn.querySelector('.accordion-icon').style.transform='rotate(45deg)'}
+        });
+    });
+});
+</script>
+</body>
+</html>

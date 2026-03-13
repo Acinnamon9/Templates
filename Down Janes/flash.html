@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strong & Free | Home Fitness for Busy Moms</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --pearl:#f5f4f3;
+            --black:#211e1b;
+            --white:#ffffff;
+            --fg:#211e1b;
+            --fg-muted:#5d6c7b;
+            --border:#d4d6d8;
+            --border-light:rgba(0,0,0,0.08);
+            /* Fitness Category Accent: Warm Orange */
+            --accent:#ec6340; 
+            --accent-rgb:236, 99, 64;
+            --accent-10:rgba(236, 99, 64, 0.1);
+            --accent-20:rgba(236, 99, 64, 0.2);
+            --section-alt:#211e1b; /* Using black as alt for high contrast on fitness */
+            --shadow-card:0 4px 24px rgba(0,0,0,0.06),0 1px 4px rgba(0,0,0,0.04);
+            --shadow-hover:0 8px 40px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);
+            --navbar-bg:rgba(245,244,243,0.92);
+            --footer-bg:#211e1b;
+            --radius-card:12px;
+            --radius-pill:9999px;
+            --radius-btn:8px;
+        }
+
+        body{background:var(--pearl);color:var(--fg);font-family:'Inter',sans-serif;overflow-x:hidden}
+        
+        .dj-container{max-width:1200px;margin:0 auto;padding:0 24px}
+        
+        .overline{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:12px}
+        
+        .classy{font-family:'Playfair Display',serif;font-weight:700;line-height:1.1;letter-spacing:-0.01em}
+        .classy-80{font-size:clamp(40px,5vw,80px)}
+        .lead-text{font-size:17px;line-height:1.7;color:var(--fg-muted)}
+        
+        .bg-pearl{background:var(--pearl)}
+        .bg-black{background:var(--black)}
+        .bg-section-alt{background:var(--section-alt)}
+        
+        /* Buttons */
+        .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:15px 32px;background:var(--black);color:#fff;border:1px solid var(--black);border-radius:var(--radius-btn);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.04em;text-decoration:none;transition:all 0.25s ease;cursor:pointer}
+        .btn-primary:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 12px rgba(236, 99, 64, 0.3)}
+        .btn-accent{background:var(--accent);border-color:var(--accent)}
+        .btn-outline{background:transparent;color:var(--black);border-color:var(--black)}
+        .btn-outline:hover{background:var(--black);color:#fff}
+        .btn-outline-white{background:transparent;color:#fff;border-color:rgba(255,255,255,0.5);border-radius:var(--radius-btn);padding:15px 32px;font-size:14px;font-weight:600;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;cursor:pointer}
+        .btn-outline-white:hover{background:rgba(255,255,255,0.1);border-color:#fff}
+        
+        /* Arrow link */
+        .arrow-link{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--accent);text-decoration:none;transition:gap 0.2s}
+        .arrow-link:hover{gap:12px}
+        
+        /* Cards */
+        .dj-card{background:#fff;border-radius:var(--radius-card);box-shadow:var(--shadow-card);overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease}
+        .dj-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+        .dj-card-pearl{background:var(--pearl)}
+        
+        /* Stats */
+        .stat-number{font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,56px);font-weight:700;color:var(--accent);line-height:1}
+        .stat-label{font-size:14px;color:var(--fg-muted);margin-top:6px}
+        
+        /* Testimonial */
+        .testimonial-card{background:#fff;border-radius:var(--radius-card);padding:32px;box-shadow:var(--shadow-card)}
+        .testimonial-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover}
+        .star-row img{height:20px;width:auto}
+
+        /* Bento Grid System */
+        .aura-hero-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:8px;width:100%;aspect-ratio:1/1}
+        .aura-box{position:relative;overflow:hidden;border-radius:6px;display:flex;align-items:center;justify-content:center}
+        .aura-box img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+        .aura-box:hover img{transform:scale(1.05)}
+
+        /* Navbar */
+        #navbar{transition:all 0.3s ease}
+        #navbar.scrolled{background:var(--navbar-bg);backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--border-light)}
+        
+        /* Mobile Nav */
+        #nav-drawer{display:none;flex-direction:column;padding:24px;background:var(--pearl);position:absolute;top:100%;left:0;right:0;z-index:998}
+        #nav-drawer a{padding:16px 0;border-bottom:1px solid var(--border-light);font-size:18px}
+
+        @media (max-width: 768px) {
+            .aura-hero-grid { display: none; }
+            .hero-split { grid-template-columns: 1fr !important; gap: 40px; text-align: center; }
+            .hero-split .cta-group { justify-content: center; }
+            .hero-social-proof { justify-content: center; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-orange-200 selection:text-orange-900">
+
+    <!-- S1: Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-999 py-6 transition-all duration-300">
+        <div class="dj-container flex items-center justify-between">
+            <a href="#" class="text-2xl font-bold tracking-tight text-black" style="font-family:'Playfair Display'">
+                Strong <span style="color:var(--accent)">&</span> Free
+            </a>
+            
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#program" class="text-sm font-medium hover:text-[var(--accent)] transition-colors">The Program</a>
+                <a href="#results" class="text-sm font-medium hover:text-[var(--accent)] transition-colors">Results</a>
+                <a href="#about" class="text-sm font-medium hover:text-[var(--accent)] transition-colors">About Sarah</a>
+                <a href="#pricing" class="btn-primary text-xs px-6 py-3">Join Now</a>
+            </div>
+
+            <button id="nav-toggle" class="md:hidden flex-col gap-1.5 w-8 h-6 justify-center items-center cursor-pointer z-1000">
+                <span class="block w-full h-0.5 bg-black transition-all duration-300"></span>
+                <span class="block w-full h-0.5 bg-black transition-all duration-300"></span>
+                <span class="block w-full h-0.5 bg-black transition-all duration-300"></span>
+            </button>
+        </div>
+        
+        <div id="nav-drawer" class="absolute top-0 left-0 w-full h-screen overflow-y-auto">
+            <a href="#program">The Program</a>
+            <a href="#results">Results</a>
+            <a href="#about">About</a>
+            <a href="#pricing" class="mt-4 block text-center btn-primary w-full justify-center">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- S2: Hero -->
+    <section class="pt-32 pb-20 lg:pt-40 lg:pb-32 relative overflow-hidden">
+        <div class="dj-container">
+            <div class="hero-split grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left Column -->
+                <div class="fade-up">
+                    <p class="overline mb-4">Fitness for Real Life</p>
+                    <h1 class="classy classy-80 leading-tight mb-6 text-[var(--black)]">
+                        Build strength,<br>
+                        <em>find freedom,</em><br>
+                        from your living room.
+                    </h1>
+                    <p class="lead-text mb-8 max-w-md">
+                        No gym membership required. We help busy moms reclaim their energy and build lean muscle in just 30 minutes a day.
+                    </p>
+                    
+                    <div class="cta-group flex flex-wrap gap-4 items-center">
+                        <a href="#pricing" class="btn-primary">Start Your Journey</a>
+                        <a href="#about" class="arrow-link">Meet Sarah &rarr;</a>
+                    </div>
+
+                    <div class="mt-10 flex items-center gap-4 hero-social-proof opacity-0 fade-up-delay">
+                        <img src="https://templates-kappa-two.vercel.app/Resources/images/hero_clients.webp" alt="Happy clients" class="w-12 h-12 -ml-3 border-2 border-white rounded-full object-cover shadow-sm">
+                        <img src="https://templates-kappa-two.vercel.app/Resources/images/hero_clients.webp" alt="Happy clients" class="w-12 h-12 -ml-3 border-2 border-white rounded-full object-cover shadow-sm">
+                        <img src="https://templates-kappa-two.vercel.app/Resources/images/hero_clients.webp" alt="Happy clients" class="w-12 h-12 -ml-3 border-2 border-white rounded-full object-cover shadow-sm">
+                        <img src="https://templates-kappa-two.vercel.app/Resources/images/hero_clients.webp" alt="Happy clients" class="w-12 h-12 -ml-3 border-2 border-white rounded-full object-cover shadow-sm">
+                        <div class="text-sm ml-2">
+                            <strong class="text-black">1,200+</strong> moms transformed
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Bento Grid -->
+                <div class="relative fade-up-delay hidden lg:block">
+                    <div class="aura-hero-grid shadow-2xl">
+                        <!-- Top Row -->
+                        <div class="aura-box" style="grid-area:1/2;background:var(--accent-10);"></div>
+                        <div class="aura-box" style="grid-area:1/4/3/5"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=800" alt="Mom lifting weights"></div>
+                        
+                        <!-- Middle Row -->
+                        <div class="aura-box" style="grid-area:2/1"><img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&q=80&w=800" alt="Healthy breakfast"></div>
+                        <div class="aura-box" style="grid-area:2/2;background:var(--accent-20)"></div>
+                        
+                        <!-- Bottom Section -->
+                        <div class="aura-box" style="grid-area:3/1;background:var(--accent-20)"></div>
+                        <div class="aura-box" style="grid-area:3/2/5/4"><img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&q=80&w=800" alt="Woman stretching at home"></div>
+                        <div class="aura-box" style="grid-area:3/4;background:var(--pearl)"></div>
+                        
+                        <!-- Footer of Grid -->
+                        <div class="aura-box" style="grid-area:4/1;background:var(--black)"></div>
+                        <div class="aura-box" style="grid-area:4/4"><img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&q=80&w=800" alt="Measuring tape"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S3: Social Proof Strip -->
+    <section class="py-10 border-b border-gray-200">
+        <div class="dj-container">
+            <p class="text-center text-xs uppercase tracking-widest text-gray-400 mb-8">Featured In</p>
+            <div class="flex flex-wrap justify-center items-center gap-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                <img src="https://templates-kappa-two.vercel.app/Resources/images/logo_wapo.svg" alt="Washington Post" class="h-6">
+                <img src="https://templates-kappa-two.vercel.app/Resources/images/logo_yahoo_finance.svg" alt="Yahoo Finance" class="h-6">
+                <img src="https://templates-kappa-two.vercel.app/Resources/images/logo_insider.svg" alt="Insider" class="h-6">
+                <img src="https://templates-kappa-two.vercel.app/Resources/images/logo_medium.svg" alt="Medium" class="h-6">
+            </div>
+        </div>
+    </section>
+
+    <!-- S4: Programs / Offerings -->
+    <section id="program" class="py-24 bg-pearl">
+        <div class="dj-container">
+            <div class="text-center max-w-2xl mx-auto mb-16 fade-up">
+                <p class="overline">Choose Your Path</p>
+                <h2 class="classy text-4xl md:text-5xl mb-4">How we can work together</h2>
+                <p class="lead-text">Whether you need a roadmap or a hand to hold, there's a plan designed for your schedule and goals.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="dj-card p-8 flex flex-col fade-up">
+                    <span class="overline mb-2">Self-Guided</span>
+                    <h3 class="classy text-2xl mb-4">The Membership</h3>
+                    <ul class="space-y-3 mb-8 flex-grow text-sm text-gray-600">
+                        <li class="flex gap-2"><span>&#10003;</span> Access to 100+ workout videos</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Monthly nutrition guides</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Private community support</li>
+                        <li class="flex gap-2"><span>&#10003;</span> New workouts added weekly</li>
+                    </ul>
+                    <a href="#" class="btn-outline w-full justify-center mt-auto">View Membership</a>
+                </div>
+
+                <!-- Card 2 (Popular) -->
+                <div class="dj-card p-8 border-2 border-[var(--accent)] relative transform scale-105 shadow-xl fade-up" style="z-index:1">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--accent)] text-white text-xs font-bold px-3 py-1 uppercase tracking-wide">Most Popular</div>
+                    <span class="overline mb-2">Coaching</span>
+                    <h3 class="classy text-2xl mb-4">12-Week Transformation</h3>
+                    <ul class="space-y-3 mb-8 flex-grow text-sm text-gray-600">
+                        <li class="flex gap-2"><span>&#10003;</span> Personalized workout plan</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Weekly check-in calls</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Customized meal strategy</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Direct WhatsApp access</li>
+                    </ul>
+                    <a href="#" class="btn-primary w-full justify-center mt-auto">Apply Now</a>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="dj-card p-8 flex flex-col fade-up">
+                    <span class="overline mb-2">Education</span>
+                    <h3 class="classy text-2xl mb-4">Strength Guide</h3>
+                    <ul class="space-y-3 mb-8 flex-grow text-sm text-gray-600">
+                        <li class="flex gap-2"><span>&#10003;</span> PDF eBook format</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Equipment-free exercises</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Grocery shopping list</li>
+                        <li class="flex gap-2"><span>&#10003;</span> Lifetime access</li>
+                    </ul>
+                    <a href="#" class="btn-outline w-full justify-center mt-auto">Get the Guide ($29)</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S5: Quiz / Lead Magnet CTA -->
+    <section class="py-24 bg-pearl">
+        <div class="dj-container">
+            <div class="dj-card bg-white p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center shadow-xl">
+                <!-- Visual Mockup -->
+                <div class="order-2 md:order-1 flex justify-center fade-up">
+                    <div style="background:var(--pearl);border-radius:24px;padding:32px;max-width:280px;box-shadow:0 10px 30px rgba(0,0,0,0.05)">
+                        <div class="mb-6 text-center"><span class="text-4xl">👋</span></div>
+                        <div style="background:#fff;border-radius:8px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)">
+                            <div style="width:20px;height:20px;border-radius:4px;border:2px solid var(--border)"></div>
+                            <div style="height:10px;background:var(--border);border-radius:4px;flex:1"></div>
+                        </div>
+                        <div style="background:#fff;border-radius:8px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)">
+                            <div style="width:20px;height:20px;border-radius:4px;background:var(--accent)"></div>
+                            <div style="height:10px;background:var(--border);border-radius:4px;flex:1"></div>
+                        </div>
+                        <div style="background:#fff;border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-card)">
+                            <div style="width:20px;height:20px;border-radius:4px;border:2px solid var(--border)"></div>
+                            <div style="height:10px;background:var(--border);border-radius:4px;flex:1"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Copy -->
+                <div class="order-1 md:order-2 fade-up">
+                    <p class="overline">Free Assessment</p>
+                    <h3 class="classy text-3xl md:text-4xl mb-4">Curious where you stand?</h3>
+                    <p class="lead-text mb-8">Take our 2-minute quiz to find out which program fits your lifestyle best and get a free sample workout plan sent to your inbox.</p>
+                    <a href="#" class="btn-accent inline-block">Take the Quiz &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S6: Social Proof Grid -->
+    <section id="results" class="py-24 bg-pearl">
+        <div class="dj-container">
+            <div class="text-center mb-16 fade-up">
+                <p class="overline">Real Stories</p>
+                <h2 class="classy text-4xl mb-4">Moms who found their strength</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 testimonial-grid">
+                <!-- Review 1 -->
+                <div class="testimonial-card fade-up">
+                    <div class="star-row mb-4"><img src="https://templates-kappa-two.vercel.app/Resources/images/star_rating.svg" alt="5 stars"></div>
+                    <p class="italic text-lg mb-6">"I thought I'd never fit into my jeans again after baby #2. The 'no-gym' approach was exactly what I needed because I'm terrified of gyms."</p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_ivy.avif" alt="Client" class="testimonial-avatar">
+                        <div>
+                            <div class="font-bold text-sm">Sarah Jenkins</div>
+                            <div class="text-xs text-gray-500">Lost 18lbs in 12 weeks</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="testimonial-card fade-up">
+                    <div class="star-row mb-4"><img src="https://templates-kappa-two.vercel.app/Resources/images/star_rating.svg" alt="5 stars"></div>
+                    <p class="italic text-lg mb-6">"The accountability was everything. Knowing Sarah was checking in made me actually show up when I wanted to hit snooze."</p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_marianne.avif" alt="Client" class="testimonial-avatar">
+                        <div>
+                            <div class="font-bold text-sm">Marianne D.</div>
+                            <div class="text-xs text-gray-500">Recovering mom of 3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="testimonial-card fade-up">
+                    <div class="star-row mb-4"><img src="https://templates-kappa-two.vercel.app/Resources/images/star_rating.svg" alt="5 stars"></div>
+                    <p class="italic text-lg mb-6">"I finally understand how to eat without starving myself. It's not about perfection, it's about consistency."</p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_katherine.avif" alt="Client" class="testimonial-avatar">
+                        <div>
+                            <div class="font-bold text-sm">Katie R.</div>
+                            <div class="text-xs text-gray-500">Gained confidence + lost inches</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S7: Approach / Philosophy -->
+    <section id="about" class="py-24 bg-section-alt">
+        <div class="dj-container">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Text -->
+                <div class="fade-up">
+                    <p class="overline text-white/60">The Philosophy</p>
+                    <h2 class="classy text-4xl md:text-5xl text-white mb-6">Stop trying to be perfect.<br>Start being strong.</h2>
+                    <p class="text-white/80 mb-6">
+                        Most programs are built for people with 2 hours a day. They aren't built for you. You have toddlers, spreadsheets, and laundry that never ends.
+                    </p>
+                    <p class="text-white/80 mb-8">
+                        At Strong & Free, we focus on <strong>sustainable habits</strong> over quick fixes. We use progressive overload principles adapted for small spaces, ensuring you see results without burning out.
+                    </p>
+                    <div class="flex gap-4 text-sm font-semibold text-white/90">
+                        <span class="flex items-center gap-2"><span style="color:var(--accent)">✓</span> Science-backed</span>
+                        <span class="flex items-center gap-2"><span style="color:var(--accent)">✓</span> Kid-friendly timing</span>
+                        <span class="flex items-center gap-2"><span style="color:var(--accent)">✓</span> No starvation diets</span>
+                    </div>
+                </div>
+
+                <!-- Right Stacked Cards -->
+                <div class="relative h-[400px] fade-up">
+                    <!-- Card 1 -->
+                    <div class="absolute top-0 left-0 w-full dj-card p-6 z-30 bg-white shadow-xl">
+                        <div class="text-3xl mb-2">💪</div>
+                        <h4 class="classy text-xl mb-1">Functional Strength</h4>
+                        <p class="text-sm text-gray-600">Exercises that make carrying groceries easier.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="absolute top-10 left-10 w-full dj-card p-6 z-20 bg-white shadow-xl">
+                        <div class="text-3xl mb-2">🥗</div>
+                        <h4 class="classy text-xl mb-1">Flexible Nutrition</h4>
+                        <p class="text-sm text-gray-600">Learn to fuel your body, not restrict it.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="absolute top-20 left-20 w-full dj-card p-6 z-10 bg-white shadow-xl">
+                        <div class="text-3xl mb-2">🧠</div>
+                        <h4 class="classy text-xl mb-1">Mindset Shift</h4>
+                        <p class="text-sm text-gray-600">Build the confidence to prioritize yourself.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S8: Content / Media -->
+    <section class="py-24 bg-pearl">
+        <div class="dj-container">
+            <div class="text-center mb-16 fade-up">
+                <p class="overline">Resources</p>
+                <h2 class="classy text-4xl">Free tools to get you started</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 content-grid mb-12">
+                <!-- Item 1 -->
+                <div class="dj-card group fade-up">
+                    <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?auto=format&fit=crop&q=80&w=800" class="h-56 w-full object-cover" alt="Workout">
+                    <div class="p-6">
+                        <p class="overline mb-2">Video Series</p>
+                        <h4 class="classy text-xl mb-2 group-hover:text-[var(--accent)] transition-colors">15-Minute Morning Mobility</h4>
+                        <a href="#" class="arrow-link">Watch now &rarr;</a>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="dj-card group fade-up">
+                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800" class="h-56 w-full object-cover" alt="Food">
+                    <div class="p-6">
+                        <p class="overline mb-2">Blog Post</p>
+                        <h4 class="classy text-xl mb-2 group-hover:text-[var(--accent)] transition-colors">5 Pantry Staples for Busy Moms</h4>
+                        <a href="#" class="arrow-link">Read guide &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Feature -->
+            <div class="dj-card bg-white p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center shadow-xl fade-up">
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800" class="rounded-xl shadow-lg" alt="Lifting weights">
+                </div>
+                <div class="md:w-1/2">
+                    <p class="overline mb-2">New Release</p>
+                    <h3 class="classy text-3xl mb-4">The "No-Equipment" Challenge</h3>
+                    <p class="lead-text mb-6">Can't find time to go to the gym? Join our 30-day challenge using only your bodyweight. Perfect for beginners and pros alike.</p>
+                    <a href="#" class="btn-primary">Join the Challenge</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S9: Testimonial Slider (Stubbed per token protocol if needed, but included here as full implementation for this specific request context) -->
+    <section class="py-24 bg-black text-white">
+        <div class="dj-container">
+            <div class="text-center mb-12">
+                <p class="overline text-[var(--accent)]">Testimonials</p>
+                <h2 class="classy text-4xl">Don't just take our word for it</h2>
+            </div>
+            
+            <div class="relative overflow-hidden" id="slider-wrapper">
+                <div class="flex transition-transform duration-500 ease-out" id="slider-track">
+                    <!-- Slide 1 -->
+                    <div class="slide min-w-full flex justify-center items-center px-4">
+                        <div class="max-w-3xl text-center">
+                            <p class="text-2xl md:text-4xl font-serif italic leading-relaxed mb-8">"I've tried every diet under the sun. This isn't a diet. It's a lifestyle change that finally stuck. I feel stronger than I did in my 20s."</p>
+                            <div class="flex items-center justify-center gap-4">
+                                <img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_rebecca.avif" class="w-12 h-12 rounded-full border-2 border-[var(--accent)]" alt="User">
+                                <div class="text-left">
+                                    <div class="font-bold">Rebecca T.</div>
+                                    <div class="text-sm text-gray-400">Mother of two, Teacher</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="slide min-w-full flex justify-center items-center px-4">
+                        <div class="max-w-3xl text-center">
+                            <p class="text-2xl md:text-4xl font-serif italic leading-relaxed mb-8">"The flexibility is unmatched. If I miss a morning workout, I can do it at night. The program adapts to ME, not the other way around."</p>
+                            <div class="flex items-center justify-center gap-4">
+                                <img src="https://templates-kappa-two.vercel.app/Resources/images/avatar_ivy.avif" class="w-12 h-12 rounded-full border-2 border-[var(--accent)]" alt="User">
+                                <div class="text-left">
+                                    <div class="font-bold">Emily S.</div>
+                                    <div class="text-sm text-gray-400">Entrepreneur</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Controls -->
+                <button id="slider-prev" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white transition-colors">&larr;</button>
+                <button id="slider-next" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white transition-colors">&rarr;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- S10: Stats -->
+    <section class="py-24 bg-pearl">
+        <div class="dj-container">
+            <div class="text-center mb-16 fade-up">
+                <p class="overline">By The Numbers</p>
+                <h2 class="classy text-4xl">Impact so far</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 stats-grid">
+                <div class="text-center fade-up">
+                    <div class="stat-number" data-count="1200">0</div>
+                    <div class="stat-label">Moms Helped</div>
+                </div>
+                <div class="text-center fade-up">
+                    <div class="stat-number" data-count="50">0</div>
+                    <div class="stat-label">Programs Created</div>
+                </div>
+                <div class="text-center fade-up">
+                    <div class="stat-number" data-count="15">0</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="text-center fade-up">
+                    <div class="stat-number" data-count="98">0</div>
+                    <div class="stat-label">% Satisfaction</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="dj-card-pearl p-8 text-center fade-up">
+                    <div class="text-4xl mb-4">🏠</div>
+                    <h4 class="classy text-xl mb-2">Home Workouts</h4>
+                    <p class="text-sm text-gray-600">No equipment necessary.</p>
+                </div>
+                <div class="dj-card-pearl p-8 text-center fade-up">
+                    <div class="text-4xl mb-4">⏱️</div>
+                    <h4 class="classy text-xl mb-2">Time Efficient</h4>
+                    <p class="text-sm text-gray-600">Under 45 mins/day.</p>
+                </div>
+                <div class="dj-card-pearl p-8 text-center fade-up">
+                    <div class="text-4xl mb-4">❤️</div>
+                    <h4 class="classy text-xl mb-2">Supportive Community</h4>
+                    <p class="text-sm text-gray-600">Never train alone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- S11: Final CTA -->
+    <section class="py-24 bg-section-alt text-white">
+        <div class="dj-container text-center fade-up">
+            <p class="overline text-white/60 mb-4">Ready to start?</p>
+            <h2 class="classy text-4xl md:text-5xl mb-6">Your strongest self is waiting.</h2>
+            <p class="text-white/80 mb-10 max-w-xl mx-auto">Join the waitlist today and get our free "7-Day Jumpstart" guide delivered to your inbox.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#" class="btn-primary bg-white text-black border-white hover:bg-gray-200">Get Started Now</a>
+                <a href="#" class="btn-outline-white">Download Free Guide</a>
+            </div>
+            
+            <div class="mt-8 flex justify-center gap-6 text-sm text-white/60">
+                <span class="flex items-center gap-2"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg> Cancel anytime</span>
+                <span class="flex items-center gap-2"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg> Money-back guarantee</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- S12: Footer -->
+    <footer class="bg-[var(--footer-bg)] text-white pt-20 pb-10 border-t border-white/10">
+        <div class="dj-container">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-1">
+                    <a href="#" class="text-2xl font-bold tracking-tight text-white" style="font-family:'Playfair Display'">
+                        Strong <span style="color:var(--accent)">&</span> Free
+                    </a>
+                    <p class="text-white/60 text-sm mt-4">Empowering busy moms to build strength, lose weight, and live freely from home.</p>
+                    <div class="flex gap-4 mt-6">
+                        <a href="#" class="text-white/60 hover:text-white transition-colors">IG</a>
+                        <a href="#" class="text-white/60 hover:text-white transition-colors">FB</a>
+                        <a href="#" class="text-white/60 hover:text-white transition-colors">TT</a>
+                    </div>
+                </div>
+                
+                <!-- Links 1 -->
+                <div>
+                    <h5 class="overline text-white/50 mb-6">Programs</h5>
+                    <ul class="space-y-3 text-sm text-white/70">
+                        <li><a href="#" class="hover:text-white transition-colors">12-Week Coaching</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Monthly Membership</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Free Guide</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links 2 -->
+                <div>
+                    <h5 class="overline text-white/50 mb-6">Company</h5>
+                    <ul class="space-y-3 text-sm text-white/70">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Success Stories</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h5 class="overline text-white/50 mb-6">Stay Connected</h5>
+                    <p class="text-white/60 text-sm mb-4">Join 10,000+ subscribers.</p>
+                    <form action="{{FORM_ENDPOINT}}" method="POST" class="flex gap-2">
+                        <input type="email" placeholder="Email address" class="bg-white/5 border border-white/10 rounded px-4 py-2 text-sm w-full focus:outline-none focus:border-[var(--accent)]">
+                        <button type="submit" class="btn-accent px-4 py-2 rounded text-sm whitespace-nowrap">Join</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-white/40">
+                <p>&copy; 2023 Strong & Free Coaching. All rights reserved.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white">Privacy Policy</a>
+                    <a href="#" class="hover:text-white">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Register ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+
+            // --- Animations ---
+            
+            // Fade Up Helper
+            const fadeUp = (selector, delay = 0) => {
+                document.querySelectorAll(selector).forEach(el => {
+                    gsap.fromTo(el, 
+                        { opacity: 0, y: 40 }, 
+                        { 
+                            opacity: 1, 
+                            y: 0, 
+                            duration: 0.8, 
+                            ease: 'power2.out', 
+                            scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' },
+                            delay: delay
+                        }
+                    );
+                });
+            };
+
+            // Apply animations
+            fadeUp('.fade-up');
+            fadeUp('.fade-up-delay', 0.2);
+            fadeUp('.stats-grid > div', 0.1);
+
+            // Stagger Cards
+            gsap.from('.testimonial-grid .testimonial-card', {
+                scrollTrigger: { trigger: '.testimonial-grid', start: 'top 80%' },
+                y: 40, opacity: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out'
+            });
+
+            // Counters
+            const counters = () => {
+                document.querySelectorAll('[data-count]').forEach(el => {
+                    const target = parseFloat(el.dataset.count);
+                    gsap.to({ val: 0 }, {
+                        val: target,
+                        duration: 2,
+                        ease: 'power2.out',
+                        onUpdate: function() {
+                            el.textContent = Math.round(this.targets()[0].val).toLocaleString();
+                        },
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top 85%',
+                            once: true
+                        }
+                    });
+                });
+            };
+            // Trigger counters manually via ScrollTrigger or simple intersection
+            gsap.to({}, {scrollTrigger: {trigger: ".stats-grid", start: "top 70%", onEnter: counters}});
+
+
+            // --- Interactions ---
+
+            // Navbar Scroll Effect
+            const nav = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 60) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            // Mobile Menu Toggle
+            const btn = document.getElementById('nav-toggle');
+            const drawer = document.getElementById('nav-drawer');
+            if(btn && drawer) {
+                btn.addEventListener('click', () => {
+                    const isOpen = drawer.style.display === 'flex';
+                    drawer.style.display = isOpen ? 'none' : 'flex';
+                    if(!isOpen) {
+                        gsap.fromTo(drawer, {opacity: 0, y: -10}, {opacity: 1, y: 0, duration: 0.3});
+                    }
+                });
+            }
+
+            // Testimonial Slider
+            const track = document.getElementById('slider-track');
+            if(track) {
+                let cur = 0;
+                const slides = track.querySelectorAll('.slide');
+                const total = slides.length;
+                
+                const go = (n) => {
+                    cur = (n + total) % total;
+                    track.style.transform = `translateX(-${cur * 100}%)`;
+                };
+
+                document.getElementById('slider-prev')?.addEventListener('click', () => go(cur - 1));
+                document.getElementById('slider-next')?.addEventListener('click', () => go(cur + 1));
+                
+                // Auto slide
+                setInterval(() => go(cur + 1), 5000);
+            }
+
+            // Cursor Dot (Optional polish)
+            const c = document.createElement('div');
+            c.style.cssText = 'position:fixed;width:10px;height:10px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:99999;opacity:0.5;transform:translate(-50%,-50%);transition:transform 0.15s ease';
+            document.body.appendChild(c);
+            document.addEventListener('mousemove', e => {
+                c.style.left = e.clientX + 'px';
+                c.style.top = e.clientY + 'px';
+            });
+            document.querySelectorAll('a, button').forEach(el => {
+                el.addEventListener('mouseenter', () => c.style.transform = 'translate(-50%, -50%) scale(2.5)');
+                el.addEventListener('mouseleave', () => c.style.transform = 'translate(-50%, -50%) scale(1)');
+            });
+        });
+    </script>
+</body>
+</html>

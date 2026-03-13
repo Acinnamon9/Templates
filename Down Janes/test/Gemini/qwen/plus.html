@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strong & Free | Somatic Governance</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 
+         * AURA HERITAGE THEME 2: BIOLOGICAL CAPITAL 
+         * Palette: Deep Forest, Sharp Blue, Stark White
+         */
+        :root {
+            --black: #0F2A1D;       /* Deep Forest Green */
+            --hotshot: #4A90E2;     /* Sharp Blue */
+            --hotshot-10: #EEF4FA;  /* Blue Tint */
+            --pearl: #F4F6F5;       /* Stark White/Gray */
+            --white: #FFFFFF;
+            --mdy-light: #5A2A82;   /* Deep Violet */
+            
+            --gray-light: #D4D6D8;
+            --gray-dark: #828282;
+            --button-corner: 0px; 
+            
+            /* Fallback to Playfair Display if Editor's Note fails, but prioritizing the requested aesthetic */
+            --font-display: 'Editor\'s Note', 'Playfair Display', serif;
+            --font-main: 'Inter', sans-serif;
+            --compact: 1.1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: var(--font-main); 
+            color: var(--black); 
+            background: var(--pearl); 
+            line-height: 1.6; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, .brand-font { 
+            font-family: var(--font-display); 
+            font-weight: 400; 
+            line-height: var(--compact); 
+            color: var(--black); 
+        }
+
+        /* Utilities */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+        .section { padding: 100px 0; }
+        .bg-white { background-color: var(--white); }
+        .bg-pearl { background-color: var(--pearl); }
+        .text-center { text-align: center; }
+        
+        /* Dark Section Override */
+        .dark-section { 
+            background: var(--black); 
+            color: var(--white); 
+        }
+        .dark-section h1, .dark-section h2, .dark-section h3 { 
+            color: var(--hotshot); 
+        }
+        .dark-section p {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 16px 32px;
+            background-color: var(--black);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border: 1px solid var(--black);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .button:hover { 
+            background-color: transparent; 
+            color: var(--black); 
+        }
+        .button.outline { 
+            background-color: transparent; 
+            color: var(--black); 
+        }
+        .button.outline:hover { 
+            background-color: var(--black); 
+            color: var(--white); 
+        }
+        .button.gold { 
+            background-color: var(--hotshot); 
+            color: var(--white); 
+            border-color: var(--hotshot); 
+        }
+        .button.gold:hover { 
+            background-color: var(--black); 
+            border-color: var(--black); 
+        }
+
+        /* 
+         * THE 4x4 BENTO GRID (CRITICAL)
+         * Rigid structure. No deviation.
+         */
+        .aura-hero-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: transparent;
+        }
+        .aura-box {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .aura-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+        .aura-box:hover img {
+            transform: scale(1.05); /* Signature hover effect */
+        }
+        
+        /* Responsive constraints for Grid */
+        @media (max-width: 991px) {
+            .aura-hero-grid { 
+                max-height: 600px; 
+                aspect-ratio: auto; 
+                grid-template-rows: repeat(4, 150px);
+            }
+            header .container {
+                flex-direction: column;
+            }
+            header .container > div {
+                max-width: 100% !important;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- A. Alert Bar & Navbar -->
+    <div style="background: var(--hotshot); color: var(--white); text-align: center; padding: 12px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700;">
+        ADVISORY: ENROLLMENT FOR Q2 PROTOCOLS CLOSES IN 48 HOURS.
+    </div>
+    <nav style="padding: 30px 5%; display: flex; justify-content: space-between; align-items: center; background: var(--pearl); border-bottom: 1px solid rgba(0,0,0,0.05);">
+        <div style="font-family: var(--font-display); font-size: 24px; letter-spacing: 1px; font-weight: 600;">STRONG & FREE</div>
+        <div style="display: flex; gap: 40px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;">
+            <a href="#manifesto" style="text-decoration: none; color: inherit;">Philosophy</a>
+            <a href="#protocol" style="text-decoration: none; color: inherit;">The Protocol</a>
+            <a href="#apply" style="text-decoration: none; color: var(--hotshot);">Client Portal</a>
+        </div>
+    </nav>
+
+    <!-- B. The 4x4 Hero Section -->
+    <header class="section bg-white">
+        <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 40px;">
+            <!-- Left Column: Copy -->
+            <div style="flex: 1; min-width: 300px; max-width: 500px;">
+                <div style="text-transform: uppercase; letter-spacing: 3px; font-size: 12px; font-weight: 600; color: var(--hotshot); margin-bottom: 20px;">SOMATIC GOVERNANCE</div>
+                <h1 style="font-size: clamp(3rem, 5vw, 4.5rem); margin-bottom: 30px;">Reclaim Your Biological Capital.</h1>
+                <p style="font-size: 18px; margin-bottom: 40px; color: var(--gray-dark);">
+                    Most wellness programs treat symptoms. We engineer structural integrity. 
+                    For the woman who has exhausted conventional methods, Strong & Free offers a sovereign approach to metabolic restoration and strength architecture—executed entirely within your domestic sphere.
+                </p>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <a href="#apply" class="button">Initiate Protocol</a>
+                    <a href="#manifesto" class="button outline">Read Manifesto</a>
+                </div>
+            </div>
+            
+            <!-- Right Column: The Mandatory Grid -->
+            <div style="flex: 1; min-width: 300px; max-width: 550px;">
+                <div class="aura-hero-grid">
+                    <!-- Ghost/Negative Space Tiles -->
+                    <div class="aura-box" style="grid-area: 1 / 2; background: var(--pearl);"></div>
+                    <div class="aura-box" style="grid-area: 2 / 2; background: var(--hotshot-10);"></div>
+                    <div class="aura-box" style="grid-area: 3 / 1; background: var(--mdy-light);"></div>
+                    <div class="aura-box" style="grid-area: 3 / 4; background: var(--pearl);"></div>
+                    <div class="aura-box" style="grid-area: 4 / 1; background: var(--black);"></div>
+
+                    <!-- Image Tiles (Using Theme 2: Biohacking Assets) -->
+                    <!-- Vertical Asset -->
+                    <div class="aura-box" style="grid-area: 1 / 4 / 3 / 5;">
+                        <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png" alt="Vertical Strength Asset"/>
+                    </div>
+                    <!-- Square Asset -->
+                    <div class="aura-box" style="grid-area: 2 / 1;">
+                        <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png" alt="Square Focus Asset"/>
+                    </div>
+                    <!-- Large Spotlight Asset -->
+                    <div class="aura-box" style="grid-area: 3 / 2 / 5 / 4;">
+                        <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png" alt="Large Movement Asset"/>
+                    </div>
+                    <!-- Bottom Square Asset -->
+                    <div class="aura-box" style="grid-area: 4 / 4;">
+                        <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png" alt="Detail Asset"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- C. The Manifesto -->
+    <section id="manifesto" class="section bg-pearl text-center" style="padding: 120px 5%; text-align: center;">
+        <h2 style="font-size: clamp(2rem, 4vw, 3.5rem); max-width: 900px; margin: 0 auto 30px auto; line-height: 1.2;">
+            You deserve the resilience of a sovereign entity, not the fatigue of a servant.
+        </h2>
+        <p style="max-width: 800px; margin: 0 auto; font-size: 18px; color: var(--gray-dark);">
+            The modern maternal archetype is built on depletion. We reject this governance. 
+            Strong & Free builds the architecture of attendance for your most valuable asset: your physiology.
+        </p>
+    </section>
+
+    <!-- D. The Sticky 3-Step Process -->
+    <section id="protocol" class="section bg-white">
+        <div class="container" style="display: flex; flex-wrap: wrap; gap: 60px;">
+            <!-- Sticky Sidebar -->
+            <div style="flex: 1; min-width: 300px;">
+                <div style="position: sticky; top: 120px;">
+                    <h2 style="font-size: 60px; margin-bottom: 30px;">3 Steps to Reconstruction</h2>
+                    <p style="margin-bottom: 40px; color: var(--gray-dark);">
+                        Our methodology bypasses the noise of trend-based fitness. We utilize a tri-phasic approach to permanent somatic change.
+                    </p>
+                    <a href="#apply" class="button">Access Protocol</a>
+                </div>
+            </div>
+            
+            <!-- Scrolling Steps -->
+            <div style="flex: 1.5; min-width: 300px; padding-top: 20px;">
+                <!-- Step 1 -->
+                <div style="display: flex; gap: 30px; margin-bottom: 80px;">
+                    <div style="font-family: var(--font-display); font-size: 32px; border: 1px solid var(--black); border-radius: 50%; min-width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">1</div>
+                    <div>
+                        <h3 style="font-size: 28px; margin-bottom: 15px;">Diagnostic Audit.</h3>
+                        <p style="color: var(--gray-dark);">We analyze your current metabolic baseline and lifestyle constraints. No gym required. We identify the friction points causing stagnation in your current routine.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div style="display: flex; gap: 30px; margin-bottom: 80px;">
+                    <div style="font-family: var(--font-display); font-size: 32px; border: 1px solid var(--black); border-radius: 50%; min-width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">2</div>
+                    <div>
+                        <h3 style="font-size: 28px; margin-bottom: 15px;">Architectural Deployment.</h3>
+                        <p style="color: var(--gray-dark);">Implementation of the 12-week strength framework. Customized nutrition protocols that fuel performance without restriction. Executed from your living room with minimal equipment.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div style="display: flex; gap: 30px;">
+                    <div style="font-family: var(--font-display); font-size: 32px; border: 1px solid var(--black); border-radius: 50%; min-width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">3</div>
+                    <div>
+                        <h3 style="font-size: 28px; margin-bottom: 15px;">Sovereign Maintenance.</h3>
+                        <p style="color: var(--gray-dark);">Transition into our monthly membership or 1:1 stewardship. You retain full autonomy over your health, supported by continuous expert oversight and community governance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- E. Immersive Final CTA -->
+    <section id="apply" class="section dark-section" style="text-align: center; background-color: var(--black); color: var(--white); padding: 140px 5%;">
+        <h2 style="font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 40px; max-width: 900px; margin-left: auto; margin-right: auto;">
+            Join our advisory to take control of your biological future.
+        </h2>
+        <p style="margin-bottom: 50px; font-size: 18px; opacity: 0.8;">Applications for 1:1 coaching and the Q2 cohort are now open.</p>
+        <a href="#" class="button gold">Apply for Access</a>
+    </section>
+
+    <footer style="background: var(--pearl); padding: 40px 5%; border-top: 1px solid rgba(0,0,0,0.05); text-align: center; font-size: 12px; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 1px;">
+        &copy; 2026 Strong & Free. All Rights Reserved. Institutional Wellness Architecture.
+    </footer>
+
+</body>
+</html>
