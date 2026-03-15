@@ -1,0 +1,1752 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>The Witness Method™</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <style>
+      :root {
+        --color-primary: #e83f43;
+        --color-primary-hover: #c42d2d;
+        --color-background: #f7f3ef;
+        --color-surface: #fff;
+        --color-surface-alt: #eeece8;
+        --color-overlay: rgba(26, 26, 26, 0.05);
+        --color-text-primary: #1a1a1a;
+        --color-text-secondary: #5c5854;
+        --color-text-muted: #847f7a;
+        --color-text-inverse: #f7f3ef;
+        --color-border: rgba(26, 26, 26, 0.1);
+        --color-border-subtle: rgba(26, 26, 26, 0.05);
+        --font-primary: "Inter", sans-serif;
+        --font-secondary: "Playfair Display", serif;
+        --t-h1: clamp(2.5rem, 8vw, 5rem);
+        --t-h2: clamp(1.5rem, 4vw, 2.5rem);
+        --t-body: clamp(0.9rem, 2vw, 1.125rem);
+        --t-micro: 0.75rem;
+        --line-tight: 1.1;
+        --line-normal: 1.6;
+        --tracking-tight: -0.02em;
+        --space-2xs: 4px;
+        --space-xs: 8px;
+        --space-sm: 12px;
+        --space-md: 16px;
+        --space-lg: 24px;
+        --space-xl: 32px;
+        --space-2xl: 48px;
+        --space-3xl: 64px;
+        --space-4xl: 96px;
+        --breath: clamp(1.5rem, 10vw, 8rem);
+        --pulse: clamp(0.8rem, 5vw, 4rem);
+        --weather: cubic-bezier(0.23, 1, 0.75, 1);
+        --motion-reveal: 1200ms var(--weather);
+        --motion-settle: 800ms var(--weather);
+        --motion-response: 300ms var(--weather);
+        --motion-micro: 150ms var(--weather);
+        --container-xl: 1200px;
+        --radius-sm: 2px;
+        --radius-md: 6px;
+      }
+      body {
+        background: var(--color-background);
+        color: var(--color-text-primary);
+        font-family: var(--font-primary);
+        cursor: none;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      @media (max-width: 1024px) {
+        body {
+          cursor: auto;
+        }
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .btn-primary {
+        padding: var(--space-lg) var(--space-3xl);
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+        font-family: var(--font-primary);
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        border: none;
+        cursor: none;
+        transition: background var(--motion-response);
+      }
+      .btn-primary:hover {
+        background: var(--color-primary);
+      }
+      .section-label {
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+        margin-bottom: var(--space-xl);
+        display: block;
+      }
+      .grain-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/><feColorMatrix type=%22saturate%22 values=%220%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%221%22/></svg>");
+        background-size: 200px;
+      }
+      .rain-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        pointer-events: none;
+        opacity: 0.02;
+        background: repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 1px,
+          rgba(0, 0, 0, 0.3) 1px,
+          rgba(0, 0, 0, 0.3) 2px
+        );
+        animation: rain-drift 20s linear infinite;
+      }
+      @keyframes rain-drift {
+        from {
+          transform: translateY(-50px);
+        }
+        to {
+          transform: translateY(50px);
+        }
+      }
+      .custom-cursor {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: none;
+      }
+      .cursor-follower {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--color-primary);
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        opacity: 0.6;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        padding: var(--space-lg) var(--breath);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        mix-blend-mode: difference;
+        transition:
+          background var(--motion-settle),
+          border-bottom var(--motion-settle);
+      }
+      .header-scrolled {
+        background: rgba(247, 243, 239, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--color-border);
+        mix-blend-mode: normal;
+      }
+      .logo {
+        font-family: var(--font-secondary);
+        font-size: 24px;
+        font-style: italic;
+        font-weight: 700;
+      }
+      .nav {
+        display: flex;
+        gap: var(--space-2xl);
+        align-items: center;
+      }
+      .nav a {
+        font-family: var(--font-primary);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+        transition: color var(--motion-response);
+      }
+      .nav a:hover {
+        color: var(--color-primary);
+      }
+      .audio-toggle {
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--color-border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--t-micro);
+        background: transparent;
+        cursor: none;
+      }
+      #canvas {
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        align-items: flex-start;
+        padding: var(--breath);
+        min-height: 100vh;
+        height: auto;
+      }
+      .slide .content-wrap {
+        max-width: 60ch;
+        padding-top: var(--space-3xl);
+      }
+      .slide-title {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        font-weight: 700;
+        line-height: var(--line-tight);
+        letter-spacing: var(--tracking-tight);
+        margin-bottom: var(--space-xl);
+      }
+      .slide-sub {
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+        font-size: var(--t-body);
+        max-width: 44ch;
+      }
+      .visual-wrap {
+        height: 75vh;
+        overflow: hidden;
+        position: relative;
+      }
+      .visual-wrap img {
+        width: 110%;
+        height: 110%;
+        object-fit: cover;
+        transform: translate(-5%, -5%);
+      }
+      .canvas-controls {
+        position: absolute;
+        bottom: var(--space-2xl);
+        right: var(--breath);
+        display: flex;
+        gap: 1px;
+        z-index: 20;
+      }
+      .canvas-controls button {
+        width: 80px;
+        height: 80px;
+        background: var(--color-surface);
+        border: none;
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        cursor: none;
+        transition: background var(--motion-response);
+      }
+      .canvas-controls button:last-child {
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+      }
+      .canvas-controls button:hover {
+        background: var(--color-primary);
+      }
+      .slide-counter {
+        position: absolute;
+        bottom: var(--space-2xl);
+        left: var(--breath);
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+      }
+      .lintel-section {
+        padding: var(--breath);
+      }
+      .manifesto-quote {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        line-height: var(--line-tight);
+        letter-spacing: var(--tracking-tight);
+        max-width: 70ch;
+      }
+      .manifesto-quote span {
+        color: var(--color-primary);
+      }
+      .manifesto-sub {
+        margin-top: var(--space-xl);
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+        font-size: var(--t-body);
+        max-width: 60ch;
+      }
+      .memory-grid {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        gap: var(--breath);
+        align-items: start;
+        padding: var(--breath);
+      }
+      .memory-text .section-label {
+        margin-bottom: var(--space-lg);
+      }
+      .memory-text h2 {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        margin-bottom: var(--space-lg);
+      }
+      .memory-text p {
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+        font-size: var(--t-body);
+        max-width: 44ch;
+        margin-bottom: var(--space-2xl);
+      }
+      .memory-stat {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        font-weight: 700;
+        color: var(--color-primary);
+        line-height: 1;
+      }
+      .memory-stat-label {
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+      }
+      .memory-image {
+        position: relative;
+        height: 50vh;
+        overflow: hidden;
+      }
+      .memory-image img {
+        width: 110%;
+        height: 110%;
+        object-fit: cover;
+        transform: translate(-5%, -5%);
+        filter: grayscale(1) blur(2px);
+        transition: filter 800ms var(--weather);
+      }
+      .memory-image img.revealed {
+        filter: grayscale(0) blur(0);
+      }
+      .ritual-section {
+        padding: var(--breath);
+      }
+      .ritual-header {
+        text-align: center;
+        margin-bottom: var(--space-3xl);
+      }
+      .ritual-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-2xl);
+      }
+      .ritual-step {
+        border-top: 1px solid var(--color-border);
+        padding-top: var(--space-xl);
+      }
+      .step-num {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        font-weight: 700;
+        color: var(--color-border);
+        line-height: 1;
+      }
+      .step-title {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        margin: var(--space-lg) 0 var(--space-md);
+      }
+      .step-desc {
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+        font-size: var(--t-body);
+        max-width: 44ch;
+      }
+      .artifacts-section {
+        padding: var(--breath);
+      }
+      .artifacts-header {
+        text-align: center;
+        margin-bottom: var(--space-3xl);
+      }
+      .artifacts-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2xl);
+        justify-content: center;
+      }
+      .artifact-card {
+        position: relative;
+        flex: 1 1 400px;
+        min-height: 45vh;
+        overflow: hidden;
+        cursor: none;
+      }
+      .artifact-card img {
+        position: absolute;
+        inset: 0;
+        width: 110%;
+        height: 110%;
+        object-fit: cover;
+        transform: translate(-5%, -5%);
+        transition: transform 0.8s var(--weather);
+      }
+      .artifact-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: var(--space-xl);
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.4));
+        color: #fff;
+      }
+      .artifact-title {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        font-weight: 700;
+      }
+      .artifact-meta {
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        opacity: 0.7;
+        margin-top: var(--space-xs);
+      }
+      .artifact-price {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        color: var(--color-primary);
+        margin-top: var(--space-sm);
+      }
+      .sanctuary-section {
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+        padding: var(--breath);
+      }
+      .sanctuary-wrap {
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        gap: var(--breath);
+        align-items: center;
+      }
+      .sanctuary-media {
+        position: relative;
+        height: 60vh;
+        overflow: hidden;
+      }
+      .sanctuary-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .sanctuary-content .section-label {
+        color: var(--color-primary);
+      }
+      .sanctuary-content h2 {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        margin: var(--space-lg) 0 var(--space-2xl);
+      }
+      .feature-row {
+        display: flex;
+        gap: var(--space-lg);
+        padding: var(--space-lg) 0;
+        border-top: 1px solid rgba(247, 243, 239, 0.1);
+      }
+      .feature-icon {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        color: var(--color-primary);
+        line-height: 1;
+      }
+      .feature-title {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        margin-bottom: var(--space-xs);
+      }
+      .feature-desc {
+        color: var(--color-text-muted);
+        line-height: var(--line-normal);
+        font-size: var(--t-body);
+      }
+      .witness-hero {
+        position: relative;
+        height: 70vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      }
+      .witness-hero img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        filter: brightness(0.4);
+      }
+      .witness-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+          transparent 0%,
+          rgba(10, 10, 0, 0.95) 100%
+        );
+        z-index: 1;
+        pointer-events: none;
+      }
+      .witness-content {
+        position: relative;
+        z-index: 2;
+        padding: var(--breath);
+        max-width: 60ch;
+      }
+      .witness-quote {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        font-style: italic;
+        line-height: var(--line-tight);
+        color: #fff;
+        margin-bottom: var(--space-xl);
+      }
+      .witness-attribution {
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+      }
+      .voyage-counter {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-right: var(--space-sm);
+      }
+      .echoes-section {
+        padding: var(--breath);
+        position: relative;
+        overflow: hidden;
+      }
+      .echoes-watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: var(--font-secondary);
+        font-size: 25vw;
+        font-weight: 700;
+        background-image: url("https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png");
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        opacity: 0.15;
+        pointer-events: none;
+        z-index: 0;
+        white-space: nowrap;
+      }
+      .echoes-grid {
+        display: grid;
+        grid-template-columns: 2fr 1.5fr;
+        gap: var(--space-4xl);
+        align-items: start;
+        position: relative;
+        z-index: 1;
+      }
+      .ghost-card {
+        border: 1px solid var(--color-border-subtle);
+        padding: var(--space-2xl);
+        opacity: 0.3;
+        transition:
+          opacity 0.4s var(--weather),
+          border-color 0.4s,
+          transform 0.4s;
+      }
+      .ghost-card:hover {
+        opacity: 1;
+        border-color: var(--color-primary);
+        transform: translateY(-4px);
+      }
+      .ghost-card.large {
+        padding: var(--space-3xl);
+      }
+      .ghost-text {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        line-height: var(--line-normal);
+        margin-bottom: var(--space-xl);
+      }
+      .ghost-author {
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-text-muted);
+      }
+      .oracle-section {
+        padding: var(--breath);
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .oracle-header {
+        text-align: center;
+        margin-bottom: var(--space-3xl);
+      }
+      .accordion-item {
+        border-bottom: 1px solid var(--color-border);
+      }
+      .accordion-trigger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: var(--space-xl) 0;
+        background: none;
+        border: none;
+        font-family: var(--font-secondary);
+        font-size: 20px;
+        text-align: left;
+        cursor: none;
+        color: var(--color-text-primary);
+      }
+      .accordion-trigger:hover {
+        color: var(--color-primary);
+      }
+      .accordion-icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        transition: transform 0.3s var(--weather);
+        font-size: 20px;
+      }
+      .accordion-content {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.4s var(--weather);
+      }
+      .accordion-content.open {
+        grid-template-rows: 1fr;
+      }
+      .accordion-inner {
+        overflow: hidden;
+        padding-bottom: var(--space-xl);
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+      }
+      .conversion-section {
+        padding: var(--breath);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .conversion-header {
+        max-width: 60ch;
+        margin-bottom: var(--space-2xl);
+      }
+      .conversion-title {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        margin-bottom: var(--space-lg);
+      }
+      .conversion-sub {
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+        font-size: var(--t-body);
+      }
+      .capture-form {
+        margin-top: var(--space-3xl);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-2xl);
+        width: 100%;
+        max-width: 600px;
+      }
+      .capture-form input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--color-text-primary);
+        padding: var(--space-lg) 0;
+        font-family: var(--font-secondary);
+        font-size: 24px;
+        color: var(--color-text-primary);
+        text-align: center;
+        outline: none;
+        transition: border-color var(--motion-micro);
+      }
+      .capture-form input:focus {
+        border-color: var(--color-primary);
+      }
+      .capture-form input::placeholder {
+        color: var(--color-text-muted);
+      }
+      .btn-submit {
+        padding: var(--space-lg) var(--space-3xl);
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+        font-family: var(--font-primary);
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        border: none;
+        cursor: none;
+        transition: background var(--motion-response);
+      }
+      .btn-submit:hover {
+        background: var(--color-primary);
+      }
+      .footer {
+        padding: var(--space-2xl) var(--breath);
+        background: var(--color-surface-alt);
+        border-top: 1px solid var(--color-border);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--space-xl);
+        align-items: start;
+      }
+      .footer-brand .logo {
+        margin-bottom: var(--space-sm);
+      }
+      .footer-brand p {
+        font-size: var(--t-body);
+        color: var(--color-text-muted);
+      }
+      .footer-nav a {
+        display: block;
+        font-family: var(--font-primary);
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+        margin-bottom: var(--space-sm);
+        transition: color var(--motion-response);
+      }
+      .footer-nav a:hover {
+        color: var(--color-primary);
+      }
+      .footer-social a {
+        font-family: var(--font-primary);
+        font-size: var(--t-micro);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+        margin-right: var(--space-lg);
+        transition: color var(--motion-response);
+      }
+      .footer-social a:hover {
+        color: var(--color-primary);
+      }
+      .footer-copy {
+        font-size: var(--t-micro);
+        color: var(--color-text-muted);
+        margin-top: var(--space-xl);
+      }
+      @media (max-width: 1024px) {
+        .slide {
+          grid-template-columns: 1fr;
+        }
+        .slide .visual-wrap {
+          display: none;
+        }
+        .memory-grid,
+        .ritual-grid,
+        .sanctuary-wrap,
+        .echoes-grid,
+        .artifacts-grid,
+        .footer {
+          grid-template-columns: 1fr;
+        }
+        .sanctuary-media {
+          display: none;
+        }
+        .canvas-controls button {
+          width: 60px;
+          height: 60px;
+        }
+        .breath-mobile {
+          padding: var(--pulse);
+        }
+      }
+      @media (max-width: 768px) {
+        .nav {
+          display: none;
+        }
+        .slide-title {
+          font-size: clamp(2rem, 6vw, 3.5rem);
+        }
+        .manifesto-quote {
+          font-size: clamp(1.5rem, 5vw, 2.5rem);
+        }
+      }
+      .menu-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1001;
+        mix-blend-mode: difference;
+      }
+      .menu-toggle span {
+        display: block;
+        width: 28px;
+        height: 2px;
+        background: #fff;
+        transition: transform 0.3s var(--weather);
+      }
+      .mobile-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--color-text-primary);
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.6s var(--weather);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: var(--breath);
+      }
+      .mobile-drawer.open {
+        transform: translateX(0);
+      }
+      .drawer-nav {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xl);
+      }
+      .drawer-nav a {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        color: #fff;
+        font-style: italic;
+      }
+      .drawer-close {
+        position: absolute;
+        top: var(--space-lg);
+        right: var(--breath);
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 32px;
+        cursor: pointer;
+      }
+      @media (max-width: 1024px) {
+        .custom-cursor,
+        .cursor-follower {
+          display: none;
+        }
+        .menu-toggle {
+          display: flex;
+        }
+        .slide {
+          grid-template-columns: 1fr;
+        }
+        .slide .visual-wrap {
+          display: none;
+        }
+        #canvas {
+          height: auto;
+          min-height: 80vh;
+        }
+        .slide-counter {
+          bottom: var(--space-lg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grain-overlay"></div>
+    <div class="rain-overlay"></div>
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
+    <header id="site-header">
+      <div class="logo">The Witness Method™</div>
+      <nav class="nav">
+        <a href="#lintel">Ethos</a><a href="#memory">Proof</a
+        ><a href="#ritual">Process</a><a href="#artifacts">Offerings</a
+        ><a href="#sanctuary">Method</a><a href="#conversion">Begin</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: var(--space-lg)">
+        <button
+          class="audio-toggle"
+          id="audio-toggle"
+          aria-label="Toggle ambient sound"
+        >
+          ◉
+        </button>
+        <button class="menu-toggle" id="menu-toggle">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+    <div class="mobile-drawer" id="mobile-drawer">
+      <button class="drawer-close" id="drawer-close">&times;</button>
+      <nav class="drawer-nav">
+        <a href="#lintel" class="drawer-link">Ethos</a>
+        <a href="#memory" class="drawer-link">Proof</a>
+        <a href="#ritual" class="drawer-link">Process</a>
+        <a href="#artifacts" class="drawer-link">Offerings</a>
+        <a href="#sanctuary" class="drawer-link">Method</a>
+        <a href="#conversion" class="drawer-link">Begin</a>
+      </nav>
+    </div>
+    <section id="canvas" class="experience-canvas">
+      <div id="slides-container">
+        <div class="slide" data-index="0" style="z-index: 2">
+          <div class="content-wrap">
+            <span class="section-label">Canvas · 01</span>
+            <h1 class="slide-title">
+              Witness the Shift, <br /><span style="color: var(--color-primary)"
+                >Not the Strategy</span
+              >
+            </h1>
+            <p class="slide-sub">
+              You already know what needs to change. What you need is someone to
+              sit with you in the waiting—without fixing, without prescribing,
+              without rushing the emergence.
+            </p>
+            <div
+              style="
+                margin-top: var(--space-2xl);
+                display: flex;
+                align-items: center;
+                gap: var(--space-xl);
+              "
+            >
+              <button class="btn-primary">Begin Inquiry</button
+              ><a
+                href="#lintel"
+                style="
+                  font-size: var(--t-micro);
+                  text-transform: uppercase;
+                  letter-spacing: 0.2em;
+                  color: var(--color-text-muted);
+                  text-decoration: none;
+                  border-bottom: 1px solid var(--color-border);
+                "
+                >Enter ↓</a
+              >
+            </div>
+          </div>
+          <div class="visual-wrap">
+            <img
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png"
+              alt=""
+            />
+          </div>
+        </div>
+        <div class="slide" data-index="1">
+          <div class="content-wrap">
+            <span class="section-label">Canvas · 02</span>
+            <h1 class="slide-title">
+              The Body Remembers <br />What the Mind Forgets
+            </h1>
+            <p class="slide-sub">
+              Cognition alone cannot move transformation. We track breath,
+              posture, nervous system shifts—the somatic markers that reveal
+              what words cannot say.
+            </p>
+            <div
+              style="
+                margin-top: var(--space-2xl);
+                display: flex;
+                align-items: center;
+                gap: var(--space-xl);
+              "
+            >
+              <button class="btn-primary">Explore the Method</button
+              ><a
+                href="#lintel"
+                style="
+                  font-size: var(--t-micro);
+                  text-transform: uppercase;
+                  letter-spacing: 0.2em;
+                  color: var(--color-text-muted);
+                  text-decoration: none;
+                  border-bottom: 1px solid var(--color-border);
+                "
+                >Enter ↓</a
+              >
+            </div>
+          </div>
+          <div class="visual-wrap">
+            <img
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cdf487659b8.png"
+              alt=""
+            />
+          </div>
+        </div>
+        <div class="slide" data-index="2">
+          <div class="content-wrap">
+            <span class="section-label">Canvas · 03</span>
+            <h1 class="slide-title">
+              Transformation Without <br /><span
+                style="color: var(--color-primary)"
+                >Exposure</span
+              >
+            </h1>
+            <p class="slide-sub">
+              No public case studies. No performative testimonials. Just
+              anonymous narratives from those who walked this path before
+              you—truth that mirrors, never exploits.
+            </p>
+            <div
+              style="
+                margin-top: var(--space-2xl);
+                display: flex;
+                align-items: center;
+                gap: var(--space-xl);
+              "
+            >
+              <button class="btn-primary">Read the Ghosts</button
+              ><a
+                href="#lintel"
+                style="
+                  font-size: var(--t-micro);
+                  text-transform: uppercase;
+                  letter-spacing: 0.2em;
+                  color: var(--color-text-muted);
+                  text-decoration: none;
+                  border-bottom: 1px solid var(--color-border);
+                "
+                >Enter ↓</a
+              >
+            </div>
+          </div>
+          <div class="visual-wrap">
+            <img
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+      <div class="canvas-controls">
+        <button id="slide-prev">←</button><button id="slide-next">→</button>
+      </div>
+      <div class="slide-counter"><span id="slide-cur">01</span> / 03</div>
+    </section>
+    <section id="lintel" class="lintel-section" style="padding: var(--breath)">
+      <span class="section-label">Ethos · 02</span>
+      <p class="manifesto-quote">
+        We do not <span style="color: var(--color-primary)">prescribe</span>. We
+        witness what emerges through breath, narrative, and the quiet spaces
+        between words.
+      </p>
+      <p class="manifesto-sub">
+        When you arrive tired of being sold solutions, you often find yourself.
+        And when you do, everything else follows.
+      </p>
+    </section>
+    <section id="memory" class="memory-grid">
+      <div class="memory-text">
+        <span class="section-label">Proof · 03</span>
+        <h2>
+          87% of clients stay beyond the first quarter. Not because we ask them
+          to. Because the work continues to reveal itself.
+        </h2>
+        <p
+          style="
+            margin-top: var(--space-lg);
+            color: var(--color-text-secondary);
+            line-height: var(--line-normal);
+            font-size: var(--t-body);
+            max-width: 44ch;
+          "
+        >
+          We track what matters: nervous system regulation, creative unblocking,
+          decision clarity. Not vanity metrics. Not forced testimonials. Just
+          the quiet evidence of shift.
+        </p>
+        <div style="margin-top: var(--space-2xl)">
+          <div class="memory-stat">68</div>
+          <div class="memory-stat-label">Net Promoter Score</div>
+        </div>
+      </div>
+      <div class="memory-image">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba069c6d0287f.png"
+          alt=""
+        />
+      </div>
+    </section>
+    <section id="ritual" class="ritual-section">
+      <span class="section-label" style="text-align: center">Process · 04</span>
+      <div class="ritual-header">
+        <h2
+          style="
+            font-family: var(--font-secondary);
+            font-size: var(--t-h2);
+            text-align: center;
+          "
+        >
+          Three Movements, One Arc
+        </h2>
+      </div>
+      <div class="ritual-grid">
+        <div class="ritual-step">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Foundation</h3>
+          <p class="step-desc">
+            Weeks 1–2: We establish safety, map your somatic baseline, and
+            identify the narrative loops that keep you stuck. No action yet.
+            Just observation.
+          </p>
+        </div>
+        <div class="ritual-step">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Pattern Disruption</h3>
+          <p class="step-desc">
+            Weeks 3–6: We introduce gentle interventions—breathwork, posture
+            shifts, narrative reframing—to create space for new neural pathways
+            to form.
+          </p>
+        </div>
+        <div class="ritual-step">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Integration</h3>
+          <p class="step-desc">
+            Month 3+: We anchor the shifts into daily practice, with optional
+            alumni circles for continued witness. Transformation becomes
+            texture, not event.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section id="artifacts" class="artifacts-section">
+      <span class="section-label" style="text-align: center"
+        >Offerings · 05</span
+      >
+      <div class="artifacts-header">
+        <h2
+          style="
+            font-family: var(--font-secondary);
+            font-size: var(--t-h2);
+            text-align: center;
+          "
+        >
+          Investment Tied to Outcome
+        </h2>
+      </div>
+      <div class="artifacts-grid">
+        <div class="artifact-card">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426daeba487700722d3e6.png"
+            alt=""
+          />
+          <div class="artifact-info">
+            <div class="artifact-title">Spotlight</div>
+            <div class="artifact-meta">Crisis Navigation · 90 min</div>
+            <div class="artifact-price">$299 / session</div>
+          </div>
+        </div>
+        <div class="artifact-card">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dabfc81f2479eeebca.png"
+            alt=""
+          />
+          <div class="artifact-info">
+            <div class="artifact-title">Resonance</div>
+            <div class="artifact-meta">Pattern Work · 8 sessions</div>
+            <div class="artifact-price">$4,500 / quarter</div>
+          </div>
+        </div>
+        <div class="artifact-card">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dafb38ca83408ecb9b.png"
+            alt=""
+          />
+          <div class="artifact-info">
+            <div class="artifact-title">Integration</div>
+            <div class="artifact-meta">Identity Work · Ongoing + Retreats</div>
+            <div class="artifact-price">$12,000 / year</div>
+          </div>
+        </div>
+        <div class="artifact-card">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cdf487659b8.png"
+            alt=""
+          />
+          <div class="artifact-info">
+            <div class="artifact-title">Alumni Circle</div>
+            <div class="artifact-meta">Graduation Pathway · Optional</div>
+            <div class="artifact-price">By Invitation</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="sanctuary" class="sanctuary-section">
+      <div class="sanctuary-wrap">
+        <div class="sanctuary-media">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png"
+            alt=""
+          />
+        </div>
+        <div class="sanctuary-content">
+          <span class="section-label">Method · 06</span>
+          <h2>Three Pillars. No Prescriptions.</h2>
+          <div class="feature-row">
+            <div class="feature-icon">+</div>
+            <div>
+              <div class="feature-title">Neutral Observation</div>
+              <div class="feature-desc">
+                Our guides do not advise. We witness somatic markers, narrative
+                loops, and energy shifts—creating space for your own wisdom to
+                emerge.
+              </div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">+</div>
+            <div>
+              <div class="feature-title">Ghost Testimonials</div>
+              <div class="feature-desc">
+                Anonymous composite narratives from past clients. Truth that
+                mirrors your hidden state—without exposing identities or
+                exploiting vulnerability.
+              </div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">+</div>
+            <div>
+              <div class="feature-title">Somatic Feedback Loops</div>
+              <div class="feature-desc">
+                Breathwork, posture awareness, nervous system tracking. Because
+                cognition alone cannot move what the body holds.
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary" style="margin-top: var(--space-2xl)">
+            Read the Framework
+          </button>
+        </div>
+      </div>
+    </section>
+    <section class="witness-hero">
+      <img
+        src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png"
+        alt=""
+      />
+      <div class="witness-content">
+        <p class="witness-quote">
+          "She arrived trembling at every board meeting. After twelve weeks, her
+          breath stopped hitching when she entered rooms. Her quarterly
+          projections became predictable."
+        </p>
+        <p class="witness-attribution">
+          — Ghost Profile: Marketing Director, 42, post-layoff pivot
+        </p>
+      </div>
+    </section>
+    <section id="echoes" class="echoes-section">
+      <div class="echoes-watermark">WITNESS</div>
+      <span class="section-label">Echoes · 07</span>
+      <div class="echoes-grid">
+        <div>
+          <div class="ghost-card large">
+            <p class="ghost-text">
+              "I thought I needed a new strategy. What I needed was someone to
+              sit with me while I stopped lying to myself about why I was
+              stuck."
+            </p>
+            <p class="ghost-author">— Founder, Tech Startup · 14 weeks</p>
+          </div>
+          <div class="ghost-card">
+            <p class="ghost-text">
+              "The first time I noticed my shoulders drop during a difficult
+              conversation, I knew the work was landing."
+            </p>
+            <p class="ghost-author">— Creative Director · 8 weeks</p>
+          </div>
+        </div>
+        <div>
+          <div class="ghost-card">
+            <p class="ghost-text">
+              "No one told me what to do. That was the point. And that was the
+              shift."
+            </p>
+            <p class="ghost-author">— Executive, Nonprofit · 22 weeks</p>
+          </div>
+          <div class="ghost-card">
+            <p class="ghost-text">
+              "I left with one less burnout episode per quarter. That alone paid
+              for the year."
+            </p>
+            <p class="ghost-author">
+              — Artist, Solo Practice · Integration Tier
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="oracle" class="oracle-section">
+      <span class="section-label" style="text-align: center">Oracle · 08</span>
+      <div class="oracle-header">
+        <h2
+          style="
+            font-family: var(--font-secondary);
+            font-size: var(--t-h2);
+            text-align: center;
+          "
+        >
+          Questions, Held Lightly
+        </h2>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span>How is this different from traditional coaching?</span
+          ><span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>
+              Most coaching prescribes: action plans, accountability structures,
+              behavioral tweaks. We witness. We create conditions for your own
+              wisdom to emerge—through somatic tracking, narrative observation,
+              and nervous system regulation. Less doing. More being.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span>What if I don't feel a shift after two sessions?</span
+          ><span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>
+              You receive a 100% refund. No questions. No guilt. If the
+              resonance isn't there, we will tell you—and refer you to a
+              better-fit provider. We charge a referral fee to them, not you.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span>Why no public testimonials?</span
+          ><span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>
+              Transformation is intimate. Public case studies often exploit
+              vulnerability for marketing. Our ghost testimonials preserve truth
+              without exposure: composite narratives that mirror your state,
+              without naming names.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span>How do I know which tier is right?</span
+          ><span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>
+              We don't decide for you. In your 15-minute discovery call, we
+              explore: What outcome would make this investment worthwhile? If
+              you leave with one less burnout episode per quarter, what is that
+              worth? You choose based on value-mapping, not session count.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span>Are your guides credentialed?</span
+          ><span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>
+              All guides hold ICF-MCC certification, trauma-informed training,
+              and Somatic Experiencing credentials. Plus: our internal 6-month
+              Witness Method certification, with biannual ethics audits overseen
+              by a council of former clients.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          <span>What happens after I apply?</span
+          ><span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <p>
+              Personal response within 48 hours. Optional 15-minute video
+              connection. Decision window: 7 days. No pressure. No follow-up
+              sequences. If it is right, you will know.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="conversion" class="conversion-section">
+      <span class="section-label">Begin · 09</span>
+      <h2 class="conversion-title">Not a Pitch. A Conversation.</h2>
+      <p class="conversion-sub">
+        15 minutes. No pricing discussion. No sales script. Just clarity: Is
+        this the right witness for your work right now?
+      </p>
+      <form class="capture-form" action="{{FORM_ENDPOINT}}" method="POST">
+        <input
+          type="email"
+          name="email"
+          placeholder="your@email.com"
+          required
+        /><button type="submit" class="btn-submit btn-submit-capture">
+          Request Invitation
+        </button>
+        <p class="success-message">
+          Coordinates archived. The memory persists.
+        </p>
+      </form>
+    </section>
+    <footer class="footer">
+      <div class="footer-brand">
+        <div class="logo">The Witness Method™</div>
+        <p>Transformation Practice for Leaders, Creators & Somatic Seekers</p>
+      </div>
+      <div class="footer-nav">
+        <a href="#lintel">Ethos</a><a href="#memory">Proof</a
+        ><a href="#ritual">Process</a><a href="#conversion">Begin</a>
+      </div>
+      <div class="footer-social">
+        <a href="#">Instagram</a><a href="#">LinkedIn</a><a href="#">Email</a>
+        <p class="footer-copy">© 2026 Witness Method LLC</p>
+      </div>
+    </footer>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        (function () {
+          const cur = document.getElementById("cursor"),
+            fol = document.getElementById("cursor-follower");
+          if (window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener("mousemove", (e) => {
+              gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0.1 });
+              gsap.to(fol, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.6,
+                ease: "cubic-bezier(0.23,1,0.75,1)",
+              });
+            });
+            document.querySelectorAll("a,button,[data-hover]").forEach((el) => {
+              el.addEventListener("mouseenter", () => {
+                gsap.to(fol, { scale: 1.8, duration: 0.3 });
+                gsap.to(cur, { scale: 0, duration: 0.2 });
+              });
+              el.addEventListener("mouseleave", () => {
+                gsap.to(fol, { scale: 1, duration: 0.3 });
+                gsap.to(cur, { scale: 1, duration: 0.2 });
+              });
+            });
+          }
+        })();
+        (function () {
+          const toggle = document.getElementById("menu-toggle");
+          const drawer = document.getElementById("mobile-drawer");
+          const close = document.getElementById("drawer-close");
+          const links = document.querySelectorAll(".drawer-link");
+          toggle?.addEventListener("click", () => drawer.classList.add("open"));
+          close?.addEventListener("click", () =>
+            drawer.classList.remove("open"),
+          );
+          links.forEach((link) =>
+            link.addEventListener("click", () =>
+              drawer.classList.remove("open"),
+            ),
+          );
+        })();
+        (function () {
+          const lenis = new Lenis({
+            duration: 1.8,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+          });
+          function raf(t) {
+            lenis.raf(t);
+            requestAnimationFrame(raf);
+          }
+          requestAnimationFrame(raf);
+          gsap.registerPlugin(ScrollTrigger);
+          lenis.on("scroll", ScrollTrigger.update);
+          gsap.ticker.lagSmoothing(0);
+        })();
+        (function () {
+          document
+            .querySelectorAll(
+              ".lintel-section,.memory-grid,.ritual-step,.artifact-card,.sanctuary-wrap,.ghost-card,.accordion-item,.conversion-section",
+            )
+            .forEach((el) => {
+              gsap.fromTo(
+                el,
+                { opacity: 0, y: 40 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 1.2,
+                  ease: "cubic-bezier(0.23,1,0.75,1)",
+                  scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none none",
+                  },
+                },
+              );
+            });
+          gsap.to(".manifesto-quote", {
+            y: -100,
+            scrollTrigger: {
+              trigger: ".lintel-section",
+              start: "top 80%",
+              end: "bottom top",
+              scrub: 1,
+            },
+          });
+          gsap.to(".echoes-watermark", {
+            x: -150,
+            scrollTrigger: {
+              trigger: ".echoes-section",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+          });
+          const mimg = document.querySelector(".memory-image img");
+          if (mimg)
+            ScrollTrigger.create({
+              trigger: ".memory-image",
+              start: "top 70%",
+              onEnter: () =>
+                gsap.to(mimg, {
+                  filter: "grayscale(0) blur(0px)",
+                  duration: 0.8,
+                  ease: "cubic-bezier(0.23,1,0.75,1)",
+                }),
+            });
+        })();
+        (function () {
+          document.querySelectorAll(".artifact-card").forEach((card) => {
+            const img = card.querySelector("img");
+            card.addEventListener("mousemove", (e) => {
+              const r = card.getBoundingClientRect();
+              const x = (e.clientX - r.left) / r.width - 0.5;
+              const y = (e.clientY - r.top) / r.height - 0.5;
+              gsap.to(img, {
+                x: x * -40 + "px",
+                y: y * -40 + "px",
+                duration: 0.8,
+                ease: "power2.out",
+              });
+            });
+            card.addEventListener("mouseleave", () =>
+              gsap.to(img, {
+                x: "-5%",
+                y: "-5%",
+                duration: 0.8,
+                ease: "power2.out",
+              }),
+            );
+          });
+        })();
+        (function () {
+          const hero = document.querySelector(".witness-hero");
+          if (!hero) return;
+          hero.addEventListener("mousemove", (e) => {
+            const r = hero.getBoundingClientRect();
+            hero.style.setProperty("--mouse-x", `${e.clientX - r.left}px`);
+            hero.style.setProperty("--mouse-y", `${e.clientY - r.top}px`);
+          });
+        })();
+        (function () {
+          const slides = document.querySelectorAll(".slide");
+          let cur = 0;
+          function gotoSlide(n, dir) {
+            const from = slides[cur],
+              to = slides[n];
+            const tl = gsap.timeline();
+            tl.set(to, { zIndex: 2, opacity: 1 })
+              .fromTo(
+                to.querySelector(".visual-wrap"),
+                {
+                  clipPath:
+                    dir === "next" ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)",
+                },
+                {
+                  clipPath: "inset(0 0% 0 0)",
+                  duration: 1.2,
+                  ease: "cubic-bezier(0.23,1,0.75,1)",
+                },
+              )
+              .fromTo(
+                to.querySelector(".content-wrap"),
+                { opacity: 0, y: 40 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.8,
+                  ease: "cubic-bezier(0.23,1,0.75,1)",
+                },
+                "-=0.6",
+              )
+              .to(from, { opacity: 0, duration: 0.4 }, "-=0.8")
+              .set(from, { zIndex: 1 });
+            cur = n;
+            document.getElementById("slide-cur").textContent = String(
+              cur + 1,
+            ).padStart(2, "0");
+            slides[n].dataset.visited = "true";
+            if (n > 0) slides[n].style.filter = "sepia(0.1) contrast(1.05)";
+          }
+          document
+            .getElementById("slide-next")
+            ?.addEventListener("click", () =>
+              gotoSlide((cur + 1) % slides.length, "next"),
+            );
+          document
+            .getElementById("slide-prev")
+            ?.addEventListener("click", () =>
+              gotoSlide((cur - 1 + slides.length) % slides.length, "prev"),
+            );
+          document.querySelectorAll(".visual-wrap img").forEach((img) => {
+            gsap.to(img, {
+              x: "+=30px",
+              y: "+=20px",
+              scale: 1.08,
+              duration: 25,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: -1,
+            });
+          });
+          slides.forEach((s, i) => {
+            s.style.opacity = i === 0 ? "1" : "0";
+            s.style.zIndex = i === 0 ? "2" : "1";
+          });
+        })();
+        (function () {
+          document.querySelectorAll(".accordion-trigger").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const item = btn.parentElement;
+              const content = item.querySelector(".accordion-content");
+              const isOpen = content.classList.contains("open");
+              document
+                .querySelectorAll(".accordion-content.open")
+                .forEach((c) => {
+                  c.classList.remove("open");
+                  c.parentElement.querySelector(
+                    ".accordion-icon",
+                  ).style.transform = "rotate(0deg)";
+                });
+              if (!isOpen) {
+                content.classList.add("open");
+                btn.querySelector(".accordion-icon").style.transform =
+                  "rotate(45deg)";
+              }
+            });
+          });
+        })();
+        (function () {
+          const btn = document.getElementById("audio-toggle");
+          let ctx = null,
+            running = false;
+          btn?.addEventListener("click", () => {
+            if (!running) {
+              if (!ctx) ctx = new AudioContext();
+              const buf = ctx.createBuffer(
+                1,
+                ctx.sampleRate * 2,
+                ctx.sampleRate,
+              );
+              const d = buf.getChannelData(0);
+              for (let i = 0; i < d.length; i++)
+                d[i] = (Math.random() * 2 - 1) * 0.15;
+              const src = ctx.createBufferSource();
+              src.buffer = buf;
+              src.loop = true;
+              const g = ctx.createGain();
+              g.gain.value = 0;
+              src.connect(g);
+              g.connect(ctx.destination);
+              src.start();
+              gsap.to(g.gain, { value: 0.3, duration: 1.5 });
+              running = true;
+            }
+          });
+        })();
+        (function () {
+          const header = document.getElementById("site-header");
+          window.addEventListener("scroll", () => {
+            if (window.scrollY > 80) {
+              header.classList.add("header-scrolled");
+            } else {
+              header.classList.remove("header-scrolled");
+            }
+          });
+        })();
+        (function () {
+          const form = document.querySelector(".capture-form");
+          const success = form?.querySelector(".success-message");
+          form?.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const btn = form.querySelector(".btn-submit-capture");
+            gsap.to(btn, { background: "var(--color-primary)", duration: 0.3 });
+            gsap.to(success, { display: "block", opacity: 1, duration: 0.8 });
+            form.reset();
+          });
+        })();
+      });
+    </script>
+  </body>
+</html>
