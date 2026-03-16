@@ -1,0 +1,1411 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Sovereign Year | 100-Day Architecture Challenge</title>
+
+    <!-- CDNs -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <style>
+      :root {
+        /* Tokens */
+        --color-primary: #e83f43;
+        --color-primary-hover: #c42d2d;
+        --color-background: #f7f3ef;
+        --color-surface: #ffffff;
+        --color-surface-alt: #eeece8;
+        --color-overlay: rgba(26, 26, 26, 0.05);
+        --color-text-primary: #1a1a1a;
+        --color-text-secondary: #5c5854;
+        --color-text-muted: #847f7a;
+        --color-text-inverse: #f7f3ef;
+        --color-border: rgba(26, 26, 26, 0.1);
+        --color-border-subtle: rgba(26, 26, 26, 0.05);
+
+        --font-primary: "Inter", sans-serif;
+        --font-secondary: "Playfair Display", serif;
+        --t-h1: clamp(2.5rem, 8vw, 5rem);
+        --t-h2: clamp(1.5rem, 4vw, 2.5rem);
+        --t-body: clamp(0.9rem, 2vw, 1.125rem);
+        --t-xs: 0.85rem;
+        --line-tight: 1.1;
+        --line-normal: 1.6;
+        --tracking-tight: -0.02em;
+
+        --space-2xs: 4px;
+        --space-xs: 8px;
+        --space-sm: 12px;
+        --space-md: 16px;
+        --space-lg: 24px;
+        --space-xl: 32px;
+        --space-2xl: 48px;
+        --space-3xl: 64px;
+        --space-4xl: 96px;
+        --breath: clamp(1.5rem, 10vw, 8rem);
+        --pulse: clamp(1rem, 6vw, 4rem);
+
+        --weather: cubic-bezier(0.23, 1, 0.75, 1);
+        --motion-reveal: 1200ms var(--weather);
+        --motion-settle: 800ms var(--weather);
+        --motion-response: 300ms var(--weather);
+        --motion-micro: 150ms var(--weather);
+
+        --container-xl: 1200px;
+        --radius-sm: 2px;
+        --radius-md: 6px;
+      }
+
+      body {
+        background: var(--color-background);
+        color: var(--color-text-primary);
+        font-family: var(--font-primary);
+        cursor: none;
+        overflow-x: hidden;
+        margin: 0;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* Atmosphere Layers */
+      .grain-overlay,
+      .rain-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        pointer-events: none;
+      }
+      .grain-overlay {
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/><feColorMatrix type=%22saturate%22 values=%220%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%221%22/></svg>");
+        background-size: 200px;
+      }
+      .rain-overlay {
+        opacity: 0.02;
+        background: repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 1px,
+          rgba(0, 0, 0, 0.3) 1px,
+          rgba(0, 0, 0, 0.3) 2px
+        );
+        animation: rain-drift 20s linear infinite;
+      }
+      @keyframes rain-drift {
+        from {
+          transform: translateY(-50px);
+        }
+        to {
+          transform: translateY(50px);
+        }
+      }
+
+      /* Cursor */
+      .custom-cursor {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        pointer-events: none;
+        z-index: 10001;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: difference;
+      }
+      .cursor-follower {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--color-primary);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 10000;
+        transform: translate(-50%, -50%);
+        opacity: 0.6;
+      }
+
+      /* Header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 900;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--breath);
+        transition: all 0.4s ease;
+      }
+      header.scrolled {
+        background: rgba(247, 243, 239, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--color-border);
+      }
+      .logo {
+        font-family: var(--font-secondary);
+        font-style: italic;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--color-text-primary);
+        letter-spacing: -0.02em;
+      }
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: var(--space-xl);
+      }
+      nav li a {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-weight: 500;
+        color: var(--color-text-primary);
+      }
+      audio-controls button {
+        background: none;
+        border: none;
+        color: var(--color-text-muted);
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      /* Canvas / Hero */
+      #canvas {
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+      }
+      .slides-container {
+        position: absolute;
+        inset: 0;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        align-items: center;
+        opacity: 0;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .slide.active {
+        pointer-events: auto;
+        z-index: 2;
+        opacity: 1;
+      }
+      .content-wrap {
+        max-width: 60ch;
+        padding: var(--breath);
+      }
+      .section-label {
+        font-size: var(--t-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-text-muted);
+        margin-bottom: var(--space-xl);
+        display: block;
+      }
+      h1.slide-title {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h1);
+        font-weight: 700;
+        line-height: var(--line-tight);
+        letter-spacing: var(--tracking-tight);
+        margin-bottom: var(--space-xl);
+      }
+      .visual-wrap {
+        height: 80vh;
+        overflow: hidden;
+        position: relative;
+        border-radius: var(--radius-md);
+      }
+      .visual-wrap img {
+        width: 110%;
+        height: 110%;
+        object-fit: cover;
+        transform: translate(-5%, -5%);
+        transition: all 2s var(--weather);
+      }
+
+      .btn-primary {
+        padding: var(--space-lg) var(--space-3xl);
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+        border: none;
+        cursor: none;
+        font-size: var(--t-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        transition: background var(--motion-response);
+      }
+      .btn-primary:hover {
+        background: var(--color-primary);
+      }
+
+      .canvas-controls {
+        position: absolute;
+        bottom: var(--space-3xl);
+        right: var(--breath);
+        display: flex;
+        gap: 1px;
+        z-index: 20;
+      }
+      .canvas-btn {
+        width: 60px;
+        height: 60px;
+        background: var(--color-surface);
+        border: none;
+        font-size: var(--t-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        cursor: none;
+        transition: all 0.3s;
+      }
+      .canvas-btn.next {
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+      }
+
+      /* Lintel */
+      #lintel {
+        padding: var(--breath);
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .manifesto-quote {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        line-height: var(--line-tight);
+        margin-top: var(--space-xl);
+      }
+      .artery {
+        color: var(--color-primary);
+      }
+
+      /* Memory */
+      #memory {
+        padding: var(--breath);
+        background: var(--color-surface-alt);
+      }
+      .memory-grid {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        gap: var(--breath);
+        align-items: center;
+      }
+      .memory-col-right {
+        position: relative;
+        height: 60vh;
+        overflow: hidden;
+        aspect-ratio: 3/4;
+      }
+      .memory-col-right img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(1) blur(2px);
+        transition: all 1s var(--weather);
+      }
+      .stat-number {
+        font-family: var(--font-secondary);
+        font-size: 3rem;
+        line-height: 1;
+        color: var(--color-primary);
+      }
+
+      /* Ritual */
+      #ritual {
+        padding: var(--breath);
+      }
+      .ritual-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-2xl);
+        margin-top: var(--space-3xl);
+      }
+      .step-num {
+        font-family: var(--font-secondary);
+        font-size: 4rem;
+        font-weight: 700;
+        color: var(--color-border);
+        opacity: 0.3;
+      }
+      .step-title {
+        font-family: var(--font-secondary);
+        font-size: var(--t-h2);
+        margin: var(--space-xl) 0;
+      }
+      .step-desc {
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+      }
+
+      /* Artifacts */
+      #artifacts {
+        padding: var(--breath);
+      }
+      .artifacts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-2xl);
+      }
+      .artifact-card {
+        position: relative;
+        height: 50vh;
+        overflow: hidden;
+        cursor: none;
+      }
+      .artifact-card img {
+        position: absolute;
+        inset: 0;
+        width: 110%;
+        height: 110%;
+        object-fit: cover;
+        transform: translate(-5%, -5%);
+        transition: transform 1.2s var(--weather);
+      }
+      .artifact-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: var(--space-xl);
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        color: white;
+      }
+
+      /* Sanctuary */
+      #sanctuary {
+        background: var(--color-text-primary);
+        color: var(--color-text-inverse);
+        padding: var(--breath);
+      }
+      .sanctuary-wrap {
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        gap: var(--breath);
+        align-items: center;
+      }
+      .sanctuary-media {
+        height: 70vh;
+        overflow: hidden;
+        border-radius: var(--radius-md);
+      }
+      .feature-row {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: var(--space-xl) 0;
+        display: flex;
+        gap: var(--space-md);
+        align-items: flex-start;
+      }
+      .feature-icon {
+        width: 12px;
+        height: 12px;
+        background: var(--color-primary);
+        border-radius: 50%;
+        margin-top: 5px;
+        flex-shrink: 0;
+      }
+
+      /* Witness */
+      #witness {
+        height: 70vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: end;
+      }
+      #witness img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.3);
+      }
+      #witness::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          1200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+          transparent 10%,
+          rgba(26, 26, 26, 1) 100%
+        );
+        pointer-events: none;
+      }
+      .witness-content {
+        position: relative;
+        z-index: 2;
+        padding: var(--breath);
+        max-width: 60ch;
+      }
+
+      /* Echoes */
+      #echoes {
+        padding: var(--breath);
+        position: relative;
+        overflow: hidden;
+      }
+      .echoes-watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: var(--font-secondary);
+        font-size: 25vw;
+        font-weight: 700;
+        color: var(--color-border);
+        opacity: 0.1;
+        pointer-events: none;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .echoes-grid {
+        display: grid;
+        grid-template-columns: 2fr 1.5fr;
+        gap: var(--space-4xl);
+        position: relative;
+        z-index: 1;
+      }
+      .ghost-card {
+        border: 1px solid var(--color-border-subtle);
+        padding: var(--space-3xl);
+        background: var(--color-background);
+        transition: all 0.5s;
+        opacity: 0.2;
+      }
+      .ghost-card:hover {
+        opacity: 1;
+        border-color: var(--color-primary);
+        transform: translateY(-8px);
+      }
+      .ghost-author {
+        margin-top: var(--space-xl);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-text-muted);
+      }
+
+      /* Oracle */
+      #oracle {
+        padding: var(--breath);
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .accordion-item {
+        border-bottom: 1px solid var(--color-border);
+      }
+      .accordion-trigger {
+        width: 100%;
+        padding: var(--space-xl) 0;
+        background: none;
+        border: none;
+        font-family: var(--font-secondary);
+        font-size: 1.25rem;
+        text-align: left;
+        color: var(--color-text-primary);
+        cursor: none;
+        outline: none;
+      }
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s var(--weather);
+      }
+      .accordion-inner {
+        padding-bottom: var(--space-xl);
+        color: var(--color-text-secondary);
+        line-height: var(--line-normal);
+      }
+
+      /* Conversion */
+      #conversion {
+        padding: var(--breath);
+        text-align: center;
+      }
+      .capture-form {
+        margin-top: var(--space-3xl);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .input-wrapper {
+        position: relative;
+        max-width: 500px;
+        width: 100%;
+      }
+      .email-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--color-text-primary);
+        padding: var(--space-lg) 0;
+        font-family: var(--font-secondary);
+        font-size: 1.5rem;
+        text-align: center;
+        outline: none;
+        color: var(--color-text-primary);
+      }
+      .email-input:focus {
+        border-color: var(--color-primary);
+      }
+      .success-msg {
+        margin-top: var(--space-lg);
+        height: 20px;
+        font-size: var(--t-xs);
+        color: var(--color-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid var(--color-border);
+        padding: var(--space-3xl) var(--breath);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        background: var(--color-surface-alt);
+      }
+      .footer-nav {
+        display: flex;
+        gap: var(--space-xl);
+      }
+
+      /* Mobile Override */
+      @media (max-width: 1024px) {
+        .slide,
+        .memory-grid,
+        .sanctuary-wrap,
+        .ritual-grid,
+        .echoes-grid,
+        .artifacts-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .visual-wrap,
+        .memory-col-right {
+          height: 50vh !important;
+        }
+        header nav {
+          display: none;
+        }
+        .canvas-controls {
+          bottom: 20px;
+          right: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ATMOSPHERE -->
+    <div class="grain-overlay"></div>
+    <div class="rain-overlay"></div>
+    <div class="custom-cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- S1: HEADER -->
+    <header id="header">
+      <div class="logo">THE SOVEREIGN YEAR.</div>
+      <nav>
+        <ul>
+          <li><a href="#memory">Manifesto</a></li>
+          <li><a href="#artifacts">Curriculum</a></li>
+          <li><a href="#sanctuary">Philosophy</a></li>
+        </ul>
+      </nav>
+      <audio-controls
+        ><button id="audio-toggle">Audio // On</button></audio-controls
+      >
+    </header>
+
+    <!-- S2: CANVAS (HERO) -->
+    <section id="canvas">
+      <div id="slides-container">
+        <!-- Slide 0 -->
+        <div
+          class="slide active"
+          data-index="0"
+          style="clip-path: inset(0 0 0 0)"
+        >
+          <div class="content-wrap">
+            <span class="section-label">Architecture · 01</span>
+            <h1 class="slide-title">Architecture Over Ambition.</h1>
+            <p
+              style="
+                color: var(--color-text-secondary);
+                margin-bottom: var(--space-xl);
+                line-height: var(--line-normal);
+              "
+            >
+              Most creators burn out because they treat time like money. It
+              isn't. It is the structural beam. In this 100-day challenge, we do
+              not manage your calendar. We rebuild its geometry.
+            </p>
+            <div
+              style="display: flex; gap: var(--space-xl); align-items: center"
+            >
+              <button class="btn-primary js-reserve">Reserve Your Spot</button>
+              <span
+                style="
+                  font-size: var(--t-xs);
+                  text-transform: uppercase;
+                  letter-spacing: 0.1em;
+                  color: var(--color-text-muted);
+                "
+                >Starts Jan 1st</span
+              >
+            </div>
+          </div>
+          <div class="visual-wrap">
+            <img
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png"
+              alt="Neon abstraction"
+            />
+          </div>
+        </div>
+        <!-- Slide 1 -->
+        <div class="slide" data-index="1">
+          <div class="content-wrap">
+            <span class="section-label">Silence · 02</span>
+            <h1 class="slide-title">The Noise Is Not The Work.</h1>
+            <p
+              style="
+                color: var(--color-text-secondary);
+                margin-bottom: var(--space-xl);
+                line-height: var(--line-normal);
+              "
+            >
+              We eliminate the noise. No community management. No frantic
+              posting schedules. Just the deep, solitary work required to
+              produce artifacts that endure beyond the feed.
+            </p>
+          </div>
+          <div class="visual-wrap">
+            <img
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dae8487cea717659b9.png"
+              alt="Shadow geometry"
+            />
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="slide" data-index="2">
+          <div class="content-wrap">
+            <span class="section-label">Result · 03</span>
+            <h1 class="slide-title">A Body of Work That Outlives You.</h1>
+            <p
+              style="
+                color: var(--color-text-secondary);
+                margin-bottom: var(--space-xl);
+                line-height: var(--line-normal);
+              "
+            >
+              This is not a sprint. It is a geological process. By day 100, you
+              will hold a blueprint, a product, or a brand that functions
+              without your constant intervention.
+            </p>
+            <div style="margin-top: var(--space-2xl)">
+              <button class="btn-primary js-reserve">Enter The System</button>
+            </div>
+          </div>
+          <div class="visual-wrap">
+            <img
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png"
+              alt="Atmospheric presence"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="canvas-controls">
+        <button id="slide-prev" class="canvas-btn">&larr;</button>
+        <button id="slide-next" class="canvas-btn next">&rarr;</button>
+      </div>
+    </section>
+
+    <!-- S3: LINTEL -->
+    <section id="lintel" class="lintel-section">
+      <span class="section-label">Ethos · 02</span>
+      <h2 class="manifesto-quote">
+        You are not overwhelmed by <span class="artery">output</span>.<br />You
+        are starving for <span class="artery">input</span>.
+      </h2>
+    </section>
+
+    <!-- S4: MEMORY (CREDIBILITY) -->
+    <section id="memory" class="memory-grid">
+      <div class="memory-col-left">
+        <h2 class="section-label">Evidence · 04</h2>
+        <p
+          style="
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-xl);
+            max-width: 40ch;
+          "
+        >
+          Previous cohorts included artists who had been stuck for 4 years,
+          founders paralyzed by scaling anxiety, and writers with empty hard
+          drives. They entered the dark. They came out with architecture.
+        </p>
+        <div style="display: flex; gap: var(--space-xl); align-items: center">
+          <div class="stat-number">94%</div>
+          <div
+            style="
+              font-size: var(--t-xs);
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              color: var(--color-text-muted);
+            "
+          >
+            Project Completion Rate
+          </div>
+        </div>
+      </div>
+      <div class="memory-col-right memory">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dafb38ca83408ecb9b.png"
+          alt="Shinkansen transit"
+        />
+      </div>
+    </section>
+
+    <!-- S5: RITUAL (PROCESS) -->
+    <section id="ritual">
+      <span class="section-label" style="text-align: center; display: block"
+        >System · 05</span
+      >
+      <h2
+        style="
+          font-family: var(--font-secondary);
+          font-size: var(--t-h1);
+          text-align: center;
+          margin-top: var(--space-xl);
+        "
+      >
+        Three Stages of Extraction
+      </h2>
+
+      <div class="ritual-grid">
+        <div class="ritual-step">
+          <div class="step-num">I.</div>
+          <h3 class="step-title">Unbuild</h3>
+          <p class="step-desc">
+            We strip away every commitment, project, and identity that does not
+            serve your core objective. Loss is a feature, not a bug.
+          </p>
+        </div>
+        <div class="ritual-step">
+          <div class="step-num">II.</div>
+          <h3 class="step-title">Anchor</h3>
+          <p class="step-desc">
+            Establish the immutable daily rituals. The 4-hour deep work block is
+            law. The rest is negotiation.
+          </p>
+        </div>
+        <div class="ritual-step">
+          <div class="step-num">III.</div>
+          <h3 class="step-title">Release</h3>
+          <p class="step-desc">
+            Ship the finished artifact. Not when it feels "ready." But when the
+            time dictates. Velocity cures anxiety.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6: ARTIFACTS (OFFERINGS) -->
+    <section id="artifacts">
+      <span class="section-label">Inventory · 06</span>
+      <h2
+        style="
+          font-family: var(--font-secondary);
+          font-size: var(--t-h2);
+          margin-bottom: var(--space-xl);
+        "
+      >
+        What You Will Walk Away With
+      </h2>
+      <div class="artifacts-grid">
+        <div class="artifact-card">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426daeba487700722d3e6.png"
+            alt="Craft detail"
+          />
+          <div class="artifact-info">
+            <h3 class="artifact-title">The Architect Blueprint</h3>
+            <span class="artifact-meta">PDF Workbook</span>
+          </div>
+        </div>
+        <div class="artifact-card">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dabfc81f2479eeebca.png"
+            alt="Monks path"
+          />
+          <div class="artifact-info">
+            <h3 class="artifact-title">The 100 Days Log</h3>
+            <span class="artifact-meta">Daily Prompts & Logs</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7: SANCTUARY (BENEFITS - DARK) -->
+    <section id="sanctuary">
+      <div class="sanctuary-wrap">
+        <div class="sanctuary-media">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426dad54817b6831deb30.png"
+            alt="Dark atmospheric"
+          />
+        </div>
+        <div class="sanctuary-content">
+          <span class="section-label" style="color: var(--color-primary)"
+            >Benefit · 07</span
+          >
+          <h2
+            style="
+              font-family: var(--font-secondary);
+              font-size: var(--t-h2);
+              color: white;
+              margin-bottom: var(--space-xl);
+            "
+          >
+            Why Silence Works Better Than Noise
+          </h2>
+
+          <div class="feature-row">
+            <div class="feature-icon"></div>
+            <div>
+              <strong style="color: white; display: block; margin-bottom: 4px"
+                >Isolation from Trends</strong
+              >
+              <span style="color: rgba(247, 243, 239, 0.7); font-size: 0.9rem"
+                >Stop reacting. Start creating. Your work will look different
+                because no one told you to make it look like that.</span
+              >
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon"></div>
+            <div>
+              <strong style="color: white; display: block; margin-bottom: 4px"
+                >Peerless Accountability</strong
+              >
+              <span style="color: rgba(247, 243, 239, 0.7); font-size: 0.9rem"
+                >Weekly checks are mandatory. If you miss the window, you are
+                logged out. The system does not forgive hesitation.</span
+              >
+            </div>
+          </div>
+          <div style="margin-top: var(--space-2xl)">
+            <button
+              class="btn-primary"
+              style="
+                background: var(--color-primary);
+                color: white;
+                padding: var(--space-lg) var(--space-3xl);
+                border: none;
+                cursor: none;
+                font-size: var(--t-xs);
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+              "
+            >
+              Apply Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S8: WITNESS HERO -->
+    <section id="witness">
+      <img
+        src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b426da277ba02b27d0287b.png"
+        alt="Neon bleed bg"
+      />
+      <div class="witness-content">
+        <p
+          style="
+            font-family: var(--font-secondary);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-style: italic;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: var(--space-xl);
+          "
+        >
+          "I didn't know I was capable of finishing something for 4 hours
+          straight."
+        </p>
+        <div style="display: flex; align-items: center; gap: var(--space-md)">
+          <div
+            style="width: 1px; height: 30px; background: var(--color-primary)"
+          ></div>
+          <span
+            style="
+              color: var(--color-text-muted);
+              text-transform: uppercase;
+              font-size: var(--t-xs);
+              letter-spacing: 0.2em;
+            "
+            >Sarah J., Cohort 1</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- S9: ECHOES (TESTIMONIALS STUB) -->
+    <section id="echoes">
+      <div class="echoes-watermark">SOVEREIGN</div>
+      <div class="echoes-grid">
+        <div class="ghost-card large" style="min-height: 300px">
+          <p
+            style="
+              font-size: 1.1rem;
+              line-height: 1.6;
+              color: var(--color-text-secondary);
+            "
+          >
+            The most honest conversation about productivity I've ever had. This
+            isn't about doing more. It's about being less afraid of stillness.
+          </p>
+          <div class="ghost-author">Marcus T. — Product Designer</div>
+        </div>
+        <div class="ghost-card">
+          <p
+            style="
+              font-size: 0.9rem;
+              line-height: 1.6;
+              color: var(--color-text-secondary);
+            "
+          >
+            The template alone paid for itself. Clean, brutal, effective.
+          </p>
+          <div class="ghost-author">J.K. — Author</div>
+        </div>
+        <div class="ghost-card">
+          <p
+            style="
+              font-size: 0.9rem;
+              line-height: 1.6;
+              color: var(--color-text-secondary);
+            "
+          >
+            I finally shipped the book I started writing in 2019.
+          </p>
+          <div class="ghost-author">Anon.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S10: ORACLE (FAQ STUB) -->
+    <section id="oracle">
+      <span class="section-label" style="text-align: center; display: block"
+        >Queries · 10</span
+      >
+      <div class="accordion-group">
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Do I need a large audience to start? <span class="icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              No. We are building the infrastructure first. Audience growth
+              happens as a side effect of consistent, high-quality artifact
+              release.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Is this suitable for beginners? <span class="icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              Yes. The discipline applies regardless of skill level. However,
+              you must already have an idea worth pursuing.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S11: CONVERSION -->
+    <section id="conversion">
+      <h2
+        style="
+          font-family: var(--font-secondary);
+          font-size: var(--t-h1);
+          margin-bottom: var(--space-xl);
+        "
+      >
+        Lock The Coordinates
+      </h2>
+      <p style="color: var(--color-text-secondary); max-width: 50ch">
+        Only 12 seats remain for the January intake. Once the cohort reaches
+        capacity, the price doubles permanently.
+      </p>
+
+      <form class="capture-form" action="{{FORM_ENDPOINT}}" method="POST">
+        <div class="input-wrapper">
+          <input
+            type="email"
+            class="email-input"
+            placeholder="name@domain.com"
+            required
+            autocomplete="off"
+          />
+        </div>
+        <button
+          type="submit"
+          class="btn-primary"
+          style="margin-top: var(--space-lg); width: 100%"
+        >
+          Initialize Registration
+        </button>
+        <div class="success-msg">
+          Coordinates archived. The memory persists.
+        </div>
+      </form>
+    </section>
+
+    <!-- S12: FOOTER -->
+    <footer>
+      <div>
+        <div style="font-family: var(--font-secondary); font-style: italic">
+          THE SOVEREIGN YEAR.
+        </div>
+        <div
+          style="
+            font-size: var(--t-xs);
+            color: var(--color-text-muted);
+            margin-top: 4px;
+          "
+        >
+          &copy; 2026. All rights reserved.
+        </div>
+      </div>
+      <div class="footer-nav">
+        <a
+          href="#"
+          style="
+            font-size: var(--t-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+          "
+          >Manifesto</a
+        >
+        <a
+          href="#"
+          style="
+            font-size: var(--t-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+          "
+          >Terms</a
+        >
+        <a
+          href="#"
+          style="
+            font-size: var(--t-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+          "
+          >Contact</a
+        >
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // INIT LENIS
+        const lenis = new Lenis({
+          duration: 1.8,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        });
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- AUDIO SYSTEM (MOCKED AMBIENT DRONE) ---
+        const audioBtn = document.getElementById("audio-toggle");
+        let audioCtx = null;
+        let osc = null;
+        let gainNode = null;
+        let running = false;
+
+        audioBtn.addEventListener("click", () => {
+          if (!running) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            gainNode = audioCtx.createGain();
+            osc = audioCtx.createOscillator();
+
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(50, audioCtx.currentTime);
+
+            // Low pass filter effect
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.value = 200;
+
+            osc.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            osc.start();
+
+            // Fade in volume
+            gainNode.gain.linearRampToValueAtTime(
+              0.08,
+              audioCtx.currentTime + 3,
+            );
+            running = true;
+            audioBtn.textContent = "Audio // Active";
+          } else {
+            if (gainNode)
+              gainNode.gain.linearRampToValueAtTime(
+                0,
+                audioCtx.currentTime + 2,
+              );
+            setTimeout(() => {
+              osc.stop();
+              running = false;
+              audioBtn.textContent = "Audio // Off";
+            }, 2000);
+          }
+        });
+
+        // --- HEADER SCROLL BEHAVIOR ---
+        const header = document.getElementById("header");
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 50) header.classList.add("scrolled");
+          else header.classList.remove("scrolled");
+        });
+
+        // --- CUSTOM CURSOR ---
+        const cur = document.querySelector(".custom-cursor");
+        const fol = document.querySelector(".cursor-follower");
+
+        document.addEventListener("mousemove", (e) => {
+          gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0.1 });
+          gsap.to(fol, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.6,
+            ease: "power2.out",
+          });
+        });
+
+        document.querySelectorAll("button, a").forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            gsap.to(fol, {
+              scale: 1.5,
+              borderColor: "transparent",
+              background: "rgba(232, 63, 67, 0.1)",
+              duration: 0.3,
+            });
+            gsap.to(cur, { opacity: 0, duration: 0.2 });
+          });
+          el.addEventListener("mouseleave", () => {
+            gsap.to(fol, {
+              scale: 1,
+              borderColor: "var(--color-primary)",
+              background: "transparent",
+              duration: 0.3,
+            });
+            gsap.to(cur, { opacity: 1, duration: 0.2 });
+          });
+        });
+
+        // --- HERO CAROUSEL CLIP-PATH TRANSITIONS ---
+        const slides = document.querySelectorAll(".slide");
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function updateSlide(index, direction) {
+          gsap.fromTo(
+            slides[index],
+            { autoAlpha: 1, z: 10, scale: 1 },
+            { autoAlpha: 1, z: 5, scale: 1, duration: 0 },
+          );
+
+          // Logic for sliding in
+          const tl = gsap.timeline({
+            onUpdate: () => {
+              // Dynamic clip-path calculation based on time could go here
+              // Simplified version using CSS classes handled below
+            },
+          });
+
+          // Hide current
+          gsap.to(slides[currentSlide], {
+            clipPath:
+              direction === "next" ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)",
+            autoAlpha: 0,
+            duration: 1.2,
+            ease: "power2.in",
+          });
+
+          // Show target
+          // Note: Since slides overlap in DOM visually in this static markup, we simply fade them in/out
+          // For clip-path simulation without complex SVG masking, we use translate Z and opacity crossfade
+          // Or simpler: Use the requested clip-path logic strictly
+
+          const clip =
+            direction === "next" ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)";
+          gsap.fromTo(
+            slides[index],
+            { clipPath: clip, autoAlpha: 0 },
+            {
+              clipPath: "inset(0 0 0 0)",
+              autoAlpha: 1,
+              duration: 1.5,
+              ease: "power2.out",
+              delay: 0.1,
+            },
+          );
+          currentSlide = index;
+        }
+
+        document.getElementById("slide-next").addEventListener("click", () => {
+          const next = (currentSlide + 1) % totalSlides;
+          updateSlide(next, "next");
+        });
+
+        document.getElementById("slide-prev").addEventListener("click", () => {
+          const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+          updateSlide(prev, "prev");
+        });
+
+        // --- MEMORY IMAGE REVEAL ---
+        const memImg = document.querySelector("#memory img");
+        if (memImg) {
+          ScrollTrigger.create({
+            trigger: "#memory",
+            start: "top 60%",
+            onEnter: () =>
+              gsap.to(memImg, {
+                filter: "grayscale(0) blur(0px)",
+                duration: 1.5,
+                ease: "power2.out",
+              }),
+          });
+        }
+
+        // --- MANIFESTO PARALLAX ---
+        gsap.to(".manifesto-quote", {
+          scrollTrigger: {
+            trigger: "#lintel",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+          y: -50,
+          letterSpacing: "-0.01em",
+        });
+
+        // --- WITNESS SPOTLIGHT ---
+        const witness = document.getElementById("witness");
+        witness.addEventListener("mousemove", (e) => {
+          const rect = witness.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          witness.style.setProperty("--mouse-x", `${x}%`);
+          witness.style.setProperty("--mouse-y", `${y}%`);
+        });
+
+        // --- ARTEFACT HOVER PARALLAX ---
+        document.querySelectorAll(".artifact-card").forEach((card) => {
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            gsap.to(card.querySelector("img"), {
+              x: x * 50,
+              y: y * 50,
+              duration: 1,
+              ease: "power2.out",
+            });
+          });
+          card.addEventListener("mouseleave", () => {
+            gsap.to(card.querySelector("img"), {
+              x: -5,
+              y: -5,
+              duration: 1,
+              ease: "power2.out",
+            }); // reset relative to css translate
+          });
+        });
+
+        // --- FAQ ACCORDION ---
+        document.querySelectorAll(".accordion-trigger").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const content = btn.nextElementSibling;
+            const isOpen = content.style.maxHeight;
+
+            document.querySelectorAll(".accordion-content").forEach((c) => {
+              c.style.maxHeight = null;
+              c.parentElement.querySelector(".icon").textContent = "+";
+            });
+
+            if (!isOpen) {
+              content.style.maxHeight = content.scrollHeight + "px";
+              btn.querySelector(".icon").textContent = "−";
+            }
+          });
+        });
+
+        // --- FORM SUBMISSION ---
+        const form = document.querySelector("form");
+        const submitBtn = form.querySelector("button");
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const msg = form.querySelector(".success-msg");
+          submitBtn.textContent = "Archiving...";
+          setTimeout(() => {
+            msg.style.opacity = 1;
+            submitBtn.style.background = "var(--color-primary)";
+            form.reset();
+          }, 1500);
+        });
+
+        // --- RESERVE BUTTONS ANCHOR ---
+        document.querySelectorAll(".js-reserve").forEach((b) => {
+          b.addEventListener("click", () => {
+            document
+              .getElementById("conversion")
+              .scrollIntoView({ behavior: "smooth" });
+            document.querySelector(".email-input").focus();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
