@@ -104,7 +104,7 @@ const createBentoTween = () => {
 };
 
 // Start the engine
-createBentoTween();
+document.addEventListener("DOMContentLoaded", createBentoTween);
 window.addEventListener("resize", createBentoTween);
 
 // Initialize on load variable
@@ -143,26 +143,135 @@ let currentQuestion = 0;
 let answers = [];
 let userEmail = "";
 
-// DOM Elements
-const startQuizBtn = document.getElementById("startQuizBtn");
-const quizSection = document.getElementById("quiz");
-const questionContainer = document.getElementById("questionContainer");
-const progressFill = document.getElementById("progressFill");
-const currentQSpan = document.getElementById("currentQ");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const emailGateModal = document.getElementById("emailGateModal");
-const resultModal = document.getElementById("resultModal");
-const resultContent = document.getElementById("resultContent");
+// Flair (Falling Icons) Animation State
+const flairAssets = [
+  "https://assets.codepen.io/16327/Revised+Flair.png",
+  "https://assets.codepen.io/16327/Revised+Flair-1.png",
+  "https://assets.codepen.io/16327/Revised+Flair-2.png",
+  "https://assets.codepen.io/16327/Revised+Flair-3.png",
+  "https://assets.codepen.io/16327/Revised+Flair-4.png",
+  "https://assets.codepen.io/16327/Revised+Flair-5.png",
+  "https://assets.codepen.io/16327/Revised+Flair-6.png",
+  "https://assets.codepen.io/16327/Revised+Flair-7.png",
+  "https://assets.codepen.io/16327/Revised+Flair-8.png",
+];
+let flairElements = [];
+let flairIndex = 0;
+const flairWrapper = (idx) => idx % flairElements.length;
+
+// DOM Elements (Selected after DOM is ready)
+let startQuizBtn, quizSection, questionContainer, progressFill, currentQSpan, prevBtn, nextBtn, emailGateModal, resultModal, resultContent;
+
+function setupDOMElements() {
+  startQuizBtn = document.getElementById("startQuizBtn");
+  quizSection = document.getElementById("quiz");
+  questionContainer = document.getElementById("questionContainer");
+  progressFill = document.getElementById("progressFill");
+  currentQSpan = document.getElementById("currentQ");
+  prevBtn = document.getElementById("prevBtn");
+  nextBtn = document.getElementById("nextBtn");
+  emailGateModal = document.getElementById("emailGateModal");
+  resultModal = document.getElementById("resultModal");
+  resultContent = document.getElementById("resultContent");
+}
 
 // Initialize Quiz
 function initQuiz() {
+  setupDOMElements();
+  setupListeners();
   if (typeof quizData === 'undefined' || !quizData.length) {
     console.error("Quiz data not loaded!");
     return;
   }
+  
+  // Attach form listener
+  const emailForm = document.getElementById('emailForm');
+  if (emailForm) {
+    emailForm.addEventListener('submit', handleEmailSubmit);
+  }
+
   renderQuestion();
   updateProgress();
+}
+
+function initFlairs() {
+  if (!quizSection) {
+    console.warn("Quiz section not found");
+    return;
+  }
+  
+  // Check if already initialized
+  if (document.getElementById("flair-container")) return;
+  
+  const container = document.createElement("div");
+  container.id = "flair-container";
+  (quizSection || document.getElementById("quiz")).appendChild(container); // ✅ Append to quizSection for local absolute positioning
+  
+  for (let i = 0; i < 40; i++) {
+    const img = document.createElement("img");
+    img.className = "flair";
+    img.src = flairAssets[i % flairAssets.length];
+    container.appendChild(img);
+    flairElements.push(img);
+  }
+}
+
+/**
+ * Play a GSAP animation on a specific flair element (Demo Aligned)
+ */
+function playFlairAnimation(shape, x, y) {
+  let tl = gsap.timeline();
+  
+  gsap.set(shape, {
+    clearProps: "all",
+    opacity: 1,
+    left: x,
+    top: y,
+    xPercent: -50,
+    yPercent: -50,
+  });
+  
+  tl.from(shape, {
+    opacity: 0,
+    scale: 0,
+    ease: "elastic.out(1,0.3)",
+  })
+  .to(shape, {
+    rotation: "random([-360, 360])",
+  }, "<")
+  .to(shape, {
+    y: "120vh",
+    ease: "back.in(.4)",
+    duration: 1,
+  }, 0);
+}
+
+// Test function - for manual verification
+window.testFlair = function() {
+  if (flairElements.length > 0) {
+    triggerFlairBurst(window.innerWidth / 2, window.innerHeight / 2);
+    console.log("Flair test triggered!");
+  } else {
+    console.warn("Flair elements not initialized yet.");
+  }
+};
+
+/**
+ * Trigger a burst of flairs from a specific coordinate
+ */
+function triggerFlairBurst(x, y) {
+  const burstCount = 8;
+  for (let i = 0; i < burstCount; i++) {
+    const wrappedIdx = flairWrapper(flairIndex);
+    const img = flairElements[wrappedIdx];
+    
+    // Add some random offset to the burst origin
+    const offsetX = (Math.random() - 0.5) * 40;
+    const offsetY = (Math.random() - 0.5) * 40;
+    
+    playFlairAnimation(img, x + offsetX, y + offsetY);
+    flairIndex++;
+  }
 }
 
 // Render Current Question
@@ -188,11 +297,10 @@ function renderQuestion() {
 
 function injectNewQuestion(q) {
   questionContainer.innerHTML = `
-    <h2 class="question-title" style="font-size: 1.5rem; margin-bottom: var(--spacing-lg); opacity: 0;">${q.question}</h2>
-    ${q.options
-      .map(
+    <h2 class="question-title" style="font-size: 1.25rem; margin-bottom: var(--spacing-sm); opacity: 0;">${q.question}</h2>
+    ${q.options.map(
         (opt, idx) => `
-        <div class="question-card" data-index="${idx}" id="option-${idx}" style="opacity: 0; transform: translateY(20px);">
+        <div class="question-card" data-index="${idx}" id="option-${idx}" role="radio" aria-checked="false" style="opacity: 0; transform: translateY(20px);">
             <div class="option-icon">${idx + 1}</div>
             <span class="option-text">${opt.text}</span>
         </div>
@@ -222,19 +330,43 @@ function injectNewQuestion(q) {
   nextBtn.textContent = currentQuestion === quizData.length - 1 ? "Complete Quiz →" : "Next →";
 }
 
-// Handle Question clicks (Event Delegation)
-questionContainer.addEventListener("click", (e) => {
-  const card = e.target.closest(".question-card");
-  if (card) {
-    const index = parseInt(card.dataset.index);
-    selectAnswer(index);
-  }
-});
+function setupListeners() {
+  if (!questionContainer) return;
+
+  // Handle Question clicks (Event Delegation)
+  questionContainer.addEventListener("click", (e) => {
+    const card = e.target.closest(".question-card");
+    if (card) {
+      const index = parseInt(card.dataset.index);
+      selectAnswer(index);
+    }
+  });
+
+  // Handle Hover Animation (Event Delegation)
+  questionContainer.addEventListener("mouseover", (e) => {
+    const card = e.target.closest(".question-card");
+    if (card && !card.classList.contains("animating")) {
+      const rect = card.getBoundingClientRect();
+      const quizRect = quizSection.getBoundingClientRect();
+      
+      // Calculate position relative to the quiz container
+      const centerX = rect.left - quizRect.left + rect.width / 2;
+      const centerY = rect.top - quizRect.top + rect.height / 2;
+      
+      triggerFlairBurst(centerX, centerY);
+      
+      card.classList.add("animating");
+      setTimeout(() => card.classList.remove("animating"), 600);
+    }
+  });
+}
 
 // Select Answer
 function selectAnswer(index) {
   document.querySelectorAll(".question-card").forEach((card) => {
-    card.classList.toggle("selected", parseInt(card.dataset.index) === index);
+    const isSelected = parseInt(card.dataset.index) === index;
+    card.classList.toggle("selected", isSelected);
+    card.setAttribute("aria-checked", isSelected);
   });
 
   answers[currentQuestion] = index;
@@ -452,12 +584,18 @@ ScrollTrigger.create({
   trigger: "#quiz",
   start: "top 80%",
   onEnter: () => {
-    if (answers.length === 0) initQuiz();
-  },
-  onRefresh: (self) => {
-    if (self.progress > 0 && answers.length === 0) initQuiz();
+    initQuiz();
+    initFlairs();
   },
   once: true
+});
+
+// Fallback initialization if already past the point
+window.addEventListener("load", () => {
+  if (window.scrollY > 0) {
+    initQuiz();
+    initFlairs();
+  }
 });
 
 // FAQ Accordion logic
@@ -467,9 +605,11 @@ document.querySelectorAll(".faq-question").forEach((btn) => {
     const answer = faqItem.querySelector(".faq-answer");
     const isOpening = !faqItem.classList.contains("active");
 
+    // Close all other active FAQ items and reset their aria-expanded
     document.querySelectorAll(".faq-item.active").forEach((item) => {
       if (item !== faqItem) {
         item.classList.remove("active");
+        item.querySelector(".faq-question").setAttribute("aria-expanded", "false");
         gsap.to(item.querySelector(".faq-answer"), {
           maxHeight: 0,
           duration: 0.3,
@@ -479,6 +619,7 @@ document.querySelectorAll(".faq-question").forEach((btn) => {
     });
 
     faqItem.classList.toggle("active");
+    btn.setAttribute("aria-expanded", isOpening);
     gsap.to(answer, {
       maxHeight: isOpening ? answer.scrollHeight + 40 : 0,
       duration: 0.4,
@@ -529,6 +670,7 @@ stats.forEach((stat) => {
           duration: 2,
           decimalPlaces: stat.decimals || 0,
           suffix: stat.suffix,
+          useGrouping: true,
         });
         if (!countUpAnim.error) {
           countUpAnim.start();
@@ -567,6 +709,8 @@ document.addEventListener("keydown", (e) => {
 window.addEventListener("load", () => {
   // Initialize Bento Gallery
   bentoCleanup = createBentoTween();
+  
+  // initFlairs() removed from here - now triggered by ScrollTrigger
 
   const masterTl = gsap.timeline();
 
