@@ -85,7 +85,7 @@ const createBentoTween = () => {
 
     // Brighten on scroll for that premium feel
     tlMain.to(
-      galleryItems.querySelectorAll("img"),
+      galleryElement.querySelectorAll(".gallery__item img"),
       {
         filter: "brightness(1) grayscale(0)",
         duration: 0.5,
