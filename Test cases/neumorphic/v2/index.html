@@ -1,0 +1,1592 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexusAI - AI-Powered Workflow Automation</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+      :root {
+        --bg: #e6e9ef;
+        --bg-mid: #d1d5db;
+        --shadow-dark: #b8bcc2;
+        --shadow-light: #ffffff;
+        --accent: #7c3aed;
+        --accent-dark: #6d28d9;
+        --text-primary: #1f2937;
+        --text-muted: #6b7280;
+        --footer-bg: #1f2937;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .neu-raised {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 24px;
+      }
+      .neu-raised-sm {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          4px 4px 8px var(--shadow-dark),
+          -4px -4px 8px var(--shadow-light);
+        border-radius: 12px;
+      }
+      .neu-convex {
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+      }
+      .neu-inset {
+        background: linear-gradient(145deg, var(--bg-mid), var(--bg));
+        box-shadow:
+          inset 4px 4px 8px var(--shadow-dark),
+          inset -4px -4px 8px var(--shadow-light);
+        border-radius: 12px;
+      }
+      .neu-card {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 24px;
+        padding: 32px;
+        transition: transform 0.3s ease;
+      }
+      .neu-card:hover {
+        transform: translateY(-4px);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+        border-radius: 14px;
+        padding: 14px 40px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow:
+          inset 4px 4px 8px rgba(0, 0, 0, 0.2),
+          inset -2px -2px 4px rgba(255, 255, 255, 0.1);
+      }
+      .btn-secondary {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          6px 6px 12px var(--shadow-dark),
+          -6px -6px 12px var(--shadow-light);
+        border-radius: 14px;
+        padding: 14px 40px;
+        color: var(--text-primary);
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(30px, -20px);
+        }
+      }
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        display: flex;
+        gap: 32px;
+        animation: marquee 20s linear infinite;
+        width: max-content;
+      }
+      .marquee-wrap {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+      .hero-headline-gradient {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .navbar.glass {
+        background: rgba(230, 233, 239, 0.92) !important;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      }
+      .demo-pill.active {
+        border: 2px solid var(--accent);
+        color: var(--accent);
+      }
+      .faq-q.active + div {
+        max-height: 500px !important;
+      }
+      #mobile-drawer {
+        display: none;
+      }
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        .feature-grid,
+        .pricing-grid,
+        .stats-row {
+          grid-template-columns: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- S1: Navbar -->
+    <nav
+      id="navbar"
+      class="fixed top-0 left-0 right-0 z-[999] px-6 py-4 flex items-center justify-between transition-all duration-300"
+    >
+      <div class="flex items-center gap-2">
+        <span class="w-4 h-4 rounded-full bg-[#7c3aed]"></span
+        ><span class="font-outfit font-black text-xl tracking-tight"
+          >Nexus<span class="text-[#7c3aed]">AI</span></span
+        >
+      </div>
+      <div class="nav-links hidden md:flex gap-8">
+        <a
+          href="#features"
+          class="hover:text-[#7c3aed] transition-colors font-inter font-medium"
+          >Features</a
+        >
+        <a
+          href="#how-it-works"
+          class="hover:text-[#7c3aed] transition-colors font-inter font-medium"
+          >How It Works</a
+        >
+        <a
+          href="#pricing"
+          class="hover:text-[#7c3aed] transition-colors font-inter font-medium"
+          >Pricing</a
+        >
+        <a
+          href="#faq"
+          class="hover:text-[#7c3aed] transition-colors font-inter font-medium"
+          >FAQ</a
+        >
+      </div>
+      <button class="hidden md:block btn-primary">Start Free Trial</button>
+      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 w-12 h-8">
+        <span class="block w-full h-0.5 bg-[#1f2937]"></span>
+        <span class="block w-full h-0.5 bg-[#1f2937]"></span>
+        <span class="block w-full h-0.5 bg-[#1f2937]"></span>
+      </button>
+    </nav>
+    <div
+      id="mobile-drawer"
+      class="fixed top-16 left-0 right-0 z-[998] neu-raised p-6"
+    >
+      <a
+        href="#features"
+        class="block py-3 border-b border-[var(--shadow-dark)] hover:text-[#7c3aed] font-inter font-medium"
+        >Features</a
+      >
+      <a
+        href="#how-it-works"
+        class="block py-3 border-b border-[var(--shadow-dark)] hover:text-[#7c3aed] font-inter font-medium"
+        >How It Works</a
+      >
+      <a
+        href="#pricing"
+        class="block py-3 border-b border-[var(--shadow-dark)] hover:text-[#7c3aed] font-inter font-medium"
+        >Pricing</a
+      >
+      <a
+        href="#faq"
+        class="block py-3 hover:text-[#7c3aed] font-inter font-medium"
+        >FAQ</a
+      >
+    </div>
+
+    <!-- S2: Hero -->
+    <section
+      class="min-h-screen relative z-10 pt-20 flex items-center overflow-hidden"
+    >
+      <div
+        style="
+          position: absolute;
+          left: 10%;
+          top: 20%;
+          width: 300px;
+          height: 300px;
+          border-radius: 50%;
+          filter: blur(80px);
+          opacity: 0.18;
+          background: linear-gradient(135deg, #7c3aed, #6d28d9);
+          animation: float 8s ease-in-out infinite;
+        "
+      ></div>
+      <div
+        style="
+          position: absolute;
+          right: 15%;
+          bottom: 30%;
+          width: 250px;
+          height: 250px;
+          border-radius: 50%;
+          filter: blur(80px);
+          opacity: 0.18;
+          background: linear-gradient(135deg, #a78bfa, #7c3aed);
+          animation: float 10s ease-in-out infinite delay-2s;
+        "
+      ></div>
+      <div
+        class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-20"
+      >
+        <div class="reveal-section hero-badge-container">
+          <div
+            class="neu-raised-sm inline-flex items-center gap-2 px-4 py-2 mb-6 border border-[#7c3aed]"
+          >
+            <span
+              class="text-[#7c3aed] font-inter font-bold text-xs tracking-wider"
+              >NEW</span
+            ><span class="font-inter font-bold text-xs uppercase tracking-wider"
+              >↑ Save 12hrs Weekly</span
+            >
+          </div>
+          <h1
+            class="hero-headline font-outfit font-black leading-tight tracking-tight mb-6"
+            style="font-size: clamp(40px, 5.5vw, 80px)"
+          >
+            Automate Your <br /><span class="hero-headline-gradient"
+              >Workflow Intelligence</span
+            >
+          </h1>
+          <p
+            class="hero-sub font-inter text-lg leading-relaxed text-[var(--text-muted)] mb-8"
+          >
+            ✓ Cut manual tasks by 73%<br />✓ Integrate 50+ tools instantly<br />✓
+            Zero-code automation builder
+          </p>
+          <div class="hero-ctas flex gap-4 flex-wrap">
+            <button class="btn-primary">Start Free Trial</button>
+            <button class="btn-secondary">Watch Demo</button>
+          </div>
+          <div class="hero-trust mt-10">
+            <span class="font-inter font-semibold text-[var(--text-muted)]"
+              >Trusted by 500+ teams</span
+            >
+            <div class="flex gap-3 mt-3">
+              <span class="neu-raised-sm px-3 py-1 text-xs font-inter font-bold"
+                >Stripe</span
+              >
+              <span class="neu-raised-sm px-3 py-1 text-xs font-inter font-bold"
+                >Notion</span
+              >
+              <span class="neu-raised-sm px-3 py-1 text-xs font-inter font-bold"
+                >Slack</span
+              >
+              <span class="neu-raised-sm px-3 py-1 text-xs font-inter font-bold"
+                >HubSpot</span
+              >
+              <span class="neu-raised-sm px-3 py-1 text-xs font-inter font-bold"
+                >Salesforce</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-reveal reveal-section">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png"
+            alt="AI Dashboard Preview"
+            class="neu-raised p-4 w-full object-cover max-h-[500px]"
+            style="border-radius: 24px"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- S3: Stats + Testimonials -->
+    <section class="py-20 relative z-20">
+      <div class="container mx-auto px-6">
+        <div class="stats-row grid md:grid-cols-4 gap-6 mb-16">
+          <div class="neu-card stats-card text-center">
+            <div
+              data-count="73"
+              class="text-5xl md:text-7xl font-outfit font-black hero-headline-gradient"
+              data-suffix="%"
+            >
+              73%
+            </div>
+            <p class="font-inter font-semibold mt-2">Task Reduction</p>
+          </div>
+          <div class="neu-card stats-card text-center">
+            <div
+              data-count="50"
+              class="text-5xl md:text-7xl font-outfit font-black hero-headline-gradient"
+              data-suffix="+"
+            >
+              50+
+            </div>
+            <p class="font-inter font-semibold mt-2">Tool Integrations</p>
+          </div>
+          <div class="neu-card stats-card text-center">
+            <div
+              data-count="12000"
+              class="text-5xl md:text-7xl font-outfit font-black hero-headline-gradient"
+              data-prefix="$"
+            >
+              12k
+            </div>
+            <p class="font-inter font-semibold mt-2">Hours Saved</p>
+          </div>
+          <div class="neu-card stats-card text-center">
+            <div
+              data-count="99.9"
+              class="text-5xl md:text-7xl font-outfit font-black hero-headline-gradient"
+              data-suffix="%"
+            >
+              99.9%
+            </div>
+            <p class="font-inter font-semibold mt-2">Uptime SLA</p>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="neu-card testimonial-card">
+            <div
+              class="w-12 h-12 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+                font-family: &quot;Outfit&quot;;
+                font-weight: 800;
+              "
+            >
+              K
+            </div>
+            <p class="font-inter italic text-[var(--text-muted)] mb-4">
+              "We automated 80% of our support tickets in 2 weeks. The ROI was
+              immediate."
+            </p>
+            <div class="font-inter font-bold">Karen Lin</div>
+            <div class="font-inter text-sm text-[var(--text-muted)]">
+              Head of Ops @ FlowLabs
+            </div>
+          </div>
+          <div class="neu-card testimonial-card">
+            <div
+              class="w-12 h-12 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+                font-family: &quot;Outfit&quot;;
+                font-weight: 800;
+              "
+            >
+              M
+            </div>
+            <p class="font-inter italic text-[var(--text-muted)] mb-4">
+              "Setup took literally 10 minutes. Now our entire sales workflow
+              runs on autopilot."
+            </p>
+            <div class="font-inter font-bold">Marcus Chen</div>
+            <div class="font-inter text-sm text-[var(--text-muted)]">
+              Founder @ GrowthBox
+            </div>
+          </div>
+          <div class="neu-card testimonial-card">
+            <div
+              class="w-12 h-12 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+                font-family: &quot;Outfit&quot;;
+                font-weight: 800;
+              "
+            >
+              S
+            </div>
+            <p class="font-inter italic text-[var(--text-muted)] mb-4">
+              "Best investment we made this year. The team saved 30+ hours per
+              week.
+            </p>
+            <div class="font-inter font-bold">Sarah Okonjo</div>
+            <div class="font-inter text-sm text-[var(--text-muted)]">
+              CTO @ DataFlow Inc
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S4: Features -->
+    <section id="features" class="py-20 bg-white relative z-30">
+      <div class="container mx-auto px-6">
+        <div class="mb-12 text-center reveal-section">
+          <span
+            class="neu-raised-sm px-4 py-2 text-xs font-inter font-bold uppercase tracking-wider text-[#7c3aed]"
+            >Features</span
+          >
+          <h2 class="font-outfit font-black text-4xl md:text-5xl mt-4 mb-3">
+            Everything You Need
+          </h2>
+          <p class="font-inter text-[var(--text-muted)] max-w-xl mx-auto">
+            Powerful building blocks for complex workflows without writing code
+          </p>
+        </div>
+        <div
+          class="reveal-grid feature-grid grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div class="neu-card feature-item">
+            <div
+              class="w-10 h-10 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            </div>
+            <h3 class="font-outfit font-bold text-lg mb-2">Smart Triggers</h3>
+            <p class="font-inter text-[var(--text-muted)]">
+              Set conditions that fire automations based on real-time events
+              across your stack.
+            </p>
+          </div>
+          <div class="neu-card feature-item">
+            <div
+              class="w-10 h-10 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <path d="M12 17h4M8 17h2" />
+              </svg>
+            </div>
+            <h3 class="font-outfit font-bold text-lg mb-2">
+              Multi-Agent Workflows
+            </h3>
+            <p class="font-inter text-[var(--text-muted)]">
+              Deploy multiple AI agents that collaborate on complex task
+              sequences automatically.
+            </p>
+          </div>
+          <div class="neu-card feature-item">
+            <div
+              class="w-10 h-10 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"
+                />
+              </svg>
+            </div>
+            <h3 class="font-outfit font-bold text-lg mb-2">
+              Visual Workflow Builder
+            </h3>
+            <p class="font-inter text-[var(--text-muted)]">
+              Drag-and-drop canvas with intelligent suggestions and pre-built
+              templates.
+            </p>
+          </div>
+          <div class="neu-card feature-item">
+            <div
+              class="w-10 h-10 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="font-outfit font-bold text-lg mb-2">
+              Real-Time Analytics
+            </h3>
+            <p class="font-inter text-[var(--text-muted)]">
+              Track every automation run with detailed logs and performance
+              metrics dashboard.
+            </p>
+          </div>
+          <div class="neu-card feature-item">
+            <div
+              class="w-10 h-10 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 15v2m0 0l-2-2m2 2l2-2M9 10v2m6 0v2M4 21h16" />
+              </svg>
+            </div>
+            <h3 class="font-outfit font-bold text-lg mb-2">
+              Enterprise Security
+            </h3>
+            <p class="font-inter text-[var(--text-muted)]">
+              SOC 2 Type II certified with end-to-end encryption and role-based
+              access control.
+            </p>
+          </div>
+          <div class="neu-card feature-item">
+            <div
+              class="w-10 h-10 rounded-full neu-raised flex items-center justify-center mb-4"
+              style="
+                background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                color: white;
+              "
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-outfit font-bold text-lg mb-2">
+              Team Collaboration
+            </h3>
+            <p class="font-inter text-[var(--text-muted)]">
+              Invite teammates, share workflows, and manage permissions across
+              your organization.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5: How It Works -->
+    <section id="how-it-works" class="py-20 relative z-40">
+      <div class="container mx-auto px-6">
+        <div class="mb-12 text-center reveal-section">
+          <h2 class="font-outfit font-black text-4xl md:text-5xl">
+            How It Works
+          </h2>
+          <p class="font-inter text-[var(--text-muted)] max-w-xl mx-auto mt-3">
+            Four steps from idea to fully automated workflow
+          </p>
+        </div>
+        <div class="steps-container">
+          <div
+            class="step-item step-card-step flex md:flex-row flex-col items-center gap-8 mb-8"
+            data-order="1"
+          >
+            <div
+              class="neu-raised w-12 h-12 flex-shrink-0 flex items-center justify-center font-outfit font-black hero-headline-gradient"
+            >
+              1
+            </div>
+            <div class="flex-grow">
+              <p class="neu-raised p-6">
+                <span class="font-outfit font-bold text-xl block mb-2"
+                  >Connect Your Stack</span
+                >
+                <span class="font-inter text-[var(--text-muted)]"
+                  >Link 50+ apps with one-click integrations or API
+                  endpoints.</span
+                >
+              </p>
+            </div>
+          </div>
+          <div
+            class="step-item step-card-step flex md:flex-row flex-col items-center gap-8 mb-8"
+            data-order="2"
+          >
+            <div
+              class="neu-raised w-12 h-12 flex-shrink-0 flex items-center justify-center font-outfit font-black hero-headline-gradient"
+            >
+              2
+            </div>
+            <div class="flex-grow">
+              <p class="neu-raised p-6">
+                <span class="font-outfit font-bold text-xl block mb-2"
+                  >Design With Visual Builder</span
+                >
+                <span class="font-inter text-[var(--text-muted)]"
+                  >Drag triggers and actions onto a canvas that understands your
+                  goals.</span
+                >
+              </p>
+            </div>
+          </div>
+          <div
+            class="step-item step-card-step flex md:flex-row flex-col items-center gap-8 mb-8"
+            data-order="3"
+          >
+            <div
+              class="neu-raised w-12 h-12 flex-shrink-0 flex items-center justify-center font-outfit font-black hero-headline-gradient"
+            >
+              3
+            </div>
+            <div class="flex-grow">
+              <p class="neu-raised p-6">
+                <span class="font-outfit font-bold text-xl block mb-2"
+                  >Train AI Agents</span
+                >
+                <span class="font-inter text-[var(--text-muted)]"
+                  >Define decision logic and let machine learning optimize your
+                  workflows.</span
+                >
+              </p>
+            </div>
+          </div>
+          <div
+            class="step-item step-card-step flex md:flex-row flex-col items-center gap-8 mb-8"
+            data-order="4"
+          >
+            <div
+              class="neu-raised w-12 h-12 flex-shrink-0 flex items-center justify-center font-outfit font-black hero-headline-gradient"
+            >
+              4
+            </div>
+            <div class="flex-grow">
+              <p class="neu-raised p-6">
+                <span class="font-outfit font-bold text-xl block mb-2"
+                  >Go Live & Scale</span
+                >
+                <span class="font-inter text-[var(--text-muted)]"
+                  >Deploy instantly and scale from hundreds to millions of tasks
+                  seamlessly.</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6: Interactive Demo -->
+    <section class="py-20 bg-white relative z-50">
+      <div class="container mx-auto px-6">
+        <div class="mb-12 text-center reveal-section">
+          <h2 class="font-outfit font-black text-4xl md:text-5xl">
+            See It In Action
+          </h2>
+          <p class="font-inter text-[var(--text-muted)] max-w-xl mx-auto mt-3">
+            Click features to explore the interface
+          </p>
+        </div>
+        <div class="neu-card demo-container grid lg:grid-cols-2 gap-8">
+          <div class="demo-pills flex flex-col gap-3">
+            <div
+              class="demo-pill neu-raised-sm px-5 py-3 cursor-pointer active flex items-center justify-between"
+              data-target="preview-1"
+            >
+              <span class="font-inter font-semibold">Workflow Canvas</span>
+              <span class="text-[#7c3aed]">→</span>
+            </div>
+            <div
+              class="demo-pill neu-raised-sm px-5 py-3 cursor-pointer flex items-center justify-between"
+              data-target="preview-2"
+            >
+              <span class="font-inter font-semibold">AI Agent Training</span>
+              <span class="text-[#7c3aed]">→</span>
+            </div>
+            <div
+              class="demo-pill neu-raised-sm px-5 py-3 cursor-pointer flex items-center justify-between"
+              data-target="preview-3"
+            >
+              <span class="font-inter font-semibold">Analytics Dashboard</span>
+              <span class="text-[#7c3aed]">→</span>
+            </div>
+          </div>
+          <div class="demo-previews">
+            <div
+              id="preview-1"
+              class="demo-preview neu-inset p-8 h-[400px] relative"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=870&auto=format&fit=crop"
+                alt="Canvas Preview"
+                class="w-full h-full object-cover rounded-xl"
+              />
+              <div class="absolute bottom-4 left-4 neu-raised-sm px-4 py-2">
+                <span class="font-inter font-bold text-sm"
+                  >Drag & Drop Interface</span
+                >
+              </div>
+            </div>
+            <div
+              id="preview-2"
+              class="demo-preview neu-inset p-8 h-[400px] relative hidden"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=870&auto=format&fit=crop"
+                alt="AI Training Preview"
+                class="w-full h-full object-cover rounded-xl"
+              />
+              <div class="absolute bottom-4 left-4 neu-raised-sm px-4 py-2">
+                <span class="font-inter font-bold text-sm"
+                  >Machine Learning Panel</span
+                >
+              </div>
+            </div>
+            <div
+              id="preview-3"
+              class="demo-preview neu-inset p-8 h-[400px] relative hidden"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=870&auto=format&fit=crop"
+                alt="Dashboard Preview"
+                class="w-full h-full object-cover rounded-xl"
+              />
+              <div class="absolute bottom-4 left-4 neu-raised-sm px-4 py-2">
+                <span class="font-inter font-bold text-sm"
+                  >Performance Metrics</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7: Pricing -->
+    <section id="pricing" class="py-20 relative z-60">
+      <div class="container mx-auto px-6">
+        <div class="mb-12 text-center reveal-section">
+          <h2 class="font-outfit font-black text-4xl md:text-5xl">
+            Simple, Transparent Pricing
+          </h2>
+          <p class="font-inter text-[var(--text-muted)] max-w-xl mx-auto mt-3">
+            Start free, upgrade as you grow
+          </p>
+        </div>
+        <div class="pricing-grid grid md:grid-cols-3 gap-6">
+          <div class="neu-card pricing-card">
+            <h3
+              class="font-inter font-bold uppercase tracking-wider text-sm mb-4"
+            >
+              Starter
+            </h3>
+            <div class="font-outfit font-black text-5xl mb-2">$29</div>
+            <div class="font-inter text-[var(--text-muted)] text-sm mb-6">
+              per month
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">5 active workflows</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">1,000 executions/mo</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Basic analytics</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Email support</span>
+              </li>
+            </ul>
+            <button class="btn-secondary w-full">Get Started</button>
+          </div>
+          <div
+            class="neu-card pricing-card most-popular"
+            style="
+              box-shadow:
+                12px 12px 24px var(--shadow-dark),
+                -12px -12px 24px var(--shadow-light);
+            "
+          >
+            <div class="neu-raised-sm inline-block mb-4">
+              <span
+                class="font-inter font-bold text-xs uppercase tracking-wider text-[#7c3aed]"
+                >Most Popular</span
+              >
+            </div>
+            <h3
+              class="font-inter font-bold uppercase tracking-wider text-sm mb-4"
+            >
+              Professional
+            </h3>
+            <div class="font-outfit font-black text-5xl mb-2">$99</div>
+            <div class="font-inter text-[var(--text-muted)] text-sm mb-6">
+              per month
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Unlimited workflows</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">10,000 executions/mo</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Advanced analytics</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Priority email support</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Custom integrations</span>
+              </li>
+            </ul>
+            <button class="btn-primary w-full">Start Free Trial</button>
+          </div>
+          <div class="neu-card pricing-card">
+            <h3
+              class="font-inter font-bold uppercase tracking-wider text-sm mb-4"
+            >
+              Enterprise
+            </h3>
+            <div class="font-outfit font-black text-5xl mb-2">Custom</div>
+            <div class="font-inter text-[var(--text-muted)] text-sm mb-6">
+              per month
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Unlimited everything</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Unlimited executions</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">Dedicated success manager</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">SLA guarantee</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[#7c3aed]">✓</span
+                ><span class="font-inter">On-premise deployment</span>
+              </li>
+            </ul>
+            <button class="btn-secondary w-full">Contact Sales</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S8: FAQ -->
+    <section id="faq" class="py-20 bg-white relative z-70">
+      <div class="container mx-auto px-6">
+        <div class="mb-12 text-center reveal-section">
+          <h2 class="font-outfit font-black text-4xl md:text-5xl">
+            Frequently Asked Questions
+          </h2>
+          <p class="font-inter text-[var(--text-muted)] max-w-xl mx-auto mt-3">
+            Everything you need to know about NexusAI
+          </p>
+        </div>
+        <div class="faq-container max-w-3xl mx-auto">
+          <div class="neu-raised faq-item mb-3 rounded-xl overflow-hidden">
+            <button
+              class="faq-q w-full flex items-center justify-between py-5 px-6 font-outfit font-bold text-lg hover:bg-white transition-colors"
+            >
+              <span>Do I need technical skills to set up workflows?</span>
+              <span
+                class="faq-icon w-8 h-8 rounded-full neu-raised flex items-center justify-center text-[#7c3aed]"
+                >+</span
+              >
+            </button>
+            <div class="hidden px-6 pb-5 pt-2">
+              <p class="font-inter text-[var(--text-muted)]">
+                No. Our visual builder is designed for non-technical users. You
+                can set up your first automation in under 10 minutes without any
+                coding knowledge.
+              </p>
+            </div>
+          </div>
+          <div class="neu-raised faq-item mb-3 rounded-xl overflow-hidden">
+            <button
+              class="faq-q w-full flex items-center justify-between py-5 px-6 font-outfit font-bold text-lg hover:bg-white transition-colors"
+            >
+              <span>What integrations do you support?</span>
+              <span
+                class="faq-icon w-8 h-8 rounded-full neu-raised flex items-center justify-center text-[#7c3aed]"
+                >+</span
+              >
+            </button>
+            <div class="hidden px-6 pb-5 pt-2">
+              <p class="font-inter text-[var(--text-muted)]">
+                We support 50+ native integrations including Slack, Notion,
+                Salesforce, HubSpot, Stripe, Shopify, and more. Custom webhooks
+                are available on all plans.
+              </p>
+            </div>
+          </div>
+          <div class="neu-raised faq-item mb-3 rounded-xl overflow-hidden">
+            <button
+              class="faq-q w-full flex items-center justify-between py-5 px-6 font-outfit font-bold text-lg hover:bg-white transition-colors"
+            >
+              <span>Is my data secure?</span>
+              <span
+                class="faq-icon w-8 h-8 rounded-full neu-raised flex items-center justify-center text-[#7c3aed]"
+                >+</span
+              >
+            </button>
+            <div class="hidden px-6 pb-5 pt-2">
+              <p class="font-inter text-[var(--text-muted)]">
+                Absolutely. We're SOC 2 Type II certified with end-to-end
+                encryption, RBAC permissions, and regular third-party security
+                audits.
+              </p>
+            </div>
+          </div>
+          <div class="neu-raised faq-item mb-3 rounded-xl overflow-hidden">
+            <button
+              class="faq-q w-full flex items-center justify-between py-5 px-6 font-outfit font-bold text-lg hover:bg-white transition-colors"
+            >
+              <span>Can I switch plans anytime?</span>
+              <span
+                class="faq-icon w-8 h-8 rounded-full neu-raised flex items-center justify-center text-[#7c3aed]"
+                >+</span
+              >
+            </button>
+            <div class="hidden px-6 pb-5 pt-2">
+              <p class="font-inter text-[var(--text-muted)]">
+                Yes. Upgrade or downgrade at any time from your dashboard.
+                Changes take effect immediately and billing is prorated.
+              </p>
+            </div>
+          </div>
+          <div class="neu-raised faq-item mb-3 rounded-xl overflow-hidden">
+            <button
+              class="faq-q w-full flex items-center justify-between py-5 px-6 font-outfit font-bold text-lg hover:bg-white transition-colors"
+            >
+              <span>Do you offer a free trial?</span>
+              <span
+                class="faq-icon w-8 h-8 rounded-full neu-raised flex items-center justify-center text-[#7c3aed]"
+                >+</span
+              >
+            </button>
+            <div class="hidden px-6 pb-5 pt-2">
+              <p class="font-inter text-[var(--text-muted)]">
+                Yes! Start with our free plan—no credit card required. Try the
+                Professional plan with a 14-day money-back guarantee.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S9: CTA Banner -->
+    <section class="py-20 relative z-80">
+      <div class="container mx-auto px-6">
+        <div
+          class="neu-card cta-banner overflow-hidden relative"
+          style="padding: 64px 32px"
+        >
+          <div
+            style="
+              position: absolute;
+              inset: 0;
+              background: linear-gradient(
+                135deg,
+                var(--accent),
+                var(--accent-dark)
+              );
+              opacity: 0.08;
+            "
+          ></div>
+          <div class="relative z-10 text-center reveal-section">
+            <h2 class="font-outfit font-black text-4xl md:text-5xl mb-4">
+              Ready to Automate Everything?
+            </h2>
+            <p
+              class="font-inter text-[var(--text-muted)] max-w-2xl mx-auto mb-8"
+            >
+              Join 500+ teams saving 12+ hours weekly with NexusAI today
+            </p>
+            <div class="flex gap-4 justify-center flex-wrap">
+              <button class="btn-primary">Start Free Trial</button>
+              <button class="btn-secondary">Book Demo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S10: Marquee Strip -->
+    <section class="py-12 bg-white relative z-90">
+      <div class="container mx-auto px-6 text-center mb-6">
+        <span
+          class="font-inter font-bold uppercase tracking-wider text-xs text-[var(--text-muted)]"
+          >Works with your stack</span
+        >
+      </div>
+      <div class="marquee-wrap">
+        <div class="marquee-track">
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Stripe</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Notion</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Slack</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >HubSpot</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Salesforce</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Shopify</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Airtable</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Zapier</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Google Sheets</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >WordPress</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Stripe</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Notion</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Slack</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >HubSpot</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Salesforce</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Shopify</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Airtable</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Zapier</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >Google Sheets</span
+          >
+          <span class="neu-raised-sm px-6 py-3 font-inter font-bold"
+            >WordPress</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- S11: About/Team -->
+    <section class="py-20 relative z-100">
+      <div class="container mx-auto px-6">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="reveal-section">
+            <h2 class="font-outfit font-black text-4xl md:text-5xl mb-6">
+              Built By Builders,<br />For Builders
+            </h2>
+            <p class="font-inter text-[var(--text-muted)] leading-relaxed mb-6">
+              Founded in 2023, NexusAI emerged from frustration with clunky
+              automation tools. Our team of ex-Google engineers and product
+              designers built the platform they wished existed.
+            </p>
+            <p class="font-inter text-[var(--text-muted)] leading-relaxed mb-8">
+              Today we serve teams across 40+ countries helping them reclaim
+              their most valuable asset: time.
+            </p>
+            <button class="btn-secondary">Learn Our Story</button>
+          </div>
+          <div class="team-cards space-y-4">
+            <div class="neu-raised-sm flex items-center gap-4 p-4">
+              <div
+                class="w-16 h-16 rounded-full neu-raised flex items-center justify-center"
+                style="
+                  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                  color: white;
+                  font-family: &quot;Outfit&quot;;
+                  font-weight: 800;
+                "
+              >
+                JD
+              </div>
+              <div>
+                <div class="font-outfit font-bold">James Dawson</div>
+                <div class="font-inter text-sm text-[var(--text-muted)]">
+                  Co-founder & CEO
+                </div>
+              </div>
+            </div>
+            <div class="neu-raised-sm flex items-center gap-4 p-4">
+              <div
+                class="w-16 h-16 rounded-full neu-raised flex items-center justify-center"
+                style="
+                  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                  color: white;
+                  font-family: &quot;Outfit&quot;;
+                  font-weight: 800;
+                "
+              >
+                EL
+              </div>
+              <div>
+                <div class="font-outfit font-bold">Emma Liu</div>
+                <div class="font-inter text-sm text-[var(--text-muted)]">
+                  Co-founder & CTO
+                </div>
+              </div>
+            </div>
+            <div class="neu-raised-sm flex items-center gap-4 p-4">
+              <div
+                class="w-16 h-16 rounded-full neu-raised flex items-center justify-center"
+                style="
+                  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                  color: white;
+                  font-family: &quot;Outfit&quot;;
+                  font-weight: 800;
+                "
+              >
+                MR
+              </div>
+              <div>
+                <div class="font-outfit font-bold">Maria Rodriguez</div>
+                <div class="font-inter text-sm text-[var(--text-muted)]">
+                  Head of Product
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S12: Footer -->
+    <footer class="py-20" style="background: var(--footer-bg)">
+      <div class="container mx-auto px-6">
+        <div class="grid md:grid-cols-4 gap-12 mb-12">
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <span class="w-4 h-4 rounded-full bg-[#7c3aed]"></span
+              ><span class="font-outfit font-black text-xl"
+                >Nexus<span class="text-[#7c3aed]">AI</span></span
+              >
+            </div>
+            <p class="font-inter text-sm text-gray-400 leading-relaxed">
+              The world's most intuitive AI-powered automation platform.
+            </p>
+            <div class="flex gap-4 mt-6">
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full neu-raised flex items-center justify-center text-white hover:bg-[#7c3aed] transition-colors"
+                ><svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"
+                  /></svg
+              ></a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full neu-raised flex items-center justify-center text-white hover:bg-[#7c3aed] transition-colors"
+                ><svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.072 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                  /></svg
+              ></a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full neu-raised flex items-center justify-center text-white hover:bg-[#7c3aed] transition-colors"
+                ><svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                  /></svg
+              ></a>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-outfit font-bold text-lg mb-4">Product</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >Integrations</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >Pricing</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >Changelog</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-outfit font-bold text-lg mb-4">Company</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >Careers</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-outfit font-bold text-lg mb-4">Stay Updated</h4>
+            <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                class="px-4 py-3 rounded-xl outline-none"
+                style="
+                  background: rgba(255, 255, 255, 0.05);
+                  box-shadow:
+                    inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+                    inset -3px -3px 6px rgba(255, 255, 255, 0.05);
+                  border: none;
+                  color: white;
+                  flex: 1;
+                  font-family: &quot;Inter&quot;, sans-serif;
+                "
+                required
+              />
+              <button type="submit" class="btn-primary whitespace-nowrap">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <p class="font-inter text-sm text-gray-400">
+            © 2026 NexusAI Inc. All rights reserved.
+          </p>
+          <div class="flex gap-6">
+            <a
+              href="#"
+              class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+              >Privacy Policy</a
+            >
+            <a
+              href="#"
+              class="font-inter text-sm text-gray-400 hover:text-white transition-colors"
+              >Terms of Service</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        (function () {
+          const nav = document.getElementById("navbar");
+          window.addEventListener("scroll", () =>
+            nav.classList.toggle("scrolled", window.scrollY > 60),
+          );
+        })()(function () {
+          gsap.registerPlugin(ScrollTrigger);
+          gsap.fromTo(
+            [
+              ".hero-badge-container",
+              ".hero-headline",
+              ".hero-sub",
+              ".hero-ctas",
+              ".hero-trust",
+            ],
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: "power3.out",
+            },
+          );
+          document
+            .querySelectorAll(".reveal-section")
+            .forEach((el) =>
+              gsap.fromTo(
+                el,
+                { opacity: 0, y: 40 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.8,
+                  ease: "power3.out",
+                  scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse",
+                  },
+                },
+              ),
+            );
+          document
+            .querySelectorAll(".reveal-grid")
+            .forEach((grid) =>
+              gsap.fromTo(
+                grid.querySelectorAll(".neu-card"),
+                { opacity: 0, y: 30 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.8,
+                  stagger: 0.1,
+                  ease: "power3.out",
+                  scrollTrigger: {
+                    trigger: grid,
+                    start: "top 82%",
+                    toggleActions: "play none none reverse",
+                  },
+                },
+              ),
+            );
+          document.querySelectorAll("[data-count]").forEach((el) => {
+            const t = parseFloat(el.dataset.count),
+              sf = el.dataset.suffix || "",
+              pf = el.dataset.prefix || "";
+            gsap.fromTo(
+              { v: 0 },
+              {
+                v: t,
+                duration: 2,
+                ease: "power2.out",
+                onUpdate: function () {
+                  el.textContent =
+                    pf + Math.round(this.targets()[0].v).toLocaleString() + sf;
+                },
+                scrollTrigger: { trigger: el, start: "top 85%", once: true },
+              },
+            );
+          });
+        })()(function () {
+          const pills = document.querySelectorAll(".demo-pill"),
+            previews = document.querySelectorAll(".demo-preview");
+          if (!pills.length) return;
+          pills.forEach((pill, i) =>
+            pill.addEventListener("click", () => {
+              pills.forEach((p) => p.classList.remove("active"));
+              pill.classList.add("active");
+              previews.forEach((p) => (p.style.display = "none"));
+              if (previews[i]) {
+                previews[i].style.display = "block";
+                gsap.fromTo(
+                  previews[i],
+                  { opacity: 0 },
+                  { opacity: 1, duration: 0.3 },
+                );
+              }
+            }),
+          );
+          pills[0]?.click();
+        })();
+        (function () {
+          document.querySelectorAll(".faq-q").forEach((q) => {
+            q.addEventListener("click", () => {
+              const a = q.nextElementSibling,
+                open = q.classList.contains("active");
+              document.querySelectorAll(".faq-q.active").forEach((o) => {
+                o.classList.remove("active");
+                gsap.to(o.nextElementSibling, {
+                  maxHeight: 0,
+                  duration: 0.3,
+                  ease: "power2.in",
+                });
+                gsap.to(o.querySelector(".faq-icon"), {
+                  rotation: 0,
+                  duration: 0.3,
+                });
+              });
+              if (!open) {
+                q.classList.add("active");
+                gsap.to(a, {
+                  maxHeight: a.scrollHeight,
+                  duration: 0.35,
+                  ease: "power2.out",
+                });
+                gsap.to(q.querySelector(".faq-icon"), {
+                  rotation: 45,
+                  duration: 0.3,
+                });
+              }
+            });
+          });
+        })();
+        (function () {
+          const btn = document.getElementById("hamburger"),
+            drawer = document.getElementById("mobile-drawer");
+          if (!btn || !drawer) return;
+          btn.addEventListener("click", () => {
+            const open = drawer.style.display === "flex";
+            drawer.style.display = open ? "none" : "flex";
+            if (!open)
+              gsap.fromTo(
+                drawer,
+                { opacity: 0, y: -10 },
+                { opacity: 1, y: 0, duration: 0.25 },
+              );
+          });
+        })();
+        document
+          .getElementById("newsletter-form")
+          ?.addEventListener("submit", (e) => {
+            e.preventDefault();
+            alert(
+              "Thank you for subscribing! This form would connect to {{FORM_ENDPOINT}}",
+            );
+            e.target.reset();
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iron Mindset — 45-Minute Elite Fitness Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{--bg:#e6e9ef;--bg-mid:#d1d5db;--shadow-dark:#b8bcc2;--shadow-light:#ffffff;--accent:#ef4444;--accent-dark:#dc2626;--accent-rgb:239,68,68;--text-primary:#1f2937;--text-muted:#6b7280}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text-primary);font-family:'Inter',system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;font-weight:800;letter-spacing:-0.02em;line-height:1.1}
+.neu-raised{background:linear-gradient(145deg,var(--bg),var(--bg-mid));box-shadow:8px 8px 16px var(--shadow-dark),-8px -8px 16px var(--shadow-light)}
+.neu-raised-sm{background:linear-gradient(145deg,var(--bg),var(--bg-mid));box-shadow:4px 4px 8px var(--shadow-dark),-4px -4px 8px var(--shadow-light)}
+.neu-convex{box-shadow:8px 8px 16px var(--shadow-dark),-8px -8px 16px var(--shadow-light),inset 1px 1px 2px rgba(255,255,255,0.4),inset -1px -1px 2px rgba(0,0,0,0.15)}
+.neu-inset{background:linear-gradient(145deg,var(--bg-mid),var(--bg));box-shadow:inset 4px 4px 8px var(--shadow-dark),inset -4px -4px 8px var(--shadow-light)}
+.neu-card{background:linear-gradient(145deg,var(--bg),var(--bg-mid));box-shadow:8px 8px 16px var(--shadow-dark),-8px -8px 16px var(--shadow-light);border-radius:30px;padding:32px;transition:all 0.3s ease}
+.neu-card:hover{transform:translateY(-4px)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-dark));box-shadow:8px 8px 16px var(--shadow-dark),-8px -8px 16px var(--shadow-light),inset 1px 1px 2px rgba(255,255,255,0.4),inset -1px -1px 2px rgba(0,0,0,0.15);border-radius:16px;padding:16px 40px;color:white;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;transition:all 0.15s ease}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(var(--accent-rgb),0.3)}
+.btn-primary:active{transform:translateY(1px);box-shadow:inset 4px 4px 8px rgba(0,0,0,0.2)}
+.btn-secondary{background:linear-gradient(145deg,var(--bg),var(--bg-mid));box-shadow:8px 8px 16px var(--shadow-dark),-8px -8px 16px var(--shadow-light);border-radius:16px;padding:16px 40px;color:var(--text-primary);border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;transition:all 0.15s ease}
+.btn-secondary:hover{transform:translateY(-2px)}
+#navbar{position:fixed;top:0;left:0;right:0;z-index:999;transition:all 0.3s ease;padding:1.5rem 0}
+#navbar.scrolled{padding:0.75rem 0;background:rgba(230,233,239,0.85);backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-track{display:flex;gap:32px;animation:marquee 20s linear infinite;width:max-content}
+.marquee-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
+</style>
+</head>
+<body>
+
+<!-- S1: NAVBAR -->
+<nav id="navbar">
+<div class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="neu-raised p-2 rounded-xl"><svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+<span class="text-xl font-bold tracking-tight" style="font-family:Outfit,sans-serif">Iron Mindset</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a href="#features" class="text-sm font-medium text-gray-600 hover:text-[var(--accent)] transition-colors">The Method</a>
+<a href="#how" class="text-sm font-medium text-gray-600 hover:text-[var(--accent)] transition-colors">How It Works</a>
+<a href="#pricing" class="text-sm font-medium text-gray-600 hover:text-[var(--accent)] transition-colors">Pricing</a>
+<a href="#faq" class="text-sm font-medium text-gray-600 hover:text-[var(--accent)] transition-colors">FAQ</a>
+</div>
+<div class="hidden md:flex items-center gap-4">
+<button class="btn-primary text-sm px-6 py-3" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Start Training</button>
+</div>
+<button id="mobile-toggle" class="md:hidden neu-raised-sm p-3 rounded-xl"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+</div>
+<div id="mobile-menu" class="hidden md:hidden bg-[#e6e9ef] border-t border-gray-200 shadow-xl p-6 space-y-4 mt-2">
+<a href="#features" class="block text-base font-medium text-gray-700 hover:text-[var(--accent)]">The Method</a>
+<a href="#how" class="block text-base font-medium text-gray-700 hover:text-[var(--accent)]">How It Works</a>
+<a href="#pricing" class="block text-base font-medium text-gray-700 hover:text-[var(--accent)]">Pricing</a>
+<a href="#faq" class="block text-base font-medium text-gray-700 hover:text-[var(--accent)]">FAQ</a>
+<button class="btn-primary w-full text-sm py-3">Start Training</button>
+</div>
+</nav>
+
+<main class="space-y-32">
+
+<!-- S2: HERO -->
+<section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32">
+<div class="absolute top-0 right-0 w-[50%] h-[50%] rounded-full opacity-30 animate-pulse -z-10 pointer-events-none" style="background:rgba(var(--accent-rgb),0.2);filter:blur(120px)"></div>
+<div class="absolute bottom-0 left-0 w-[40%] h-[40%] rounded-full opacity-30 animate-pulse -z-10 pointer-events-none" style="background:rgba(59,130,246,0.2);filter:blur(120px)"></div>
+<div class="max-w-7xl mx-auto px-4 md:px-6 text-center">
+<div class="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full neu-raised-sm mb-8">
+<span class="text-[var(--accent)]">⚡</span>
+<span class="text-xs font-bold text-gray-600 tracking-wider uppercase">Science-Backed Training</span>
+<span class="text-gray-400">→</span>
+</div>
+<h1 class="hero-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-gray-900 mb-8">45 Minutes to<br><span class="text-[var(--accent)]">Unstoppable.</span></h1>
+<p class="hero-sub text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto leading-relaxed mb-12">No fluff. No 2-hour sessions. Just science-backed, high-yield training engineered for professionals who refuse to compromise on results or time.</p>
+<div class="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-6">
+<button class="btn-primary px-10 py-4 rounded-2xl text-lg shadow-2xl group" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Start Training <span class="inline-block transition-transform group-hover:translate-x-1">→</span></button>
+<button class="btn-secondary px-10 py-4 rounded-2xl text-lg">See Results ▶</button>
+</div>
+<div class="hero-preview mt-24 relative max-w-5xl mx-auto">
+<div class="neu-raised p-4 md:p-8 rounded-[40px] shadow-2xl border border-white/20">
+<div style="background:var(--bg)" class="rounded-[30px] overflow-hidden min-h-[500px] flex items-center justify-center relative border border-white/40 shadow-inner">
+<img src="https://images.unsplash.com/photo-1534438327167-1dcbe013c94b?q=80&w=2070&auto=format&fit=crop" alt="Iron Mindset Training" class="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-1000 opacity-90">
+<div class="absolute top-10 right-10 neu-raised p-4 rounded-2xl hidden md:block backdrop-blur-sm bg-white/10">
+<span class="text-xs font-black uppercase tracking-widest text-[var(--accent)]">LIVE SESSIONS</span>
+</div>
+<div class="absolute bottom-10 left-10 p-6 rounded-3xl hidden md:flex items-center gap-6 backdrop-blur-xl bg-white/5 border border-white/10 neu-raised text-left">
+<div class="w-12 h-12 rounded-full neu-raised flex items-center justify-center text-[var(--accent)] text-xl">★</div>
+<div>
+<div class="text-xs font-black uppercase tracking-widest text-[var(--accent)] mb-1">Client Retention</div>
+<div class="text-2xl font-bold text-gray-800">94% stay beyond 6 months</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S3: TRUSTED BY -->
+<section class="py-12 border-y border-gray-200" style="background:rgba(209,213,219,0.3)">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<p class="text-xs font-black tracking-[0.2em] uppercase text-gray-400 mb-10 text-center">Trusted By Athletes & Professionals Using</p>
+<div class="flex flex-wrap items-center justify-center gap-12 md:gap-20">
+<div class="flex items-center gap-2 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"><span class="text-lg">⌚</span><span class="text-sm font-bold text-gray-500">WHOOP</span></div>
+<div class="flex items-center gap-2 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"><span class="text-lg">💍</span><span class="text-sm font-bold text-gray-500">OURA</span></div>
+<div class="flex items-center gap-2 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"><span class="text-lg">🚴</span><span class="text-sm font-bold text-gray-500">PELOTON</span></div>
+<div class="flex items-center gap-2 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"><span class="text-lg">📊</span><span class="text-sm font-bold text-gray-500">MYFITNESSPAL</span></div>
+<div class="flex items-center gap-2 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"><span class="text-lg">💪</span><span class="text-sm font-bold text-gray-500">STRENGTHLEVEL</span></div>
+<div class="flex items-center gap-2 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"><span class="text-lg">🧬</span><span class="text-sm font-bold text-gray-500">NOOM</span></div>
+</div>
+</div>
+</section>
+
+<!-- S3.5: STATS -->
+<section class="border-t border-gray-200 pt-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="neu-card text-center"><div class="text-4xl md:text-5xl font-black text-[var(--accent)]" data-count="500" style="font-family:Outfit,sans-serif">0</div><p class="text-sm text-gray-500 mt-2 font-medium">Active Clients</p></div>
+<div class="neu-card text-center"><div class="text-4xl md:text-5xl font-black text-[var(--accent)]" data-count="45" style="font-family:Outfit,sans-serif">0</div><p class="text-sm text-gray-500 mt-2 font-medium">Minute Sessions</p></div>
+<div class="neu-card text-center"><div class="text-4xl md:text-5xl font-black text-[var(--accent)]" data-count="94" style="font-family:Outfit,sans-serif">0</div><p class="text-sm text-gray-500 mt-2 font-medium">% Retention Rate</p></div>
+<div class="neu-card text-center"><div class="text-4xl md:text-5xl font-black text-[var(--accent)]" data-count="4" style="font-family:Outfit,sans-serif">0</div><p class="text-sm text-gray-500 mt-2 font-medium">Sessions Per Week</p></div>
+</div>
+</div>
+</section>
+
+<!-- S4: FEATURES -->
+<section id="features" class="border-t border-gray-200 pt-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">Engineered for <span class="text-[var(--accent)]">Efficiency</span></h2>
+<p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">We strip away the noise. No 2-hour workouts. No complex meal plans. Just pure, high-yield training.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="neu-card hover:-translate-y-2 transition-all duration-300">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background:rgba(var(--accent-rgb),0.15)"><svg class="w-6 h-6 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+<h3 class="text-xl font-bold mb-3" style="font-family:Outfit,sans-serif">45-Minute Protocol</h3>
+<p class="text-gray-500 leading-relaxed">Maximum intensity, minimum time. Every workout is designed to fit the busiest executive schedules.</p>
+</div>
+<div class="neu-card hover:-translate-y-2 transition-all duration-300">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background:rgba(var(--accent-rgb),0.15)"><svg class="w-6 h-6 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+<h3 class="text-xl font-bold mb-3" style="font-family:Outfit,sans-serif">Science-Backed</h3>
+<p class="text-gray-500 leading-relaxed">Every rep is calculated based on hypertrophy research and metabolic conditioning principles.</p>
+</div>
+<div class="neu-card hover:-translate-y-2 transition-all duration-300">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background:rgba(var(--accent-rgb),0.15)"><svg class="w-6 h-6 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+<h3 class="text-xl font-bold mb-3" style="font-family:Outfit,sans-serif">Data-Driven</h3>
+<p class="text-gray-500 leading-relaxed">Track your progress with our proprietary app. We adjust variables weekly based on performance data.</p>
+</div>
+<div class="neu-card hover:-translate-y-2 transition-all duration-300">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background:rgba(var(--accent-rgb),0.15)"><svg class="w-6 h-6 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+<h3 class="text-xl font-bold mb-3" style="font-family:Outfit,sans-serif">Accountability Partners</h3>
+<p class="text-gray-500 leading-relaxed">Weekly check-ins, progress photos, and a community of high-performers who push each other forward.</p>
+</div>
+<div class="neu-card hover:-translate-y-2 transition-all duration-300">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background:rgba(var(--accent-rgb),0.15)"><svg class="w-6 h-6 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+<h3 class="text-xl font-bold mb-3" style="font-family:Outfit,sans-serif">Nutrition Blueprint</h3>
+<p class="text-gray-500 leading-relaxed">Simple, sustainable meal frameworks. No rigid diets — just principles that work with your lifestyle.</p>
+</div>
+<div class="neu-card hover:-translate-y-2 transition-all duration-300">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style="background:rgba(var(--accent-rgb),0.15)"><svg class="w-6 h-6 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+<h3 class="text-xl font-bold mb-3" style="font-family:Outfit,sans-serif">Mindset Coaching</h3>
+<p class="text-gray-500 leading-relaxed">Build discipline, resilience, and mental toughness that transfers to your career and personal life.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S5: HOW IT WORKS -->
+<section id="how" class="border-t border-gray-200 pt-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">Your Path to <span class="text-[var(--accent)]">Results</span></h2>
+<p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">From sign-up to transformation in four simple steps.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="text-center">
+<div class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-xl font-black text-[var(--accent)]" style="font-family:Outfit,sans-serif">1</span></div>
+<div class="neu-card">
+<h3 class="text-lg font-bold mb-2" style="font-family:Outfit,sans-serif">Assessment</h3>
+<p class="text-gray-500 text-sm leading-relaxed">Complete a movement screen and fitness audit. We identify your baseline and set targets.</p>
+</div>
+</div>
+<div class="text-center">
+<div class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-xl font-black text-[var(--accent)]" style="font-family:Outfit,sans-serif">2</span></div>
+<div class="neu-card">
+<h3 class="text-lg font-bold mb-2" style="font-family:Outfit,sans-serif">Custom Protocol</h3>
+<p class="text-gray-500 text-sm leading-relaxed">Receive your personalized 45-minute training program, calibrated to your goals and schedule.</p>
+</div>
+</div>
+<div class="text-center">
+<div class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-xl font-black text-[var(--accent)]" style="font-family:Outfit,sans-serif">3</span></div>
+<div class="neu-card">
+<h3 class="text-lg font-bold mb-2" style="font-family:Outfit,sans-serif">Train & Track</h3>
+<p class="text-gray-500 text-sm leading-relaxed">Execute sessions with live coaching. Your data feeds back into the algorithm for weekly optimization.</p>
+</div>
+</div>
+<div class="text-center">
+<div class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-xl font-black text-[var(--accent)]" style="font-family:Outfit,sans-serif">4</span></div>
+<div class="neu-card">
+<h3 class="text-lg font-bold mb-2" style="font-family:Outfit,sans-serif">Level Up</h3>
+<p class="text-gray-500 text-sm leading-relaxed">Monthly progress reviews, new phase protocols, and milestone celebrations. The gains compound.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S6: INTERACTIVE DEMO -->
+<section class="border-t border-gray-200 pt-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">See <span class="text-[var(--accent)]">Iron Mindset</span> in Action</h2>
+<p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">Explore what a week of training looks like inside our platform.</p>
+</div>
+<div class="neu-card p-0 overflow-hidden">
+<div class="grid grid-cols-1 lg:grid-cols-2">
+<div class="p-8 flex flex-col gap-4">
+<button class="demo-pill active neu-inset border-2 border-[var(--accent)] rounded-xl p-5 text-left transition-all duration-300" data-demo="0">
+<h4 class="font-bold text-gray-800" style="font-family:Outfit,sans-serif">Workout Dashboard</h4>
+<p class="text-sm text-gray-500 mt-1">Track strength, body comp, and consistency</p>
+</button>
+<button class="demo-pill neu-raised-sm rounded-xl p-5 text-left transition-all duration-300" data-demo="1">
+<h4 class="font-bold text-gray-800" style="font-family:Outfit,sans-serif">Live Coaching</h4>
+<p class="text-sm text-gray-500 mt-1">Real-time form corrections and motivation</p>
+</button>
+<button class="demo-pill neu-raised-sm rounded-xl p-5 text-left transition-all duration-300" data-demo="2">
+<h4 class="font-bold text-gray-800" style="font-family:Outfit,sans-serif">Community Hub</h4>
+<p class="text-sm text-gray-500 mt-1">Connect with other high-performers</p>
+</button>
+</div>
+<div class="neu-inset rounded-[30px] min-h-[400px] p-8 m-4 flex flex-col justify-center relative overflow-hidden">
+<div class="demo-content" data-demo-panel="0">
+<img src="https://images.unsplash.com/photo-1534438327167-1dcbe013c94b?q=80&w=870&auto=format&fit=crop" alt="Workout Dashboard" class="w-full h-48 object-cover rounded-2xl mb-4">
+<h4 class="text-xl font-bold mb-2 text-gray-800" style="font-family:Outfit,sans-serif">Iron Mindset Dashboard</h4>
+<p class="text-gray-500 leading-relaxed mb-4">Track strength, body comp, and consistency in one view. Weekly auto-adjustments based on your performance data.</p>
+<div class="flex items-center gap-4"><span class="text-2xl font-black text-[var(--accent)]" style="font-family:Outfit,sans-serif">94%</span><span class="text-sm text-gray-400">avg. session completion rate</span></div>
+</div>
+<div class="demo-content hidden" data-demo-panel="1">
+<img src="https://images.unsplash.com/photo-1517836357163-dcda8edfe2b6?q=80&w=870&auto=format&fit=crop" alt="Live Coaching" class="w-full h-48 object-cover rounded-2xl mb-4">
+<h4 class="text-xl font-bold mb-2 text-gray-800" style="font-family:Outfit,sans-serif">Real-Time Form Coaching</h4>
+<p class="text-gray-500 leading-relaxed mb-4">Your coach watches every rep via video. Instant corrections. No wasted sets. Maximum muscle engagement per movement.</p>
+<div class="flex items-center gap-4"><span class="text-2xl font-black text-[var(--accent)]" style="font-family:Outfit,sans-serif">4x</span><span class="text-sm text-gray-400">faster strength gains vs. solo training</span></div>
+</div>
+<div class="demo-content hidden" data-demo-panel="2">
+<img src="https://images.unsplash.com/photo-1581009137042-c6f2a95ef2c8?q=80&w=870&auto=format&fit=crop" alt="Community" class="w-full h-48 object-cover rounded-2xl mb-4">
+<h4 class="text-xl font-bold mb-2 text-gray-800" style="font-family:Outfit,sans-serif">Elite Community</h4>
+<p class="text-gray-500 leading-relaxed mb-4">Connect with 500+ driven professionals. Share wins, swap strategies, and hold each other accountable.</p>
+<div class="flex items-center gap-4"><span class="text-2xl font-black text-[var(--accent)]" style="font-family:Outfit,sans-serif">500+</span><span class="text-sm text-gray-400">active community members</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S7: PRICING -->
+<section id="pricing" class="border-t border-gray-200 pt-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">Invest in Your <span class="text-[var(--accent)]">Strongest</span> Self</h2>
+<p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">Two paths. Same science. Choose the level of attention you need.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+<div class="neu-card rounded-3xl p-8 hover:-translate-y-2 transition-all duration-300">
+<h3 class="text-xl font-bold mb-2" style="font-family:Outfit,sans-serif">Starter</h3>
+<p class="text-gray-500 text-sm mb-6">Try the method. 7-day free trial.</p>
+<div class="text-5xl font-black mb-2 text-gray-900" style="font-family:Outfit,sans-serif">$0</div>
+<p class="text-sm text-gray-400 mb-8">for 7 days</p>
+<div class="space-y-4 mb-10 text-left">
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">3 sample workouts</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Fitness assessment</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Community access</span></div>
+</div>
+<form action="{{FORM_ENDPOINT}}" method="POST"><button type="submit" class="btn-secondary w-full py-5 rounded-2xl text-lg font-bold">Start Free Trial</button></form>
+</div>
+<div class="neu-card rounded-3xl p-8 hover:-translate-y-2 transition-all duration-300 relative scale-105 z-10 border-2" style="border-color:rgba(var(--accent-rgb),0.2)">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-white text-xs font-black uppercase tracking-widest" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark))">Most Popular</div>
+<h3 class="text-xl font-bold mb-2" style="font-family:Outfit,sans-serif">Group Coaching</h3>
+<p class="text-gray-500 text-sm mb-6">Small groups. Big accountability.</p>
+<div class="text-5xl font-black mb-2 text-gray-900" style="font-family:Outfit,sans-serif">$297</div>
+<p class="text-sm text-gray-400 mb-8">/month</p>
+<div class="space-y-4 mb-10 text-left">
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">4 sessions/week</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Custom workout protocol</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Nutrition blueprint</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Weekly group calls</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Private community</span></div>
+</div>
+<form action="{{FORM_ENDPOINT}}" method="POST"><button type="submit" class="btn-primary w-full py-5 rounded-2xl text-lg font-bold">Join Group Coaching</button></form>
+</div>
+<div class="neu-card rounded-3xl p-8 hover:-translate-y-2 transition-all duration-300">
+<h3 class="text-xl font-bold mb-2" style="font-family:Outfit,sans-serif">1-on-1 Elite</h3>
+<p class="text-gray-500 text-sm mb-6">Your personal Iron Mindset coach.</p>
+<div class="text-5xl font-black mb-2 text-gray-900" style="font-family:Outfit,sans-serif">$697</div>
+<p class="text-sm text-gray-400 mb-8">/month</p>
+<div class="space-y-4 mb-10 text-left">
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Everything in Group</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Private 1-on-1 coaching</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Real-time form corrections</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Direct coach messaging</span></div>
+<div class="flex items-center gap-3"><div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background:rgba(var(--accent-rgb),0.8)">✓</div><span class="text-gray-600 text-sm">Monthly body comp analysis</span></div>
+</div>
+<form action="{{FORM_ENDPOINT}}" method="POST"><button type="submit" class="btn-primary w-full py-5 rounded-2xl text-lg font-bold">Go Elite</button></form>
+</div>
+</div>
+<div class="mt-24 neu-inset p-8 md:p-12 rounded-[40px] text-center max-w-4xl mx-auto">
+<p class="text-xl md:text-2xl text-gray-600 leading-relaxed italic mb-6">"I've tried every program out there. Iron Mindset is the first one that actually respects my time. 45 minutes, in and out, and I'm in the best shape of my life at 42."</p>
+<div class="flex items-center justify-center gap-4">
+<div class="w-12 h-12 rounded-full neu-raised flex items-center justify-center text-[var(--accent)] font-bold" style="font-family:Outfit,sans-serif">MK</div>
+<div class="text-left"><p class="font-bold text-gray-800 text-sm">Marcus K.</p><p class="text-xs text-gray-500">VP of Engineering, Series C Startup</p></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S8: FAQ -->
+<section id="faq" class="border-t border-gray-200 pt-20 pb-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">Questions? <span class="text-[var(--accent)]">Answers.</span></h2>
+<p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">Everything you need to know before getting started.</p>
+</div>
+<div style="max-width:800px;margin:0 auto">
+<div class="faq-item neu-raised rounded-3xl cursor-pointer" style="padding:24px 28px;margin-bottom:16px">
+<div class="flex items-center justify-between"><h4 class="font-bold text-gray-800 text-lg pr-4" style="font-family:Outfit,sans-serif">Do I need gym equipment?</h4><span class="faq-icon text-[var(--accent)] font-black text-xl flex-shrink-0">+</span></div>
+<div class="faq-answer text-gray-500 leading-relaxed mt-4" style="max-height:0;overflow:hidden">No. Our programs are designed for home, hotel, or garage gym training. Minimal equipment — dumbbells and a pull-up bar cover 90% of movements. We also offer bodyweight-only tracks.</div>
+</div>
+<div class="faq-item neu-raised rounded-3xl cursor-pointer" style="padding:24px 28px;margin-bottom:16px">
+<div class="flex items-center justify-between"><h4 class="font-bold text-gray-800 text-lg pr-4" style="font-family:Outfit,sans-serif">Is 45 minutes really enough?</h4><span class="faq-icon text-[var(--accent)] font-black text-xl flex-shrink-0">+</span></div>
+<div class="faq-answer text-gray-500 leading-relaxed mt-4" style="max-height:0;overflow:hidden">Absolutely. Research shows that high-intensity, well-programmed sessions of 40-50 minutes produce superior results to longer, unfocused workouts. We maximize every minute.</div>
+</div>
+<div class="faq-item neu-raised rounded-3xl cursor-pointer" style="padding:24px 28px;margin-bottom:16px">
+<div class="flex items-center justify-between"><h4 class="font-bold text-gray-800 text-lg pr-4" style="font-family:Outfit,sans-serif">What if I'm a complete beginner?</h4><span class="faq-icon text-[var(--accent)] font-black text-xl flex-shrink-0">+</span></div>
+<div class="faq-answer text-gray-500 leading-relaxed mt-4" style="max-height:0;overflow:hidden">We welcome all levels. Your initial assessment determines your starting point, and every exercise has scaled variations. Your protocol is built for where you are today, not where someone else is.</div>
+</div>
+<div class="faq-item neu-raised rounded-3xl cursor-pointer" style="padding:24px 28px;margin-bottom:16px">
+<div class="flex items-center justify-between"><h4 class="font-bold text-gray-800 text-lg pr-4" style="font-family:Outfit,sans-serif">Can I cancel anytime?</h4><span class="faq-icon text-[var(--accent)] font-black text-xl flex-shrink-0">+</span></div>
+<div class="faq-answer text-gray-500 leading-relaxed mt-4" style="max-height:0;overflow:hidden">Yes. No contracts, no cancellation fees. We keep 94% of our members because the results speak for themselves — not because you're locked in.</div>
+</div>
+<div class="faq-item neu-raised rounded-3xl cursor-pointer" style="padding:24px 28px;margin-bottom:16px">
+<div class="flex items-center justify-between"><h4 class="font-bold text-gray-800 text-lg pr-4" style="font-family:Outfit,sans-serif">What time zones do you support?</h4><span class="faq-icon text-[var(--accent)] font-black text-xl flex-shrink-0">+</span></div>
+<div class="faq-answer text-gray-500 leading-relaxed mt-4" style="max-height:0;overflow:hidden">We have coaches across US, EU, and APAC time zones. You'll always find a live session that fits your schedule, whether you're an early bird or a night owl.</div>
+</div>
+<div class="faq-item neu-raised rounded-3xl cursor-pointer" style="padding:24px 28px;margin-bottom:16px">
+<div class="flex items-center justify-between"><h4 class="font-bold text-gray-800 text-lg pr-4" style="font-family:Outfit,sans-serif">How is this different from Peloton or a gym membership?</h4><span class="faq-icon text-[var(--accent)] font-black text-xl flex-shrink-0">+</span></div>
+<div class="faq-answer text-gray-500 leading-relaxed mt-4" style="max-height:0;overflow:hidden">Peloton is content. A gym is a building. Iron Mindset is a coach who knows your name, your numbers, and your goals — and adjusts your program every single week. It's personalized, not programmatic.</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S9: CTA BANNER -->
+<section class="px-4 md:px-6">
+<div class="max-w-7xl mx-auto">
+<div class="neu-card rounded-[40px] text-center p-12 md:p-20 relative overflow-hidden">
+<div class="absolute inset-0 opacity-[0.06]" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark))"></div>
+<div class="relative z-10">
+<h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">Ready to Get <span class="text-[var(--accent)]">Stronger?</span></h2>
+<p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-10">Join 500+ professionals who transformed their fitness in 45 minutes a day.</p>
+<form action="{{FORM_ENDPOINT}}" method="POST"><button type="submit" class="btn-primary px-10 py-5 rounded-2xl text-lg shadow-2xl">Start Your Free Trial →</button></form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S10: MARQUEE -->
+<section class="pt-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<p class="text-xs font-black tracking-[0.2em] uppercase text-gray-400 mb-10 text-center">Powered By</p>
+</div>
+<div class="marquee-wrap">
+<div class="marquee-track">
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">⚡ WHOOP</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">💍 OURA</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">🚴 PELOTON</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">📊 MYFITNESSPAL</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">💪 STRENGTHLEVEL</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">🧬 NOOM</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">🏋️ TONAL</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">📱 STRAVA</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">⚡ WHOOP</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">💍 OURA</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">🚴 PELOTON</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">📊 MYFITNESSPAL</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">💪 STRENGTHLEVEL</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">🧬 NOOM</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">🏋️ TONAL</span>
+<span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap flex items-center gap-2">📱 STRAVA</span>
+</div>
+</div>
+</section>
+
+<!-- S11: ABOUT / TEAM -->
+<section class="border-t border-gray-200 pt-20">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">Built by Athletes,<br>for <span class="text-[var(--accent)]">Professionals.</span></h2>
+<p class="text-lg text-gray-500 leading-relaxed mb-8">Iron Mindset was founded by former D1 athletes and NSCA-certified coaches who got tired of watching busy people waste time on inefficient programs. We built the coaching system we wished existed — one that respects your intelligence and your schedule.</p>
+<button class="btn-secondary">Meet the Team →</button>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="neu-card text-center p-6">
+<div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark));font-family:Outfit,sans-serif">JR</div>
+<p class="font-bold text-gray-800 text-sm">Jake R.</p>
+<p class="text-xs text-gray-500">Head Coach</p>
+</div>
+<div class="neu-card text-center p-6">
+<div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark));font-family:Outfit,sans-serif">SM</div>
+<p class="font-bold text-gray-800 text-sm">Sarah M.</p>
+<p class="text-xs text-gray-500">Nutrition Lead</p>
+</div>
+<div class="neu-card text-center p-6">
+<div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark));font-family:Outfit,sans-serif">DT</div>
+<p class="font-bold text-gray-800 text-sm">David T.</p>
+<p class="text-xs text-gray-500">Mindset Coach</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- S12: FOOTER -->
+<footer class="border-t border-gray-200 pt-20 pb-10 bg-[#e6e9ef]">
+<div class="max-w-7xl mx-auto px-4 md:px-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+<div>
+<div class="flex items-center gap-3 mb-4">
+<div class="neu-raised p-2 rounded-xl"><svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+<span class="text-xl font-bold tracking-tight" style="font-family:Outfit,sans-serif">Iron Mindset</span>
+</div>
+<p class="text-gray-500 leading-relaxed max-w-sm mb-6">Science-backed fitness for the modern professional. Build strength, clarity, and resilience.</p>
+<div class="flex items-center gap-3">
+<a href="#" class="neu-raised-sm p-2 rounded-lg text-gray-500 hover:text-[var(--accent)] transition-colors"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+<a href="#" class="neu-raised-sm p-2 rounded-lg text-gray-500 hover:text-[var(--accent)] transition-colors"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+<a href="#" class="neu-raised-sm p-2 rounded-lg text-gray-500 hover:text-[var(--accent)] transition-colors"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-gray-800 mb-6">Program</h4>
+<div class="space-y-3"><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">Group Coaching</a><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">1-on-1 Elite</a><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">Corporate Wellness</a><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">Success Stories</a></div>
+</div>
+<div>
+<h4 class="font-bold text-gray-800 mb-6">Company</h4>
+<div class="space-y-3"><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">About Us</a><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">Careers</a><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">Contact</a><a href="#" class="block text-gray-500 hover:text-[var(--accent)] transition-colors">Privacy Policy</a></div>
+</div>
+<div>
+<h4 class="font-bold text-gray-800 mb-6">Newsletter</h4>
+<p class="text-gray-500 mb-4">Weekly tips on fitness and productivity.</p>
+<form action="{{FORM_ENDPOINT}}" method="POST" class="flex items-center gap-2">
+<input type="email" placeholder="Email address" required class="neu-inset flex-1 px-4 py-3 rounded-xl border-none outline-none text-sm" style="font-family:Inter,sans-serif">
+<button type="submit" class="btn-primary p-3 rounded-xl"><span>→</span></button>
+</form>
+</div>
+</div>
+<div class="pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4">
+<p class="text-sm text-gray-400">© 2026 Iron Mindset. All rights reserved.</p>
+<div class="flex items-center gap-6">
+<a href="#" class="text-sm text-gray-400 hover:text-[var(--accent)] transition-colors">Privacy</a>
+<a href="#" class="text-sm text-gray-400 hover:text-[var(--accent)] transition-colors">Terms</a>
+<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-green-500"></div><span class="text-sm text-gray-400">System Operational</span></div>
+</div>
+</div>
+</div>
+</footer>
+
+</main>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  // 1. Navbar scroll
+  (function(){
+    var nav = document.getElementById('navbar');
+    window.addEventListener('scroll', function(){
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+  })();
+
+  // 2. Mobile menu
+  (function(){
+    var toggle = document.getElementById('mobile-toggle');
+    var menu = document.getElementById('mobile-menu');
+    toggle.addEventListener('click', function(){
+      menu.classList.toggle('hidden');
+    });
+    menu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ menu.classList.add('hidden'); });
+    });
+  })();
+
+  // 3. GSAP animations
+  (function(){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.fromTo('.hero-badge',{opacity:0,y:20},{opacity:1,y:0,duration:0.5,delay:0.3,ease:'power3.out'});
+    gsap.fromTo('.hero-headline',{opacity:0,y:30},{opacity:1,y:0,duration:0.7,delay:0.4,ease:'power3.out'});
+    gsap.fromTo('.hero-sub',{opacity:0,y:20},{opacity:1,y:0,duration:0.7,delay:0.5,ease:'power3.out'});
+    gsap.fromTo('.hero-ctas',{opacity:0,y:20},{opacity:1,y:0,duration:0.7,delay:0.6,ease:'power3.out'});
+    gsap.fromTo('.hero-preview',{opacity:0,scale:0.95},{opacity:1,scale:1,duration:1,delay:0.8,ease:'power3.out'});
+
+    gsap.utils.toArray('.neu-card').forEach(function(card){
+      gsap.fromTo(card,{opacity:0,y:40},{opacity:1,y:0,duration:0.8,ease:'power3.out',scrollTrigger:{trigger:card,start:'top 85%',toggleActions:'play none none reverse'}});
+    });
+
+    document.querySelectorAll('[data-count]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-count'));
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        onEnter: function(){
+          gsap.to({val:0},{val:target,duration:2,ease:'power2.out',onUpdate:function(){
+            el.textContent = Math.round(this.targets()[0].val) + (target === 94 ? '%' : target === 500 ? '+' : '');
+          }});
+        },
+        once: true
+      });
+    });
+  })();
+
+  // 4. Demo tab swap
+  (function(){
+    var pills = document.querySelectorAll('.demo-pill');
+    var panels = document.querySelectorAll('.demo-content');
+    pills.forEach(function(pill){
+      pill.addEventListener('click', function(){
+        var idx = pill.getAttribute('data-demo');
+        pills.forEach(function(p){
+          p.classList.remove('active','neu-inset','border-2','border-[var(--accent)]');
+          p.classList.add('neu-raised-sm');
+        });
+        pill.classList.add('active','neu-inset','border-2','border-[var(--accent)]');
+        pill.classList.remove('neu-raised-sm');
+        panels.forEach(function(panel){
+          if(panel.getAttribute('data-demo-panel') === idx){
+            panel.classList.remove('hidden');
+            gsap.fromTo(panel,{opacity:0},{opacity:1,duration:0.3});
+          } else {
+            panel.classList.add('hidden');
+          }
+        });
+      });
+    });
+  })();
+
+  // 5. FAQ accordion
+  (function(){
+    document.querySelectorAll('.faq-item').forEach(function(item){
+      item.addEventListener('click', function(){
+        var answer = item.querySelector('.faq-answer');
+        var icon = item.querySelector('.faq-icon');
+        var isOpen = item.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(function(i){
+          i.classList.remove('active');
+          gsap.to(i.querySelector('.faq-answer'),{maxHeight:0,duration:0.3,ease:'power2.inOut'});
+          gsap.to(i.querySelector('.faq-icon'),{rotation:0,duration:0.3});
+        });
+        if(!isOpen){
+          item.classList.add('active');
+          gsap.to(answer,{maxHeight:answer.scrollHeight,duration:0.35,ease:'power2.out'});
+          gsap.to(icon,{rotation:45,duration:0.3});
+        }
+      });
+    });
+  })();
+});
+</script>
+</body>
+</html>

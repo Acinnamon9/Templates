@@ -1,0 +1,1373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iron Mindset | Elite Online Coaching</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+      :root {
+        --bg: #e6e9ef;
+        --bg-mid: #d1d5db;
+        --shadow-dark: #b8bcc2;
+        --shadow-light: #ffffff;
+        --accent: #ef4444; /* Fitness Red */
+        --accent-dark: #dc2626;
+        --accent-rgb: 239, 68, 68;
+        --text-primary: #1f2937;
+        --text-muted: #6b7280;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: "Outfit", sans-serif;
+        letter-spacing: -0.02em;
+      }
+
+      /* Neumorphic Classes */
+      .neu-raised {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+      }
+      .neu-raised-sm {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          4px 4px 8px var(--shadow-dark),
+          -4px -4px 8px var(--shadow-light);
+      }
+      .neu-inset {
+        background: linear-gradient(145deg, var(--bg-mid), var(--bg));
+        box-shadow:
+          inset 4px 4px 8px var(--shadow-dark),
+          inset -4px -4px 8px var(--shadow-light);
+      }
+      .neu-card {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 30px;
+        padding: 32px;
+        transition: all 0.3s ease;
+      }
+      .neu-card:hover {
+        transform: translateY(-4px);
+      }
+
+      /* Button Patterns */
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(239, 68, 68, 0.3);
+      }
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: var(--text-primary);
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Blob Animation */
+      @keyframes blob-pulse {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+          opacity: 0.3;
+        }
+        50% {
+          transform: translate(20px, -20px) scale(1.1);
+          opacity: 0.4;
+        }
+      }
+      .blob {
+        position: absolute;
+        z-index: -1;
+        filter: blur(80px);
+        animation: blob-pulse 10s infinite ease-in-out alternate;
+      }
+
+      /* Marquee */
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        display: flex;
+        gap: 32px;
+        animation: marquee 25s linear infinite;
+        width: max-content;
+      }
+      .marquee-wrap {
+        overflow: hidden;
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+
+      /* Utilities */
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav
+      id="navbar"
+      class="fixed w-full z-[999] top-0 transition-all duration-300 py-6 px-4 md:px-0"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="neu-raised p-2 rounded-xl text-red-500 shadow-inner">
+            <svg
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+          </div>
+          <span
+            class="text-xl font-black tracking-tight text-gray-800 uppercase"
+            >Iron Mindset</span
+          >
+        </div>
+
+        <div class="hidden md:flex items-center gap-10">
+          <a
+            href="#how"
+            class="text-sm font-bold text-gray-500 hover:text-[#ef4444] transition-colors"
+            >THE METHOD</a
+          >
+          <a
+            href="#demo"
+            class="text-sm font-bold text-gray-500 hover:text-[#ef4444] transition-colors"
+            >RESULTS</a
+          >
+          <a
+            href="#pricing"
+            class="text-sm font-bold text-gray-500 hover:text-[#ef4444] transition-colors"
+            >PRICING</a
+          >
+        </div>
+
+        <div class="flex items-center gap-4">
+          <a href="#pricing" class="btn-primary text-sm py-3 px-6"
+            >Get Started</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section
+      class="relative pt-32 lg:pt-48 pb-20 lg:pb-32 min-h-screen flex items-center overflow-hidden"
+    >
+      <!-- Background Blobs -->
+      <div
+        class="blob bg-red-500/40 w-[50%] h-[50%] rounded-full top-[-10%] right-[10%]"
+      ></div>
+      <div
+        class="blob bg-blue-500/20 w-[40%] h-[40%] rounded-full bottom-[0%] left-[10%] delay-1000"
+      ></div>
+
+      <div
+        class="max-w-7xl mx-auto px-4 md:px-6 text-center relative z-10 w-full"
+      >
+        <!-- Badge -->
+        <div
+          class="hero-badge inline-flex items-center gap-2 neu-raised-sm px-5 py-2.5 rounded-full mb-8 border border-white/40"
+        >
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+          <span
+            class="text-xs font-black uppercase tracking-[0.2em] text-gray-600"
+            >Now Accepting March Cohort</span
+          >
+          <svg
+            width="12"
+            height="12"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </div>
+
+        <!-- Headline -->
+        <h1
+          class="hero-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-gray-900 mb-8 leading-[1.1]"
+        >
+          Build Elite Fitness<br />
+          Without The <span style="color: var(--accent)">Time Cost</span>.
+        </h1>
+
+        <!-- Subhead -->
+        <p
+          class="hero-sub text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto leading-relaxed mb-12"
+        >
+          Science-backed, 45-minute online coaching programs for busy
+          professionals who refuse to compromise on results.
+        </p>
+
+        <!-- CTAs -->
+        <div
+          class="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-6 mb-20"
+        >
+          <button class="btn-primary group py-4 px-10 rounded-2xl text-lg">
+            Start My Transformation →
+          </button>
+          <button
+            class="btn-secondary py-4 px-10 rounded-2xl text-lg flex items-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+              />
+            </svg>
+            Watch Intro
+          </button>
+        </div>
+
+        <!-- GIANT PREVIEW FRAME -->
+        <div
+          class="hero-preview mt-10 relative max-w-6xl mx-auto perspective-1000"
+        >
+          <div
+            class="neu-raised p-4 md:p-6 rounded-[40px] shadow-2xl border border-white/20"
+          >
+            <div
+              class="rounded-[30px] overflow-hidden min-h-[500px] md:min-h-[700px] flex items-center justify-center relative border border-white/40 shadow-inner"
+            >
+              <!-- Full Bleed Image: Using Aura Biohacking for that high-tech clean fitness look -->
+              <img
+                src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+                alt="Iron Mindset Interface"
+                class="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-1000"
+              />
+
+              <!-- Floating Overlay Top Right -->
+              <div
+                class="absolute top-10 right-10 neu-raised p-4 rounded-2xl hidden md:block backdrop-blur-md bg-white/10 border border-white/20"
+              >
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                  <span
+                    class="text-xs font-black uppercase tracking-widest text-white"
+                    >Live Now</span
+                  >
+                </div>
+              </div>
+
+              <!-- Floating Stats Bottom Left -->
+              <div
+                class="absolute bottom-10 left-10 p-6 rounded-3xl hidden md:flex items-center gap-6 backdrop-blur-xl bg-white/5 border border-white/10 neu-raised text-left w-80"
+              >
+                <div
+                  class="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center text-white text-lg font-bold shadow-lg"
+                >
+                  ★
+                </div>
+                <div>
+                  <div
+                    class="text-[10px] font-black uppercase tracking-widest text-gray-300 mb-1"
+                  >
+                    Client Retention
+                  </div>
+                  <div class="text-2xl font-bold text-white">94%</div>
+                </div>
+              </div>
+
+              <!-- Simulated App UI Card inside Preview -->
+              <div
+                class="absolute bottom-10 right-10 w-72 bg-white/90 backdrop-blur-lg rounded-2xl p-4 shadow-2xl hidden md:block border border-gray-100"
+              >
+                <div class="flex justify-between items-end mb-2">
+                  <span class="text-xs font-bold text-gray-500 uppercase"
+                    >Weekly Volume</span
+                  >
+                  <span class="text-xs font-bold text-red-500">On Track</span>
+                </div>
+                <div class="flex gap-1 h-8 items-end">
+                  <div class="w-1.5 bg-red-500 h-3/4 rounded-t-sm"></div>
+                  <div class="w-1.5 bg-red-500 h-1/2 rounded-t-sm"></div>
+                  <div class="w-1.5 bg-red-500 h-3/4 rounded-t-sm"></div>
+                  <div class="w-1.5 bg-red-500 h-full rounded-t-sm"></div>
+                  <div class="w-1.5 bg-red-500 h-full rounded-t-sm"></div>
+                  <div class="w-1.5 bg-red-500 h-1/4 rounded-t-sm"></div>
+                  <div class="w-1.5 bg-gray-200 h-1/4 rounded-t-sm"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUSTED BY STRIP -->
+    <div class="py-12 border-y border-gray-200 bg-white/30 backdrop-blur-sm">
+      <div class="max-w-7xl mx-auto px-4 text-center">
+        <p
+          class="text-[10px] font-black tracking-[0.3em] uppercase text-gray-400 mb-8"
+        >
+          Trusted By Professionals From
+        </p>
+        <div
+          class="flex flex-wrap items-center justify-center gap-8 md:gap-16 grayscale opacity-50"
+        >
+          <span class="font-black text-xl text-gray-500">GOOGLE</span>
+          <span class="font-black text-xl text-gray-500">MICROSOFT</span>
+          <span class="font-black text-xl text-gray-500">SPOTIFY</span>
+          <span class="font-black text-xl text-gray-500">STRIPE</span>
+          <span class="font-black text-xl text-gray-500">AIRBNB</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES SECTION -->
+    <section class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="mb-16 max-w-3xl">
+          <h2
+            class="text-4xl md:text-5xl font-black tracking-tight text-gray-900 mb-6"
+          >
+            No Fluff. Just Physiology.
+          </h2>
+          <p class="text-xl text-gray-500 leading-relaxed">
+            We strip away the unnecessary cardio, the 2-hour gym sessions, and
+            the diet culture nonsense. We use data-driven programming optimized
+            for maximum hypertrophy and metabolic health in minimum time.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Feature 1 -->
+          <div class="neu-card">
+            <div
+              class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl mb-6 shadow-lg"
+            >
+              ⏱️
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Strictly 45-Min
+            </h3>
+            <p class="text-gray-500 leading-relaxed">
+              Respect your schedule. Our workouts are scientifically engineered
+              to deliver elite stimulus in under 45 minutes including warm-up.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="neu-card">
+            <div
+              class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl mb-6 shadow-lg"
+            >
+              📱
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Online Accountability
+            </h3>
+            <p class="text-gray-500 leading-relaxed">
+              Upload your videos, get form corrections within hours, and train
+              anywhere in the world with video-guided progression.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="neu-card">
+            <div
+              class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl mb-6 shadow-lg"
+            >
+              🧠
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Mindset Integration
+            </h3>
+            <p class="text-gray-500 leading-relaxed">
+              Training isn't physical only. We include weekly mindset briefings
+              to help you perform better in your career too.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="neu-card">
+            <div
+              class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl mb-6 shadow-lg"
+            >
+              🩺
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Medical Backed</h3>
+            <p class="text-gray-500 leading-relaxed">
+              Programming reviewed by former medical researchers to ensure joint
+              safety and sustainable longevity.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="neu-card">
+            <div
+              class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl mb-6 shadow-lg"
+            >
+              🥩
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Nutrition Flexibility
+            </h3>
+            <p class="text-gray-500 leading-relaxed">
+              Macro targets tailored to your lifestyle. Eat out, drink
+              occasionally, and still shred fat without counting every calorie.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="neu-card">
+            <div
+              class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-2xl mb-6 shadow-lg"
+            >
+              💾
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Auto-Progression
+            </h3>
+            <p class="text-gray-500 leading-relaxed">
+              The app tracks your lifts and automatically increases difficulty
+              so you never stall or guess what to do next week.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how" class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4">
+        <h2
+          class="text-4xl font-black tracking-tight text-center text-gray-900 mb-16"
+        >
+          The Iron Protocol™
+        </h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-center">
+          <!-- Step 1 -->
+          <div class="relative group">
+            <div
+              class="w-12 h-12 rounded-full neu-raised flex items-center justify-center font-black text-gray-800 text-lg mb-6 z-10 relative bg-white shadow-inner border border-gray-100"
+            >
+              1
+            </div>
+            <h4 class="font-bold text-xl mb-2">Assessment</h4>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Fill out our intake form. We map your goals, equipment access, and
+              medical history.
+            </p>
+          </div>
+
+          <div
+            class="hidden lg:block w-full h-px bg-gradient-to-r from-gray-300 via-gray-400 to-transparent relative"
+          >
+            <div
+              class="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent"
+            ></div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="relative">
+            <div
+              class="w-12 h-12 rounded-full neu-raised flex items-center justify-center font-black text-gray-800 text-lg mb-6 z-10 relative bg-white shadow-inner border border-gray-100"
+            >
+              2
+            </div>
+            <h4 class="font-bold text-xl mb-2">Programming</h4>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Your custom plan launches in the app within 24 hours. Video
+              tutorials included.
+            </p>
+          </div>
+
+          <div
+            class="hidden lg:block w-full h-px bg-gradient-to-r from-gray-300 via-gray-400 to-transparent relative"
+          >
+            <div
+              class="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent"
+            ></div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="relative">
+            <div
+              class="w-12 h-12 rounded-full neu-raised flex items-center justify-center font-black text-gray-800 text-lg mb-6 z-10 relative bg-white shadow-inner border border-gray-100"
+            >
+              3
+            </div>
+            <h4 class="font-bold text-xl mb-2">Execution</h4>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Log workouts, send videos, adjust macros. We tweak your program
+              bi-weekly based on progress.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE DEMO (PROGRAM TYPES) -->
+    <section id="demo" class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4">
+        <h2
+          class="text-4xl font-black tracking-tight text-center text-gray-900 mb-16"
+        >
+          Choose Your Level
+        </h2>
+
+        <div class="neu-card p-0 overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+            <!-- Controls -->
+            <div
+              class="lg:col-span-1 p-8 border-b lg:border-b-0 lg:border-r border-gray-200/50 bg-white/20"
+            >
+              <div class="space-y-4">
+                <button
+                  class="group w-full text-left p-4 rounded-xl neu-raised-sm hover:bg-white transition-all duration-200 active-group"
+                  data-target="basic"
+                >
+                  <h4
+                    class="font-bold text-gray-900 group-hover:text-red-500 transition-colors"
+                  >
+                    Group Coaching
+                  </h4>
+                  <p class="text-xs text-gray-500 mt-1">
+                    High energy, peer accountability, low cost.
+                  </p>
+                </button>
+                <button
+                  class="group w-full text-left p-4 rounded-xl neu-raised-sm hover:bg-white transition-all duration-200 active-group"
+                  data-target="elite"
+                >
+                  <h4
+                    class="font-bold text-gray-900 group-hover:text-red-500 transition-colors"
+                  >
+                    Elite 1-on-1
+                  </h4>
+                  <p class="text-xs text-gray-500 mt-1">
+                    Daily feedback, video form check, direct access.
+                  </p>
+                </button>
+              </div>
+            </div>
+
+            <!-- Display -->
+            <div
+              class="lg:col-span-2 bg-[#e6e9ef] p-8 md:p-12 flex flex-col justify-center items-center text-center relative overflow-hidden"
+            >
+              <div class="z-10 content-block">
+                <span
+                  class="text-xs font-black uppercase tracking-[0.2em] text-red-500 mb-4 block"
+                  >Most Common</span
+                >
+                <h3 class="text-3xl md:text-4xl font-black text-gray-900 mb-6">
+                  The Group Intensive
+                </h3>
+                <p
+                  class="text-lg text-gray-500 max-w-md mx-auto mb-8 leading-relaxed"
+                >
+                  Join a cohort of like-minded professionals. We meet live once
+                  a week for technique checks, but mostly we drive through daily
+                  wins together.
+                </p>
+                <ul
+                  class="text-left space-y-3 max-w-xs mx-auto mb-8 text-gray-600 font-medium text-sm"
+                >
+                  <li class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                    45-Min Workout Plan
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                    Weekly Live Q&A Calls
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                    Community Discord Access
+                  </li>
+                </ul>
+                <button class="btn-primary w-full md:w-auto">
+                  Select Group
+                </button>
+              </div>
+              <div
+                class="content-block hidden absolute inset-0 p-12 bg-gradient-to-br from-red-50 to-white rounded-[40px]"
+              >
+                <span
+                  class="text-xs font-black uppercase tracking-[0.2em] text-purple-500 mb-4 block"
+                  >Top Tier</span
+                >
+                <h3 class="text-3xl md:text-4xl font-black text-gray-900 mb-6">
+                  Elite 1-on-1 Mastery
+                </h3>
+                <p
+                  class="text-lg text-gray-500 max-w-md mx-auto mb-8 leading-relaxed"
+                >
+                  Stop wasting time guessing. Get direct line access to coaches
+                  for real-time problem solving and laser-focused customization.
+                </p>
+                <ul
+                  class="text-left space-y-3 max-w-xs mx-auto mb-8 text-gray-600 font-medium text-sm"
+                >
+                  <li class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    Everything in Group
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    Daily Chat Support
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    Personalized Nutrition Audit
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    Biometric Progress Tracking
+                  </li>
+                </ul>
+                <button
+                  class="btn-primary bg-gradient-to-r from-purple-500 to-indigo-600 shadow-xl hover:shadow-2xl hover:translate-y-[-4px] transition-all duration-300 w-full md:w-auto"
+                >
+                  Start Elite
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="pricing" class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4">
+        <h2
+          class="text-4xl font-black tracking-tight text-center text-gray-900 mb-6"
+        >
+          Simple Investment
+        </h2>
+        <p class="text-gray-500 text-center max-w-xl mx-auto mb-16">
+          Transparent pricing. No hidden fees. Cancel anytime before your next
+          billing cycle.
+        </p>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start"
+        >
+          <!-- Basic Card -->
+          <div
+            class="neu-card rounded-3xl p-8 relative border border-transparent hover:border-gray-200/50 transition-colors"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">
+              Group Coaching
+            </h3>
+            <p class="text-sm text-gray-500 mb-6">
+              Perfect for most busy professionals.
+            </p>
+            <div class="flex items-baseline mb-8">
+              <span class="text-5xl font-black text-gray-900">$297</span>
+              <span class="text-gray-500 ml-2 font-medium">/month</span>
+            </div>
+            <ul class="space-y-4 mb-8 text-left">
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm"
+                  >4x 45-Min Workouts / Week</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm"
+                  >Full Program Adaptation</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm"
+                  >Bi-Weekly Live Check-ins</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm">Mobile App Access</span>
+              </li>
+            </ul>
+            <button
+              class="btn-secondary w-full py-4 rounded-2xl text-gray-800 hover:text-red-500 font-bold"
+            >
+              Join Group
+            </button>
+          </div>
+
+          <!-- Elite Card -->
+          <div
+            class="neu-card rounded-3xl p-8 relative border-2 border-red-500/20 bg-white shadow-2xl transform md:-translate-y-4 scale-100 z-10"
+          >
+            <div
+              class="absolute -top-4 left-1/2 -translate-x-1/2 bg-red-600 text-white text-xs font-black uppercase tracking-[0.15em] py-1 px-4 rounded-full shadow-lg"
+            >
+              Most Popular
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">
+              Elite Training
+            </h3>
+            <p class="text-sm text-gray-500 mb-6">
+              For those who want the fastest results.
+            </p>
+            <div class="flex items-baseline mb-8">
+              <span class="text-5xl font-black text-gray-900">$697</span>
+              <span class="text-gray-500 ml-2 font-medium">/month</span>
+            </div>
+            <ul class="space-y-4 mb-8 text-left">
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 font-bold"
+                  >Everything in Group</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm"
+                  >Dedicated Coach Assigned</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm"
+                  >Unlimited Video Form Review</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm"
+                  >24/48hr Response Guarantee</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <svg
+                  class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span class="text-gray-700 text-sm"
+                  >Customized Nutrition Plans</span
+                >
+              </li>
+            </ul>
+            <button class="btn-primary w-full py-4 rounded-2xl text-white">
+              Apply for Elite
+            </button>
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="mt-24 max-w-4xl mx-auto">
+          <div
+            class="neu-inset p-8 md:p-12 rounded-[40px] border border-gray-300 text-center"
+          >
+            <svg
+              class="w-10 h-10 text-gray-400 mx-auto mb-6 opacity-50"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M14.017 21L14.017 18C14.017 16.896 14.323 16.028 14.935 15.396C15.547 14.764 16.415 14.335 17.541 14.111L17.541 11.616C16.541 11.984 15.775 12.672 15.231 13.68C14.687 14.688 14.415 15.904 14.415 17.328V21H14.017ZM8 21L8 18C8 16.896 8.306 16.028 8.918 15.396C9.53 14.764 10.398 14.335 11.524 14.111L11.524 11.616C10.524 11.984 9.758 12.672 9.214 13.68C8.67 14.688 8.398 15.904 8.398 17.328V21H8Z"
+              />
+            </svg>
+            <p
+              class="text-xl md:text-2xl text-gray-700 font-serif italic leading-relaxed mb-8"
+            >
+              "I thought I'd lose my mind trying to balance a C-suite job with
+              the gym. Iron Mindset solved this. I'm actually stronger now than
+              when I was working out 5 days a week."
+            </p>
+            <div class="flex items-center justify-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-gray-300 bg-[url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100')] bg-cover"
+              ></div>
+              <div class="text-left">
+                <div class="font-bold text-gray-900 text-sm">David Chen</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide">
+                  VP of Engineering
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="py-20 border-t border-gray-200">
+      <div class="max-w-3xl mx-auto px-4">
+        <h2
+          class="text-3xl font-black tracking-tight text-center text-gray-900 mb-12"
+        >
+          Common Questions
+        </h2>
+
+        <div class="space-y-4">
+          <!-- FAQ Item 1 -->
+          <div
+            class="neu-raised rounded-3xl overflow-hidden cursor-pointer accordion-item"
+          >
+            <div class="p-6 flex justify-between items-center">
+              <span class="font-bold text-gray-800"
+                >Do I need a gym membership?</span
+              >
+              <svg
+                class="w-5 h-5 text-gray-500 transition-transform duration-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+            <div class="h-0 overflow-hidden bg-white/30">
+              <p class="p-6 text-gray-500 leading-relaxed">
+                Not necessarily. While having full access helps, our members
+                have success training in hotel gyms, parks, or with dumbbells at
+                home. The app allows you to swap exercises dynamically.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div
+            class="neu-raised rounded-3xl overflow-hidden cursor-pointer accordion-item"
+          >
+            <div class="p-6 flex justify-between items-center">
+              <span class="font-bold text-gray-800"
+                >How often do I talk to my coach?</span
+              >
+              <svg
+                class="w-5 h-5 text-gray-500 transition-transform duration-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+            <div class="h-0 overflow-hidden bg-white/30">
+              <p class="p-6 text-gray-500 leading-relaxed">
+                In Group Coaching, we have bi-weekly calls. In Elite, we chat
+                directly whenever you hit a snag or need a modification. We
+                prioritize clarity and speed over bureaucracy.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div
+            class="neu-raised rounded-3xl overflow-hidden cursor-pointer accordion-item"
+          >
+            <div class="p-6 flex justify-between items-center">
+              <span class="font-bold text-gray-800"
+                >Is there a commitment length?</span
+              >
+              <svg
+                class="w-5 h-5 text-gray-500 transition-transform duration-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+            <div class="h-0 overflow-hidden bg-white/30">
+              <p class="p-6 text-gray-500 leading-relaxed">
+                Nope. We operate on a month-to-month basis because results
+                compound over time. As long as you're making progress, stay. If
+                you need a break, pause whenever.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#e6e9ef] pt-20 pb-10 border-t border-gray-200 text-sm">
+      <div class="max-w-7xl mx-auto px-4 mb-16">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
+          <div>
+            <div class="flex items-center gap-2 mb-6">
+              <div
+                class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-red-500 shadow-sm"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
+              <span
+                class="text-lg font-black tracking-tight text-gray-800 uppercase"
+                >Iron Mindset</span
+              >
+            </div>
+            <p class="text-gray-500 leading-relaxed max-w-xs mb-6">
+              Fitness infrastructure for high performers. Stop waiting for
+              Monday. Start building today.
+            </p>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg neu-raised-sm flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors"
+                >IG</a
+              >
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg neu-raised-sm flex items-center justify-center text-gray-500 hover:text-blue-500 transition-colors"
+                >LI</a
+              >
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg neu-raised-sm flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors"
+                >YT</a
+              >
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Company</h4>
+            <ul class="space-y-3 text-gray-500">
+              <li>
+                <a href="#" class="hover:text-[#ef4444] transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-[#ef4444] transition-colors"
+                  >Careers</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-[#ef4444] transition-colors"
+                  >Success Stories</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Legal</h4>
+            <ul class="space-y-3 text-gray-500">
+              <li>
+                <a href="#" class="hover:text-[#ef4444] transition-colors"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-[#ef4444] transition-colors"
+                  >Terms of Service</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-[#ef4444] transition-colors"
+                  >Cookie Settings</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Stay Updated</h4>
+            <form onsubmit="event.preventDefault()" class="flex gap-2">
+              <input
+                type="email"
+                placeholder="Email address"
+                class="w-full neu-inset p-3 rounded-xl text-sm text-gray-800 focus:outline-none focus:ring-2 ring-red-500/50"
+              />
+              <button class="btn-primary py-2 px-4 text-base">→</button>
+            </form>
+          </div>
+        </div>
+
+        <div
+          class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center text-gray-400"
+        >
+          <div>&copy; 2026 Iron Mindset Inc. All rights reserved.</div>
+          <div class="flex items-center gap-2 mt-4 md:mt-0">
+            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+            <span>Servers Operational</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        // Navbar Scroll Effect
+        (function () {
+          const nav = document.getElementById("navbar");
+          window.addEventListener("scroll", () => {
+            if (window.scrollY > 20) {
+              nav.classList.add("scrolled");
+              nav.style.background = "rgba(230, 233, 239, 0.85)";
+              nav.style.backdropFilter = "blur(10px)";
+              nav.classList.remove("py-6");
+              nav.classList.add("py-3");
+            } else {
+              nav.classList.remove("scrolled");
+              nav.style.background = "";
+              nav.style.backdropFilter = "";
+              nav.classList.add("py-6");
+              nav.classList.remove("py-3");
+            }
+          });
+        })();
+
+        // Interactive Demo Swap
+        (function () {
+          const buttons = document.querySelectorAll("[data-target]");
+          const contents = document.querySelectorAll(".content-block");
+
+          buttons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+              buttons.forEach((b) =>
+                b.classList.remove("border-red-500/50", "bg-white"),
+              );
+              btn.classList.add("border-red-500/50", "bg-white");
+
+              contents.forEach((c) => {
+                c.classList.add("hidden");
+                gsap.to(c, { autoAlpha: 0, y: -10, duration: 0.2 });
+              });
+
+              const targetId = btn.getAttribute("data-target");
+              // Simple find logic for demo
+              let target = null;
+              if (targetId === "basic") target = contents[0];
+              else target = contents[1];
+
+              target.classList.remove("hidden");
+              setTimeout(() => {
+                gsap.fromTo(
+                  target,
+                  { autoAlpha: 0, y: 10 },
+                  { autoAlpha: 1, y: 0, duration: 0.3 },
+                );
+              }, 50);
+            });
+          });
+          // Init click on first
+          buttons[0].click();
+        })();
+
+        // FAQ Accordion
+        (function () {
+          const items = document.querySelectorAll(".accordion-item");
+          items.forEach((item) => {
+            item.addEventListener("click", () => {
+              const icon = item.querySelector("svg");
+              const answer = item.querySelector(".overflow-hidden");
+              const isOpen = answer.style.height !== "0px";
+
+              // Close others (optional single open behavior)
+              items.forEach((other) => {
+                if (
+                  other !== item &&
+                  other.querySelector(".overflow-hidden").style.height !== "0px"
+                ) {
+                  const otherAns = other.querySelector(".overflow-hidden");
+                  const otherIcon = other.querySelector("svg");
+                  gsap.to(otherAns, {
+                    height: 0,
+                    duration: 0.3,
+                    onComplete: () => (otherAns.style.overflow = "hidden"),
+                  });
+                  gsap.to(otherIcon, { rotation: 0, duration: 0.3 });
+                }
+              });
+
+              if (isOpen) {
+                gsap.to(answer, {
+                  height: 0,
+                  duration: 0.3,
+                  onComplete: () => (answer.style.overflow = "hidden"),
+                });
+                gsap.to(icon, { rotation: 0, duration: 0.3 });
+              } else {
+                answer.style.overflow = "visible";
+                gsap.to(answer, {
+                  height: answer.scrollHeight + "px",
+                  duration: 0.3,
+                });
+                gsap.to(icon, { rotation: 180, duration: 0.3 });
+              }
+            });
+          });
+        })();
+
+        // GSAP Animations
+        (function () {
+          gsap.registerPlugin(ScrollTrigger);
+
+          // Hero Entry
+          gsap.fromTo(
+            ".hero-badge",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.5, delay: 0.3, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-headline",
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.7, delay: 0.4, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-sub",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.7, delay: 0.5, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-ctas",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.7, delay: 0.6, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-preview",
+            { opacity: 0, scale: 0.95, rotateX: 5 },
+            {
+              opacity: 1,
+              scale: 1,
+              rotateX: 0,
+              duration: 1,
+              delay: 0.8,
+              ease: "power3.out",
+            },
+          );
+
+          // Section Reveal
+          gsap.utils.toArray("section").forEach((section) => {
+            if (
+              section.id === "how" ||
+              section.id === "demo" ||
+              section.id === "pricing" ||
+              section.id.match(/^faq|trus/) != null
+            )
+              return; // Skip specific sections handled separately
+
+            gsap.fromTo(
+              section.querySelector(".neu-card"),
+              { y: 50, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                scrollTrigger: {
+                  trigger: section,
+                  start: "top 80%",
+                  toggleActions: "play none none reverse",
+                },
+                stagger: 0.1,
+                duration: 0.8,
+              },
+            );
+          });
+
+          // Number Counters
+          // ... implementation could go here
+        })();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "skill_name": "neumorphic-funnel",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run a fitness coaching business called \"Iron Mindset\" — I work with busy professionals who want to get strong, lose fat, and build discipline without spending 2 hours at the gym every day. My programs are 45-minute sessions, 4x a week, fully online. I charge $297/month for group coaching and $697/month for 1-on-1. Make me a landing page.",
+      "expected_output": "A single standalone HTML file with a complete neumorphic landing page for Iron Mindset fitness coaching. Should have: neumorphic shadow system (#e6e9ef base, dual shadows), red/orange accent color (fitness category), Outfit+Inter fonts, GSAP animations, hero with animated blobs, stats section with data-count, features grid, pricing cards (group $297 + 1-on-1 $697), FAQ accordion, all sections S1-S8 at minimum. Must use hosted images (Aura James CDN or Unsplash). No broken local paths. Single .html file.",
+      "files": [],
+      "assertions": [
+        "Output is a single HTML file",
+        "Body background is #e6e9ef (neumorphic base)",
+        "CSS defines .neu-raised class with dual box-shadow",
+        "CSS defines .neu-inset class for inputs",
+        "CSS defines .btn-primary with gradient and convex shadow",
+        "Accent color is red/orange/warm (fitness category: #ef4444 or similar)",
+        "Google Fonts link for Outfit and Inter is present in head",
+        "GSAP and ScrollTrigger CDN scripts are included",
+        "All GSAP code is inside window.addEventListener DOMContentLoaded",
+        "Hero section has animated blob elements",
+        "Stats section has at least one [data-count] element",
+        "Pricing section includes $297 and $697 price points",
+        "FAQ uses GSAP accordion (maxHeight animation), not CSS transition",
+        "Marquee uses CSS @keyframes marquee, not Tailwind animate-marquee",
+        "All image src attributes use https:// URLs (no local paths or placeholders)",
+        "Footer has dark background (#1f2937)",
+        "Title tag contains Iron Mindset or similar business name",
+        "Form endpoints use {{FORM_ENDPOINT}} placeholder"
+      ]
+    }
+  ]
+}

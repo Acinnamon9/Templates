@@ -1,0 +1,1760 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brevity | Cut Copy in Half</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind & Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Styles -->
+    <style>
+      :root {
+        --bg: #e6e9ef;
+        --bg-mid: #d1d5db;
+        --shadow-dark: #b8bcc2;
+        --shadow-light: #ffffff;
+        --accent: #7c3aed;
+        --accent-dark: #6d28d9;
+        --accent-rgb: 124, 58, 237;
+        --text-primary: #1f2937;
+        --text-muted: #6b7280;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .font-heading {
+        font-family: "Outfit", sans-serif;
+      }
+
+      /* Neumorphic Surfaces */
+      .neu-raised {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+      }
+      .neu-raised-sm {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          4px 4px 8px var(--shadow-dark),
+          -4px -4px 8px var(--shadow-light);
+      }
+      .neu-inset {
+        background: linear-gradient(145deg, var(--bg-mid), var(--bg));
+        box-shadow:
+          inset 4px 4px 8px var(--shadow-dark),
+          inset -4px -4px 8px var(--shadow-light);
+      }
+      .neu-card {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 30px;
+        padding: 32px;
+        transition: all 0.3s ease;
+      }
+      .neu-card:hover {
+        transform: translateY(-4px);
+        box-shadow:
+          12px 12px 20px var(--shadow-dark),
+          -12px -12px 20px var(--shadow-light);
+      }
+
+      /* Buttons */
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(var(--accent-rgb), 0.3);
+      }
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: var(--text-primary);
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Utilities */
+      .text-accent {
+        color: var(--accent);
+      }
+      .text-accent-bg {
+        background-color: var(--accent);
+      }
+      .border-accent {
+        border-color: var(--accent);
+      }
+
+      /* Animations */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        display: flex;
+        gap: 32px;
+        animation: marquee 20s linear infinite;
+        width: max-content;
+      }
+      .marquee-wrap {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+    </style>
+  </head>
+  <body>
+    <!-- S1: Navbar -->
+    <nav
+      id="navbar"
+      class="fixed w-full top-0 left-0 z-[100] transition-all duration-300 py-6"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between"
+      >
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div
+            class="neu-raised p-2 rounded-xl group-hover:scale-105 transition-transform"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-[#7c3aed]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <span class="text-xl font-bold tracking-tight text-gray-900"
+            >Brevity</span
+          >
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a
+            href="#features"
+            class="text-sm font-medium text-gray-600 hover:text-[#7c3aed] transition-colors"
+            >Features</a
+          >
+          <a
+            href="#demo"
+            class="text-sm font-medium text-gray-600 hover:text-[#7c3aed] transition-colors"
+            >How it Works</a
+          >
+          <a
+            href="#pricing"
+            class="text-sm font-medium text-gray-600 hover:text-[#7c3aed] transition-colors"
+            >Pricing</a
+          >
+        </div>
+
+        <!-- CTA -->
+        <div class="hidden md:flex items-center gap-4">
+          <button
+            class="neu-raised-sm p-2 rounded-lg text-gray-600 hover:text-[#7c3aed] transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+            </svg>
+          </button>
+          <a href="#pricing" class="btn-primary text-sm px-6 py-3"
+            >Get Started Free</a
+          >
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden neu-raised-sm p-2 rounded-lg text-gray-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Drawer -->
+      <div
+        id="mobile-menu"
+        class="fixed inset-0 bg-[#e6e9ef]/95 backdrop-blur-xl z-50 transform translate-y-full transition-transform duration-300 pt-24 px-6 md:hidden"
+      >
+        <div
+          class="flex flex-col gap-6 text-center text-xl font-bold text-gray-800"
+        >
+          <a href="#features" class="mobile-link">Features</a>
+          <a href="#demo" class="mobile-link">How it Works</a>
+          <a href="#pricing" class="mobile-link">Pricing</a>
+          <hr class="border-gray-300" />
+          <a href="#pricing" class="btn-primary mx-auto block w-full"
+            >Start Writing Less</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- S2: Hero -->
+    <section
+      class="relative min-h-screen pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden"
+    >
+      <!-- Background Blobs -->
+      <div
+        class="absolute top-0 right-0 w-[50%] h-[50%] bg-purple-500/20 blur-[120px] rounded-full opacity-30 animate-pulse pointer-events-none"
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-blue-500/20 blur-[120px] rounded-full opacity-30 animate-pulse pointer-events-none"
+      ></div>
+
+      <div class="max-w-7xl mx-auto px-4 md:px-6 text-center relative z-10">
+        <!-- Badge -->
+        <div
+          class="hero-badge inline-flex items-center gap-2 neu-raised-sm px-4 py-2 rounded-full mb-8 opacity-0"
+        >
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <span class="text-xs font-bold text-gray-600 tracking-wider uppercase"
+            >Now Integrating with Notion</span
+          >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-3 w-3 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+
+        <!-- Headline -->
+        <h1
+          class="hero-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-gray-900 mb-8 leading-[1.1]"
+        >
+          Write Less.<br />
+          <span class="text-[#7c3aed]">Read More.</span>
+        </h1>
+
+        <!-- Subheading -->
+        <p
+          class="hero-sub text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto leading-relaxed mb-12"
+        >
+          Brevity is the AI editor that cuts your marketing copy by 50% while
+          keeping the meaning intact. Built for speed, not just length.
+        </p>
+
+        <!-- CTAs -->
+        <div
+          class="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
+        >
+          <button class="btn-primary group w-full sm:w-auto">
+            Try for Free
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="inline-block ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </button>
+          <button class="btn-secondary group w-full sm:w-auto">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5 mr-2 inline-block"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Watch Demo
+          </button>
+        </div>
+
+        <!-- Giant Preview Frame -->
+        <div
+          class="hero-preview mt-24 relative max-w-5xl mx-auto opacity-0 scale-95 origin-top"
+        >
+          <div
+            class="neu-raised p-4 md:p-8 rounded-[40px] shadow-2xl border border-white/20 relative z-10"
+          >
+            <div
+              style="background: var(--bg)"
+              class="rounded-[30px] overflow-hidden min-h-[500px] flex items-center justify-center relative border border-white/40 shadow-inner"
+            >
+              <!-- Full Bleed Image -->
+              <img
+                src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+                alt="Brevity Interface"
+                class="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-1000 opacity-90 grayscale-[20%]"
+              />
+
+              <!-- Floating Overlay: Live -->
+              <div
+                class="floating-badge absolute top-10 right-10 neu-raised p-4 rounded-2xl md:block hidden backdrop-blur-sm bg-white/10 border border-white/20"
+              >
+                <div class="flex items-center gap-2">
+                  <div
+                    class="w-2 h-2 rounded-full bg-green-500 animate-pulse"
+                  ></div>
+                  <span
+                    class="text-xs font-black uppercase tracking-widest text-white"
+                    >LIVE SYNC</span
+                  >
+                </div>
+              </div>
+
+              <!-- Floating Stat Overlay -->
+              <div
+                class="absolute bottom-10 left-10 p-6 md:p-8 rounded-3xl flex items-center gap-6 backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl md:block hidden animate-float"
+              >
+                <div
+                  class="w-12 h-12 rounded-full neu-raised flex items-center justify-center text-[#7c3aed]"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div
+                    class="text-xs font-black uppercase tracking-widest text-[#7c3aed] mb-1"
+                  >
+                    Time Saved
+                  </div>
+                  <div class="text-2xl font-bold text-white drop-shadow-md">
+                    +4.2 hours / week
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mockup Element: The "Cut" UI -->
+              <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-2xl z-20 hidden md:block"
+              >
+                <div
+                  class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"
+                >
+                  <span
+                    class="text-xs font-bold text-gray-400 uppercase tracking-widest"
+                    >Original Word Count</span
+                  >
+                  <span class="text-sm font-bold text-red-500">342 words</span>
+                </div>
+                <div class="text-center py-4">
+                  <div
+                    class="mx-auto w-8 h-8 rounded-full bg-[#7c3aed] text-white flex items-center justify-center mb-2 shadow-lg shadow-purple-500/30"
+                  >
+                    ✂️
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span
+                    class="text-xs font-bold text-gray-400 uppercase tracking-widest"
+                    >Brevity Refined</span
+                  >
+                  <span class="text-sm font-bold text-green-500"
+                    >149 words</span
+                  >
+                </div>
+                <div class="mt-3 h-1 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#7c3aed] w-1/2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S3: TrustedBy Strip -->
+    <section class="py-12 border-y border-gray-200 bg-[rgba(209,213,219,0.3)]">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <p
+          class="text-[10px] font-black tracking-[0.25em] uppercase text-gray-400 mb-10 text-center"
+        >
+          Powering teams at
+        </p>
+        <div
+          class="flex flex-wrap items-center justify-center gap-12 md:gap-24"
+        >
+          <!-- Generic Icons using Emoji/SVG for simplicity to avoid external assets issues -->
+          <div
+            class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <span
+              class="w-8 h-8 rounded bg-white flex items-center justify-center font-bold text-lg shadow-sm"
+              >G</span
+            >
+            <span class="text-sm font-bold text-gray-600">Google Docs</span>
+          </div>
+          <div
+            class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <span
+              class="w-8 h-8 rounded bg-[#00ba7c] flex items-center justify-center text-white font-bold text-lg shadow-sm"
+              >N</span
+            >
+            <span class="text-sm font-bold text-gray-600">Notion</span>
+          </div>
+          <div
+            class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <span
+              class="w-8 h-8 rounded bg-[#4a154b] flex items-center justify-center text-white font-bold text-lg shadow-sm"
+              >#</span
+            >
+            <span class="text-sm font-bold text-gray-600">Slack</span>
+          </div>
+          <div
+            class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <span
+              class="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-sm"
+              >T</span
+            >
+            <span class="text-sm font-bold text-gray-600">Figma</span>
+          </div>
+          <div
+            class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <span
+              class="w-8 h-8 rounded bg-yellow-400 flex items-center justify-center text-white font-bold text-lg shadow-sm"
+              >W</span
+            >
+            <span class="text-sm font-bold text-gray-600">Webflow</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S4: Features -->
+    <section id="features" class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2
+            class="text-4xl md:text-5xl font-black tracking-tight text-gray-900 mb-6"
+          >
+            Intelligence in every word.
+          </h2>
+          <p class="text-xl text-gray-500 leading-relaxed">
+            We don't just delete filler. We understand context, tone, and intent
+            to preserve your brand voice while trimming fat.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature 1 -->
+          <div class="neu-card">
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+              style="background: rgba(124, 58, 237, 0.15)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-[#7c3aed]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl mb-3">
+              Context-Aware Reduction
+            </h3>
+            <p class="text-gray-500 leading-relaxed text-sm">
+              Unlike basic summarizers, Brevity retains the core argument of
+              every paragraph, ensuring no critical points are lost.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="neu-card">
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+              style="background: rgba(124, 58, 237, 0.15)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-[#7c3aed]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                />
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl mb-3">
+              Tone Preset Library
+            </h3>
+            <p class="text-gray-500 leading-relaxed text-sm">
+              Choose "Professional," "Witty," or "Punchy." Our model adapts its
+              reduction strategy to match your specific style guide instantly.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="neu-card">
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+              style="background: rgba(124, 58, 237, 0.15)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-[#7c3aed]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl mb-3">
+              Real-time Workflow Sync
+            </h3>
+            <p class="text-gray-500 leading-relaxed text-sm">
+              Edit in Google Docs or Notion and hit Cmd+K to rewrite. No
+              switching windows, no copy-pasting errors.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="neu-card">
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+              style="background: rgba(124, 58, 237, 0.15)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-[#7c3aed]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl mb-3">
+              SEO Keyword Guard
+            </h3>
+            <p class="text-gray-500 leading-relaxed text-sm">
+              Set your priority keywords. Brevity refuses to cut them out during
+              compression, protecting your search rankings.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="neu-card">
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+              style="background: rgba(124, 58, 237, 0.15)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-[#7c3aed]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl mb-3">
+              Brand Voice Training
+            </h3>
+            <p class="text-gray-500 leading-relaxed text-sm">
+              Upload past blog posts and emails. We learn your unique vocabulary
+              and sentence structure to mimic you perfectly.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="neu-card">
+            <div
+              class="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+              style="background: rgba(124, 58, 237, 0.15)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-[#7c3aed]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl mb-3">
+              Enterprise Security
+            </h3>
+            <p class="text-gray-500 leading-relaxed text-sm">
+              SOC2 compliant. Data is encrypted in transit and never used to
+              train public models. Your copy is yours alone.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5: How It Works -->
+    <section id="demo" class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center mb-16">
+          <h2
+            class="text-4xl md:text-5xl font-black tracking-tight text-gray-900 mb-6"
+          >
+            Simplify your workflow in 4 steps.
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Step 1 -->
+          <div class="step-card text-center opacity-0 translate-y-10">
+            <div
+              class="w-14 h-14 neu-raised rounded-full flex items-center justify-center mx-auto mb-4 text-[#7c3aed] font-black text-xl"
+            >
+              1
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2">Paste or Import</h3>
+            <p class="text-gray-500 text-sm">
+              Drop a rough draft from Docs, Notion, or paste text directly from
+              your clipboard.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card text-center opacity-0 translate-y-10">
+            <div
+              class="w-14 h-14 neu-raised rounded-full flex items-center justify-center mx-auto mb-4 text-[#7c3aed] font-black text-xl"
+            >
+              2
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2">Select Target</h3>
+            <p class="text-gray-500 text-sm">
+              Choose "Shorten", "Simplify", or set a specific word count target.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card text-center opacity-0 translate-y-10">
+            <div
+              class="w-14 h-14 neu-raised rounded-full flex items-center justify-center mx-auto mb-4 text-[#7c3aed] font-black text-xl"
+            >
+              3
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2">Review Changes</h3>
+            <p class="text-gray-500 text-sm">
+              See highlighted deletions instantly. Accept or revert changes with
+              one click.
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-card text-center opacity-0 translate-y-10">
+            <div
+              class="w-14 h-14 neu-raised rounded-full flex items-center justify-center mx-auto mb-4 text-[#7c3aed] font-black text-xl"
+            >
+              4
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2">Publish Clean</h3>
+            <p class="text-gray-500 text-sm">
+              Push directly back to your workspace or export to PDF/Docs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6: Interactive Demo -->
+    <section class="py-20 border-t border-gray-200 bg-[rgba(230,233,239,0.5)]">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <h2
+          class="text-3xl md:text-4xl font-black tracking-tight text-gray-900 mb-8 text-center"
+        >
+          Try the magic yourself.
+        </h2>
+
+        <div class="neu-card p-8 lg:p-12">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <!-- Left: Controls -->
+            <div class="space-y-4">
+              <button
+                class="demo-tab w-full text-left neu-raised-sm rounded-xl p-5 flex items-center justify-between group focus:bg-gray-200"
+                onclick="switchDemo('shorten', this)"
+              >
+                <span class="font-bold text-gray-800"
+                  >Reduce Length by 40%</span
+                >
+                <span class="text-[#7c3aed]">→</span>
+              </button>
+              <button
+                class="demo-tab w-full text-left neu-raised-sm rounded-xl p-5 flex items-center justify-between group focus:bg-gray-200"
+                onclick="switchDemo('clearer', this)"
+              >
+                <span class="font-bold text-gray-800">Simplify Complexity</span>
+                <span class="text-[#7c3aed]">→</span>
+              </button>
+              <button
+                class="demo-tab w-full text-left neu-raised-sm rounded-xl p-5 flex items-center justify-between group focus:bg-gray-200"
+                onclick="switchDemo('tone', this)"
+              >
+                <span class="font-bold text-gray-800">Boost Engagement</span>
+                <span class="text-[#7c3aed]">→</span>
+              </button>
+            </div>
+
+            <!-- Right: Display -->
+            <div
+              class="neu-inset rounded-[30px] min-h-[350px] p-8 flex flex-col justify-center bg-gray-200 relative overflow-hidden"
+            >
+              <div id="demo-content-shorten" class="demo-view flex flex-col">
+                <img
+                  src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=1000"
+                  class="w-full h-48 object-cover rounded-2xl mb-4 opacity-80"
+                />
+                <h3 class="text-2xl font-heading font-black text-gray-800 mb-2">
+                  More Impact, Fewer Words
+                </h3>
+                <p class="text-gray-500">
+                  Our algorithm detects passive voice and removes redundant
+                  phrases, resulting in punchier copy.
+                </p>
+                <div class="mt-6 flex items-center gap-4">
+                  <div class="text-3xl font-black text-[#7c3aed]">-42%</div>
+                  <div
+                    class="text-sm font-bold uppercase tracking-wide text-gray-400"
+                  >
+                    Word Count
+                  </div>
+                </div>
+              </div>
+              <div
+                id="demo-content-clearer"
+                class="demo-view hidden flex flex-col"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=1000"
+                  class="w-full h-48 object-cover rounded-2xl mb-4 opacity-80"
+                />
+                <h3 class="text-2xl font-heading font-black text-gray-800 mb-2">
+                  8th Grade Level Reading
+                </h3>
+                <p class="text-gray-500">
+                  Complex jargon is replaced with clear language, expanding your
+                  audience reach significantly.
+                </p>
+                <div class="mt-6 flex items-center gap-4">
+                  <div class="text-3xl font-black text-[#7c3aed]">+30%</div>
+                  <div
+                    class="text-sm font-bold uppercase tracking-wide text-gray-400"
+                  >
+                    Readability Score
+                  </div>
+                </div>
+              </div>
+              <div
+                id="demo-content-tone"
+                class="demo-view hidden flex flex-col"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=1000"
+                  class="w-full h-48 object-cover rounded-2xl mb-4 opacity-80"
+                />
+                <h3 class="text-2xl font-heading font-black text-gray-800 mb-2">
+                  Action-Oriented Voice
+                </h3>
+                <p class="text-gray-500">
+                  Passive constructions are converted to active verbs, driving
+                  immediate reader response.
+                </p>
+                <div class="mt-6 flex items-center gap-4">
+                  <div class="text-3xl font-black text-[#7c3aed]">+18%</div>
+                  <div
+                    class="text-sm font-bold uppercase tracking-wide text-gray-400"
+                  >
+                    Conversion Lift
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7: Pricing -->
+    <section id="pricing" class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <h2
+            class="text-4xl md:text-5xl font-black tracking-tight text-gray-900 mb-6"
+          >
+            Simple pricing for faster results.
+          </h2>
+          <p class="text-xl text-gray-500">
+            Start free. Upgrade when you hit your stride.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+          <!-- Starter -->
+          <div
+            class="neu-card rounded-3xl p-8 hover:-translate-y-2 transition-all"
+          >
+            <h3 class="text-xl font-black tracking-tight mb-2">Starter</h3>
+            <p class="text-gray-500 text-sm mb-6">For solo creators.</p>
+            <div class="text-5xl font-black tracking-tight mb-8">
+              $29<span class="text-lg font-normal text-gray-400">/mo</span>
+            </div>
+            <ul class="space-y-4 mb-10 text-left text-gray-600">
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Up to 5 documents</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Google Docs Plugin</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Standard Speed</span>
+              </li>
+            </ul>
+            <button
+              class="w-full btn-secondary py-4 rounded-2xl text-lg font-bold"
+            >
+              Start Free Trial
+            </button>
+          </div>
+
+          <!-- Pro -->
+          <div
+            class="neu-card rounded-3xl p-8 hover:-translate-y-2 transition-all border-2 border-[#7c3aed]/20 relative bg-[#fff]/50 z-10 scale-105 shadow-2xl"
+          >
+            <div
+              class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] text-white px-6 py-1 rounded-full text-xs font-black uppercase tracking-widest shadow-lg"
+            >
+              Most Popular
+            </div>
+            <h3 class="text-xl font-black tracking-tight mb-2">Team</h3>
+            <p class="text-gray-500 text-sm mb-6">For growing agencies.</p>
+            <div class="text-5xl font-black tracking-tight mb-8">
+              $79<span class="text-lg font-normal text-gray-400">/mo</span>
+            </div>
+            <ul class="space-y-4 mb-10 text-left text-gray-600">
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Up to 25 users</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Brand Voice Training</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Notion & Slack Sync</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>API Access</span>
+              </li>
+            </ul>
+            <button
+              class="w-full btn-primary py-4 rounded-2xl text-lg font-bold"
+            >
+              Start Free Trial
+            </button>
+          </div>
+
+          <!-- Enterprise -->
+          <div
+            class="neu-card rounded-3xl p-8 hover:-translate-y-2 transition-all"
+          >
+            <h3 class="text-xl font-black tracking-tight mb-2">Enterprise</h3>
+            <p class="text-gray-500 text-sm mb-6">For large organizations.</p>
+            <div class="text-5xl font-black tracking-tight mb-8">Custom</div>
+            <ul class="space-y-4 mb-10 text-left text-gray-600">
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Unlimited seats</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>SAML/SSO Integration</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>Dedicated Success Manager</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg
+                  class="w-5 h-5 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  /></svg
+                ><span>VPC Deployment</span>
+              </li>
+            </ul>
+            <button
+              class="w-full btn-secondary py-4 rounded-2xl text-lg font-bold"
+            >
+              Contact Sales
+            </button>
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="mt-24 max-w-3xl mx-auto">
+          <div
+            class="neu-inset p-8 md:p-12 rounded-[40px] border border-gray-300"
+          >
+            <svg
+              class="w-8 h-8 text-[#7c3aed] opacity-50 mb-4"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V5H13.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z"
+              />
+            </svg>
+            <p
+              class="text-xl md:text-2xl italic text-gray-700 leading-relaxed mb-6"
+            >
+              "Brevity changed our newsletter process. What used to take our
+              copywriter 4 hours now takes 15 minutes. It feels like cheating,
+              but it's actually just smarter writing."
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full neu-raised flex items-center justify-center text-lg font-bold text-gray-400"
+              >
+                SL
+              </div>
+              <div>
+                <div class="font-bold text-gray-900">Sarah L.</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide">
+                  Head of Content, FinTech Co
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S8: FAQ -->
+    <section class="py-20 border-t border-gray-200 bg-[rgba(230,233,239,0.3)]">
+      <div class="max-w-3xl mx-auto px-4 md:px-6">
+        <h2
+          class="text-3xl md:text-4xl font-black tracking-tight text-gray-900 mb-12 text-center"
+        >
+          Common Questions
+        </h2>
+
+        <div
+          class="faq-item mb-4 rounded-3xl neu-raised overflow-hidden cursor-pointer"
+        >
+          <div class="p-6 flex items-center justify-between">
+            <h4 class="font-heading font-bold text-lg text-gray-800">
+              Is my data safe?
+            </h4>
+            <span
+              class="faq-icon w-8 h-8 rounded-full neu-raised-sm flex items-center justify-center text-[#7c3aed] transition-transform duration-300"
+              >+</span
+            >
+          </div>
+          <div class="faq-answer px-6 pb-0 overflow-hidden">
+            <p class="text-gray-500 text-sm leading-relaxed pb-6">
+              Absolutely. Brevity is SOC2 Type II compliant. We do not train on
+              your private data, and enterprise plans support VPC deployment for
+              total isolation.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="faq-item mb-4 rounded-3xl neu-raised overflow-hidden cursor-pointer"
+        >
+          <div class="p-6 flex items-center justify-between">
+            <h4 class="font-heading font-bold text-lg text-gray-800">
+              Does it write from scratch?
+            </h4>
+            <span
+              class="faq-icon w-8 h-8 rounded-full neu-raised-sm flex items-center justify-center text-[#7c3aed] transition-transform duration-300"
+              >+</span
+            >
+          </div>
+          <div class="faq-answer px-6 pb-0 overflow-hidden">
+            <p class="text-gray-500 text-sm leading-relaxed pb-6">
+              No, Brevity is a refinement engine. It requires source material
+              (drafts, outlines, raw notes) to compress and polish. You still
+              need the ideas; we handle the editing.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="faq-item mb-4 rounded-3xl neu-raised overflow-hidden cursor-pointer"
+        >
+          <div class="p-6 flex items-center justify-between">
+            <h4 class="font-heading font-bold text-lg text-gray-800">
+              Can I cancel anytime?
+            </h4>
+            <span
+              class="faq-icon w-8 h-8 rounded-full neu-raised-sm flex items-center justify-center text-[#7c3aed] transition-transform duration-300"
+              >+</span
+            >
+          </div>
+          <div class="faq-answer px-6 pb-0 overflow-hidden">
+            <p class="text-gray-500 text-sm leading-relaxed pb-6">
+              Yes. There are no long-term contracts. Cancel your subscription
+              directly from the dashboard, and you keep access until the end of
+              your billing cycle.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="faq-item mb-4 rounded-3xl neu-raised overflow-hidden cursor-pointer"
+        >
+          <div class="p-6 flex items-center justify-between">
+            <h4 class="font-heading font-bold text-lg text-gray-800">
+              Does it support other languages?
+            </h4>
+            <span
+              class="faq-icon w-8 h-8 rounded-full neu-raised-sm flex items-center justify-center text-[#7c3aed] transition-transform duration-300"
+              >+</span
+            >
+          </div>
+          <div class="faq-answer px-6 pb-0 overflow-hidden">
+            <p class="text-gray-500 text-sm leading-relaxed pb-6">
+              Currently we support English, Spanish, French, and German, with
+              full localization plans coming in Q3.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="faq-item mb-4 rounded-3xl neu-raised overflow-hidden cursor-pointer"
+        >
+          <div class="p-6 flex items-center justify-between">
+            <h4 class="font-heading font-bold text-lg text-gray-800">
+              What about the free trial?
+            </h4>
+            <span
+              class="faq-icon w-8 h-8 rounded-full neu-raised-sm flex items-center justify-center text-[#7c3aed] transition-transform duration-300"
+              >+</span
+            >
+          </div>
+          <div class="faq-answer px-6 pb-0 overflow-hidden">
+            <p class="text-gray-500 text-sm leading-relaxed pb-6">
+              We offer a 7-day free trial on all paid plans so you can test the
+              Team features before committing.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S9: CTA Banner -->
+    <section class="py-20 border-t border-gray-200">
+      <div class="max-w-4xl mx-auto px-4 md:px-6">
+        <div
+          class="neu-card rounded-[40px] p-8 md:p-16 text-center relative overflow-hidden bg-gradient-to-br from-transparent via-[rgba(124,58,237,0.03)] to-transparent"
+        >
+          <h2
+            class="text-3xl md:text-5xl font-black tracking-tight text-gray-900 mb-6"
+          >
+            Ready to say more with less?
+          </h2>
+          <p class="text-xl text-gray-500 mb-10 max-w-xl mx-auto">
+            Join 10,000+ marketers reclaiming their inbox. Start refining for
+            free today.
+          </p>
+          <button class="btn-primary text-lg px-12 py-5">
+            Start Writing Less →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- S10: Marquee Footer Links -->
+    <section class="py-20 border-t border-gray-200 bg-[rgba(230,233,239,0.3)]">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <h3
+          class="text-center text-sm font-bold uppercase tracking-widest text-gray-400 mb-12"
+        >
+          Integrates with your stack
+        </h3>
+        <div class="marquee-wrap w-full">
+          <div class="marquee-track">
+            <!-- Duplicated list for seamless loop -->
+            <span class="text-xl font-bold text-gray-400 px-4"
+              >Google Docs</span
+            >
+            <span class="text-xl font-bold text-[#00ba7c] px-4">Notion</span>
+            <span class="text-xl font-bold text-[#4a154b] px-4">Slack</span>
+            <span class="text-xl font-bold text-[#fb923c] px-4">WordPress</span>
+            <span class="text-xl font-bold text-[#1da1f2] px-4">Medium</span>
+            <span class="text-xl font-bold text-gray-400 px-4">Substack</span>
+            <span class="text-xl font-bold text-gray-400 px-4">Ghost</span>
+            <span class="text-xl font-bold text-gray-400 px-4">Confluence</span>
+            <!-- Second Set -->
+            <span class="text-xl font-bold text-gray-400 px-4"
+              >Google Docs</span
+            >
+            <span class="text-xl font-bold text-[#00ba7c] px-4">Notion</span>
+            <span class="text-xl font-bold text-[#4a154b] px-4">Slack</span>
+            <span class="text-xl font-bold text-[#fb923c] px-4">WordPress</span>
+            <span class="text-xl font-bold text-[#1da1f2] px-4">Medium</span>
+            <span class="text-xl font-bold text-gray-400 px-4">Substack</span>
+            <span class="text-xl font-bold text-gray-400 px-4">Ghost</span>
+            <span class="text-xl font-bold text-gray-400 px-4">Confluence</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S11: About Teaser -->
+    <section class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div
+          class="flex flex-col md:flex-row items-center justify-between gap-12"
+        >
+          <div class="md:w-1/2">
+            <h2
+              class="text-3xl md:text-4xl font-black tracking-tight text-gray-900 mb-6"
+            >
+              Built by writers, for writers.
+            </h2>
+            <p class="text-gray-500 leading-relaxed mb-8">
+              We're a distributed team of editors, linguists, and AI engineers
+              obsessed with the craft of brevity. We believe clarity is
+              kindness.
+            </p>
+            <button class="btn-secondary px-8 py-3 rounded-2xl font-bold">
+              Meet the Team
+            </button>
+          </div>
+          <div class="md:w-1/2 grid grid-cols-3 gap-4">
+            <div
+              class="neu-raised-sm rounded-full aspect-square flex items-center justify-center font-bold text-xl"
+            >
+              JD
+            </div>
+            <div
+              class="neu-raised-sm rounded-full aspect-square flex items-center justify-center font-bold text-xl"
+            >
+              AL
+            </div>
+            <div
+              class="neu-raised-sm rounded-full aspect-square flex items-center justify-center font-bold text-xl"
+            >
+              MR
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S12: Footer -->
+    <footer class="pt-20 border-t border-gray-200 bg-[#e6e9ef] pb-10">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
+          <!-- Col 1: Brand -->
+          <div>
+            <a href="#" class="flex items-center gap-2 mb-6">
+              <div class="neu-raised p-1.5 rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 text-[#7c3aed]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <span class="text-lg font-bold tracking-tight text-gray-900"
+                >Brevity</span
+              >
+            </a>
+            <p class="text-gray-500 text-sm leading-relaxed mb-6 max-w-xs">
+              Cutting edge AI for clearer communication. Save time, read more.
+            </p>
+            <div class="flex gap-4">
+              <a
+                href="#"
+                class="neu-raised-sm p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                ><svg
+                  class="w-4 h-4 text-gray-600"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"
+                  /></svg
+              ></a>
+              <a
+                href="#"
+                class="neu-raised-sm p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                ><svg
+                  class="w-4 h-4 text-gray-600"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                  /></svg
+              ></a>
+            </div>
+          </div>
+
+          <!-- Col 2: Product -->
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Product</h4>
+            <ul class="space-y-3 text-sm text-gray-500">
+              <li><a href="#" class="hover:text-[#7c3aed]">Features</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">Integrations</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">Pricing</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">Changelog</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">API Docs</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Company -->
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Company</h4>
+            <ul class="space-y-3 text-sm text-gray-500">
+              <li><a href="#" class="hover:text-[#7c3aed]">About Us</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">Careers</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">Blog</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">Contact</a></li>
+              <li><a href="#" class="hover:text-[#7c3aed]">Partners</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 4: Newsletter -->
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Stay Sharp</h4>
+            <p class="text-gray-500 text-sm mb-4">
+              Weekly tips on better writing.
+            </p>
+            <form class="flex flex-col gap-3">
+              <div class="neu-inset rounded-xl p-1 flex items-center">
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  class="bg-transparent border-none outline-none px-3 py-2 text-sm w-full text-gray-800 placeholder-gray-500"
+                />
+                <button
+                  type="submit"
+                  class="btn-primary px-4 py-2 text-sm rounded-lg"
+                >
+                  Subscribe
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div
+          class="pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <p class="text-xs text-gray-400">
+            © 2026 Brevity AI Inc. All rights reserved.
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+              <span
+                class="w-2 h-2 rounded-full bg-green-500 animate-pulse"
+              ></span>
+              <span
+                class="text-xs font-bold text-gray-400 uppercase tracking-wide"
+                >All Systems Operational</span
+              >
+            </div>
+            <a href="#" class="text-xs text-gray-400 hover:text-[#7c3aed]"
+              >Privacy</a
+            >
+            <a href="#" class="text-xs text-gray-400 hover:text-[#7c3aed]"
+              >Terms</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JS Scripts -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        // 1. Navbar Scroll
+        (function () {
+          const nav = document.getElementById("navbar");
+          const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+          const mobileMenu = document.getElementById("mobile-menu");
+          const mobileLinks = document.querySelectorAll(".mobile-link");
+
+          window.addEventListener("scroll", () => {
+            nav.classList.toggle("scrolled", window.scrollY > 20);
+          });
+
+          // Mobile Menu Logic
+          mobileMenuBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("translate-y-full");
+          });
+
+          mobileLinks.forEach((link) => {
+            link.addEventListener("click", () => {
+              mobileMenu.classList.add("translate-y-full");
+            });
+          });
+        })();
+
+        // 2. GSAP Animations
+        (function () {
+          gsap.registerPlugin(ScrollTrigger);
+
+          // Hero Page-Load Stagger
+          gsap.fromTo(
+            ".hero-badge",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.5, delay: 0.3, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-headline",
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.7, delay: 0.4, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-sub",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.7, delay: 0.5, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-ctas",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.7, delay: 0.6, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-preview",
+            { opacity: 0, scale: 0.95 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 1,
+              delay: 0.8,
+              ease: "power3.out",
+            },
+          );
+
+          // Section Reveals
+          const sections = ["features", "demo", "pricing"];
+          sections.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) {
+              gsap.to(el, {
+                scrollTrigger: {
+                  trigger: el,
+                  start: "top 85%",
+                  toggleActions: "play none none reverse",
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+              });
+            }
+          });
+
+          // Feature Card Stagger
+          gsap.from(".neu-card", {
+            scrollTrigger: ".neu-card",
+            start: "top 90%",
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "back.out(1.7)",
+            y: 50,
+            opacity: 0,
+          });
+
+          // How It Works Steps
+          gsap.from(".step-card", {
+            scrollTrigger: "#demo",
+            start: "top 80%",
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out",
+            y: 50,
+            opacity: 0,
+          });
+        })();
+
+        // 3. Demo Tab Swap
+        (function () {
+          window.switchDemo = function (viewId, btnEl) {
+            // Update Buttons
+            document
+              .querySelectorAll(".demo-tab")
+              .forEach((b) => b.classList.remove("neu-inset"));
+            btnEl.classList.add("neu-inset");
+
+            // Show View
+            document
+              .querySelectorAll(".demo-view")
+              .forEach((v) => v.classList.add("hidden"));
+            const target = document.getElementById("demo-content-" + viewId);
+            target.classList.remove("hidden");
+
+            // Animation
+            gsap.fromTo(
+              target,
+              { alpha: 0, y: 10 },
+              { alpha: 1, y: 0, duration: 0.3 },
+            );
+          };
+        })();
+
+        // 4. FAQ Accordion
+        (function () {
+          document.querySelectorAll(".faq-item").forEach(function (item) {
+            item.addEventListener("click", function (e) {
+              // Prevent double fire if clicking icon vs div
+              e.stopPropagation();
+              var answer = item.querySelector(".faq-answer");
+              var icon = item.querySelector(".faq-icon");
+              var isOpen = item.classList.contains("active");
+
+              // Close all others first
+              document.querySelectorAll(".faq-item").forEach(function (i) {
+                i.classList.remove("active");
+                gsap.to(i.querySelector(".faq-answer"), {
+                  maxHeight: 0,
+                  duration: 0.3,
+                  ease: "power2.inOut",
+                });
+                gsap.to(i.querySelector(".faq-icon"), {
+                  rotation: 0,
+                  duration: 0.3,
+                });
+                i.querySelector(".faq-icon").textContent = "+";
+              });
+
+              if (!isOpen) {
+                item.classList.add("active");
+                gsap.to(answer, {
+                  maxHeight: answer.scrollHeight,
+                  duration: 0.35,
+                  ease: "power2.out",
+                });
+                gsap.to(icon, { rotation: 45, duration: 0.3 });
+                icon.textContent = "-";
+              }
+            });
+          });
+        })();
+      });
+    </script>
+  </body>
+</html>

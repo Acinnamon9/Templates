@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iron Mindset | Premium Online Coaching</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+      :root {
+        --bg: #e6e9ef;
+        --bg-mid: #d1d5db;
+        --shadow-dark: #b8bcc2;
+        --shadow-light: #ffffff;
+        --accent: #ef4444;
+        --accent-dark: #dc2626;
+        --accent-rgb: 239, 68, 68;
+        --text-primary: #1f2937;
+        --text-muted: #6b7280;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", system-ui, sans-serif;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .font-black {
+        font-family: "Outfit", sans-serif;
+        letter-spacing: -0.02em;
+      }
+
+      .neu-raised {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+      }
+      .neu-raised-sm {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          4px 4px 8px var(--shadow-dark),
+          -4px -4px 8px var(--shadow-light);
+      }
+      .neu-convex {
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+      }
+      .neu-inset {
+        background: linear-gradient(145deg, var(--bg-mid), var(--bg));
+        box-shadow:
+          inset 4px 4px 8px var(--shadow-dark),
+          inset -4px -4px 8px var(--shadow-light);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(var(--accent-rgb), 0.3);
+      }
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: var(--text-primary);
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.15s ease;
+      }
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+      }
+
+      .neu-card {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 30px;
+        padding: 32px;
+        transition: all 0.3s ease;
+      }
+      .neu-card:hover {
+        transform: translateY(-4px);
+      }
+
+      /* Custom Animations */
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        display: flex;
+        gap: 32px;
+        animation: marquee 20s linear infinite;
+        width: max-content;
+      }
+      .marquee-wrap {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+
+      /* Mobile Menu Drawer */
+      .mobile-drawer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 999;
+        background: var(--bg);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        padding: 4rem 2rem;
+      }
+      .mobile-drawer.open {
+        transform: translateX(0);
+      }
+
+      /* Helper for opacity issues with dynamic colors */
+      .bg-accent-opacity {
+        background: rgba(var(--accent-rgb), 0.15);
+      }
+    </style>
+  </head>
+  <body class="antialiased selection:bg-red-500 selection:text-white">
+    <!-- S1: NAVBAR -->
+    <nav
+      id="navbar"
+      class="fixed top-0 w-full z-[999] py-6 px-4 md:px-6 transition-all duration-300"
+      style="backdrop-filter: blur(0px)"
+    >
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="#" class="flex items-center gap-3 group">
+          <div
+            class="neu-raised p-2 rounded-xl transition-transform group-hover:rotate-12"
+          >
+            <svg
+              class="w-6 h-6 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              ></path>
+            </svg>
+          </div>
+          <span class="text-xl font-bold tracking-tight text-gray-800"
+            >IRON MINDSET</span
+          >
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a
+            href="#features"
+            class="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors"
+            >Methodology</a
+          >
+          <a
+            href="#how-it-works"
+            class="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors"
+            >How It Works</a
+          >
+          <a
+            href="#pricing"
+            class="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors"
+            >Pricing</a
+          >
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button
+            class="btn-primary hidden lg:block"
+            onclick="
+              document
+                .getElementById('pricing')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Join Now
+          </button>
+          <button
+            id="hamburger"
+            class="md:hidden neu-raised-sm p-2 rounded-lg text-gray-600"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Drawer -->
+      <div
+        id="mobile-menu"
+        class="mobile-drawer shadow-2xl border-t border-gray-200 bg-[#e6e9ef]"
+      >
+        <div class="flex justify-end mb-8">
+          <button
+            id="close-menu"
+            class="p-2 rounded-full hover:bg-gray-200 transition"
+          >
+            <svg
+              class="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex flex-col gap-8 text-center">
+          <a
+            href="#features"
+            class="text-2xl font-black text-gray-800 mobile-link"
+            >Methodology</a
+          >
+          <a
+            href="#how-it-works"
+            class="text-2xl font-black text-gray-800 mobile-link"
+            >How It Works</a
+          >
+          <a
+            href="#pricing"
+            class="text-2xl font-black text-gray-800 mobile-link"
+            >Pricing</a
+          >
+          <button
+            class="btn-primary w-full mt-4"
+            onclick="
+              document
+                .getElementById('pricing')
+                .scrollIntoView({ behavior: 'smooth' });
+              document.getElementById('close-menu').click();
+            "
+          >
+            Join Iron Squad
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- S2: HERO -->
+    <section
+      class="pt-32 pb-20 lg:pt-48 lg:pb-32 relative overflow-hidden px-4 md:px-6 max-w-7xl mx-auto text-center"
+    >
+      <!-- Background Blobs -->
+      <div
+        class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-red-500/10 blur-[120px] rounded-full animate-pulse -z-10"
+      ></div>
+      <div
+        class="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] bg-blue-500/10 blur-[100px] rounded-full animate-pulse -z-10"
+      ></div>
+
+      <div
+        class="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full neu-raised-sm mb-8"
+      >
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+        <span
+          class="text-xs font-black uppercase tracking-[0.2em] text-gray-600"
+          >Accepting New Clients • March Intake</span
+        >
+      </div>
+
+      <h1
+        class="hero-headline text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight"
+      >
+        Build A Body <br />
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600"
+          >Built For Speed</span
+        >
+      </h1>
+
+      <p
+        class="hero-sub text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-10"
+      >
+        Train 45 minutes a day, 4 days a week. We engineer strength, burn fat,
+        and instill military-grade discipline for busy executives—no endless
+        cardio required.
+      </p>
+
+      <div
+        class="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-6 mb-12"
+      >
+        <a
+          href="#pricing"
+          class="btn-primary w-full sm:w-auto flex items-center justify-center gap-2"
+        >
+          Start Training
+          <svg
+            class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            ></path>
+          </svg>
+        </a>
+        <button
+          class="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+            />
+          </svg>
+          Watch Protocol
+        </button>
+      </div>
+
+      <!-- Giant Preview Frame -->
+      <div
+        class="mt-16 lg:mt-24 relative max-w-6xl mx-auto hero-preview origin-top scale-95 md:scale-100 opacity-0"
+      >
+        <div
+          class="neu-raised p-4 md:p-8 rounded-[40px] shadow-2xl border border-white/20"
+        >
+          <div
+            style="background: var(--bg)"
+            class="rounded-[30px] overflow-hidden min-h-[500px] md:min-h-[600px] flex items-center justify-center relative border border-white/40 shadow-inner"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1534438327167-1dcbe013c94b?q=80&w=1600&auto=format&fit=crop"
+              alt="Athlete Training"
+              class="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-1000 opacity-90 grayscale hover:grayscale-0"
+            />
+
+            <!-- Overlay 1 -->
+            <div
+              class="absolute top-10 right-10 md:right-20 neu-raised p-4 rounded-2xl hidden md:flex items-center gap-4 backdrop-blur-md bg-white/90 shadow-xl"
+            >
+              <div
+                class="bg-red-100 p-2 rounded-lg text-red-600 font-black text-xs uppercase"
+              >
+                Live
+              </div>
+              <div class="text-left">
+                <div
+                  class="text-[10px] font-black uppercase text-gray-500 tracking-wider"
+                >
+                  Current Cohort
+                </div>
+                <div class="text-sm font-bold text-gray-900">March 2026</div>
+              </div>
+            </div>
+
+            <!-- Overlay 2 -->
+            <div
+              class="absolute bottom-10 left-6 md:left-12 p-8 rounded-3xl flex items-center gap-6 backdrop-blur-xl bg-white/10 border border-white/10 shadow-2xl hidden md:flex"
+            >
+              <div
+                class="w-16 h-16 rounded-full neu-raised flex items-center justify-center text-2xl text-red-600"
+              >
+                ★
+              </div>
+              <div>
+                <div
+                  class="text-xs font-black uppercase tracking-widest text-red-500 mb-1"
+                >
+                  Average Transformation
+                </div>
+                <div class="text-2xl font-bold text-white text-shadow-sm">
+                  –14% Body Fat
+                </div>
+                <div class="text-sm text-gray-300">in 90 Days</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S3: TRUSTED BY -->
+    <div class="border-y border-gray-200 py-12 bg-gray-100/50">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <p
+          class="text-center text-xs font-black tracking-[0.2em] uppercase text-gray-400 mb-8"
+        >
+          Optimized for the Data-Driven Athlete
+        </p>
+        <div
+          class="flex flex-wrap items-center justify-center gap-12 md:gap-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-white font-bold text-xs"
+            >
+              W
+            </div>
+            <span class="font-bold text-gray-600">WHOOP</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white font-bold text-xs"
+            >
+              O
+            </div>
+            <span class="font-bold text-gray-600">OURA RING</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center text-white font-bold text-xs"
+            >
+              M
+            </div>
+            <span class="font-bold text-gray-600">MYFITNESSPAL</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-xs"
+            >
+              S
+            </div>
+            <span class="font-bold text-gray-600">STRAVA</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-xs"
+            >
+              F
+            </div>
+            <span class="font-bold text-gray-600">FREE WEIGHT LOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4: FEATURES -->
+    <section id="features" class="py-20 border-t border-gray-200 pt-20">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="mb-16">
+          <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+            Anti-Bloat Training<br />For Maximum Results
+          </h2>
+          <p class="text-xl text-gray-500 max-w-2xl">
+            Stop wasting hours at the gym. Our system leverages high-density
+            training blocks designed specifically for cognitive performance.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature 1 -->
+          <div
+            class="neu-card hover:-translate-y-2 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-accent-opacity"
+              style="background: rgba(var(--accent-rgb), 0.15)"
+            >
+              <svg
+                class="w-7 h-7 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-3">45-Minute Blocks</h3>
+            <p class="text-gray-500 leading-relaxed">
+              No fluff. High-intensity compound movements that trigger hormonal
+              response in under an hour.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div
+            class="neu-card hover:-translate-y-2 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-accent-opacity"
+              style="background: rgba(var(--accent-rgb), 0.15)"
+            >
+              <svg
+                class="w-7 h-7 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-3">Precision Nutrition</h3>
+            <p class="text-gray-500 leading-relaxed">
+              Macro-calculated fueling strategies based on your caloric output,
+              not generic meal plans.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div
+            class="neu-card hover:-translate-y-2 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-accent-opacity"
+              style="background: rgba(var(--accent-rgb), 0.15)"
+            >
+              <svg
+                class="w-7 h-7 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-3">Accountability Protocols</h3>
+            <p class="text-gray-500 leading-relaxed">
+              We don't guess. We track reps, RPE, and recovery. If you miss a
+              session, we pivot immediately.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5: HOW IT WORKS -->
+    <section id="how-it-works" class="py-20 border-t border-gray-200 pt-20">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-black text-gray-900 mb-4">
+            The Iron Protocol
+          </h2>
+          <p class="text-gray-500">
+            Three weeks to build momentum. Four weeks to see changes.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Step 1 -->
+          <div
+            class="flex flex-col items-center text-center step-reveal opacity-0 translate-y-8"
+          >
+            <div
+              class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mb-6 shadow-lg"
+            >
+              <span class="font-black text-xl text-red-600">01</span>
+            </div>
+            <div class="neu-card p-6 w-full">
+              <h3 class="font-bold text-lg mb-2">Assessment</h3>
+              <p class="text-sm text-gray-500">
+                Video analysis of movement patterns and lifestyle audit.
+              </p>
+            </div>
+          </div>
+          <!-- Step 2 -->
+          <div
+            class="flex flex-col items-center text-center step-reveal opacity-0 translate-y-8"
+          >
+            <div
+              class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mb-6 shadow-lg"
+            >
+              <span class="font-black text-xl text-red-600">02</span>
+            </div>
+            <div class="neu-card p-6 w-full">
+              <h3 class="font-bold text-lg mb-2">Programming</h3>
+              <p class="text-sm text-gray-500">
+                Your custom periodized plan delivered weekly in our app.
+              </p>
+            </div>
+          </div>
+          <!-- Step 3 -->
+          <div
+            class="flex flex-col items-center text-center step-reveal opacity-0 translate-y-8"
+          >
+            <div
+              class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mb-6 shadow-lg"
+            >
+              <span class="font-black text-xl text-red-600">03</span>
+            </div>
+            <div class="neu-card p-6 w-full">
+              <h3 class="font-bold text-lg mb-2">Execution</h3>
+              <p class="text-sm text-gray-500">
+                Complete 4 sessions/week. Upload form checks for feedback.
+              </p>
+            </div>
+          </div>
+          <!-- Step 4 -->
+          <div
+            class="flex flex-col items-center text-center step-reveal opacity-0 translate-y-8"
+          >
+            <div
+              class="neu-raised w-14 h-14 rounded-full flex items-center justify-center mb-6 shadow-lg"
+            >
+              <span class="font-black text-xl text-red-600">04</span>
+            </div>
+            <div class="neu-card p-6 w-full">
+              <h3 class="font-bold text-lg mb-2">Results</h3>
+              <p class="text-sm text-gray-500">
+                Biometric testing and physique check-ins every 4 weeks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6: INTERACTIVE DEMO -->
+    <section class="py-20 border-t border-gray-200 pt-20">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-black text-gray-900">Choose Your Level</h2>
+          <p class="text-gray-500 mt-2">
+            See exactly what goes into each program tier.
+          </p>
+        </div>
+
+        <div
+          class="neu-raised rounded-[30px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-2xl"
+        >
+          <!-- Left Control Panel -->
+          <div
+            class="lg:col-span-4 p-8 border-r border-gray-200/50 bg-[#e6e9ef]/50 flex flex-col justify-center gap-4"
+          >
+            <div
+              class="interactive-tab active bg-accent-opacity ring-2 ring-red-600 rounded-xl p-6 cursor-pointer transition-all"
+              onclick="switchTab(this, 'group')"
+            >
+              <h4 class="font-bold text-xl mb-1">Performance Group</h4>
+              <p class="text-sm text-gray-500">
+                For those who want community energy without the daily oversight.
+              </p>
+            </div>
+            <div
+              class="interactive-tab bg-[#e6e9ef] hover:bg-gray-200 rounded-xl p-6 cursor-pointer transition-all"
+              onclick="switchTab(this, 'elite')"
+            >
+              <h4 class="font-bold text-xl mb-1">Elite Coaching</h4>
+              <p class="text-sm text-gray-500">
+                Daily communication, video form review, and macro adjustments.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Display Area -->
+          <div class="lg:col-span-8 relative min-h-[500px]">
+            <!-- Tab 1 Content -->
+            <div
+              id="content-group"
+              class="absolute inset-0 p-8 md:p-12 flex items-center transition-all duration-500"
+            >
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full items-center"
+              >
+                <div class="space-y-6">
+                  <img
+                    src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800&auto=format&fit=crop"
+                    class="w-full h-64 object-cover rounded-[24px] shadow-xl neu-raised"
+                    alt="Gym Group"
+                  />
+                  <div>
+                    <h3 class="text-3xl font-black mb-4">
+                      Community Accountability
+                    </h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                      Weekly group Zoom calls to discuss nutrition hurdles and
+                      lift together. Access to our Discord for instant wins.
+                    </p>
+                    <ul class="space-y-3">
+                      <li
+                        class="flex items-center gap-3 text-gray-700 font-medium"
+                      >
+                        <span
+                          class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs"
+                          >✓</span
+                        >
+                        Weekly Check-ins
+                      </li>
+                      <li
+                        class="flex items-center gap-3 text-gray-700 font-medium"
+                      >
+                        <span
+                          class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs"
+                          >✓</span
+                        >
+                        App Access
+                      </li>
+                      <li
+                        class="flex items-center gap-3 text-gray-700 font-medium"
+                      >
+                        <span
+                          class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs"
+                          >✓</span
+                        >
+                        Community Forum
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Tab 2 Content -->
+            <div
+              id="content-elite"
+              class="absolute inset-0 p-8 md:p-12 flex items-center opacity-0 transition-all duration-500 translate-x-10"
+            >
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full items-center"
+              >
+                <div class="space-y-6">
+                  <img
+                    src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop"
+                    class="w-full h-64 object-cover rounded-[24px] shadow-xl neu-raised"
+                    alt="1 on 1 Coaching"
+                  />
+                  <div>
+                    <h3 class="text-3xl font-black mb-4">
+                      Direct Line to Coach
+                    </h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                      You get my personal attention. Unlimited messaging, weekly
+                      video calls to critique your technique, and real-time diet
+                      tweaks.
+                    </p>
+                    <ul class="space-y-3">
+                      <li
+                        class="flex items-center gap-3 text-gray-700 font-medium"
+                      >
+                        <span
+                          class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-xs"
+                          >✓</span
+                        >
+                        Daily WhatsApp Access
+                      </li>
+                      <li
+                        class="flex items-center gap-3 text-gray-700 font-medium"
+                      >
+                        <span
+                          class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-xs"
+                          >✓</span
+                        >
+                        Form Video Analysis
+                      </li>
+                      <li
+                        class="flex items-center gap-3 text-gray-700 font-medium"
+                      >
+                        <span
+                          class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-xs"
+                          >✓</span
+                        >
+                        Priority Scheduling
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7: PRICING -->
+    <section id="pricing" class="py-20 border-t border-gray-200 pt-20">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+            Invest In Yourself
+          </h2>
+          <p class="text-xl text-gray-500 max-w-2xl mx-auto">
+            Simple monthly pricing. No contracts. Cancel anytime.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <!-- Card 1 -->
+          <div class="neu-raised rounded-[30px] p-8 border border-gray-200/50">
+            <h3 class="text-lg font-bold text-gray-500 mb-2">Self-Paced</h3>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-4xl font-black text-gray-900">$297</span>
+              <span class="text-sm text-gray-500">/month</span>
+            </div>
+            <button class="btn-secondary w-full py-4 rounded-2xl mb-10">
+              Select Plan
+            </button>
+            <ul class="space-y-4 text-gray-600 text-sm">
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Custom Workouts
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Monthly Check-ins
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center"
+                >
+                  ✕
+                </div>
+                Form Reviews
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center"
+                >
+                  ✕
+                </div>
+                Nutrition Plans
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Popular -->
+          <div
+            class="relative scale-105 z-10 bg-gradient-to-b from-white to-[#e6e9ef] rounded-[30px] p-8 shadow-2xl border-2 border-red-500/30"
+          >
+            <div
+              class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-600 to-red-500 text-white px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-lg"
+            >
+              Most Popular
+            </div>
+            <h3 class="text-lg font-bold text-red-600 mb-2">Elite Coaching</h3>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-5xl font-black text-gray-900">$697</span>
+              <span class="text-sm text-gray-500">/month</span>
+            </div>
+            <button class="btn-primary w-full py-4 rounded-2xl mb-10">
+              Apply Now
+            </button>
+            <ul class="space-y-4 text-gray-700 font-medium text-sm">
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Custom Workouts
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Bi-Weekly Calls
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Form Reviews
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Full Macro Diet
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 3 -->
+          <div
+            class="neu-raised rounded-[30px] p-8 border border-gray-200/50 opacity-75"
+          >
+            <h3 class="text-lg font-bold text-gray-500 mb-2">Private Client</h3>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-4xl font-black text-gray-900">Ask</span>
+            </div>
+            <button class="btn-secondary w-full py-4 rounded-2xl mb-10">
+              Contact Sales
+            </button>
+            <ul class="space-y-4 text-gray-600 text-sm">
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Everything in Elite
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                In-Person Sessions
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Travel Planning
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center"
+                >
+                  ✓
+                </div>
+                Family Consultation
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Testimonial Strip below Pricing -->
+        <div class="mt-20">
+          <div
+            class="neu-inset p-8 md:p-12 rounded-[40px] max-w-4xl mx-auto text-center relative"
+          >
+            <div class="absolute top-8 left-8 text-red-500 opacity-20 text-6xl">
+              "
+            </div>
+            <p
+              class="text-xl md:text-2xl text-gray-700 italic font-serif leading-relaxed mb-8"
+            >
+              "I lost 12 lbs in the first month and finally understand how to
+              eat for my schedule. Iron Mindset isn't a bootcamp; it's an
+              operating system for high-performance humans."
+            </p>
+            <div class="flex items-center justify-center gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-gray-300 neu-raised flex items-center justify-center text-gray-500 font-bold"
+              >
+                JD
+              </div>
+              <div class="text-left">
+                <div class="font-bold text-gray-900">James D.</div>
+                <div
+                  class="text-xs font-bold uppercase tracking-widest text-gray-400"
+                >
+                  CEO, Tech Startup
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S8: FAQ -->
+    <section class="py-20 border-t border-gray-200 pt-20">
+      <div class="max-w-3xl mx-auto px-4 md:px-6">
+        <h2 class="text-4xl font-black text-gray-900 mb-12 text-center">
+          Common Objections
+        </h2>
+
+        <div class="space-y-4 faq-container">
+          <!-- Q1 -->
+          <div
+            class="faq-item neu-raised rounded-[30px] p-6 cursor-pointer transition-all"
+          >
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-lg">Do I need a gym membership?</h4>
+              <span
+                class="faq-icon text-red-600 font-black text-2xl transition-transform duration-300"
+                >+</span
+              >
+            </div>
+            <div class="faq-answer overflow-hidden" style="max-height: 0">
+              <p class="pt-4 text-gray-600 leading-relaxed">
+                Ideally yes, but not mandatory. About 40% of my clients are
+                "Home Gym" optimized using adjustable dumbbells and kettlebells.
+                We design around the barbell, but we respect the reality of
+                limited space.
+              </p>
+            </div>
+          </div>
+          <!-- Q2 -->
+          <div
+            class="faq-item neu-raised rounded-[30px] p-6 cursor-pointer transition-all"
+          >
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-lg">
+                I travel 2 weeks a month. Will this work?
+              </h4>
+              <span
+                class="faq-icon text-red-600 font-black text-2xl transition-transform duration-300"
+                >+</span
+              >
+            </div>
+            <div class="faq-answer overflow-hidden" style="max-height: 0">
+              <p class="pt-4 text-gray-600 leading-relaxed">
+                Absolutely. That's actually a specialty of mine. We build
+                hotel-room friendly routines and provide travel nutrition guides
+                so you can maintain mass on the road.
+              </p>
+            </div>
+          </div>
+          <!-- Q3 -->
+          <div
+            class="faq-item neu-raised rounded-[30px] p-6 cursor-pointer transition-all"
+          >
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-lg">What happens if I miss a week?</h4>
+              <span
+                class="faq-icon text-red-600 font-black text-2xl transition-transform duration-300"
+                >+</span
+              >
+            </div>
+            <div class="faq-answer overflow-hidden" style="max-height: 0">
+              <p class="pt-4 text-gray-600 leading-relaxed">
+                Life happens. Life continues. Just message me, tell me when
+                you're back, and we adjust your next cycle to prioritize that
+                window.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S9: CTA BANNER -->
+    <section class="py-24">
+      <div class="max-w-5xl mx-auto px-4 md:px-6">
+        <div
+          class="neu-raised rounded-[40px] p-10 md:p-16 text-center relative overflow-hidden"
+        >
+          <div
+            class="absolute inset-0 bg-red-600 opacity-[0.03] mix-blend-multiply pointer-events-none"
+          ></div>
+          <div class="relative z-10">
+            <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+              Ready to Upgrade Your Operating System?
+            </h2>
+            <p class="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">
+              Spots for the March cohort are closing. Secure your spot today and
+              stop overthinking your health.
+            </p>
+            <a href="#pricing" class="btn-primary inline-block shadow-2xl"
+              >Join Iron Mindset</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S10: FOOTER -->
+    <footer class="border-t border-gray-200 pt-20 pb-10 bg-[#e6e9ef]">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
+          <div>
+            <a href="#" class="flex items-center gap-3 mb-6">
+              <div class="neu-raised p-2 rounded-xl">
+                <svg
+                  class="w-5 h-5 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-xl font-bold tracking-tight text-gray-800"
+                >IRON MINDSET</span
+              >
+            </a>
+            <p class="text-gray-500 leading-relaxed max-w-sm text-sm">
+              Premium online coaching for professionals who value time,
+              aesthetics, and mental fortitude.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Company</h4>
+            <ul class="space-y-3 text-sm text-gray-500">
+              <li>
+                <a href="#" class="hover:text-red-600 transition">About</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-red-600 transition">The Team</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-red-600 transition">Careers</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Support</h4>
+            <ul class="space-y-3 text-sm text-gray-500">
+              <li><a href="#" class="hover:text-red-600 transition">FAQ</a></li>
+              <li>
+                <a href="#" class="hover:text-red-600 transition">Contact Us</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-red-600 transition"
+                  >Privacy Policy</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 mb-6">Newsletter</h4>
+            <form class="flex gap-2">
+              <input
+                type="email"
+                placeholder="Email address"
+                class="flex-1 neu-inset rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-red-500"
+              />
+              <button class="btn-primary py-3 px-4 text-sm rounded-xl">
+                →
+              </button>
+            </form>
+            <div class="flex gap-4 mt-6">
+              <a
+                href="#"
+                class="neu-raised-sm p-2 rounded-lg hover:bg-white transition"
+                ><svg
+                  class="w-5 h-5 text-gray-500"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"
+                  /></svg
+              ></a>
+              <a
+                href="#"
+                class="neu-raised-sm p-2 rounded-lg hover:bg-white transition"
+                ><svg
+                  class="w-5 h-5 text-gray-500"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                  /></svg
+              ></a>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <div class="flex items-center gap-2">
+            <span
+              class="w-2 h-2 rounded-full bg-green-500 animate-pulse"
+            ></span>
+            <span class="text-xs text-gray-500">Systems Operational</span>
+          </div>
+          <div class="text-xs text-gray-400">
+            © 2026 Iron Mindset. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        // 1. Navbar Scroll Effect
+        const nav = document.getElementById("navbar");
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 20) {
+            nav.classList.add("scrolled", "bg-[rgba(230,233,239,0.9)]");
+            nav.classList.remove("backdrop-blur-md");
+          } else {
+            nav.classList.remove("scrolled", "bg-[rgba(230,233,239,0.9)]");
+            nav.classList.add("backdrop-blur-md");
+          }
+        });
+
+        // 2. GSAP Hero Animation
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Page Load Stagger
+        gsap.fromTo(
+          ".hero-badge",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, delay: 0.2, ease: "power3.out" },
+        );
+        gsap.fromTo(
+          ".hero-headline",
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.7, delay: 0.3, ease: "power3.out" },
+        );
+        gsap.fromTo(
+          ".hero-sub",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.7, delay: 0.4, ease: "power3.out" },
+        );
+        gsap.fromTo(
+          ".hero-ctas",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.7, delay: 0.5, ease: "power3.out" },
+        );
+        gsap.to(".hero-preview", {
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          delay: 0.7,
+          ease: "power3.out",
+        });
+
+        // Section Reveals
+        const sections = document.querySelectorAll("section[id]");
+        sections.forEach((section) => {
+          gsap.fromTo(
+            section.children,
+            { opacity: 0, y: 40 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.1,
+              scrollTrigger: {
+                trigger: section,
+                start: "top 85%",
+              },
+            },
+          );
+        });
+
+        // Specifically handle how-it-works steps stagger
+        gsap.fromTo(
+          ".step-reveal",
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.15,
+            scrollTrigger: {
+              trigger: ".step-reveal",
+              start: "top 80%",
+            },
+          },
+        );
+
+        // 3. Tab Switching Logic
+        window.switchTab = function (el, tabName) {
+          // Reset styles
+          document.querySelectorAll(".interactive-tab").forEach((t) => {
+            t.className =
+              "interactive-tab bg-[#e6e9ef] hover:bg-gray-200 rounded-xl p-6 cursor-pointer transition-all";
+            t.querySelector("h4").classList.remove("text-red-600");
+          });
+
+          // Activate clicked
+          el.className =
+            "interactive-tab active bg-accent-opacity ring-2 ring-red-600 rounded-xl p-6 cursor-pointer transition-all";
+          el.querySelector("h4").classList.add("text-red-600");
+
+          // Animate Content
+          const currentId =
+            tabName === "group" ? "content-group" : "content-elite";
+          const targetId =
+            tabName === "group" ? "content-elite" : "content-group";
+
+          gsap.to("#" + currentId, {
+            opacity: 0,
+            x: -20,
+            duration: 0.2,
+            onComplete: () => {
+              document.getElementById(currentId).style.display = "none";
+            },
+          });
+
+          setTimeout(() => {
+            const targetEl = document.getElementById(targetId);
+            targetEl.style.display = "block";
+            gsap.fromTo(
+              targetEl,
+              { opacity: 0, x: 20 },
+              { opacity: 1, x: 0, duration: 0.4 },
+            );
+          }, 200);
+        };
+
+        // 4. FAQ Accordion Logic
+        const faqs = document.querySelectorAll(".faq-item");
+        faqs.forEach((item) => {
+          item.addEventListener("click", () => {
+            const isOpen = item.classList.contains("active");
+            // Close all
+            document.querySelectorAll(".faq-item").forEach((i) => {
+              i.classList.remove("active");
+              gsap.to(i.querySelector(".faq-answer"), {
+                maxHeight: 0,
+                duration: 0.3,
+                ease: "power2.inOut",
+              });
+              gsap.to(i.querySelector(".faq-icon"), {
+                rotation: 0,
+                duration: 0.3,
+              });
+            });
+
+            if (!isOpen) {
+              item.classList.add("active");
+              const answer = item.querySelector(".faq-answer");
+              gsap.to(answer, {
+                maxHeight: answer.scrollHeight + 20,
+                duration: 0.35,
+                ease: "power2.out",
+              });
+              gsap.to(item.querySelector(".faq-icon"), {
+                rotation: 45,
+                duration: 0.3,
+              });
+            }
+          });
+        });
+
+        // 5. Mobile Menu Logic
+        const hamburger = document.getElementById("hamburger");
+        const menu = document.getElementById("mobile-menu");
+        const closeMenu = document.getElementById("close-menu");
+        const mobileLinks = document.querySelectorAll(".mobile-link");
+
+        hamburger.addEventListener("click", () => menu.classList.add("open"));
+        closeMenu.addEventListener("click", () =>
+          menu.classList.remove("open"),
+        );
+        mobileLinks.forEach((link) =>
+          link.addEventListener("click", () => menu.classList.remove("open")),
+        );
+      });
+    </script>
+  </body>
+</html>

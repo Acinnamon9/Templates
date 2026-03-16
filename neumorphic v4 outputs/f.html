@@ -1,0 +1,1272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meridian Estates | Miami Luxury Waterfront Brokerage</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+      :root {
+        --bg: #e6e9ef;
+        --bg-mid: #d1d5db;
+        --shadow-dark: #b8bcc2;
+        --shadow-light: #ffffff;
+        --accent: #3b82f6;
+        --accent-dark: #2563eb;
+        --accent-rgb: 59, 130, 246;
+        --text-primary: #1f2937;
+        --text-muted: #6b7280;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", system-ui, sans-serif;
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      .font-outfit {
+        font-family: "Outfit", sans-serif;
+      }
+
+      /* --- Neumorphic Surface Classes --- */
+      .neu-raised {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+      }
+      .neu-raised-sm {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          4px 4px 8px var(--shadow-dark),
+          -4px -4px 8px var(--shadow-light);
+      }
+      .neu-inset {
+        background: linear-gradient(145deg, var(--bg-mid), var(--bg));
+        box-shadow:
+          inset 4px 4px 8px var(--shadow-dark),
+          inset -4px -4px 8px var(--shadow-light);
+      }
+      .neu-card {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 30px;
+        padding: 32px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .neu-card:hover {
+        transform: translateY(-4px);
+      }
+
+      /* --- Button Patterns --- */
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        transition: all 0.15s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-primary::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: shine 3s infinite;
+      }
+      @keyframes shine {
+        0% {
+          left: -100%;
+        }
+        20% {
+          left: 100%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(var(--accent-rgb), 0.3);
+      }
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 16px;
+        padding: 16px 40px;
+        color: var(--text-primary);
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        transition: all 0.15s ease;
+      }
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          4px 4px 10px var(--shadow-dark),
+          -4px -4px 10px var(--shadow-light);
+      }
+
+      /* --- Utility Fixes --- */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+      }
+      .text-accent {
+        color: var(--accent);
+      }
+      .bg-accent {
+        background-color: var(--accent);
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, var(--text-primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+  </head>
+  <body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+    <!-- S1: NAVBAR -->
+    <nav
+      id="navbar"
+      class="fixed w-full z-[1000] py-6 transition-all duration-300"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between"
+      >
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl neu-raised flex items-center justify-center text-lg shadow-inner"
+          >
+            <span style="color: var(--accent)">⚓</span>
+          </div>
+          <span class="text-xl font-outfit font-bold tracking-tight"
+            >Meridian<span class="text-gray-400">Estates</span></span
+          >
+        </div>
+
+        <!-- Desktop Links -->
+        <div class="hidden md:flex items-center gap-8">
+          <a
+            href="#collection"
+            class="text-sm font-medium text-gray-600 hover:text-[--accent] transition-colors"
+            >Collection</a
+          >
+          <a
+            href="#process"
+            class="text-sm font-medium text-gray-600 hover:text-[--accent] transition-colors"
+            >Global Buyers</a
+          >
+          <a
+            href="#stats"
+            class="text-sm font-medium text-gray-600 hover:text-[--accent] transition-colors"
+            >Performance</a
+          >
+          <button
+            class="btn-primary py-3 px-6 text-sm bg-white text-[--accent] shadow-none border border-gray-200"
+          >
+            Client Portal
+          </button>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button
+          class="md:hidden w-10 h-10 rounded-xl neu-raised flex items-center justify-center"
+          onclick="
+            document.getElementById('mobile-menu').classList.toggle('hidden')
+          "
+        >
+          <svg
+            class="w-6 h-6 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Overlay -->
+      <div
+        id="mobile-menu"
+        class="hidden absolute top-full left-0 w-full bg-[#e6e9ef] border-t border-gray-200 p-6 shadow-2xl z-50"
+      >
+        <div class="flex flex-col gap-4 text-center">
+          <a href="#collection" class="text-lg font-bold text-gray-800 py-2"
+            >Latest Collection</a
+          >
+          <a href="#process" class="text-lg font-bold text-gray-800 py-2"
+            >International Services</a
+          >
+          <button class="btn-primary mt-2 w-full">Schedule Viewing</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- S2: HERO SECTION -->
+    <section
+      class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 min-h-screen flex flex-col justify-center overflow-hidden"
+    >
+      <!-- Background Blobs -->
+      <div
+        class="absolute top-[10%] right-[5%] w-[40%] h-[40%] bg-blue-500/20 blur-[120px] rounded-full opacity-40 animate-pulse pointer-events-none mix-blend-multiply"
+      ></div>
+      <div
+        class="absolute bottom-[10%] left-[5%] w-[30%] h-[30%] bg-indigo-500/20 blur-[100px] rounded-full opacity-30 animate-pulse pointer-events-none mix-blend-multiply"
+        style="animation-delay: 1s"
+      ></div>
+
+      <div class="max-w-7xl mx-auto px-4 md:px-6 text-center relative z-10">
+        <!-- Badge -->
+        <div
+          class="hero-badge inline-flex items-center gap-2 px-5 py-2.5 rounded-full neu-raised-sm mb-8 border border-white/50"
+        >
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span
+            class="text-xs font-black uppercase tracking-[0.2em] text-[#55606e]"
+            >Miami Luxury Markets Active</span
+          >
+        </div>
+
+        <!-- Headline -->
+        <h1
+          class="hero-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.1] mb-8 text-gray-900"
+        >
+          Own a Piece of <br />
+          <span
+            class="text-[--accent]"
+            style="
+              background: linear-gradient(to right, var(--accent), #60a5fa);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            "
+            >Paradise.</span
+          >
+        </h1>
+
+        <!-- Subheading -->
+        <p
+          class="hero-sub text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto leading-relaxed mb-12"
+        >
+          Specializing in waterfront estates <strong>$2M+</strong>. We simplify
+          cross-border acquisitions for the global elite, handling legal
+          intricacies and private viewings from inception to closing.
+        </p>
+
+        <!-- CTAs -->
+        <div
+          class="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
+        >
+          <button class="btn-primary text-lg group">
+            View Exclusive Collection
+            <svg
+              class="inline-block w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              ></path>
+            </svg>
+          </button>
+          <button class="btn-secondary text-lg flex items-center gap-3">
+            <svg
+              class="w-5 h-5 text-gray-600"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            Watch Introduction
+          </button>
+        </div>
+
+        <!-- GIANT PREVIEW FRAME -->
+        <div
+          class="hero-preview mt-24 relative max-w-5xl mx-auto perspective-1000"
+        >
+          <div
+            class="neu-raised p-4 md:p-6 rounded-[40px] shadow-2xl border border-white/30 transform rotate-x-1 hover:rotate-0 transition-all duration-700"
+          >
+            <div
+              class="rounded-[30px] overflow-hidden min-h-[600px] relative border border-white/40 shadow-inner bg-gray-100"
+            >
+              <!-- Full Bleed Image: Modern Waterfront Villa -->
+              <img
+                src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1600"
+                alt="Luxury Waterfront Estate"
+                class="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-[2000ms]"
+              />
+
+              <!-- Floating Badge Overlay -->
+              <div
+                class="absolute top-8 right-8 md:top-10 md:right-10 neu-raised p-4 rounded-2xl hidden md:block backdrop-blur-md bg-white/10 border border-white/20 shadow-lg"
+              >
+                <div class="flex items-center gap-2">
+                  <div
+                    class="w-2 h-2 rounded-full bg-green-400 animate-pulse"
+                  ></div>
+                  <span
+                    class="text-xs font-black uppercase tracking-widest text-white"
+                    >Just Listed</span
+                  >
+                </div>
+              </div>
+
+              <!-- Floating Stats Overlay -->
+              <div
+                class="absolute bottom-8 left-8 md:bottom-10 md:left-10 p-6 md:p-8 rounded-3xl hidden md:flex items-start gap-5 backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl w-fit"
+              >
+                <div
+                  class="w-14 h-14 rounded-full neu-raised flex items-center justify-center text-[--accent] shadow-inner"
+                >
+                  <svg
+                    class="w-7 h-7"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <div
+                    class="text-xs font-black uppercase tracking-widest text-[--accent] mb-1"
+                  >
+                    Closing Volume
+                  </div>
+                  <div class="text-2xl md:text-3xl font-black text-gray-900">
+                    $180M+
+                  </div>
+                  <div class="text-xs text-gray-400 mt-1">
+                    Closed over 18 months
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S3: TRUSTED BY STRIP -->
+    <div
+      class="py-12 border-y border-gray-200/60 bg-[#e6e9ef]/50 backdrop-blur-sm"
+    >
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <p
+          class="text-xs font-black tracking-[0.3em] uppercase text-gray-400 mb-10 text-center"
+        >
+          Trusted by Global Investors From
+        </p>
+        <div
+          class="flex flex-wrap items-center justify-center gap-10 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+        >
+          <div
+            class="text-xl font-bold font-outfit text-gray-600 flex items-center gap-2"
+          >
+            <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+            BRAZIL
+          </div>
+          <div
+            class="text-xl font-bold font-outfit text-gray-600 flex items-center gap-2"
+          >
+            <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+            CANADA
+          </div>
+          <div
+            class="text-xl font-bold font-outfit text-gray-600 flex items-center gap-2"
+          >
+            <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+            UK
+          </div>
+          <div
+            class="text-xl font-bold font-outfit text-gray-600 flex items-center gap-2"
+          >
+            <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+            CHILE
+          </div>
+          <div
+            class="text-xl font-bold font-outfit text-gray-600 flex items-center gap-2"
+          >
+            <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+            ARGENTINA
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4: FEATURES GRID -->
+    <section id="collection" class="py-24 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">
+            Curated Waterfront <span class="gradient-text">Experiences</span>
+          </h2>
+          <p class="text-xl text-gray-500 max-w-2xl mx-auto">
+            Our portfolio is hand-selected. No clutter. Only premier properties
+            exceeding $2M with direct water access.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Card 1 -->
+          <div class="neu-card group">
+            <div
+              class="w-12 h-12 rounded-full bg-white/50 flex items-center justify-center mb-6 text-xl shadow-inner group-hover:scale-110 transition-transform"
+            >
+              🌊
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-800">
+              Direct Ocean Access
+            </h3>
+            <p class="text-gray-600 leading-relaxed">
+              Seawalls, docks, and deep-water canals capable of accommodating
+              large yachts are standard in our collection.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="neu-card group">
+            <div
+              class="w-12 h-12 rounded-full bg-white/50 flex items-center justify-center mb-6 text-xl shadow-inner group-hover:scale-110 transition-transform"
+            >
+              ✈️
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-800">
+              Remote Closing Suite
+            </h3>
+            <p class="text-gray-600 leading-relaxed">
+              Sign documents securely from anywhere in the world via DocuSign.
+              We handle wire transfers and title insurance logistics.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="neu-card group">
+            <div
+              class="w-12 h-12 rounded-full bg-white/50 flex items-center justify-center mb-6 text-xl shadow-inner group-hover:scale-110 transition-transform"
+            >
+              🛡️
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-800">Privacy First</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Gated estates and discretion-focused agents ensure your investment
+              remains off the public radar until you are ready.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5: HOW IT WORKS (Process) -->
+    <section id="process" class="py-24 border-t border-gray-200 bg-[#e6e9ef]">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="mb-16">
+          <h2 class="text-4xl font-black tracking-tight mb-4">
+            The Meridian Protocol
+          </h2>
+          <p class="text-gray-500">
+            Streamlined for international investors seeking turnkey operations.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <!-- Step 1 -->
+          <div class="relative">
+            <div
+              class="flex items-center justify-center w-13 h-13 rounded-full neu-raised-sm mb-6 text-[--accent] font-outfit font-bold text-xl shadow-inner border-4 border-[#e6e9ef] z-10 relative"
+            >
+              1
+            </div>
+            <h4 class="text-lg font-bold mb-2 text-gray-800">Discovery Call</h4>
+            <p class="text-sm text-gray-600">
+              Define budget, lifestyle needs, and desired location (Coco Cay,
+              Star Island, etc).
+            </p>
+          </div>
+
+          <!-- Connector (Desktop) -->
+          <div
+            class="hidden md:block absolute top-6 left-1/4 w-3/4 h-0.5 border-t border-dashed border-gray-400 z-0"
+          ></div>
+
+          <!-- Step 2 -->
+          <div class="relative">
+            <div
+              class="flex items-center justify-center w-13 h-13 rounded-full neu-raised-sm mb-6 text-[--accent] font-outfit font-bold text-xl shadow-inner border-4 border-[#e6e9ef] z-10 relative"
+            >
+              2
+            </div>
+            <h4 class="text-lg font-bold mb-2 text-gray-800">
+              Private Curation
+            </h4>
+            <p class="text-sm text-gray-600">
+              Receive a personalized video walk-through of 3-5 homes tailored to
+              your criteria.
+            </p>
+          </div>
+
+          <!-- Connector (Desktop) -->
+          <div
+            class="hidden md:block absolute top-6 left-1/4 w-3/4 h-0.5 border-t border-dashed border-gray-400 z-0"
+          ></div>
+
+          <!-- Step 3 -->
+          <div class="relative">
+            <div
+              class="flex items-center justify-center w-13 h-13 rounded-full neu-raised-sm mb-6 text-[--accent] font-outfit font-bold text-xl shadow-inner border-4 border-[#e6e9ef] z-10 relative"
+            >
+              3
+            </div>
+            <h4 class="text-lg font-bold mb-2 text-gray-800">
+              Off-Market Offer
+            </h4>
+            <p class="text-sm text-gray-600">
+              Negotiate terms with sellers who often prefer quiet, cash-ready
+              foreign buyers.
+            </p>
+          </div>
+
+          <!-- Connector (Desktop) -->
+          <div
+            class="hidden md:block absolute top-6 left-1/4 w-3/4 h-0.5 border-t border-dashed border-gray-400 z-0"
+          ></div>
+
+          <!-- Step 4 -->
+          <div class="relative">
+            <div
+              class="flex items-center justify-center w-13 h-13 rounded-full neu-raised-sm mb-6 text-[--accent] font-outfit font-bold text-xl shadow-inner border-4 border-[#e6e9ef] z-10 relative"
+            >
+              4
+            </div>
+            <h4 class="text-lg font-bold mb-2 text-gray-800">
+              Turnkey Closing
+            </h4>
+            <p class="text-sm text-gray-600">
+              Legal settlement, funds transfer, and concierge move-in
+              assistance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6: INTERACTIVE DEMO (Portfolio Selector) -->
+    <section class="py-24 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div
+          class="neu-card rounded-[40px] p-0 overflow-hidden flex flex-col lg:flex-row h-[600px]"
+        >
+          <!-- Left Controls -->
+          <div
+            class="lg:w-1/3 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-gray-200 bg-opacity-50"
+          >
+            <h3 class="text-2xl font-black mb-8 text-gray-800">
+              Filter by Location
+            </h3>
+            <div class="flex flex-col gap-4">
+              <button
+                class="feature-pill text-left p-4 rounded-2xl neu-raised-sm hover:bg-blue-50 transition-all active-feature"
+                onclick="switchTab(this, 'star')"
+              >
+                <span class="font-bold text-lg block">Star Island</span
+                ><span class="text-xs text-gray-500 mt-1"
+                  >Ultra-exclusive peninsulas</span
+                >
+              </button>
+              <button
+                class="feature-pill text-left p-4 rounded-2xl neu-raised-sm hover:bg-blue-50 transition-all"
+                onclick="switchTab(this, 'brickell')"
+              >
+                <span class="font-bold text-lg block">Brickell Key</span
+                ><span class="text-xs text-gray-500 mt-1"
+                  >Urban luxury islands</span
+                >
+              </button>
+              <button
+                class="feature-pill text-left p-4 rounded-2xl neu-raised-sm hover:bg-blue-50 transition-all"
+                onclick="switchTab(this, 'coconut')"
+              >
+                <span class="font-bold text-lg block">Coconut Grove</span
+                ><span class="text-xs text-gray-500 mt-1"
+                  >Historic waterfront charm</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Content -->
+          <div
+            class="lg:w-2/3 relative p-8 flex items-center justify-center bg-gray-200 overflow-hidden"
+          >
+            <!-- Tab Content: Star Island -->
+            <div
+              id="view-star"
+              class="tab-content absolute inset-0 flex-col items-center justify-center text-center transition-all duration-500 opacity-100 scale-100"
+            >
+              <div class="w-full h-full absolute inset-0">
+                <img
+                  src="https://images.unsplash.com/photo-1600596542815-e328d4de4bf7?auto=format&fit=crop&q=80&w=1200"
+                  class="absolute inset-0 w-full h-full object-cover shadow-inner rounded-none"
+                  style="transform: scale(1.05); filter: brightness(0.9)"
+                />
+              </div>
+              <div
+                class="relative z-10 neu-raised p-8 rounded-3xl max-w-lg backdrop-blur-md"
+              >
+                <span
+                  class="text-[--accent] font-black uppercase tracking-widest text-sm mb-2 block"
+                  >Featured Listing</span
+                >
+                <h4 class="text-3xl font-black text-gray-900 mb-2">
+                  Villa Mariposa
+                </h4>
+                <p class="text-gray-600 mb-6 text-lg">
+                  A masterpiece of modern design situated on 80ft of bay front.
+                  Infinity pool, private dock.
+                </p>
+                <div class="flex gap-4 items-center justify-center">
+                  <div class="text-left">
+                    <div class="text-xs text-gray-500 uppercase font-bold">
+                      Price
+                    </div>
+                    <div class="text-2xl font-bold">$14.5M</div>
+                  </div>
+                  <div class="text-left border-l pl-4">
+                    <div class="text-xs text-gray-500 uppercase font-bold">
+                      Sq Ft
+                    </div>
+                    <div class="text-2xl font-bold">12,000</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content: Brickell Key (Hidden by default logic handled by JS class toggling) -->
+            <div
+              id="view-brickell"
+              class="tab-content absolute inset-0 flex-col items-center justify-center text-center opacity-0 scale-95 transition-all duration-500 pointer-events-none"
+            >
+              <div class="w-full h-full absolute inset-0">
+                <img
+                  src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200"
+                  class="absolute inset-0 w-full h-full object-cover shadow-inner rounded-none"
+                  style="transform: scale(1.05)"
+                />
+              </div>
+              <div
+                class="relative z-10 neu-raised p-8 rounded-3xl max-w-lg backdrop-blur-md"
+              >
+                <span
+                  class="text-[--accent] font-black uppercase tracking-widest text-sm mb-2 block"
+                  >High-Rise Living</span
+                >
+                <h4 class="text-3xl font-black text-gray-900 mb-2">
+                  One Thousand Museum
+                </h4>
+                <p class="text-gray-600 mb-6 text-lg">
+                  Iconic Zaha Hadid architecture. Panoramic ocean and city
+                  views.
+                </p>
+                <div class="flex gap-4 items-center justify-center">
+                  <div class="text-left">
+                    <div class="text-xs text-gray-500 uppercase font-bold">
+                      Price
+                    </div>
+                    <div class="text-2xl font-bold">$8.2M</div>
+                  </div>
+                  <div class="text-left border-l pl-4">
+                    <div class="text-xs text-gray-500 uppercase font-bold">
+                      Views
+                    </div>
+                    <div class="text-2xl font-bold">360°</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content: Coconut Grove (Hidden) -->
+            <div
+              id="view-coconut"
+              class="tab-content absolute inset-0 flex-col items-center justify-center text-center opacity-0 scale-95 transition-all duration-500 pointer-events-none"
+            >
+              <div class="w-full h-full absolute inset-0">
+                <img
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200"
+                  class="absolute inset-0 w-full h-full object-cover shadow-inner rounded-none"
+                  style="transform: scale(1.05)"
+                />
+              </div>
+              <div
+                class="relative z-10 neu-raised p-8 rounded-3xl max-w-lg backdrop-blur-md"
+              >
+                <span
+                  class="text-[--accent] font-black uppercase tracking-widest text-sm mb-2 block"
+                  >Estate Home</span
+                >
+                <h4 class="text-3xl font-black text-gray-900 mb-2">
+                  The Grove Manor
+                </h4>
+                <p class="text-gray-600 mb-6 text-lg">
+                  Classic Mediterranean villa surrounded by lush tropical
+                  gardens and marina.
+                </p>
+                <div class="flex gap-4 items-center justify-center">
+                  <div class="text-left">
+                    <div class="text-xs text-gray-500 uppercase font-bold">
+                      Price
+                    </div>
+                    <div class="text-2xl font-bold">$6.8M</div>
+                  </div>
+                  <div class="text-left border-l pl-4">
+                    <div class="text-xs text-gray-500 uppercase font-bold">
+                      Lot
+                    </div>
+                    <div class="text-2xl font-bold">0.8 Acres</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7: INVESTMENT STATS (Pricing style visual) -->
+    <section id="stats" class="py-24 border-t border-gray-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-black tracking-tight mb-4">
+            Market Dominance
+          </h2>
+          <p class="text-gray-500">
+            We don't just sell houses; we manage capital appreciation.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Stat 1 -->
+          <div
+            class="text-center p-8 rounded-3xl neu-raised-sm border border-white"
+          >
+            <div
+              class="text-[--accent] text-5xl font-black mb-2"
+              data-target="180"
+            >
+              0
+            </div>
+            <div
+              class="text-sm font-bold uppercase tracking-wide text-gray-500 mb-1"
+            >
+              Properties Closed
+            </div>
+            <div class="text-xs text-gray-400">
+              Since opening boutique office
+            </div>
+          </div>
+          <!-- Stat 2 -->
+          <div
+            class="text-center p-8 rounded-3xl neu-raised-sm border border-white relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-8 bg-[--accent] rounded-b-xl text-white text-xs font-bold flex items-center justify-center"
+            >
+              MOST POPULAR
+            </div>
+            <div
+              class="text-[--accent] text-5xl font-black mb-2"
+              data-target="4.2"
+            >
+              0
+            </div>
+            <div
+              class="text-sm font-bold uppercase tracking-wide text-gray-500 mb-1"
+            >
+              Avg Sale Price ($M)
+            </div>
+            <div class="text-xs text-gray-400">
+              Significantly above market rate
+            </div>
+          </div>
+          <!-- Stat 3 -->
+          <div
+            class="text-center p-8 rounded-3xl neu-raised-sm border border-white"
+          >
+            <div class="text-[--accent] text-5xl font-black mb-2">98%</div>
+            <div
+              class="text-sm font-bold uppercase tracking-wide text-gray-500 mb-1"
+            >
+              Buyer Satisfaction
+            </div>
+            <div class="text-xs text-gray-400">
+              Based on post-closing surveys
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial Strip -->
+        <div class="mt-16 max-w-4xl mx-auto">
+          <div class="neu-inset p-8 md:p-12 rounded-[40px] relative">
+            <div
+              class="text-4xl text-[--accent] opacity-30 absolute top-6 left-6 font-serif"
+            >
+              "
+            </div>
+            <p
+              class="text-xl md:text-2xl font-medium text-gray-700 italic mb-8"
+            >
+              "I needed to close a deal in Coral Gables while living in London.
+              Meridian handled the entire process remotely with seamless
+              communication across time zones. Their understanding of
+              international tax implications saved me years of headaches."
+            </p>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gray-300"></div>
+              <div>
+                <div class="font-bold text-gray-900">Carlos Mendoza</div>
+                <div class="text-sm text-gray-500">CEO, FinTech Ventures</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S8: FAQ -->
+    <section class="py-24 border-t border-gray-200">
+      <div class="max-w-3xl mx-auto px-4 md:px-6">
+        <h2 class="text-4xl font-black tracking-tight mb-12 text-center">
+          Common Inquiries
+        </h2>
+
+        <div class="space-y-6">
+          <details
+            class="group neu-raised rounded-3xl overflow-hidden cursor-pointer"
+          >
+            <summary
+              class="flex items-center justify-between p-6 text-gray-900 font-bold text-lg"
+            >
+              <span>Do you work with international banks?</span>
+              <span
+                class="text-2xl text-gray-400 group-open:rotate-45 transition-transform"
+                >+</span
+              >
+            </summary>
+            <div
+              class="p-6 pt-0 text-gray-600 leading-relaxed border-t border-transparent group-hover:border-gray-100 transition-colors"
+            >
+              Yes. We have established relationships with major international
+              lending institutions that specialize in non-resident mortgages,
+              allowing for up to 70% LTV on premium assets.
+            </div>
+          </details>
+
+          <details
+            class="group neu-raised rounded-3xl overflow-hidden cursor-pointer"
+          >
+            <summary
+              class="flex items-center justify-between p-6 text-gray-900 font-bold text-lg"
+            >
+              <span
+                >What are the costs associated with buying as a foreign
+                national?</span
+              >
+              <span
+                class="text-2xl text-gray-400 group-open:rotate-45 transition-transform"
+                >+</span
+              >
+            </summary>
+            <div
+              class="p-6 pt-0 text-gray-600 leading-relaxed border-t border-transparent group-hover:border-gray-100 transition-colors"
+            >
+              Aside from standard closing costs (~2% of purchase price), foreign
+              buyers should budget for FIRPTA withholding taxes and potential
+              property tax adjustments based on residency status. Our team
+              provides a full pro-forma before contract signing.
+            </div>
+          </details>
+
+          <details
+            class="group neu-raised rounded-3xl overflow-hidden cursor-pointer"
+          >
+            <summary
+              class="flex items-center justify-between p-6 text-gray-900 font-bold text-lg"
+            >
+              <span
+                >Can I tour properties without flying to Miami
+                immediately?</span
+              >
+              <span
+                class="text-2xl text-gray-400 group-open:rotate-45 transition-transform"
+                >+</span
+              >
+            </summary>
+            <div
+              class="p-6 pt-0 text-gray-600 leading-relaxed border-t border-transparent group-hover:border-gray-100 transition-colors"
+            >
+              Absolutely. For serious buyers, we offer full 3D Matterport
+              virtual tours and FaceTime walkthroughs led by our listing agents
+              to narrow down options before travel.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- S12: FOOTER -->
+    <footer class="border-t border-gray-200 bg-[#e6e9ef] pt-20 pb-10">
+      <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
+          <!-- Brand -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-lg neu-raised flex items-center justify-center text-sm"
+              >
+                ⚓
+              </div>
+              <span class="text-xl font-outfit font-bold"
+                >Meridian<span class="text-gray-400">Estates</span></span
+              >
+            </div>
+            <p class="text-sm text-gray-500 leading-relaxed">
+              The definitive voice in Miami waterfront real estate. Curating
+              lives of leisure for the globally mobile.
+            </p>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg neu-raised-sm flex items-center justify-center text-gray-500 hover:text-[--accent] transition-colors"
+                ><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"
+                  /></svg
+              ></a>
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg neu-raised-sm flex items-center justify-center text-gray-500 hover:text-[--accent] transition-colors"
+                ><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                  /></svg
+              ></a>
+            </div>
+          </div>
+
+          <!-- Links -->
+          <div class="col-span-1 md:col-span-2">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+              <div>
+                <h4 class="font-bold text-gray-800 mb-6">Collection</h4>
+                <ul class="space-y-4 text-sm text-gray-500">
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >Waterfront Homes</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >Luxury Condos</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >Island Estates</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >New Developments</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 mb-6">Company</h4>
+                <ul class="space-y-4 text-sm text-gray-500">
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >About Us</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >Global Agents</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >Press & Awards</a
+                    >
+                  </li>
+                  <li>
+                    <a href="#" class="hover:text-[--accent] transition-colors"
+                      >Careers</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 mb-6">Contact</h4>
+                <ul class="space-y-4 text-sm text-gray-500">
+                  <li>Sales@MeridianEstates.com</li>
+                  <li>+1 (305) 555-0199</li>
+                  <li>1000 Point Park Dr, Miami FL</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div class="text-xs text-gray-400">
+            © 2026 Meridian Estates. All rights reserved.
+          </div>
+          <div class="flex items-center gap-6 text-xs text-gray-500">
+            <a href="#" class="hover:text-[--accent]">Privacy Policy</a>
+            <a href="#" class="hover:text-[--accent]">Terms of Service</a>
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-green-500"></div>
+              <span>Systems Operational</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        // 1. Navbar Scroll Effect
+        (function () {
+          const nav = document.getElementById("navbar");
+          window.addEventListener("scroll", () => {
+            if (window.scrollY > 20) {
+              nav.classList.add("scrolled", "py-3");
+              nav.classList.remove("py-6");
+              nav.style.background = "rgba(230,233,239,0.85)";
+              nav.style.backdropFilter = "blur(12px)";
+              nav.style.boxShadow = "0 4px 20px rgba(0,0,0,0.05)";
+            } else {
+              nav.classList.remove("scrolled", "py-3");
+              nav.classList.add("py-6");
+              nav.style.background = "transparent";
+              nav.style.backdropFilter = "none";
+              nav.style.boxShadow = "none";
+            }
+          });
+        })();
+
+        // 2. GSAP Animations
+        (function () {
+          gsap.registerPlugin(ScrollTrigger);
+
+          // Hero Page Load Stagger
+          gsap.fromTo(
+            ".hero-badge",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.6, delay: 0.2, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-headline",
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-sub",
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-ctas",
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: "power3.out" },
+          );
+          gsap.fromTo(
+            ".hero-preview",
+            { opacity: 0, scale: 0.95 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 1.2,
+              delay: 0.6,
+              ease: "power3.out",
+            },
+          );
+
+          // Section Reveals
+          const sections = document.querySelectorAll(
+            "section:not(#mobile-menu):not(:first-child)",
+          );
+          sections.forEach((sec) => {
+            gsap.fromTo(
+              sec.children,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 0.2,
+                ease: "power3.out",
+                stagger: 0.1,
+                scrollTrigger: { trigger: sec, start: "top 80%" },
+              },
+            );
+          });
+
+          // Feature Card Hover Pop
+          gsap.utils.toArray(".neu-card").forEach((card) => {
+            gsap.fromTo(
+              card,
+              { scale: 0.95 },
+              {
+                scale: 1,
+                duration: 0.5,
+                ease: "back.out(1.7)",
+                scrollTrigger: { trigger: card, start: "top 85%" },
+              },
+            );
+          });
+
+          // Counter Animation
+          const counters = document.querySelectorAll("[data-target]");
+          counters.forEach((counter) => {
+            let target = parseFloat(counter.getAttribute("data-target"));
+            gsap.to(counter, {
+              innerHTML: target,
+              duration: 2,
+              snap: { innerHTML: target % 1 !== 0 ? 0.1 : 1 },
+              scrollTrigger:
+                counter.parentElement.getBoundingClientRect().top <
+                window.innerHeight * 0.8,
+              onUpdate: function () {
+                const val = Math.ceil(this.targets()[0].innerHTML);
+                // Format currency/stats
+                if (target > 100) counter.innerText = target + "+";
+                else if (target.toString().includes("."))
+                  counter.innerText = target.toFixed(1) + "M";
+                else counter.innerText = target;
+              },
+            });
+          });
+
+          // Simple Re-bind for stats
+          ScrollTrigger.create({
+            trigger: "#stats",
+            start: "top 70%",
+            onEnter: () => {
+              gsap.to(document.querySelector('[data-target="180"]'), {
+                innerHtml: 180,
+                duration: 2,
+              });
+              gsap.to(document.querySelector('[data-target="4.2"]'), {
+                innerHtml: 4.2,
+                duration: 2,
+              });
+            },
+          });
+        })();
+
+        // 3. Interactive Tabs
+        function switchTab(el, tabName) {
+          // Reset styles
+          document.querySelectorAll(".feature-pill").forEach((btn) => {
+            btn.classList.remove(
+              "neu-inset",
+              "border-2",
+              "border-[--accent]",
+              "bg-blue-50",
+            );
+            btn.classList.add("neu-raised-sm");
+          });
+
+          // Set active
+          el.classList.remove("neu-raised-sm");
+          el.classList.add("neu-inset", "border-2", "border-[--accent]");
+          el.classList.remove("bg-blue-50"); // Ensure no background clash
+
+          // Hide all contents
+          document.querySelectorAll(".tab-content").forEach((content) => {
+            content.style.opacity = "0";
+            content.style.scale = "0.95";
+            content.classList.add("pointer-events-none");
+          });
+
+          // Show selected
+          const selected = document.getElementById(`view-${tabName}`);
+          selected.style.opacity = "1";
+          selected.style.scale = "1";
+          selected.classList.remove("pointer-events-none");
+
+          // Trigger animation via GSAP if not already set
+          gsap.fromTo(
+            selected,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.4 },
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

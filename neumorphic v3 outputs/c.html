@@ -1,0 +1,1352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brevity | Cut Your Copy in Half</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+      :root {
+        --bg: #e6e9ef;
+        --bg-mid: #d1d5db;
+        --shadow-dark: #b8bcc2;
+        --shadow-light: #ffffff;
+        --accent: #7c3aed; /* Violet */
+        --accent-dark: #6d28d9;
+        --accent-rgb: 124, 58, 237;
+        --text-primary: #1f2937;
+        --text-muted: #6b7280;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Outfit", sans-serif;
+      }
+
+      /* --- NEUMORPHIC CORE CLASSES --- */
+
+      .neu-raised {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+      }
+
+      .neu-raised-sm {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          4px 4px 8px var(--shadow-dark),
+          -4px -4px 8px var(--shadow-light);
+      }
+
+      .neu-raised-lg {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          12px 12px 24px var(--shadow-dark),
+          -12px -12px 24px var(--shadow-light);
+      }
+
+      .neu-inset {
+        background: linear-gradient(145deg, var(--bg-mid), var(--bg));
+        box-shadow:
+          inset 4px 4px 8px var(--shadow-dark),
+          inset -4px -4px 8px var(--shadow-light);
+      }
+
+      .neu-card {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          8px 8px 16px var(--shadow-dark),
+          -8px -8px 16px var(--shadow-light);
+        border-radius: 30px;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .neu-card:hover {
+        transform: translateY(-4px);
+        box-shadow:
+          12px 12px 20px var(--shadow-dark),
+          -12px -12px 20px var(--shadow-light);
+      }
+
+      /* --- BUTTON PATTERNS --- */
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        box-shadow:
+          6px 6px 12px rgba(0, 0, 0, 0.15),
+          -6px -6px 12px rgba(255, 255, 255, 0.9),
+          inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+        padding: 16px 32px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 0.02em;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 10px 20px rgba(124, 58, 237, 0.25),
+          0 0 0 transparent;
+      }
+
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(145deg, var(--bg), var(--bg-mid));
+        box-shadow:
+          6px 6px 12px var(--shadow-dark),
+          -6px -6px 12px var(--shadow-light);
+        border-radius: 16px;
+        padding: 16px 32px;
+        color: var(--text-primary);
+        border: none;
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.2s ease;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+      }
+
+      /* --- NAVBAR --- */
+      #navbar {
+        transition: all 0.3s ease;
+        backdrop-filter: blur(0px);
+      }
+      #navbar.scrolled {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        background: rgba(230, 233, 239, 0.85);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      /* --- HERO PREVIEW FRAMES --- */
+      .hero-frame-border {
+        box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* --- TABS --- */
+      .tab-active {
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid var(--accent);
+        color: var(--accent);
+      }
+
+      /* --- MARQUEE --- */
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      .marquee-track {
+        display: flex;
+        gap: 40px;
+        animation: marquee 30s linear infinite;
+        width: max-content;
+      }
+      .marquee-wrap {
+        overflow: hidden;
+        position: relative;
+      }
+      .marquee-wrap::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 150px;
+        background: linear-gradient(to right, var(--bg), transparent);
+        z-index: 2;
+      }
+      .marquee-wrap::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 150px;
+        background: linear-gradient(to left, var(--bg), transparent);
+        z-index: 2;
+      }
+
+      /* --- UTILS --- */
+      .gradient-text {
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .blob {
+        position: absolute;
+        filter: blur(80px);
+        opacity: 0.4;
+        z-index: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body class="antialiased selection:bg-purple-200 selection:text-purple-900">
+    <!-- S1: Navbar -->
+    <nav
+      id="navbar"
+      class="fixed w-full z-[100] px-6 md:px-12 py-8 lg:py-6 flex items-center justify-between bg-transparent transition-all duration-300"
+    >
+      <div class="flex items-center gap-3 group cursor-pointer">
+        <div
+          class="w-10 h-10 neu-raised p-2.5 rounded-xl flex items-center justify-center shadow-inner"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-gray-800 group-hover:text-[#7c3aed] transition-colors"
+          >
+            <path
+              d="M4 12H20M4 8H12M4 16H16"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-gray-900"
+          >Brevity</span
+        >
+      </div>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a
+          href="#features"
+          class="text-sm font-semibold text-gray-600 hover:text-[#7c3aed] transition-colors uppercase tracking-wide"
+          >Features</a
+        >
+        <a
+          href="#pricing"
+          class="text-sm font-semibold text-gray-600 hover:text-[#7c3aed] transition-colors uppercase tracking-wide"
+          >Pricing</a
+        >
+        <a
+          href="#faq"
+          class="text-sm font-semibold text-gray-600 hover:text-[#7c3aed] transition-colors uppercase tracking-wide"
+          >FAQ</a
+        >
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button
+          class="hidden md:block btn-primary text-sm py-2.5 px-6 shadow-lg"
+        >
+          Start Free Trial
+        </button>
+        <!-- Mobile Menu Button -->
+        <button
+          class="md:hidden w-10 h-10 neu-raised rounded-xl flex items-center justify-center active:scale-95 transition-transform"
+        >
+          <svg
+            class="w-5 h-5 text-gray-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- S2: Hero Section -->
+    <section
+      class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex items-center"
+    >
+      <!-- Background Blobs -->
+      <div
+        class="blob w-[60vw] h-[60vw] bg-[#7c3aed] rounded-full top-[-10%] right-[-10%] opacity-10 animate-pulse"
+      ></div>
+      <div
+        class="blob w-[40vw] h-[40vw] bg-blue-400 rounded-full bottom-[-10%] left-[-10%] opacity-10 animate-pulse delay-1000"
+      ></div>
+
+      <div
+        class="max-w-7xl mx-auto px-6 md:px-8 text-center z-10 relative hero-badge opacity-0 translate-y-4"
+      >
+        <!-- Badge -->
+        <div
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-full neu-raised-sm mb-8 border border-white/20"
+        >
+          <span class="w-2 h-2 bg-[#7c3aed] rounded-full animate-ping"></span>
+          <span
+            class="text-xs font-black uppercase tracking-[0.2em] text-gray-600"
+            >Now integrated with Slack</span
+          >
+        </div>
+
+        <!-- Headline -->
+        <h1
+          class="text-5xl md:text-7xl lg:text-[7rem] font-black tracking-tight text-gray-900 mb-6 leading-[1.1]"
+        >
+          Cut your copy<br />
+          <span class="text-[#7c3aed]">in half.</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p
+          class="text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-10 hero-sub opacity-0 translate-y-4"
+        >
+          Brevity uses advanced NLP to distill marketing fluff into punchy,
+          high-converting message without losing the soul of your brand.
+        </p>
+
+        <!-- CTAs -->
+        <div
+          class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16 hero-ctas opacity-0 translate-y-4"
+        >
+          <button
+            class="btn-primary px-12 py-5 rounded-2xl text-lg shadow-xl flex items-center gap-3 group"
+          >
+            Start Condensing
+            <svg
+              class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              ></path>
+            </svg>
+          </button>
+          <button class="btn-secondary px-12 py-5 rounded-2xl text-lg">
+            View Demo Video
+          </button>
+        </div>
+      </div>
+
+      <!-- GIANT PREVIEW FRAME -->
+      <div
+        class="mt-12 md:mt-20 max-w-6xl mx-auto perspective-1000 hero-preview opacity-0 scale-95 transform-gpu"
+      >
+        <div
+          class="neu-raised p-4 md:p-8 rounded-[40px] shadow-2xl border border-white/20 relative"
+        >
+          <!-- Inner Container -->
+          <div
+            class="bg-[#e6e9ef] rounded-[30px] overflow-hidden min-h-[500px] md:min-h-[700px] relative border border-white/40 shadow-inner flex items-center justify-center"
+          >
+            <!-- Full Bleed Image (Unsplash Creative Workspace) -->
+            <img
+              src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop"
+              alt="Marketing Dashboard"
+              class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-multiply"
+            />
+
+            <!-- Simulated UI Element (Glass Overlay) -->
+            <div
+              class="relative z-10 bg-white/90 backdrop-blur-md border border-white/50 p-8 rounded-[24px] max-w-md w-full shadow-2xl transform rotate-[-2deg] hover:rotate-0 transition-transform duration-700"
+            >
+              <div class="flex items-center justify-between mb-6">
+                <div class="h-2 w-20 bg-gray-200 rounded-full"></div>
+                <div class="h-2 w-8 bg-green-400 rounded-full"></div>
+              </div>
+              <div class="space-y-3">
+                <div class="h-3 w-full bg-gray-100 rounded-full"></div>
+                <div class="h-3 w-3/4 bg-gray-100 rounded-full"></div>
+                <div class="h-3 w-full bg-gray-100 rounded-full"></div>
+              </div>
+              <div
+                class="mt-8 p-4 bg-purple-50 rounded-xl border border-purple-100 flex items-start gap-4"
+              >
+                <div class="mt-1 bg-[#7c3aed] text-white p-1.5 rounded-lg">
+                  <svg
+                    class="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-purple-700 uppercase mb-1">
+                    Brevity Suggestion
+                  </div>
+                  <div
+                    class="text-sm font-medium text-gray-800 line-through opacity-50 decoration-red-400 block"
+                  >
+                    We have implemented a strategic paradigm shift regarding our
+                    holistic approach to synergy.
+                  </div>
+                  <div class="text-sm font-bold text-gray-900 block mt-1">
+                    Shifted focus to holistic synergy.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Stats (Right Side) -->
+            <div
+              class="absolute top-10 right-10 md:right-20 bg-white/80 backdrop-blur-lg p-4 rounded-2xl shadow-xl border border-white/50 animate-bounce duration-[3000ms]"
+            >
+              <div class="text-xs font-black text-gray-400 uppercase mb-1">
+                Time Saved
+              </div>
+              <div class="text-2xl font-black text-[#7c3aed]">
+                24hrs<span class="text-base text-gray-400 font-normal"
+                  >/wk</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S3: Trusted By -->
+    <section class="py-12 border-y border-gray-200 bg-gray-50/30">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <p
+          class="text-xs font-black tracking-[0.2em] uppercase text-gray-400 mb-10"
+        >
+          Trusted by forward-thinking teams
+        </p>
+
+        <div
+          class="flex flex-wrap items-center justify-center gap-10 md:gap-20 grayscale hover:grayscale-0 transition-all duration-500"
+        >
+          <!-- Google Logo Style -->
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded bg-[#4285F4]"></div>
+            <div class="w-6 h-6 rounded bg-[#EA4335]"></div>
+            <div class="w-6 h-6 rounded bg-[#FBBC05]"></div>
+            <div class="w-6 h-6 rounded bg-[#34A853]"></div>
+            <span class="font-bold text-gray-600 ml-2">Docs</span>
+          </div>
+
+          <!-- Notion Logo Style -->
+          <div class="flex items-center gap-2">
+            <div
+              class="w-5 h-5 rounded-sm bg-[#111] flex items-center justify-center text-[8px] text-white"
+            >
+              N
+            </div>
+            <span class="font-bold text-gray-600 ml-2">Notion</span>
+          </div>
+
+          <!-- Slack Logo Style -->
+          <div class="flex items-center gap-2">
+            <div class="grid grid-cols-2 gap-[2px]">
+              <div
+                class="w-3 h-3 bg-[#E01E5A] rounded-tl-sm rounded-br-sm"
+              ></div>
+              <div
+                class="w-3 h-3 bg-[#36C5F0] rounded-tr-sm rounded-bl-sm"
+              ></div>
+              <div
+                class="w-3 h-3 bg-[#E01E5A] rounded-tl-sm rounded-br-sm"
+              ></div>
+              <div
+                class="w-3 h-3 bg-[#36C5F0] rounded-tr-sm rounded-bl-sm"
+              ></div>
+            </div>
+            <span class="font-bold text-gray-600 ml-2">Slack</span>
+          </div>
+
+          <!-- Figma Style -->
+          <div class="flex items-center gap-2">
+            <div class="w-5 h-5 rounded-full border-2 border-gray-400"></div>
+            <span class="font-bold text-gray-600 ml-2">Figma</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S4: Features -->
+    <section id="features" class="py-20 lg:py-32 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-20">
+          <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">
+            Compression Without Loss
+          </h2>
+          <p class="text-xl text-gray-500 max-w-2xl mx-auto">
+            Our algorithm understands nuance. We strip adverbs and jargon,
+            keeping only the signal.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature 1 -->
+          <div class="neu-card p-8 group">
+            <div
+              class="w-12 h-12 rounded-2xl bg-[#7c3aed]/10 flex items-center justify-center text-[#7c3aed] mb-6 group-hover:scale-110 transition-transform duration-300"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Context Aware</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Reads your brand voice profile and ensures every cut word aligns
+              with your tone settings.
+            </p>
+          </div>
+          <!-- Feature 2 -->
+          <div class="neu-card p-8 group">
+            <div
+              class="w-12 h-12 rounded-2xl bg-[#7c3aed]/10 flex items-center justify-center text-[#7c3aed] mb-6 group-hover:scale-110 transition-transform duration-300"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Real-time Refine
+            </h3>
+            <p class="text-gray-600 leading-relaxed">
+              Works as you type. As you draft in Docs, Brevity highlights
+              redundancy instantly.
+            </p>
+          </div>
+          <!-- Feature 3 -->
+          <div class="neu-card p-8 group">
+            <div
+              class="w-12 h-12 rounded-2xl bg-[#7c3aed]/10 flex items-center justify-center text-[#7c3aed] mb-6 group-hover:scale-110 transition-transform duration-300"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Team Sync</h3>
+            <p class="text-gray-600 leading-relaxed">
+              All versions live in one place. See exactly what changed and why
+              when teammates edit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5: How It Works -->
+    <section class="py-20 lg:py-32 border-t border-gray-200 bg-gray-50/50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-20">
+          <h2 class="text-4xl font-black tracking-tight mb-6">
+            Workflow Integration
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
+          <!-- Connector Line Desktop -->
+          <div
+            class="hidden md:block absolute top-10 left-0 w-full h-0.5 bg-dashed border-t-2 border-gray-200 border-dashed opacity-50"
+          ></div>
+
+          <!-- Step 1 -->
+          <div class="relative z-10 step-reveal opacity-0 translate-y-8">
+            <div
+              class="w-20 h-20 neu-raised-lg rounded-3xl flex items-center justify-center text-2xl font-bold text-[#7c3aed] mb-6 shadow-[8px_8px_16px_#b8bcc2,-8px_-8px_16px_#ffffff]"
+            >
+              01
+            </div>
+            <div class="neu-raised-sm p-6 rounded-3xl">
+              <h4 class="font-bold text-xl mb-2">Connect Source</h4>
+              <p class="text-gray-500 text-sm">
+                Link your Google Drive or paste raw content directly into our
+                interface.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="relative z-10 step-reveal opacity-0 translate-y-8">
+            <div
+              class="w-20 h-20 neu-raised-lg rounded-3xl flex items-center justify-center text-2xl font-bold text-[#7c3aed] mb-6 shadow-[8px_8px_16px_#b8bcc2,-8px_-8px_16px_#ffffff]"
+            >
+              02
+            </div>
+            <div class="neu-raised-sm p-6 rounded-3xl">
+              <h4 class="font-bold text-xl mb-2">Tweak Tone</h4>
+              <p class="text-gray-500 text-sm">
+                Adjust the "Punchiness" slider. More aggressive cuts for
+                Twitter, conservative for Whitepapers.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="relative z-10 step-reveal opacity-0 translate-y-8">
+            <div
+              class="w-20 h-20 neu-raised-lg rounded-3xl flex items-center justify-center text-2xl font-bold text-[#7c3aed] mb-6 shadow-[8px_8px_16px_#b8bcc2,-8px_-8px_16px_#ffffff]"
+            >
+              03
+            </div>
+            <div class="neu-raised-sm p-6 rounded-3xl">
+              <h4 class="font-bold text-xl mb-2">One Click Push</h4>
+              <p class="text-gray-500 text-sm">
+                Export cleanly back to Docs, Notion, or drop straight into Slack
+                threads.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6: Interactive Demo -->
+    <section class="py-20 lg:py-32 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Left: Controls -->
+          <div>
+            <h2 class="text-4xl font-black tracking-tight mb-8">
+              See it in action
+            </h2>
+            <p class="text-gray-500 mb-8">
+              Toggle between different editing modes to see how Brevity adapts.
+            </p>
+
+            <div class="space-y-4">
+              <button
+                class="tab-btn tab-active w-full text-left px-6 py-5 rounded-2xl transition-all duration-300 shadow-sm bg-[#fff] border-l-4 border-[#7c3aed]"
+              >
+                <span class="block font-bold text-lg mb-1"
+                  >Professional Polish</span
+                >
+                <span class="text-xs text-gray-500 uppercase tracking-wide"
+                  >Remove passive voice, improve flow.</span
+                >
+              </button>
+              <button
+                class="tab-btn w-full text-left px-6 py-5 rounded-2xl transition-all duration-300 shadow-sm hover:bg-white/50"
+              >
+                <span class="block font-bold text-lg mb-1"
+                  >Twitter / Social Mode</span
+                >
+                <span class="text-xs text-gray-500 uppercase tracking-wide"
+                  >Maximum density, zero filler.</span
+                >
+              </button>
+              <button
+                class="tab-btn w-full text-left px-6 py-5 rounded-2xl transition-all duration-300 shadow-sm hover:bg-white/50"
+              >
+                <span class="block font-bold text-lg mb-1"
+                  >Executive Summary</span
+                >
+                <span class="text-xs text-gray-500 uppercase tracking-wide"
+                  >Extract key insights only.</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Visual Result -->
+          <div
+            class="neu-raised p-8 rounded-[30px] min-h-[400px] flex items-center justify-center relative overflow-hidden border border-white/20"
+          >
+            <div id="demo-content" class="relative w-full h-full">
+              <!-- Content injected via JS logic or static placeholder for visual -->
+              <div class="animate-fade-in">
+                <div class="mb-2 text-xs font-bold text-[#7c3aed] uppercase">
+                  Original: 142 chars
+                </div>
+                <p
+                  class="text-sm text-gray-600 italic line-through decoration-red-400"
+                >
+                  It is important to note that we are seeing a significant
+                  increase in revenue due to the implementation of these new
+                  strategies.
+                </p>
+
+                <div class="my-4 flex justify-center">
+                  <span class="text-2xl text-gray-300">&darr;</span>
+                </div>
+
+                <div class="mb-2 text-xs font-bold text-green-600 uppercase">
+                  Brevity: 38 chars (-73%)
+                </div>
+                <p class="text-base font-bold text-gray-800">
+                  Revenue surged following strategy implementation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7: Pricing -->
+    <section
+      id="pricing"
+      class="py-20 lg:py-32 border-t border-gray-200 bg-gradient-to-b from-[#e6e9ef] to-[#e2e4e8]"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-20">
+          <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">
+            Simple Plans
+          </h2>
+          <p class="text-xl text-gray-500">
+            Stop wasting hours on edits. Invest in clarity.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <!-- Starter -->
+          <div class="neu-card p-8 flex flex-col">
+            <div class="mb-8">
+              <div
+                class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2"
+              >
+                Creator
+              </div>
+              <div class="text-5xl font-black text-gray-900">
+                $29<span class="text-lg text-gray-400 font-normal">/mo</span>
+              </div>
+            </div>
+            <ul class="space-y-4 mb-8 flex-1">
+              <li class="flex items-center gap-3 text-sm text-gray-700">
+                <div
+                  class="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"
+                >
+                  ✓
+                </div>
+                Up to 5 users
+              </li>
+              <li class="flex items-center gap-3 text-sm text-gray-700">
+                <div
+                  class="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"
+                >
+                  ✓
+                </div>
+                5k words/mo reduction
+              </li>
+              <li class="flex items-center gap-3 text-sm text-gray-700">
+                <div
+                  class="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"
+                >
+                  ✓
+                </div>
+                Google Docs Link
+              </li>
+            </ul>
+            <button class="btn-secondary w-full py-4 rounded-2xl text-lg">
+              Select Plan
+            </button>
+          </div>
+
+          <!-- Pro (Popular) -->
+          <div class="relative p-8 flex flex-col transform md:-translate-y-4">
+            <div
+              class="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#7c3aed] text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg whitespace-nowrap"
+            >
+              MOST POPULAR
+            </div>
+            <div
+              class="neu-raised p-8 bg-white/20 backdrop-blur-sm border border-[#7c3aed]/20 flex flex-col"
+            >
+              <div class="mb-8">
+                <div
+                  class="text-sm font-bold text-[#7c3aed] uppercase tracking-wider mb-2"
+                >
+                  Growth
+                </div>
+                <div class="text-5xl font-black text-gray-900">
+                  $79<span class="text-lg text-gray-400 font-normal">/mo</span>
+                </div>
+              </div>
+              <ul class="space-y-4 mb-8 flex-1">
+                <li
+                  class="flex items-center gap-3 text-sm text-gray-900 font-medium"
+                >
+                  <div
+                    class="w-5 h-5 rounded-full bg-[#7c3aed] text-white flex items-center justify-center text-xs"
+                  >
+                    ✓
+                  </div>
+                  Up to 25 users
+                </li>
+                <li
+                  class="flex items-center gap-3 text-sm text-gray-900 font-medium"
+                >
+                  <div
+                    class="w-5 h-5 rounded-full bg-[#7c3aed] text-white flex items-center justify-center text-xs"
+                  >
+                    ✓
+                  </div>
+                  Unlimited words
+                </li>
+                <li
+                  class="flex items-center gap-3 text-sm text-gray-900 font-medium"
+                >
+                  <div
+                    class="w-5 h-5 rounded-full bg-[#7c3aed] text-white flex items-center justify-center text-xs"
+                  >
+                    ✓
+                  </div>
+                  All Integrations (Notion, Slack)
+                </li>
+                <li
+                  class="flex items-center gap-3 text-sm text-gray-900 font-medium"
+                >
+                  <div
+                    class="w-5 h-5 rounded-full bg-[#7c3aed] text-white flex items-center justify-center text-xs"
+                  >
+                    ✓
+                  </div>
+                  Priority Support
+                </li>
+              </ul>
+              <button
+                class="btn-primary w-full py-5 rounded-2xl text-lg shadow-xl"
+              >
+                Get Growth
+              </button>
+            </div>
+          </div>
+
+          <!-- Enterprise -->
+          <div class="neu-card p-8 flex flex-col">
+            <div class="mb-8">
+              <div
+                class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2"
+              >
+                Enterprise
+              </div>
+              <div class="text-5xl font-black text-gray-900">Custom</div>
+            </div>
+            <ul class="space-y-4 mb-8 flex-1">
+              <li class="flex items-center gap-3 text-sm text-gray-700">
+                <div
+                  class="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"
+                >
+                  ✓
+                </div>
+                SSO & Security
+              </li>
+              <li class="flex items-center gap-3 text-sm text-gray-700">
+                <div
+                  class="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"
+                >
+                  ✓
+                </div>
+                Dedicated Success Manager
+              </li>
+              <li class="flex items-center gap-3 text-sm text-gray-700">
+                <div
+                  class="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"
+                >
+                  ✓
+                </div>
+                Custom API Access
+              </li>
+            </ul>
+            <button class="btn-secondary w-full py-4 rounded-2xl text-lg">
+              Contact Sales
+            </button>
+          </div>
+        </div>
+
+        <!-- Testimonial Quote below Pricing -->
+        <div class="mt-24 max-w-3xl mx-auto">
+          <div class="neu-inset p-10 md:p-14 rounded-[40px] text-center">
+            <p
+              class="text-2xl md:text-3xl font-medium text-gray-700 leading-normal"
+            >
+              "We used to spend every Friday reviewing copy. Now Brevity handles
+              the heavy lifting, and the team focuses on strategy.
+              <strong>Productivity up 40%</strong>."
+            </p>
+            <div class="mt-8 flex items-center justify-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop"
+                  alt="CEO"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="text-left">
+                <div class="font-bold text-gray-900">Sarah Jenkins</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide">
+                  VP of Marketing, Acme Corp
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S8: FAQ -->
+    <section id="faq" class="py-20 lg:py-32 border-t border-gray-200">
+      <div class="max-w-3xl mx-auto px-6">
+        <h2
+          class="text-3xl md:text-4xl font-black tracking-tight text-center mb-16"
+        >
+          Common Questions
+        </h2>
+
+        <div class="space-y-4">
+          <!-- FAQ Item 1 -->
+          <div
+            class="neu-raised rounded-3xl overflow-hidden border border-white/20"
+          >
+            <button
+              class="faq-trigger w-full p-6 flex items-center justify-between text-left hover:bg-white/20 transition-colors"
+            >
+              <span class="font-bold text-lg"
+                >Does it destroy my original document?</span
+              >
+              <span
+                class="faq-icon w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center transition-transform"
+                >+</span
+              >
+            </button>
+            <div
+              class="max-h-0 overflow-hidden transition-all duration-300 bg-gray-50/50"
+            >
+              <div class="p-6 pt-0 text-gray-600 text-sm leading-relaxed">
+                Never. Brevity works non-destructively. We create a separate
+                version or suggestion layer so you maintain total control over
+                your source material.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div
+            class="neu-raised rounded-3xl overflow-hidden border border-white/20"
+          >
+            <button
+              class="faq-trigger w-full p-6 flex items-center justify-between text-left hover:bg-white/20 transition-colors"
+            >
+              <span class="font-bold text-lg">How secure is my data?</span>
+              <span
+                class="faq-icon w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center transition-transform"
+                >+</span
+              >
+            </button>
+            <div
+              class="max-h-0 overflow-hidden transition-all duration-300 bg-gray-50/50"
+            >
+              <div class="p-6 pt-0 text-gray-600 text-sm leading-relaxed">
+                Enterprise grade. We do not train our public models on your
+                proprietary data. SOC2 compliant and GDPR ready.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div
+            class="neu-raised rounded-3xl overflow-hidden border border-white/20"
+          >
+            <button
+              class="faq-trigger w-full p-6 flex items-center justify-between text-left hover:bg-white/20 transition-colors"
+            >
+              <span class="font-bold text-lg"
+                >Can I integrate it with Slack?</span
+              >
+              <span
+                class="faq-icon w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center transition-transform"
+                >+</span
+              >
+            </button>
+            <div
+              class="max-h-0 overflow-hidden transition-all duration-300 bg-gray-50/50"
+            >
+              <div class="p-6 pt-0 text-gray-600 text-sm leading-relaxed">
+                Yes! Paste a thread into the Brevity sidebar app, and it returns
+                a concise summary or reply suggestion instantly.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S9: CTA Banner (Stubbed for brevity as per instructions logic, but included here for completeness) -->
+    <section class="py-20 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+        <div
+          class="neu-raised-lg rounded-[40px] p-12 md:p-20 text-center relative overflow-hidden"
+        >
+          <div class="absolute inset-0 bg-[#7c3aed]/5"></div>
+          <div class="relative z-10">
+            <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+              Ready to speak clearly?
+            </h2>
+            <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+              Join 10,000+ marketers who stopped writing fluff.
+            </p>
+            <button
+              class="btn-primary px-12 py-5 rounded-2xl text-lg shadow-2xl hover:scale-105 transition-transform"
+            >
+              Get Started for Free
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S12: Footer (Light Neumorphic) -->
+    <footer class="border-t border-gray-200 pt-20 pb-10 bg-[#e6e9ef]">
+      <div class="max-w-7xl mx-auto px-6">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
+          <!-- Brand -->
+          <div class="col-span-1 lg:col-span-1">
+            <div class="flex items-center gap-2 mb-6">
+              <div
+                class="w-8 h-8 rounded-lg bg-gray-200 shadow-[4px_4px_8px_#b8bcc2,-4px_-4px_8px_#ffffff] flex items-center justify-center"
+              >
+                <span class="font-bold text-[#7c3aed] text-xs">B</span>
+              </div>
+              <span class="text-lg font-bold text-gray-900">Brevity</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed mb-6">
+              Cutting through the noise since 2026.
+            </p>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="w-10 h-10 rounded-xl bg-white shadow-[4px_4px_8px_#b8bcc2,-4px_-4px_8px_#ffffff] flex items-center justify-center text-gray-400 hover:text-[#7c3aed] hover:scale-110 transition-all"
+                >𝕏</a
+              >
+              <a
+                href="#"
+                class="w-10 h-10 rounded-xl bg-white shadow-[4px_4px_8px_#b8bcc2,-4px_-4px_8px_#ffffff] flex items-center justify-center text-gray-400 hover:text-[#7c3aed] hover:scale-110 transition-all"
+                >in</a
+              >
+              <a
+                href="#"
+                class="w-10 h-10 rounded-xl bg-white shadow-[4px_4px_8px_#b8bcc2,-4px_-4px_8px_#ffffff] flex items-center justify-center text-gray-400 hover:text-[#7c3aed] hover:scale-110 transition-all"
+                >Ig</a
+              >
+            </div>
+          </div>
+
+          <!-- Links -->
+          <div>
+            <h4 class="font-bold text-gray-900 mb-6">Product</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >Integrations</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >Changelog</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >Pricing</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >API</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-gray-900 mb-6">Company</h4>
+            <ul class="space-y-3">
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >Careers</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >Legal</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-500 hover:text-[#7c3aed] text-sm"
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Newsletter -->
+          <div>
+            <h4 class="font-bold text-gray-900 mb-6">Stay updated</h4>
+            <form class="flex gap-2">
+              <input
+                type="email"
+                placeholder="Email address"
+                class="w-full bg-white/50 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 ring-[#7c3aed] border border-white/20"
+              />
+              <button class="btn-primary px-4 py-3 rounded-xl !py-0">Go</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div
+          class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400"
+        >
+          <p>&copy; 2026 Brevity AI Inc. All rights reserved.</p>
+          <div class="flex items-center gap-2">
+            <span
+              class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]"
+            ></span>
+            Systems Operational
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- GSAP ANIMATIONS -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- 1. Navbar Scroll Effect ---
+        const navbar = document.getElementById("navbar");
+        window.addEventListener("scroll", () => {
+          navbar.classList.toggle("scrolled", window.scrollY > 20);
+        });
+
+        // --- 2. Hero Page Load Animation ---
+        const tl = gsap.timeline();
+        tl.to(".hero-badge", {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power3.out",
+          delay: 0.2,
+        })
+          .to(
+            ".hero-headline",
+            { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+            "-=0.3",
+          )
+          .to(
+            ".hero-sub",
+            { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+            "-=0.5",
+          )
+          .to(
+            ".hero-ctas",
+            { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+            "-=0.5",
+          )
+          .to(
+            ".hero-preview",
+            { opacity: 1, scale: 1, duration: 1.2, ease: "expo.out" },
+            "-=0.8",
+          );
+
+        // --- 3. Section Reveal Stagger ---
+        const sections = document.querySelectorAll(
+          ".step-reveal, .neu-card:nth-child(-n+6), #features h2",
+        );
+
+        gsap.fromTo(
+          ".step-reveal",
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".step-reveal",
+              start: "top 80%",
+            },
+          },
+        );
+
+        gsap.fromTo(
+          "#features h2, #features p",
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: "#features",
+              start: "top 75%",
+            },
+          },
+        );
+
+        gsap.utils.toArray(".pricing-wrapper").forEach((card) => {
+          // Simplified selector logic for pricing cards could be added here specifically
+          // Pricing cards usually auto-stagger or appear naturally, focusing on scroll triggers for others.
+        });
+
+        // --- 4. FAQ Accordion Logic (GSAP) ---
+        const faqItems = document.querySelectorAll(".faq-trigger");
+        faqItems.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const answer = btn.nextElementSibling;
+            const isOpen =
+              answer.style.maxHeight && answer.style.maxHeight !== "0px";
+
+            // Close all others
+            document.querySelectorAll(".faq-trigger").forEach((otherBtn) => {
+              if (otherBtn !== btn) {
+                otherBtn.nextElementSibling.style.maxHeight = null;
+                otherBtn.querySelector(".faq-icon").innerText = "+";
+                otherBtn
+                  .querySelector(".faq-icon")
+                  .classList.remove("rotate-45", "bg-[#7c3aed]", "text-white");
+              }
+            });
+
+            if (isOpen) {
+              answer.style.maxHeight = null;
+              btn.querySelector(".faq-icon").innerText = "+";
+              btn
+                .querySelector(".faq-icon")
+                .classList.remove("rotate-45", "bg-[#7c3aed]", "text-white");
+            } else {
+              answer.style.maxHeight = answer.scrollHeight + "px";
+              btn.querySelector(".faq-icon").innerText = "−";
+              btn
+                .querySelector(".faq-icon")
+                .classList.add("rotate-45", "bg-[#7c3aed]", "text-white");
+            }
+          });
+        });
+
+        // --- 5. Tab Logic (Demo Section) ---
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => {
+              t.classList.remove(
+                "tab-active",
+                "bg-white",
+                "border-l-4",
+                "border-[#7c3aed]",
+              );
+              t.classList.add("shadow-sm", "hover:bg-white/50");
+            });
+            tab.classList.add(
+              "tab-active",
+              "bg-white",
+              "border-l-4",
+              "border-[#7c3aed]",
+            );
+            tab.classList.remove("shadow-sm", "hover:bg-white/50");
+
+            // Simple swap animation for demo content
+            const demoContent = document.getElementById("demo-content");
+            gsap.to(demoContent, {
+              opacity: 0,
+              duration: 0.2,
+              onComplete: () => {
+                // Reset random content based on tab index could go here
+                gsap.fromTo(
+                  demoContent,
+                  { opacity: 0 },
+                  { opacity: 1, duration: 0.3 },
+                );
+              },
+            });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
