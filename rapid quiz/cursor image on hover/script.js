@@ -17,8 +17,10 @@ gsap.utils.toArray(".hover-trigger").forEach((trigger) => {
         syncY(event.clientY);
       }
     },
-    enableGlobalTracking = () => document.addEventListener("mousemove", reconcilePointer),
-    disableGlobalTracking = () => document.removeEventListener("mousemove", reconcilePointer),
+    enableGlobalTracking = () =>
+      document.addEventListener("mousemove", reconcilePointer),
+    disableGlobalTracking = () =>
+      document.removeEventListener("mousemove", reconcilePointer),
     opacityTimeline = gsap.to(followerMedia, {
       autoAlpha: 1,
       ease: "none",

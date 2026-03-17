@@ -6,7 +6,7 @@
   --primary: #0f172a; /* Midnight Slate */
   --background: #f8fafc; /* Crisp Ice White */
   --secondary: #64748b; /* Slate Grey */
-  --accent: #3d40ed; /* Electric Indigo (Premium) */
+  --accent: #273c39; /* Electric Indigo (Premium) */
   --accent-pink: #f472b6;
   --accent-cyan: #22d3ee;
   --success: #10b981;
@@ -40,7 +40,7 @@
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 32px;
-  --radius-organic: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  --radius-organic: 30% 20% 15% 45% / 60% 30% 70% 40%;
   --radius-squircle: 40px;
 
   /* Claymorphism Configuration */
@@ -52,6 +52,8 @@
   --shadow-card: var(--clay-shadow);
 
   --accent-hover: #4f46e5;
+
+  --radius-clay-slab: 80px; /* High-volume softness */
 }
 
 /* ============================================
@@ -80,8 +82,7 @@
 .testimonials-section,
 .pricing-section,
 .faq-section {
-  position: relative;
-  overflow: hidden;
+  margin: 32px 0;
 }
 
 /* ============================================
@@ -133,7 +134,7 @@ button {
 
 img {
   max-width: 100%;
-  display: block;
+  display: inline-block;
 }
 
 .container {
@@ -343,7 +344,6 @@ img {
   transform: translateY(110%);
   will-change: transform;
 }
-
 
 .hero-subtitle {
   font-size: 1.25rem;
@@ -1248,6 +1248,8 @@ img {
     /* Side Specularity */ inset -4px 0 10px rgba(0, 0, 0, 0.05);
   animation: slabBreathe 10s ease-in-out infinite alternate;
   isolation: isolate;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 /* Glossy Surface Overlap on the Slab */
@@ -1571,14 +1573,14 @@ img {
 }
 
 .pricing-card.popular {
-  border: 4px solid var(--white); /* Physical Rim */
+  /* border: 4px solid var(--white); */
   background: var(--background) !important;
   box-shadow:
     0 40px 100px -20px var(--color-shadow-deep),
     0 0 0 2px var(--accent),
     /* Electric Aura border */ inset 0 4px 8px var(--white);
   position: relative;
-  z-index: 10;
+  z-index: 00;
   transform: scale(1.02);
 }
 
@@ -1646,10 +1648,6 @@ img {
 /* ============================================
      FAQ SECTION
      ============================================ */
-.faq-section {
-  padding: var(--spacing-lg) 0;
-  position: relative;
-}
 
 .faq-items {
   max-width: 850px;
@@ -1672,12 +1670,6 @@ img {
     0 12px 24px -10px rgba(15, 23, 42, 0.08),
     inset 0 4px 6px rgba(255, 255, 255, 1),
     inset 0 -4px 8px rgba(15, 23, 42, 0.01);
-}
-
-.faq-item:hover {
-  transform: translateY(-4px);
-  border-radius: 44px;
-  box-shadow: 0 15px 35px -10px rgba(15, 23, 42, 0.12);
 }
 
 /* FAQ Texture Overlay */
@@ -1774,6 +1766,8 @@ img {
     inset 0 4px 15px rgba(255, 255, 255, 0.3),
     /* Top Bevel */ inset 0 -8px 20px rgba(0, 0, 0, 0.1); /* Bottom Mass */
   isolation: isolate;
+  width: 70%;
+  margin: var(--spacing-xl) auto;
 }
 
 /* Glassy Surface Shine */
@@ -1809,7 +1803,7 @@ img {
   font-weight: 900;
   letter-spacing: -0.05em;
   margin-bottom: var(--spacing-md);
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-shadow: 5px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .banner-subtitle {
@@ -2405,11 +2399,11 @@ body > .follower-element {
   position: fixed;
   top: 0;
   left: 0;
-  width: 350px;
-  height: 350px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
   transform: translate(-50%, -50%);
-  z-index: 9999;
+  z-index: 9;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;

@@ -111,7 +111,6 @@ let bentoCleanup;
 // Hero Parallax and Legacy Background Animations removed (Protocol: Subtractive Design)
 // Logic replaced by Bento Gallery and Initial Overlay reveal.
 
-
 // Data is now sourced from data.js
 
 // --- State Management ---
@@ -728,7 +727,10 @@ document.querySelectorAll(".faq-question").forEach((btn) => {
 });
 
 // FAQ Cursor Image Hover Effect
-gsap.set(".hover-trigger .follower-element", { yPercent: -50, xPercent: -50 });
+gsap.set(".hover-trigger .follower-element", {
+  yPercent: -100,
+  xPercent: 0,
+});
 
 let isInitialFrame;
 
@@ -736,8 +738,14 @@ gsap.utils.toArray(".hover-trigger").forEach((trigger) => {
   const followerMedia = trigger.querySelector(".follower-element");
   if (!followerMedia) return;
 
-  const syncX = gsap.quickTo(followerMedia, "x", { duration: 0.4, ease: "power3" });
-  const syncY = gsap.quickTo(followerMedia, "y", { duration: 0.4, ease: "power3" });
+  const syncX = gsap.quickTo(followerMedia, "x", {
+    duration: 0.4,
+    ease: "power3",
+  });
+  const syncY = gsap.quickTo(followerMedia, "y", {
+    duration: 0.4,
+    ease: "power3",
+  });
 
   const reconcilePointer = (event) => {
     if (isInitialFrame) {
@@ -750,8 +758,10 @@ gsap.utils.toArray(".hover-trigger").forEach((trigger) => {
     }
   };
 
-  const enableGlobalTracking = () => document.addEventListener("mousemove", reconcilePointer);
-  const disableGlobalTracking = () => document.removeEventListener("mousemove", reconcilePointer);
+  const enableGlobalTracking = () =>
+    document.addEventListener("mousemove", reconcilePointer);
+  const disableGlobalTracking = () =>
+    document.removeEventListener("mousemove", reconcilePointer);
 
   const opacityTimeline = gsap.to(followerMedia, {
     autoAlpha: 1,
