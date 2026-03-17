@@ -532,6 +532,8 @@ ScrollTrigger.create({
 <div class="faq-items">
   <div class="faq-item hover-trigger">
     <!-- Image must be FIRST child, before button -->
+    <!-- CRITICAL: Use images from images.json - prefer hero_mindset, atmospheric, or hero images -->
+    <!-- Each FAQ item should have a different image for variety -->
     <img class="follower-element"
          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png"
          alt=""
@@ -545,7 +547,22 @@ ScrollTrigger.create({
       <p>Most users complete the full assessment in under 90 seconds...</p>
     </div>
   </div>
-  <!-- More FAQ items -->
+
+  <div class="faq-item hover-trigger">
+    <img class="follower-element"
+         src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png"
+         alt="">
+    <button class="faq-question" aria-expanded="false">
+      Is my data secure?
+      <span class="faq-toggle">+</span>
+    </button>
+    <div class="faq-answer">
+      <p>Absolutely. We use industry-standard encryption...</p>
+    </div>
+  </div>
+
+  <!-- Continue pattern with different images for each FAQ item -->
+  <!-- Suggested images: hero_wealth, hero_estate, atm_biohacking, atm_wealth, atm_estate -->
 </div>
 ```
 
@@ -571,7 +588,9 @@ ScrollTrigger.create({
 ### Required JavaScript (EXACT implementation)
 
 ```js
-gsap.set('.hover-trigger .follower-element', { yPercent: -50, xPercent: -50 });
+// FAQ Cursor Image Hover Effect
+// CRITICAL: Initial position is yPercent: -100, xPercent: 0 (NOT -50, -50)
+gsap.set('.hover-trigger .follower-element', { yPercent: -100, xPercent: 0 });
 
 let isInitialFrame;
 
@@ -579,13 +598,15 @@ gsap.utils.toArray('.hover-trigger').forEach((trigger) => {
   const followerMedia = trigger.querySelector('.follower-element');
   if (!followerMedia) return;
 
+  // CRITICAL: Animate x and y (pixel values), NOT xPercent/yPercent
   const syncX = gsap.quickTo(followerMedia, 'x', { duration: 0.4, ease: 'power3' });
   const syncY = gsap.quickTo(followerMedia, 'y', { duration: 0.4, ease: 'power3' });
 
   const reconcilePointer = (event) => {
+    // CRITICAL: On first frame, pass clientX twice to skip interpolation
     if (isInitialFrame) {
-      syncX(event.clientX);
-      syncY(event.clientY);
+      syncX(event.clientX, event.clientX);
+      syncY(event.clientY, event.clientY);
       isInitialFrame = false;
     } else {
       syncX(event.clientX);
@@ -615,7 +636,12 @@ gsap.utils.toArray('.hover-trigger').forEach((trigger) => {
 });
 ```
 
-**CRITICAL:** Image must be `position: fixed`, z-index `9999`, and use `translate(-50%, -50%)` for proper centering on cursor.
+**CRITICAL SETTINGS:**
+- Initial GSAP position: `yPercent: -100, xPercent: 0` (NOT -50, -50)
+- Animate `x` and `y` properties (pixel values), NOT percentages
+- On first frame: pass `clientX` twice to skip interpolation: `syncX(event.clientX, event.clientX)`
+- CSS transform: `translate(-50%, -50%)` for proper centering
+- Image must be `position: fixed`, z-index `9999` or higher
 
 ---
 
