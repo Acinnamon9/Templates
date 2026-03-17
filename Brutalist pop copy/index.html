@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <section class="principles">
+    <div class="principles__header">
+      <div class="principles__header-ghost" aria-hidden="true">PRINCIPLES</div>
+      <h2 class="principles__header-title" id="headerTitle">
+        <span>The</span>
+        <span>Principles</span>
+      </h2>
+    </div>
+    <div class="principles__grid">
+
+      <article class="card card--yellow">
+        <div class="card__ghost" aria-hidden="true">01</div>
+        <div class="card__top"><span class="card__number">P—01</span><span class="card__icon">★</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Bias<br>to<br>Action</h3>
+          <p class="card__desc">Thinking is cheap. Making is expensive. Spend your budget where it counts. Start before you're ready — because you'll never be ready.</p>
+          <div class="card__tags"><span class="card__tag">Momentum</span><span class="card__tag">Start</span></div>
+        </div>
+      </article>
+
+      <article class="card card--cyan">
+        <div class="card__ghost" aria-hidden="true">02</div>
+        <div class="card__top"><span class="card__number">P—02</span><span class="card__icon">∞</span></div>
+        <div class="card__body">
+          <h3 class="card__title card__title--stroke">Constraint<br>is<br>Creative</h3>
+          <p class="card__desc">Limitations aren't your enemy. They're your collaborator. The blank page is harder than the brief. Embrace what you can't do; it shows you what you can.</p>
+          <div class="card__tags"><span class="card__tag">Limits</span><span class="card__tag">Freedom</span></div>
+        </div>
+      </article>
+
+      <article class="card card--pink">
+        <div class="card__ghost" aria-hidden="true">03</div>
+        <div class="card__top"><span class="card__number">P—03</span><span class="card__icon">◉</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Process<br>is<br>Product</h3>
+          <p class="card__desc">What you make is inseparable from how you made it. Your methods leave fingerprints on your outputs. Design the process; the product follows.</p>
+          <div class="card__tags"><span class="card__tag">Systems</span><span class="card__tag">Method</span></div>
+        </div>
+      </article>
+
+      <article class="card card--lavender">
+        <div class="card__ghost" aria-hidden="true">04</div>
+        <div class="card__top"><span class="card__number">P—04</span><span class="card__icon">✦</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Steal<br>Like a<br>System</h3>
+          <p class="card__desc">Don't copy — transpose. Take from everywhere, then run it through your own lens until it comes out unrecognisable. That's called influence. Own it.</p>
+          <div class="card__tags"><span class="card__tag">Reference</span><span class="card__tag">Transform</span></div>
+        </div>
+      </article>
+
+      <article class="card card--lime">
+        <div class="card__ghost" aria-hidden="true">05</div>
+        <div class="card__top"><span class="card__number">P—05</span><span class="card__icon">★</span></div>
+        <div class="card__body">
+          <h3 class="card__title card__title--stroke">Make<br>It<br>Real</h3>
+          <p class="card__desc">A prototype answers a question no meeting can. Get something tangible in front of people as fast as possible. Reality is a better editor than your brain.</p>
+          <div class="card__tags"><span class="card__tag">Prototype</span><span class="card__tag">Tangible</span></div>
+        </div>
+      </article>
+
+      <article class="card card--orange">
+        <div class="card__ghost" aria-hidden="true">06</div>
+        <div class="card__top"><span class="card__number">P—06</span><span class="card__icon">∞</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Show.<br>Don't<br>Tell.</h3>
+          <p class="card__desc">A working demo beats a perfect pitch deck every time. Let the thing speak for itself. Demonstration is the only honest form of communication.</p>
+          <div class="card__tags"><span class="card__tag">Demo</span><span class="card__tag">Proof</span></div>
+        </div>
+      </article>
+
+      <article class="card card--green">
+        <div class="card__ghost" aria-hidden="true">07</div>
+        <div class="card__top"><span class="card__number">P—07</span><span class="card__icon">◉</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Audience<br>First,<br>Always</h3>
+          <p class="card__desc">You are not your user. You are not your reader. You are not the person on the other side of the screen. Go find out who that is before you decide anything.</p>
+          <div class="card__tags"><span class="card__tag">Empathy</span><span class="card__tag">Research</span></div>
+        </div>
+      </article>
+
+      <article class="card card--yellow">
+        <div class="card__ghost" aria-hidden="true">08</div>
+        <div class="card__top"><span class="card__number">P—08</span><span class="card__icon">✦</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Fail<br>Forward</h3>
+          <p class="card__desc">Failure is data. Every bad prototype, every missed launch, every piece of feedback that stings — it's information. Log it. Use it. Keep going.</p>
+          <div class="card__tags"><span class="card__tag">Resilience</span><span class="card__tag">Data</span></div>
+        </div>
+      </article>
+
+      <article class="card card--pink">
+        <div class="card__ghost" aria-hidden="true">09</div>
+        <div class="card__top"><span class="card__number">P—09</span><span class="card__icon">★</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Iterate<br>Relent-<br>lessly</h3>
+          <p class="card__desc">Version 1 is a hypothesis. Version 2 is where the learning shows. There is no final form — only the next iteration and the courage to ship it.</p>
+          <div class="card__tags"><span class="card__tag">Version</span><span class="card__tag">Loop</span></div>
+        </div>
+      </article>
+
+      <article class="card card--cyan">
+        <div class="card__ghost" aria-hidden="true">10</div>
+        <div class="card__top"><span class="card__number">P—10</span><span class="card__icon">∞</span></div>
+        <div class="card__body">
+          <h3 class="card__title card__title--stroke">Name<br>Every-<br>thing</h3>
+          <p class="card__desc">Unnamed things don't exist yet. Give every concept, file, idea, and stage a name. Nomenclature is infrastructure. Language makes things real.</p>
+          <div class="card__tags"><span class="card__tag">Language</span><span class="card__tag">Clarity</span></div>
+        </div>
+      </article>
+
+      <article class="card card--lavender">
+        <div class="card__ghost" aria-hidden="true">11</div>
+        <div class="card__top"><span class="card__number">P—11</span><span class="card__icon">◉</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Document<br>as You<br>Go</h3>
+          <p class="card__desc">Memory is lossy and selective. The decision you made six weeks ago for a very good reason will be mysterious in six months. Write it down now — for future you.</p>
+          <div class="card__tags"><span class="card__tag">Memory</span><span class="card__tag">Record</span></div>
+        </div>
+      </article>
+
+      <article class="card card--orange">
+        <div class="card__ghost" aria-hidden="true">12</div>
+        <div class="card__top"><span class="card__number">P—12</span><span class="card__icon">✦</span></div>
+        <div class="card__body">
+          <h3 class="card__title">Ship.<br>It.</h3>
+          <p class="card__desc">Done is better than perfect. Perfect is a fantasy. The world cannot respond to something that exists only on your hard drive. Let it go. Ship the damn thing.</p>
+          <div class="card__tags"><span class="card__tag">Launch</span><span class="card__tag">Done</span></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div class="manifesto__ghost" aria-hidden="true">MAKE</div>
+    <p class="manifesto__label" id="manifestoLabel">✦ The Collective Manifesto</p>
+    <blockquote class="manifesto__quote" id="manifestoQuote">
+      We don't wait for<br>
+      <em>permission.</em><br>
+      We don't wait for<br>
+      <em>perfect.</em><br>
+      We make things<br>
+      and we ship them.
+    </blockquote>
+  </section>
+
+  <section class="beliefs">
+    <div class="beliefs__left">
+      <h2 class="beliefs__title" id="beliefsTitle">
+        We<br>Believe<br>In<br>Making.
+      </h2>
+      <ul class="beliefs__list">
+        <li data-sym="★">Makers who obsess over the thing in front of them, not the career it might build.</li>
+        <li data-sym="∞">Teams that disagree loudly and commit fully.</li>
+        <li data-sym="◉">Work that is finished before it is beautiful.</li>
+        <li data-sym="✦">Honest feedback delivered with respect, received with openness.</li>
+        <li data-sym="★">The discipline to stop what isn't working, no matter how much time was spent on it.</li>
+      </ul>
+    </div>
+    <div class="beliefs__right">
+      <div class="beliefs__box" id="beliefsBox1">
+        <strong>◉ Collective Signal</strong>
+        The quality of your output is a direct function of the quality of your decisions. Most decisions are made in ten seconds. Spend the other time building.
+      </div>
+      <div class="beliefs__box beliefs__box--pink" id="beliefsBox2">
+        <strong>✦ Anti-Patterns to Kill</strong>
+        → Endless research loops that delay launch<br>
+        → Design-by-committee on irreversible decisions<br>
+        → Shipping the scaffold instead of the structure<br>
+        → Mistaking motion for progress<br>
+        → Never writing the post-mortem
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta__ghost" aria-hidden="true">SHIP</div>
+    <p class="cta__kicker" id="ctaKicker">★ Join the Collective</p>
+    <h2 class="cta__title" id="ctaTitle">
+      Now<br><span>Make</span><br>Something.
+    </h2>
+    <a href="https://codepen.io/Margarita-the-solid" target="_blank" class="cta__btn" id="ctaBtn">Join The Collective ✦</a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__logo">The<br><span>Collective</span></div>
+    <div class="footer__symbols" id="footerSymbols">★ ∞ ◉ ✦</div>
+    </div>
+  </footer>
+</body>
+</html>

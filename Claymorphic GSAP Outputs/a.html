@@ -1,0 +1,2357 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VitalEdge | Premium Biohacking Diagnostic</title>
+    <meta
+      name="description"
+      content="Discover your personalized supplement protocol. 60-second diagnostic for high-performers."
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CDN Stack -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
+
+    <style>
+      :root {
+        --primary: #0f172a;
+        --background: #f8fafc;
+        --secondary: #64748b;
+        --accent: #273c39;
+        --accent-pink: #f472b6;
+        --accent-cyan: #22d3ee;
+        --success: #10b981;
+        --border: #e2e8f0;
+        --white: #ffffff;
+        --color-rim: rgba(255, 255, 255, 0.8);
+        --color-shadow-light: rgba(15, 23, 42, 0.08);
+        --color-shadow-deep: rgba(15, 23, 42, 0.2);
+        --grad-surface: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        --grad-indigo: linear-gradient(135deg, #6366f1 0%, #9e38fd 100%);
+        --grad-pink: linear-gradient(135deg, #882056 0%, #c92e45 100%);
+        --grad-cyan: linear-gradient(135deg, #22d3ee 0%, #4f5dda 100%);
+        --grad-accent: linear-gradient(135deg, #273c39 0%, #3d5a55 100%);
+        --font-heading: "Bricolage Grotesque", sans-serif;
+        --font-body: "Plus Jakarta Sans", sans-serif;
+        --clay-shadow:
+          12px 12px 24px rgba(0, 0, 0, 0.05),
+          -8px -8px 16px rgba(255, 255, 255, 0.8),
+          inset 4px 4px 8px rgba(255, 255, 255, 0.5),
+          inset -4px -4px 8px rgba(0, 0, 0, 0.02);
+        --radius-sm: 8px;
+        --radius-md: 16px;
+        --radius-lg: 32px;
+        --radius-organic: 30% 20% 15% 45% / 60% 30% 70% 40%;
+        --radius-squircle: 40px;
+        --spacing-sm: 1rem;
+        --spacing-md: 2rem;
+        --spacing-lg: 4rem;
+        --spacing-xl: 6rem;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--font-body);
+        background: var(--background);
+        color: var(--primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .font-heading {
+        font-family: var(--font-heading);
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .font-label {
+        font-family: var(--font-body);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.01em;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-md);
+      }
+      .text-center {
+        text-align: center;
+      }
+      .justify-center {
+        display: flex;
+        justify-content: center;
+      }
+      .accent-color {
+        color: var(--accent);
+      }
+
+      /* Neumorphic Card System */
+      .clay-card {
+        background: var(--grad-surface);
+        border: 2px solid var(--color-rim);
+        border-radius: var(--radius-squircle);
+        padding: var(--spacing-lg);
+        box-shadow: var(--clay-shadow);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: visible;
+        cursor: pointer;
+      }
+      .clay-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.025;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .clay-card::after {
+        content: "";
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent 45%,
+          rgba(255, 255, 255, 0.3) 50%,
+          transparent 55%
+        );
+        transform: rotate(-25deg);
+        transition: all 0.7s ease;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .clay-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -10px rgba(39, 60, 57, 0.2);
+        border-radius: 44px;
+      }
+      .clay-card:hover::after {
+        top: -20%;
+        left: -20%;
+      }
+      .clay-card.selected {
+        border-color: var(--accent);
+        box-shadow:
+          0 0 0 3px rgba(39, 60, 57, 0.15),
+          var(--clay-shadow);
+      }
+
+      /* Bento Hero Grid */
+      .gallery-wrap {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+      .hero-initial-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        pointer-events: none;
+      }
+      .hero-content {
+        max-width: 700px;
+        padding: var(--spacing-lg);
+      }
+      .hero-label {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        background: var(--grad-accent);
+        color: white;
+        border-radius: 50px;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 12px rgba(39, 60, 57, 0.2);
+      }
+      .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        margin-bottom: 1.5rem;
+      }
+      .hero-title div {
+        overflow: hidden;
+      }
+      .hero-title span {
+        display: block;
+        transform: translateY(100%);
+      }
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--secondary);
+        margin-bottom: 2.5rem;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2.5rem;
+        background: var(--grad-accent);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(39, 60, 57, 0.3);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(39, 60, 57, 0.4);
+      }
+      .cta-button.pulse {
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 8px 24px rgba(39, 60, 57, 0.3);
+        }
+        50% {
+          box-shadow: 0 8px 32px rgba(39, 60, 57, 0.5);
+        }
+      }
+
+      .gallery {
+        position: relative;
+        will-change: transform;
+        backface-visibility: hidden;
+      }
+      .gallery--bento {
+        display: grid;
+        gap: 1vh;
+        grid-template-columns: repeat(3, 32.5vw);
+        grid-template-rows: repeat(4, 23vh);
+        justify-content: center;
+        align-content: center;
+      }
+      .gallery--bento .gallery__item {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--clay-shadow);
+        position: relative;
+      }
+      .gallery--bento .gallery__item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+      .gallery--bento .gallery__item:hover img {
+        transform: scale(1.05);
+      }
+      .gallery--bento .gallery__item:nth-child(1) {
+        grid-area: 1/1/3/2;
+      }
+      .gallery--bento .gallery__item:nth-child(2) {
+        grid-area: 1/2/2/3;
+      }
+      .gallery--bento .gallery__item:nth-child(3) {
+        grid-area: 2/2/4/3;
+      }
+      .gallery--bento .gallery__item:nth-child(4) {
+        grid-area: 1/3/3/3;
+      }
+      .gallery--bento .gallery__item:nth-child(5) {
+        grid-area: 3/1/3/2;
+      }
+      .gallery--bento .gallery__item:nth-child(6) {
+        grid-area: 3/3/5/4;
+      }
+      .gallery--bento .gallery__item:nth-child(7) {
+        grid-area: 4/1/5/2;
+      }
+      .gallery--bento .gallery__item:nth-child(8) {
+        grid-area: 4/2/5/3;
+      }
+      .gallery--final.gallery--bento {
+        grid-template-columns: repeat(3, 100vw);
+        grid-template-rows: repeat(4, 49.5vh);
+        gap: 1vh;
+      }
+
+      /* Quiz Section */
+      .quiz-section {
+        position: relative;
+        padding: var(--spacing-xl) 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+      .quiz-atmosphere {
+        position: absolute;
+        inset: 0;
+        opacity: 0.08;
+        pointer-events: none;
+      }
+      .quiz-atmosphere .liquid-bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(40px) saturate(1.2);
+      }
+      #flair-container {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 1;
+      }
+      .flair {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        opacity: 0;
+        display: none;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+      }
+
+      .quiz-container {
+        position: relative;
+        z-index: 2;
+        max-width: 700px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .quiz-header {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+      }
+      .quiz-main-title {
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        margin-bottom: 0.5rem;
+      }
+      .quiz-meta-info {
+        color: var(--secondary);
+        font-size: 0.95rem;
+      }
+
+      .quiz-progress {
+        margin-bottom: var(--spacing-md);
+      }
+      .progress-bar {
+        height: 12px;
+        background: var(--background);
+        border-radius: 50px;
+        overflow: hidden;
+        box-shadow:
+          inset 2px 2px 4px rgba(0, 0, 0, 0.03),
+          inset -2px -2px 4px rgba(255, 255, 255, 0.9);
+        position: relative;
+      }
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--grad-accent);
+        border-radius: 50px;
+        position: relative;
+        transition: width 0.4s ease;
+      }
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      .progress-text {
+        display: block;
+        text-align: center;
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+        color: var(--secondary);
+        font-weight: 500;
+      }
+
+      .question-title {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-md);
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      .question-options {
+        display: grid;
+        gap: 1rem;
+      }
+      .question-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem;
+        text-align: left;
+      }
+      .option-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--grad-accent);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .option-text {
+        font-weight: 500;
+      }
+
+      .question-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: var(--spacing-md);
+        gap: 1rem;
+      }
+      .nav-btn {
+        flex: 1;
+        padding: 1rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--background);
+        box-shadow: var(--clay-shadow);
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .nav-btn:not(:disabled):hover {
+        transform: translateY(-2px);
+      }
+      .nav-next {
+        background: var(--grad-accent);
+        color: white;
+      }
+
+      .micro-copy {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--secondary);
+        font-size: 0.9rem;
+      }
+
+      /* Modals */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.98);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-content {
+        background: var(--background);
+        border-radius: var(--radius-squircle);
+        padding: var(--spacing-lg);
+        max-width: 500px;
+        width: 90%;
+        box-shadow: var(--clay-shadow);
+        position: relative;
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      .modal-close {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: var(--background);
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: var(--clay-shadow);
+      }
+      .modal-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        background: var(--grad-accent);
+        color: white;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+      .modal-title {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+      }
+      .modal-subtitle {
+        color: var(--secondary);
+        margin-bottom: 2rem;
+      }
+
+      .email-form {
+        display: grid;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+      .form-label {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .form-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 2px solid var(--border);
+        border-radius: var(--radius-md);
+        font-size: 1rem;
+        background: var(--white);
+        transition: border-color 0.3s;
+      }
+      .form-input:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+      .form-hint {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--secondary);
+      }
+
+      .result-previews {
+        border-top: 1px solid var(--border);
+        padding-top: 1.5rem;
+      }
+      .receive-label {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      .preview-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+      .preview-check {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--success);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      /* Results Modal */
+      .result-modal {
+        background: var(--background);
+        border-radius: var(--radius-squircle);
+        padding: var(--spacing-lg);
+        max-width: 600px;
+        width: 90%;
+        box-shadow: var(--clay-shadow);
+        position: relative;
+        clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
+      }
+      .result-avatar-container {
+        position: relative;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      .result-avatar-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto;
+        display: block;
+        border: 4px solid var(--white);
+        box-shadow: var(--clay-shadow);
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      .result-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.25rem;
+        background: var(--grad-accent);
+        color: white;
+        border-radius: 50px;
+        font-weight: 600;
+        margin-top: -1rem;
+        position: relative;
+        z-index: 2;
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      .result-icon {
+        font-size: 1.25rem;
+      }
+      .result-headline {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      .result-summary {
+        color: var(--secondary);
+        margin-bottom: 2rem;
+        transform: translateX(-20px);
+        opacity: 0;
+      }
+
+      .result-mistakes {
+        margin-bottom: 2rem;
+      }
+      .mistake-title {
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .mistake-list {
+        list-style: none;
+        display: grid;
+        gap: 0.75rem;
+      }
+      .mistake-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        transform: translateX(-20px);
+        opacity: 0;
+      }
+      .mistake-icon {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .recommended-action {
+        background: var(--grad-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--clay-shadow);
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      .action-title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .action-desc {
+        color: var(--secondary);
+        margin-bottom: 1.25rem;
+      }
+      .action-btn {
+        display: inline-block;
+        padding: 0.875rem 2rem;
+        background: var(--grad-accent);
+        color: white;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+      }
+      .action-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .sent-notice {
+        text-align: center;
+        color: var(--secondary);
+        margin: 1.5rem 0 0.5rem;
+        opacity: 0;
+      }
+      .reset-link {
+        text-align: center;
+      }
+      .reset-link a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .reset-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Features Section */
+      .features-section {
+        padding: var(--spacing-xl) 0;
+        position: relative;
+        overflow: hidden;
+      }
+      .cursor-glow {
+        position: fixed;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(39, 60, 57, 0.15) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .features-bg {
+        position: absolute;
+        inset: 0;
+        opacity: 0.05;
+        pointer-events: none;
+      }
+      .feature-bg-element {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(60px);
+      }
+
+      .section-header {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto var(--spacing-lg);
+      }
+      .section-title {
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        margin-bottom: 1rem;
+      }
+      .section-subtitle {
+        color: var(--secondary);
+        font-size: 1.1rem;
+      }
+
+      .features-grid {
+        display: grid;
+        gap: var(--spacing-md);
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .feature-card {
+        text-align: center;
+        padding: var(--spacing-md);
+      }
+      .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      .feature-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+      }
+      .feature-desc {
+        color: var(--secondary);
+      }
+
+      /* Testimonials */
+      .testimonials-section {
+        padding: var(--spacing-xl) 0;
+      }
+      .testimonial-grid {
+        display: grid;
+        gap: var(--spacing-md);
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .testimonial-card {
+        padding: var(--spacing-md);
+      }
+      .testimonial-stars {
+        color: #fbbf24;
+        margin-bottom: 1rem;
+        letter-spacing: 0.25rem;
+      }
+      .testimonial-text {
+        color: var(--secondary);
+        margin-bottom: 1.5rem;
+        font-style: italic;
+      }
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .author-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--grad-accent);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+      .author-info h4 {
+        font-weight: 600;
+      }
+      .author-info p {
+        color: var(--secondary);
+        font-size: 0.9rem;
+      }
+
+      /* FAQ */
+      .faq-section {
+        padding: var(--spacing-xl) 0;
+      }
+      .faq-items {
+        max-width: 700px;
+        margin: 0 auto;
+        display: grid;
+        gap: 1rem;
+      }
+      .faq-item {
+        position: relative;
+      }
+      .faq-question {
+        width: 100%;
+        text-align: left;
+        padding: 1.25rem;
+        border: none;
+        background: var(--grad-surface);
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: var(--clay-shadow);
+      }
+      .faq-toggle {
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+      }
+      .faq-item.active .faq-toggle {
+        transform: rotate(45deg);
+      }
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 1.25rem;
+        color: var(--secondary);
+        transition: max-height 0.4s ease;
+      }
+      .faq-answer p {
+        padding: 1rem 0;
+      }
+      .follower-element {
+        position: fixed;
+        width: 180px;
+        height: 120px;
+        border-radius: var(--radius-md);
+        object-fit: cover;
+        box-shadow: var(--clay-shadow);
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0;
+      }
+
+      /* CTA Banner */
+      .cta-banner {
+        padding: var(--spacing-xl) 0;
+        text-align: center;
+        background: var(--grad-surface);
+      }
+      .banner-title {
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        margin-bottom: 1rem;
+      }
+      .banner-subtitle {
+        color: var(--secondary);
+        max-width: 500px;
+        margin: 0 auto var(--spacing-md);
+      }
+      .banner-cta-container {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .banner-btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .banner-btn-primary {
+        background: var(--grad-accent);
+        color: white;
+      }
+      .banner-btn-secondary {
+        background: var(--background);
+        box-shadow: var(--clay-shadow);
+      }
+      .banner-btn:hover {
+        transform: translateY(-3px);
+      }
+
+      /* Footer */
+      .footer {
+        padding: var(--spacing-xl) 0 var(--spacing-lg);
+        position: relative;
+      }
+      .footer-texture {
+        position: absolute;
+        inset: 0;
+        opacity: 0.03;
+        pointer-events: none;
+      }
+      .texture-overlay {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .footer-content {
+        display: grid;
+        gap: var(--spacing-md);
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        margin-bottom: var(--spacing-lg);
+      }
+      .footer-brand h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .footer-brand p {
+        color: var(--secondary);
+        margin-bottom: 1.5rem;
+      }
+      .social-icons {
+        display: flex;
+        gap: 0.75rem;
+      }
+      .social-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--background);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--primary);
+        font-weight: 600;
+        box-shadow: var(--clay-shadow);
+        transition: transform 0.3s ease;
+      }
+      .social-icon:hover {
+        transform: translateY(-3px);
+      }
+      .footer-col h4 {
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      .footer-links {
+        list-style: none;
+        display: grid;
+        gap: 0.5rem;
+      }
+      .footer-links a {
+        color: var(--secondary);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: var(--spacing-md);
+        border-top: 1px solid var(--border);
+        color: var(--secondary);
+        font-size: 0.9rem;
+      }
+      .legal-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+      .legal-btn {
+        background: none;
+        border: none;
+        color: var(--secondary);
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 0;
+      }
+      .legal-btn:hover {
+        color: var(--accent);
+        text-decoration: underline;
+      }
+
+      /* Utilities */
+      .initial-hidden {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+
+      /* Mobile */
+      @media (max-width: 1024px) {
+        .gallery--bento {
+          grid-template-columns: repeat(2, 48vw);
+          grid-template-rows: repeat(6, 15vh);
+        }
+        .gallery--bento .gallery__item:nth-child(1) {
+          grid-area: 1/1/3/2;
+        }
+        .gallery--bento .gallery__item:nth-child(2) {
+          grid-area: 1/2/2/3;
+        }
+        .gallery--bento .gallery__item:nth-child(3) {
+          grid-area: 2/1/4/2;
+        }
+        .gallery--bento .gallery__item:nth-child(4) {
+          grid-area: 2/2/4/3;
+        }
+        .gallery--bento .gallery__item:nth-child(5) {
+          grid-area: 4/1/6/2;
+        }
+        .gallery--bento .gallery__item:nth-child(6) {
+          grid-area: 4/2/6/3;
+        }
+        .gallery--bento .gallery__item:nth-child(7),
+        .gallery--bento .gallery__item:nth-child(8) {
+          display: none;
+        }
+        .features-grid,
+        .testimonial-grid {
+          grid-template-columns: 1fr;
+        }
+        .footer-content {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        .section-title {
+          font-size: 2rem;
+        }
+        .footer-content {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .legal-buttons {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .question-nav {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Hero Bento Grid -->
+    <div class="gallery-wrap">
+      <div class="hero-initial-overlay">
+        <div class="container">
+          <div class="hero-content text-center">
+            <span class="hero-label font-label"
+              >FREE BIOHACKING DIAGNOSTIC</span
+            >
+            <h1 class="hero-title font-heading reveal-text">
+              <div><span>What's Your</span></div>
+              <div><span class="accent-color">Performance Score?</span></div>
+            </h1>
+            <p class="hero-subtitle reveal-sub">
+              Unlock your personalized supplement protocol in 60 seconds.
+            </p>
+            <div class="hero-cta-container justify-center">
+              <button id="startQuizBtn" class="cta-button">
+                Start Free Assessment ↗
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="gallery-8" class="gallery gallery--bento">
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+            alt="Biohacking molecular structure"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png"
+            alt="Premium wellness lab"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png"
+            alt="Supplement precision"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befb38cabb229231e2.png"
+            alt="Biological optimization"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png"
+            alt="Luxury spa aesthetic"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png"
+            alt="High-performance mindset"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png"
+            alt="Wellness lifestyle"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png"
+            alt="Clinical precision"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="quiz-section">
+      <div class="quiz-atmosphere">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+          class="liquid-bg"
+          alt=""
+        />
+      </div>
+      <div id="flair-container"></div>
+
+      <div class="container quiz-container">
+        <div class="quiz-header">
+          <h2 class="quiz-main-title font-heading">
+            Let's Optimize Your Biology
+          </h2>
+          <p class="quiz-meta-info">6 questions • 60 seconds</p>
+        </div>
+
+        <div class="quiz-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-text"
+            ><span id="currentQ">1</span>/6 Questions</span
+          >
+        </div>
+
+        <div id="questionContainer"></div>
+
+        <div class="question-nav">
+          <button id="prevBtn" class="nav-btn nav-prev" disabled>
+            ← Previous
+          </button>
+          <button id="nextBtn" class="nav-btn nav-next">Next →</button>
+        </div>
+
+        <p class="micro-copy">
+          No account required • Instant personalized results
+        </p>
+      </div>
+    </section>
+
+    <!-- Email Gate Modal -->
+    <div id="emailGateModal" class="modal-overlay">
+      <div class="modal-content" data-lenis-prevent>
+        <button class="modal-close" id="closeEmailBtn">×</button>
+        <span class="modal-badge font-label">UNLOCK YOUR PROTOCOL</span>
+        <h2 class="modal-title font-heading">Enter Your Email</h2>
+        <p class="modal-subtitle">
+          Get your personalized VitalEdge report instantly.
+        </p>
+
+        <form id="emailForm" class="email-form">
+          <label class="form-label" for="emailInput">Work Email Address</label>
+          <input
+            type="email"
+            id="emailInput"
+            class="form-input"
+            placeholder="you@company.com"
+            required
+          />
+          <div class="form-hint">
+            <span>🔒</span> Secure • No spam • Unsubscribe anytime
+          </div>
+          <button type="submit" class="cta-button pulse" style="width: 100%">
+            Send My Protocol →
+          </button>
+        </form>
+
+        <div class="result-previews">
+          <p class="receive-label font-label">You'll Receive:</p>
+          <div class="preview-item">
+            <span class="preview-check">✓</span>
+            <span>Your Exact Performance Tier</span>
+          </div>
+          <div class="preview-item">
+            <span class="preview-check">✓</span>
+            <span>Top 3 Optimization Opportunities</span>
+          </div>
+          <div class="preview-item">
+            <span class="preview-check">✓</span>
+            <span>Personalized Supplement Stack PDF</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultModal" class="modal-overlay">
+      <div class="result-modal" data-lenis-prevent>
+        <button class="modal-close" id="closeResultBtn">×</button>
+        <div id="resultContent"></div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="how-it-works" class="features-section">
+      <div class="cursor-glow" id="featuresGlow"></div>
+      <div class="features-bg">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png"
+          alt="Motion trails"
+          class="feature-bg-element"
+        />
+      </div>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title font-heading">Why Take The Diagnostic?</h2>
+          <p class="section-subtitle">
+            Most high-performers optimize the wrong biomarkers first. We fix
+            that.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card clay-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title font-heading">Precision Diagnosis</h3>
+            <p class="feature-desc">
+              Identify exactly which lever isn't pulling and where your biggest
+              performance leaks are hiding.
+            </p>
+          </div>
+          <div class="feature-card clay-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title font-heading">Instant Action Plan</h3>
+            <p class="feature-desc">
+              Get prioritized supplement recommendations you can implement
+              immediately—no vague advice included.
+            </p>
+          </div>
+          <div class="feature-card clay-card">
+            <div class="feature-icon">📈</div>
+            <h3 class="feature-title font-heading">Benchmark Against Peers</h3>
+            <p class="feature-desc">
+              See how your biohacking maturity compares to other elite
+              performers at your stage.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+      <div class="cursor-glow" id="testimonialsGlow"></div>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title font-heading testimonial-title">
+            Trusted by 12,500+ High-Performers
+          </h2>
+          <p class="section-subtitle testimonial-subtitle">
+            Real protocols that led to real results.
+          </p>
+        </div>
+
+        <div class="testimonial-grid">
+          <div class="testimonial-card clay-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "This diagnostic exposed the one bottleneck I was blind to.
+              Implemented their Optimizer stack and saw 23% increase in
+              cognitive clarity within 3 weeks."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">SK</div>
+              <div class="author-info">
+                <h4>Sarah Kim</h4>
+                <p>Founder, ScaleUp Ventures</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card clay-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "Finally a supplement protocol that actually aligns with my
+              biomarkers. The Elite pack transformed my recovery and sleep
+              quality."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">MJ</div>
+              <div class="author-info">
+                <h4>Marcus Chen</h4>
+                <p>Executive, Tech Innovations</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card clay-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "As a physician, I'm skeptical of supplement claims. VitalEdge's
+              science-backed approach and transparent formulations won me over."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">DR</div>
+              <div class="author-info">
+                <h4>Dr. Elena Rossi</h4>
+                <p>Integrative Medicine</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title font-heading">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-items">
+          <div class="faq-item hover-trigger">
+            <img
+              class="follower-element"
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png"
+              alt=""
+            />
+            <button
+              class="faq-question"
+              aria-expanded="false"
+              aria-controls="faq-ans-1"
+            >
+              How long does the diagnostic take?
+              <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-1">
+              <p>
+                Most users complete the full assessment in under 90 seconds.
+                Your personalized protocol is generated instantly upon email
+                submission.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item hover-trigger">
+            <img
+              class="follower-element"
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+              alt=""
+            />
+            <button
+              class="faq-question"
+              aria-expanded="false"
+              aria-controls="faq-ans-2"
+            >
+              Are the supplements third-party tested?
+              <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-2">
+              <p>
+                Yes. Every VitalEdge formulation undergoes rigorous third-party
+                testing for purity, potency, and bioavailability. Certificates
+                of Analysis are available upon request.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item hover-trigger">
+            <img
+              class="follower-element"
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png"
+              alt=""
+            />
+            <button
+              class="faq-question"
+              aria-expanded="false"
+              aria-controls="faq-ans-3"
+            >
+              Can I switch protocols later?
+              <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-3">
+              <p>
+                Absolutely. Your biology evolves, and so should your protocol.
+                Re-take the diagnostic anytime to receive an updated
+                recommendation based on your current goals.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item hover-trigger">
+            <img
+              class="follower-element"
+              src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png"
+              alt=""
+            />
+            <button
+              class="faq-question"
+              aria-expanded="false"
+              aria-controls="faq-ans-4"
+            >
+              Do you ship internationally?
+              <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-4">
+              <p>
+                Yes, VitalEdge ships to 45+ countries with
+                temperature-controlled logistics to ensure supplement integrity.
+                Duties and taxes calculated at checkout.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+      <div class="container">
+        <h2 class="banner-title font-heading">
+          Ready to Optimize Your Biology?
+        </h2>
+        <p class="banner-subtitle">
+          Join thousands of high-performers who discovered their breakthrough
+          through our diagnostic tool.
+        </p>
+        <div class="banner-cta-container">
+          <button class="banner-btn banner-btn-primary pulse" id="ctaQuizBtn">
+            Take Free Assessment
+          </button>
+          <button class="banner-btn banner-btn-secondary">
+            View Sample Results
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-texture">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png"
+          alt="Marble texture"
+          class="texture-overlay"
+        />
+      </div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <h3 class="font-heading">🧬 VitalEdge</h3>
+            <p>Understand where your performance engine is broken.</p>
+            <div class="social-icons">
+              <a href="#" class="social-icon">𝕏</a>
+              <a href="#" class="social-icon">IN</a>
+              <a href="#" class="social-icon">IG</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Product</h4>
+            <ul class="footer-links">
+              <li><a href="#">Diagnostic Tool</a></li>
+              <li><a href="#">Supplement Packs</a></li>
+              <li><a href="#">Biohacking Guides</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul class="footer-links">
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Science Team</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <ul class="footer-links">
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Research Library</a></li>
+              <li><a href="#">Protocol Calculator</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div>&copy; 2026 VitalEdge. All rights reserved.</div>
+          <div class="legal-buttons">
+            <button class="legal-btn" data-legal="privacy">
+              Privacy Policy
+            </button>
+            <button class="legal-btn" data-legal="terms">
+              Terms of Service
+            </button>
+            <button class="legal-btn" data-legal="cookie">Cookie Policy</button>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // === STATE & CONFIG ===
+      const STATE = {
+        currentQuestion: 0,
+        answers: [],
+        userEmail: "",
+        score: 0,
+        mousePos: { x: 0, y: 0 },
+        lastMousePos: { x: 0, y: 0 },
+        flairIndex: 0,
+        flairElements: [],
+      };
+
+      const flairAssets = [
+        "https://assets.codepen.io/16327/Revised+Flair.png",
+        "https://assets.codepen.io/16327/Revised+Flair-1.png",
+        "https://assets.codepen.io/16327/Revised+Flair-2.png",
+        "https://assets.codepen.io/16327/Revised+Flair-3.png",
+        "https://assets.codepen.io/16327/Revised+Flair-4.png",
+        "https://assets.codepen.io/16327/Revised+Flair-5.png",
+        "https://assets.codepen.io/16327/Revised+Flair-6.png",
+        "https://assets.codepen.io/16327/Revised+Flair-7.png",
+        "https://assets.codepen.io/16327/Revised+Flair-8.png",
+      ];
+
+      // === QUIZ DATA ===
+      const quizData = [
+        {
+          question: "How would you rate your average daily energy levels?",
+          options: [
+            {
+              text: "Consistently low, need caffeine to function",
+              points: 1,
+              tier: "starter",
+            },
+            {
+              text: "Midday crashes, inconsistent focus",
+              points: 2,
+              tier: "starter",
+            },
+            {
+              text: "Generally stable with occasional dips",
+              points: 3,
+              tier: "optimizer",
+            },
+            {
+              text: "Sustained high energy throughout the day",
+              points: 4,
+              tier: "elite",
+            },
+          ],
+        },
+        {
+          question: "How would you describe your sleep quality?",
+          options: [
+            {
+              text: "Frequently interrupted, wake up tired",
+              points: 1,
+              tier: "starter",
+            },
+            {
+              text: "Take 30+ mins to fall asleep, light sleeper",
+              points: 2,
+              tier: "starter",
+            },
+            {
+              text: "Mostly restful, occasional restless nights",
+              points: 3,
+              tier: "optimizer",
+            },
+            {
+              text: "Deep, restorative sleep consistently",
+              points: 4,
+              tier: "elite",
+            },
+          ],
+        },
+        {
+          question: "What's your current stress management approach?",
+          options: [
+            {
+              text: "Overwhelmed, no consistent strategy",
+              points: 1,
+              tier: "starter",
+            },
+            {
+              text: "Basic breathing exercises when stressed",
+              points: 2,
+              tier: "starter",
+            },
+            {
+              text: "Regular meditation or mindfulness practice",
+              points: 3,
+              tier: "optimizer",
+            },
+            {
+              text: "Advanced protocols: HRV training, cold exposure",
+              points: 4,
+              tier: "elite",
+            },
+          ],
+        },
+        {
+          question: "How intense is your typical workout routine?",
+          options: [
+            {
+              text: "Sedentary or light movement only",
+              points: 1,
+              tier: "starter",
+            },
+            { text: "Moderate exercise 2-3x/week", points: 2, tier: "starter" },
+            {
+              text: "Structured training 4-5x/week",
+              points: 3,
+              tier: "optimizer",
+            },
+            {
+              text: "Elite athletic training or competition prep",
+              points: 4,
+              tier: "elite",
+            },
+          ],
+        },
+        {
+          question: "What supplements do you currently take?",
+          options: [
+            {
+              text: "None or just a basic multivitamin",
+              points: 1,
+              tier: "starter",
+            },
+            {
+              text: "Vitamin D, magnesium, omega-3s",
+              points: 2,
+              tier: "starter",
+            },
+            {
+              text: "Targeted nootropics or adaptogens",
+              points: 3,
+              tier: "optimizer",
+            },
+            {
+              text: "Comprehensive stack with biomarker tracking",
+              points: 4,
+              tier: "elite",
+            },
+          ],
+        },
+        {
+          question: "What's your #1 performance goal right now?",
+          options: [
+            {
+              text: "Build foundational health habits",
+              points: 1,
+              tier: "starter",
+            },
+            {
+              text: "Improve focus and mental clarity",
+              points: 2,
+              tier: "optimizer",
+            },
+            {
+              text: "Enhance recovery and resilience",
+              points: 3,
+              tier: "optimizer",
+            },
+            {
+              text: "Maximize peak cognitive & physical output",
+              points: 4,
+              tier: "elite",
+            },
+          ],
+        },
+      ];
+
+      const resultsData = [
+        {
+          category: "FOUNDATION PROFILE",
+          emoji: "🌱",
+          title: "The Starter: Foundational Vitality",
+          summary:
+            "Your results indicate you're building your biological foundation. Focus on core nutrients that support cellular energy, sleep architecture, and stress resilience before layering advanced compounds.",
+          mistakes: [
+            "Skipping foundational vitamins (B-complex, D3, magnesium) before adding nootropics",
+            "Inconsistent sleep schedule undermining supplement efficacy",
+            "Not tracking baseline biomarkers to measure progress",
+          ],
+          actionTitle: "Your Next Step: Build Your Base",
+          actionDesc:
+            "The Starter pack delivers clinically-dosed foundational vitamins in highly bioavailable forms. Start here for 30 days, then re-assess.",
+          ctaText: "Get The Starter →",
+        },
+        {
+          category: "OPTIMIZATION PROFILE",
+          emoji: "⚡",
+          title: "The Optimizer: Cognitive + Adaptogenic Edge",
+          summary:
+            "You've established solid fundamentals and are ready to enhance mental clarity, stress adaptation, and sustained focus. Your protocol combines evidence-based nootropics with premium adaptogens.",
+          mistakes: [
+            "Using stimulants without supporting neurotransmitter precursors",
+            "Not cycling adaptogens for sustained receptor sensitivity",
+            "Overlooking mitochondrial support for cognitive endurance",
+          ],
+          actionTitle: "Your Next Step: Amplify Performance",
+          actionDesc:
+            "The Optimizer stack pairs Lion's Mane, Rhodiola, and L-Theanine with mitochondrial cofactors for clean, jitter-free focus and resilience.",
+          ctaText: "Get The Optimizer →",
+        },
+        {
+          category: "ELITE PROFILE",
+          emoji: "🏆",
+          title: "The Elite: Full-Stack Performance",
+          summary:
+            "You operate at the frontier of human performance. Your protocol integrates advanced nootropics, peptide-supportive compounds, and precision-dosed adaptogens for peak cognitive and physical output.",
+          mistakes: [
+            "Not personalizing dosages based on biomarker feedback",
+            "Missing synergistic compound combinations for enhanced bioavailability",
+            "Neglecting recovery protocols to sustain elite output long-term",
+          ],
+          actionTitle: "Your Next Step: Master Your Biology",
+          actionDesc:
+            "The Elite pack delivers a comprehensive, biomarker-informed stack with premium ingredients like Alpha-GPC, Ashwagandha KSM-66®, and Mitopure®.",
+          ctaText: "Get The Elite →",
+        },
+      ];
+
+      // === DOM ELEMENTS ===
+      const quizSection = document.getElementById("quiz");
+      const questionContainer = document.getElementById("questionContainer");
+      const progressFill = document.getElementById("progressFill");
+      const currentQEl = document.getElementById("currentQ");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const emailGateModal = document.getElementById("emailGateModal");
+      const resultModal = document.getElementById("resultModal");
+      const resultContent = document.getElementById("resultContent");
+      const emailForm = document.getElementById("emailForm");
+      const startQuizBtn = document.getElementById("startQuizBtn");
+      const ctaQuizBtn = document.getElementById("ctaQuizBtn");
+
+      // === INIT ===
+      function init() {
+        initLenis();
+        initGSAP();
+        initBentoGrid();
+        initQuiz();
+        initFlairs();
+        initCursorGlow();
+        initFAQHover();
+        initModals();
+        initForm();
+        initLegalButtons();
+      }
+
+      // === LENIS SMOOTH SCROLL ===
+      function initLenis() {
+        const lenis = new Lenis({
+          lerp: 0.15,
+          smoothWheel: true,
+          wheelMultiplier: 1.2,
+        });
+        const raf = (time) => {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
+        window.lenis = lenis;
+      }
+
+      // === GSAP SETUP ===
+      function initGSAP() {
+        gsap.registerPlugin(ScrollTrigger, Flip);
+        gsap.defaults({ ease: "power3.out" });
+      }
+
+      // === BENTO GRID ANIMATION ===
+      function initBentoGrid() {
+        const galleryElement = document.querySelector("#gallery-8");
+        const galleryItems = galleryElement.querySelectorAll(".gallery__item");
+        const heroOverlay = document.querySelector(".hero-initial-overlay");
+
+        // Text reveal
+        gsap.from(".hero-initial-overlay .reveal-text span", {
+          y: "100%",
+          duration: 1.2,
+          stagger: 0.1,
+          ease: "power4.out",
+        });
+        gsap.from(".hero-initial-overlay .reveal-sub", {
+          opacity: 0,
+          y: 20,
+          duration: 0.8,
+          delay: 0.6,
+        });
+
+        // Flip animation setup
+        galleryElement.classList.add("gallery--final");
+        const flipState = Flip.getState(galleryItems);
+        galleryElement.classList.remove("gallery--final");
+
+        const flip = Flip.to(flipState, {
+          simple: true,
+          ease: "expoScale(1, 5)",
+        });
+
+        const tlMain = gsap.timeline({
+          scrollTrigger: {
+            trigger: galleryElement,
+            start: "center center",
+            end: "+=100%",
+            scrub: true,
+            pin: galleryElement.parentNode,
+          },
+        });
+
+        tlMain.to(heroOverlay, { opacity: 0, y: -50, duration: 0.2 }, 0);
+        tlMain.add(flip, 0);
+      }
+
+      // === QUIZ LOGIC ===
+      function initQuiz() {
+        renderQuestion();
+        updateProgress();
+
+        prevBtn.addEventListener("click", goToPrevQuestion);
+        nextBtn.addEventListener("click", goToNextQuestion);
+        startQuizBtn.addEventListener("click", () => scrollToQuiz());
+        ctaQuizBtn.addEventListener("click", () => scrollToQuiz());
+      }
+
+      function scrollToQuiz() {
+        quizSection.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => initFlairScrollTrigger(), 500);
+      }
+
+      function renderQuestion() {
+        const q = quizData[STATE.currentQuestion];
+        currentQEl.textContent = STATE.currentQuestion + 1;
+
+        questionContainer.innerHTML = `
+        <h2 class="question-title font-heading initial-hidden">${q.question}</h2>
+        <div class="question-options">
+          ${q.options
+            .map(
+              (opt, idx) => `
+            <div class="question-card clay-card initial-hidden" data-index="${idx}">
+              <div class="option-icon">${idx + 1}</div>
+              <span class="option-text">${opt.text}</span>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+      `;
+
+        // Animate in
+        gsap.to(questionContainer.querySelector(".question-title"), {
+          duration: 0.4,
+          opacity: 1,
+          y: 0,
+          ease: "power3.out",
+        });
+        gsap.to(questionContainer.querySelectorAll(".question-card"), {
+          duration: 0.4,
+          opacity: 1,
+          y: 0,
+          stagger: 0.08,
+          ease: "back.out(1.2)",
+        });
+
+        // Add click handlers
+        questionContainer.querySelectorAll(".question-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            const idx = parseInt(card.dataset.index);
+            selectAnswer(idx);
+          });
+        });
+
+        updateNavButtons();
+      }
+
+      function selectAnswer(index) {
+        // Visual feedback
+        document.querySelectorAll(".question-card").forEach((card, i) => {
+          card.classList.toggle("selected", i === index);
+        });
+
+        // Store answer and calculate score
+        STATE.answers[STATE.currentQuestion] = index;
+        STATE.score += quizData[STATE.currentQuestion].options[index].points;
+
+        // Auto-advance
+        setTimeout(() => {
+          if (STATE.currentQuestion < quizData.length - 1) {
+            goToNextQuestion();
+          } else {
+            completeQuiz();
+          }
+        }, 400);
+      }
+
+      function goToPrevQuestion() {
+        if (STATE.currentQuestion > 0) {
+          STATE.currentQuestion--;
+          renderQuestion();
+          updateProgress();
+        }
+      }
+
+      function goToNextQuestion() {
+        if (STATE.currentQuestion < quizData.length - 1) {
+          STATE.currentQuestion++;
+          renderQuestion();
+          updateProgress();
+        }
+      }
+
+      function updateProgress() {
+        const percent = (STATE.currentQuestion / quizData.length) * 100;
+        progressFill.style.width = `${percent}%`;
+      }
+
+      function updateNavButtons() {
+        prevBtn.disabled = STATE.currentQuestion === 0;
+        nextBtn.style.display = "none"; // Auto-advance on selection
+      }
+
+      function completeQuiz() {
+        progressFill.style.width = "100%";
+        setTimeout(() => openEmailGate(), 300);
+      }
+
+      function calculateResult() {
+        const avg = STATE.score / quizData.length;
+        if (avg <= 2) return 0; // Starter
+        if (avg <= 3) return 1; // Optimizer
+        return 2; // Elite
+      }
+
+      // === FALLING ICON TRAILS ===
+      function initFlairs() {
+        const container = document.getElementById("flair-container");
+        for (let i = 0; i < 100; i++) {
+          const img = document.createElement("img");
+          img.className = "flair";
+          img.src = flairAssets[i % flairAssets.length];
+          container.appendChild(img);
+          STATE.flairElements.push(img);
+        }
+      }
+
+      function initFlairScrollTrigger() {
+        ScrollTrigger.create({
+          trigger: quizSection,
+          start: "top 80%",
+          onEnter: () => {
+            quizSection.addEventListener("mousemove", handleMouseMove);
+            gsap.ticker.add(updateImageTrail);
+          },
+          onLeaveBack: () => {
+            quizSection.removeEventListener("mousemove", handleMouseMove);
+            gsap.ticker.remove(updateImageTrail);
+          },
+        });
+      }
+
+      function handleMouseMove(e) {
+        const rect = quizSection.getBoundingClientRect();
+        STATE.mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
+
+      function playFlairAnimation(shape, x, y) {
+        gsap.killTweensOf(shape);
+        gsap.set(shape, {
+          opacity: 1,
+          scale: 1,
+          left: x,
+          top: y,
+          xPercent: -50,
+          yPercent: -50,
+          rotation: 0,
+          y: 0,
+          display: "block",
+          position: "absolute",
+        });
+        gsap
+          .timeline()
+          .from(shape, { opacity: 0, scale: 0, ease: "elastic.out(1,0.3)" })
+          .to(shape, { rotation: "random([-360, 360])" }, "<")
+          .to(shape, { y: "120vh", ease: "back.in(.4)", duration: 1 }, 0);
+      }
+
+      function updateImageTrail() {
+        const travelDistance = Math.hypot(
+          STATE.lastMousePos.x - STATE.mousePos.x,
+          STATE.lastMousePos.y - STATE.mousePos.y,
+        );
+        if (travelDistance > 60) {
+          const wrappedIdx = STATE.flairIndex % STATE.flairElements.length;
+          const img = STATE.flairElements[wrappedIdx];
+          playFlairAnimation(img, STATE.mousePos.x, STATE.mousePos.y);
+          STATE.lastMousePos = { ...STATE.mousePos };
+          STATE.flairIndex++;
+        }
+      }
+
+      // === CURSOR GLOW ===
+      function initCursorGlow() {
+        const glow = document.getElementById("featuresGlow");
+        document.addEventListener("mousemove", (e) => {
+          gsap.to(glow, {
+            x: e.clientX,
+            y: e.clientY,
+            opacity: 1,
+            duration: 0.3,
+          });
+        });
+        document.addEventListener("mouseleave", () => {
+          gsap.to(glow, { opacity: 0, duration: 0.3 });
+        });
+      }
+
+      // === FAQ HOVER EFFECT ===
+      function initFAQHover() {
+        gsap.set(".hover-trigger .follower-element", {
+          yPercent: -100,
+          xPercent: 0,
+        });
+        let isInitialFrame;
+
+        gsap.utils.toArray(".hover-trigger").forEach((trigger) => {
+          const followerMedia = trigger.querySelector(".follower-element");
+          if (!followerMedia) return;
+
+          const syncX = gsap.quickTo(followerMedia, "x", {
+            duration: 0.4,
+            ease: "power3",
+          });
+          const syncY = gsap.quickTo(followerMedia, "y", {
+            duration: 0.4,
+            ease: "power3",
+          });
+
+          const reconcilePointer = (event) => {
+            if (isInitialFrame) {
+              syncX(event.clientX, event.clientX);
+              syncY(event.clientY, event.clientY);
+              isInitialFrame = false;
+            } else {
+              syncX(event.clientX);
+              syncY(event.clientY);
+            }
+          };
+
+          const enableGlobalTracking = () =>
+            document.addEventListener("mousemove", reconcilePointer);
+          const disableGlobalTracking = () =>
+            document.removeEventListener("mousemove", reconcilePointer);
+
+          const opacityTimeline = gsap.to(followerMedia, {
+            autoAlpha: 1,
+            ease: "none",
+            paused: true,
+            duration: 0.1,
+            onReverseComplete: disableGlobalTracking,
+          });
+
+          trigger.addEventListener("mouseenter", (event) => {
+            isInitialFrame = true;
+            opacityTimeline.play();
+            enableGlobalTracking();
+            reconcilePointer(event);
+          });
+          trigger.addEventListener("mouseleave", () =>
+            opacityTimeline.reverse(),
+          );
+        });
+      }
+
+      // === FAQ ACCORDION ===
+      document.querySelectorAll(".faq-question").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const faqItem = btn.parentElement;
+          const answer = faqItem.querySelector(".faq-answer");
+          const isOpening = !faqItem.classList.contains("active");
+
+          document.querySelectorAll(".faq-item.active").forEach((item) => {
+            if (item !== faqItem) {
+              item.classList.remove("active");
+              item
+                .querySelector(".faq-question")
+                .setAttribute("aria-expanded", "false");
+              gsap.to(item.querySelector(".faq-answer"), {
+                maxHeight: 0,
+                duration: 0.3,
+                ease: "power2.inOut",
+              });
+            }
+          });
+
+          faqItem.classList.toggle("active");
+          btn.setAttribute("aria-expanded", isOpening);
+          gsap.to(answer, {
+            maxHeight: isOpening ? answer.scrollHeight + 40 : 0,
+            duration: 0.4,
+            ease: "power2.inOut",
+          });
+        });
+      });
+
+      // === MODALS ===
+      function initModals() {
+        // Close buttons
+        document
+          .getElementById("closeEmailBtn")
+          .addEventListener("click", closeModal);
+        document
+          .getElementById("closeResultBtn")
+          .addEventListener("click", closeModal);
+
+        // Escape key
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeModal();
+        });
+
+        // Click outside
+        [emailGateModal, resultModal].forEach((modal) => {
+          modal.addEventListener("click", (e) => {
+            if (e.target === modal) closeModal();
+          });
+        });
+      }
+
+      function openEmailGate() {
+        emailGateModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        if (window.lenis) window.lenis.stop();
+
+        gsap.from("#emailGateModal .modal-content", {
+          duration: 0.5,
+          scale: 0.9,
+          opacity: 0,
+          ease: "elastic.out(1, 0.75)",
+        });
+      }
+
+      function openResults(resultIndex) {
+        const result = resultsData[resultIndex];
+
+        resultContent.innerHTML = `
+        <div class="result-avatar-container">
+          <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png" alt="" class="result-avatar-img">
+          <span class="result-badge font-label initial-hidden">
+            <span class="result-icon">${result.emoji}</span>
+            ${result.category}
+          </span>
+        </div>
+        <h2 class="result-headline font-heading initial-hidden">${result.title}</h2>
+        <p class="result-summary initial-hidden">${result.summary}</p>
+
+        <div class="result-mistakes initial-hidden">
+          <div class="mistake-title">
+            <span style="color:var(--accent);">⚠️</span>
+            Top 3 Optimization Leaks
+          </div>
+          <ul class="mistake-list">
+            ${result.mistakes
+              .map(
+                (m) => `
+              <li class="mistake-item initial-hidden">
+                <span class="mistake-icon">•</span>
+                <span>${m}</span>
+              </li>
+            `,
+              )
+              .join("")}
+          </ul>
+        </div>
+
+        <div class="recommended-action initial-hidden">
+          <div class="action-title">${result.actionTitle}</div>
+          <p class="action-desc">${result.actionDesc}</p>
+          <div class="action-cta">
+            <a href="{{FORM_ENDPOINT}}" class="action-btn">${result.ctaText}</a>
+          </div>
+        </div>
+
+        <p class="sent-notice">📧 Full protocol sent to ${STATE.userEmail}</p>
+        <div class="reset-link"><a href="#" id="resetQuiz">Take Assessment Again</a></div>
+      `;
+
+        resultModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        if (window.lenis) window.lenis.stop();
+
+        // Cascade animations
+        const tl = gsap.timeline();
+        tl.fromTo(
+          "#resultModal .result-modal",
+          { clipPath: "polygon(0 0, 0% 0, 0% 100%, 0% 100%)" },
+          {
+            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+            duration: 0.6,
+            ease: "power2.out",
+          },
+        )
+          .to(
+            ".result-avatar-img",
+            { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" },
+            "-=0.2",
+          )
+          .to(".result-badge", { y: 0, opacity: 1, duration: 0.4 }, "-=0.3")
+          .to(
+            ".result-headline",
+            { scale: 1, opacity: 1, duration: 0.4 },
+            "-=0.2",
+          )
+          .to(".result-summary", { x: 0, opacity: 1, duration: 0.4 }, "-=0.2")
+          .to(".result-mistakes", { opacity: 1, duration: 0.4 }, "-=0.2")
+          .to(".mistake-item", { x: 0, opacity: 1, stagger: 0.1 }, "-=0.2")
+          .to(
+            ".recommended-action",
+            { y: 0, opacity: 1, duration: 0.4 },
+            "-=0.2",
+          )
+          .to([".sent-notice", ".reset-link"], { opacity: 1, duration: 0.4 });
+
+        document.getElementById("resetQuiz").addEventListener("click", (e) => {
+          e.preventDefault();
+          resetQuiz();
+        });
+      }
+
+      function closeModal() {
+        emailGateModal.classList.remove("active");
+        resultModal.classList.remove("active");
+        document.body.style.overflow = "";
+        if (window.lenis) window.lenis.start();
+      }
+
+      function resetQuiz() {
+        STATE.currentQuestion = 0;
+        STATE.answers = [];
+        STATE.score = 0;
+        closeModal();
+        renderQuestion();
+        updateProgress();
+        quizSection.scrollIntoView({ behavior: "smooth" });
+      }
+
+      // === FORM HANDLING ===
+      function initForm() {
+        emailForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          STATE.userEmail = document.getElementById("emailInput").value;
+
+          // Simulate API call
+          setTimeout(() => {
+            closeModal();
+            const resultIndex = calculateResult();
+            openResults(resultIndex);
+          }, 800);
+        });
+      }
+
+      // === LEGAL BUTTONS ===
+      function initLegalButtons() {
+        document.querySelectorAll(".legal-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const type = e.target.dataset.legal;
+            alert(
+              `${type.replace("-", " ").toUpperCase()} modal would open here.`,
+            );
+          });
+        });
+      }
+
+      // === BOOT ===
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>

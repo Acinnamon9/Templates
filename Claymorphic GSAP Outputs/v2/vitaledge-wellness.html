@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VitalEdge | Biohacking Diagnostic & Supplement Recommendation</title>
+<meta name="description" content="Discover your personalized supplement protocol in 60 seconds. Science-backed stacks for high-performers.">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
+<style>
+:root{--primary:#0f172a;--background:#f8fafc;--secondary:#64748b;--accent:#273c39;--accent-pink:#f472b6;--accent-cyan:#22d3ee;--success:#10b981;--border:#e2e8f0;--white:#fff;--color-rim:rgba(255,255,255,.8);--color-shadow-light:rgba(15,23,42,.08);--color-shadow-deep:rgba(15,23,42,.2);--grad-surface:linear-gradient(135deg,#fff 0%,#f8fafc 100%);--grad-indigo:linear-gradient(135deg,#6366f1 0%,#9e38fd 100%);--grad-pink:linear-gradient(135deg,#882056 0%,#c92e45 100%);--grad-cyan:linear-gradient(135deg,#22d3ee 0%,#4f5dda 100%);--grad-accent:linear-gradient(135deg,#273c39 0%,#3a5a56 100%);--font-heading:'Bricolage Grotesque',sans-serif;--font-body:'Plus Jakarta Sans',sans-serif;--clay-shadow:12px 12px 24px rgba(0,0,0,.05),-8px -8px 16px rgba(255,255,255,.8),inset 4px 4px 8px rgba(255,255,255,.5),inset -4px -4px 8px rgba(0,0,0,.02);--radius-sm:8px;--radius-md:16px;--radius-lg:32px;--radius-organic:30% 20% 15% 45%/60% 30% 70% 40%;--radius-squircle:40px}*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--font-body);background:var(--background);color:var(--primary);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);font-weight:700;letter-spacing:-.04em;line-height:1.1}.container{max-width:1200px;margin:0 auto;padding:0 2rem}.text-center{text-align:center}.header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(248,250,252,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}.header-content{display:flex;justify-content:space-between;align-items:center;height:72px;padding:0 2rem}.logo{font-family:var(--font-heading);font-weight:700;font-size:1.5rem;display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--primary)}.logo-icon{width:40px;height:40px;background:var(--accent);border-radius:var(--radius-organic);display:flex;align-items:center;justify-content:center;font-size:1.25rem;box-shadow:var(--clay-shadow)}.nav-links{display:flex;gap:2rem}.nav-link{font-size:.9rem;color:var(--secondary);font-weight:500;text-decoration:none;transition:color .2s}.nav-link:hover{color:var(--primary)}.header-cta{background:var(--background);color:var(--primary);font-weight:600;padding:10px 24px;border-radius:50px;border:4px solid var(--white);box-shadow:var(--clay-shadow);transition:all .3s;cursor:pointer;font-family:var(--font-body)}.header-cta:hover{transform:translateY(-2px);border-radius:var(--radius-organic)}.gallery-wrap{position:relative;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--primary)}.gallery{position:relative;width:100%;height:100%;flex:none}.gallery__item{position:relative;overflow:hidden;background:#000;will-change:transform;backface-visibility:hidden}.gallery__item img{width:100%;height:100%;object-fit:cover}.gallery--bento{display:grid;gap:1vh;grid-template-columns:repeat(3,32.5vw);grid-template-rows:repeat(4,23vh);justify-content:center;align-content:center;will-change:transform;backface-visibility:hidden}.gallery--bento .gallery__item:nth-child(1){grid-area:1/1/3/2}.gallery--bento .gallery__item:nth-child(2){grid-area:1/2/2/3}.gallery--bento .gallery__item:nth-child(3){grid-area:2/2/4/3}.gallery--bento .gallery__item:nth-child(4){grid-area:1/3/3/3}.gallery--bento .gallery__item:nth-child(5){grid-area:3/1/3/2}.gallery--bento .gallery__item:nth-child(6){grid-area:3/3/5/4}.gallery--bento .gallery__item:nth-child(7){grid-area:4/1/5/2}.gallery--bento .gallery__item:nth-child(8){grid-area:4/2/5/3}.gallery--final.gallery--bento{grid-template-columns:repeat(3,100vw);grid-template-rows:repeat(4,49.5vh);gap:1vh}.hero-initial-overlay{position:absolute;top:3%;left:0;width:100%;height:100%;z-index:20;display:flex;justify-content:center;align-items:center}.hero-initial-overlay .hero-content{max-width:950px;margin:0 auto;background:rgba(130,130,130,.45);backdrop-filter:blur(8px);padding:4rem 2rem;border-radius:var(--radius-lg)}.hero-initial-overlay .hero-title{font-size:clamp(2.5rem,8vw,5rem);margin-bottom:1.5rem;color:var(--white)}.hero-initial-overlay .hero-subtitle{font-size:1.5rem;color:var(--white);margin-bottom:2rem;font-weight:500}.accent-color{color:var(--accent-cyan)}.reveal-text .line-wrapper{overflow:hidden;display:block}.reveal-text span{display:block;transform:translateY(110%);will-change:transform}.hero-subtitle.reveal-sub{opacity:0;transform:translateY(20px)}.hero-cta-container{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:center}.cta-button{background:var(--accent);color:var(--white);padding:16px 48px;font-weight:600;border-radius:50px;display:inline-flex;align-items:center;gap:.75rem;border:none;cursor:pointer;font-family:var(--font-body);font-size:1rem;box-shadow:0 10px 20px rgba(39,60,57,.3),inset 0 4px 10px rgba(255,255,255,.3),inset 0 -4px 10px rgba(0,0,0,.1);transition:all .3s cubic-bezier(.34,1.56,.64,1)}.cta-button:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 15px 30px rgba(39,60,57,.4),inset 0 4px 10px rgba(255,255,255,.4);border-radius:var(--radius-organic)}.quiz-section{padding:4rem 0;background:var(--white);position:relative;overflow:hidden;min-height:100vh;margin:2rem 0}#flair-container{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:99}.flair{position:absolute;opacity:0;width:48px;height:48px;pointer-events:none;z-index:100;object-fit:contain}.quiz-container{max-width:720px;margin:0 auto}.quiz-header{text-align:center;margin-bottom:2rem}.quiz-main-title{font-size:1.75rem;margin-bottom:.5rem}.quiz-meta-info{color:var(--secondary);font-size:.95rem}.quiz-progress{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:2rem}.progress-bar{width:200px;height:14px;background:var(--background);border-radius:20px;position:relative;overflow:hidden;box-shadow:inset 2px 2px 5px rgba(0,0,0,.05),inset -2px -2px 5px rgba(255,255,255,.8)}.progress-fill{height:100%;background:var(--accent);border-radius:20px;width:0%;transition:width .3s;box-shadow:inset 0 3px 6px rgba(255,255,255,.4),inset 0 -3px 6px rgba(0,0,0,.1);position:relative}.progress-fill::after{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:shimmer 3s infinite linear}@keyframes shimmer{0%{left:-100%}100%{left:100%}}.progress-text{font-size:.9rem;color:var(--secondary);font-weight:500}.question-title{font-size:clamp(1.25rem,4vw,1.75rem);text-align:center;margin-bottom:2rem}.question-card{background:var(--background);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:12px;display:flex;align-items:center;transition:all .3s;cursor:pointer}.question-card:hover{border-color:var(--accent);box-shadow:var(--clay-shadow);transform:translateY(-4px)}.question-card.selected{background:var(--primary);border-color:var(--primary)}.question-card.selected .option-text,.question-card.selected .option-icon{color:var(--white)}.option-icon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--background);border-radius:50%;margin-right:12px;font-size:.9rem;color:var(--secondary);flex-shrink:0;transition:all .2s}.question-card.selected .option-icon{background:var(--accent)}.option-text{font-size:1.05rem;color:var(--primary);font-weight:500}.question-nav{display:flex;justify-content:space-between;margin-top:24px}.nav-btn{padding:14px 32px;font-size:1rem;font-weight:500;border-radius:var(--radius-sm);transition:all .3s;cursor:pointer;border:none;font-family:var(--font-body)}.nav-prev{background:transparent;color:var(--secondary)}.nav-prev:hover:not(:disabled){background:var(--border);color:var(--primary)}.nav-next{background:var(--accent);color:var(--white)}.nav-next:hover{background:#1a2e2b;transform:translateY(-2px)}.nav-btn:disabled{opacity:.5;cursor:not-allowed}.micro-copy{text-align:center;font-size:.9rem;color:var(--secondary);margin-top:1rem}.initial-hidden{opacity:0}.modal-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;padding:2rem;background:rgba(15,23,42,.98);backdrop-filter:none!important}.modal-overlay.active{opacity:1;visibility:visible}.modal-content{background:var(--grad-surface)!important;opacity:1!important;border:4px solid var(--white);border-radius:var(--radius-lg);max-width:520px;width:95%;padding:3rem;position:relative;box-shadow:0 30px 60px var(--color-shadow-deep),0 0 40px rgba(99,102,241,.15),inset 0 2px 4px var(--white),inset 0 -4px 10px var(--color-shadow-light);overflow-y:auto;max-height:90vh;z-index:10001!important;isolation:isolate}.modal-close{position:absolute;top:1.5rem;right:1.5rem;width:36px;height:36px;background:transparent;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;color:var(--secondary);cursor:pointer}.modal-close:hover{background:var(--border);color:var(--primary)}.modal-badge{display:inline-flex;align-items:center;gap:8px;background:var(--grad-indigo);color:var(--white);padding:8px 16px;border-radius:var(--radius-organic);font-size:.8rem;font-weight:700;letter-spacing:.05em;margin-bottom:1.5rem;box-shadow:0 4px 12px rgba(99,102,241,.3)}.modal-title{font-size:2rem;margin-bottom:1rem}.modal-subtitle{color:var(--secondary);margin-bottom:2rem}.email-form{display:flex;flex-direction:column;gap:1.5rem;margin-bottom:2rem}.form-label{font-size:.9rem;font-weight:500;color:var(--primary)}.form-input{padding:20px 24px;background:var(--background);border:4px solid var(--white);border-radius:var(--radius-md);font-size:1.1rem;font-family:var(--font-body);transition:all .2s;box-shadow:inset 2px 2px 5px rgba(0,0,0,.05)}.form-input:focus{border-color:var(--accent);background:var(--white);box-shadow:var(--clay-shadow);outline:none}.form-hint{font-size:.85rem;color:var(--secondary);display:flex;align-items:center;gap:.75rem}.result-previews{background:var(--background);border-radius:var(--radius-sm);padding:1.5rem;border:1px solid var(--border)}.preview-item{display:flex;align-items:flex-start;gap:.75rem;padding:.5rem 0;font-size:.9rem;color:var(--secondary)}.preview-check{color:var(--accent);flex-shrink:0}.receive-label{font-size:.85rem;color:var(--secondary);margin-bottom:.75rem;font-weight:600;text-transform:uppercase}.result-modal{background:var(--grad-surface)!important;border:6px solid var(--white);border-radius:var(--radius-lg);max-width:620px;width:100%;padding:40px;position:relative;box-shadow:0 40px 100px -20px var(--color-shadow-deep),0 0 60px rgba(99,102,241,.1),inset 0 4px 8px var(--white),inset 0 -8px 16px var(--color-shadow-light);isolation:isolate;z-index:10001!important}.result-avatar-container{text-align:center;margin-bottom:1.5rem}.result-avatar-img{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);padding:3px;background:var(--white);box-shadow:var(--clay-shadow);opacity:0}.result-badge{display:inline-flex;align-items:center;gap:.75rem;background:var(--grad-indigo);color:var(--white);padding:12px 24px;border-radius:var(--radius-organic);font-size:.85rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.5rem;box-shadow:0 8px 20px rgba(99,102,241,.2);border:2px solid rgba(255,255,255,.2);margin-top:1rem}.result-icon{font-size:1.5rem}.result-headline{font-size:2.25rem;margin-bottom:1rem}.result-summary{color:var(--secondary);font-size:1.1rem;line-height:1.5;margin-bottom:1.5rem}.result-mistakes{background:rgba(15,23,42,.02);border-radius:var(--radius-md);padding:2rem;margin-bottom:2rem;border:1px solid var(--border);position:relative;overflow:hidden}.result-mistakes::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:var(--accent)}.mistake-title{font-size:1.1rem;font-weight:600;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem}.mistake-list{list-style:none}.mistake-item{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 0;color:var(--secondary);font-size:.95rem;border-bottom:1px solid var(--border)}.mistake-item:last-child{border-bottom:none}.mistake-icon{color:var(--accent);font-size:1.25rem;flex-shrink:0;margin-top:2px}.recommended-action{background:var(--accent);color:var(--white);padding:24px;border-radius:var(--radius-sm);text-align:center;margin-bottom:1.5rem}.action-title{font-family:var(--font-heading);font-weight:600;font-size:1.25rem;margin-bottom:.5rem}.action-desc{font-size:.9rem;opacity:.9}.action-cta{margin-top:1.5rem}.action-btn{background:var(--white);color:var(--primary);padding:16px 32px;font-size:1rem;font-weight:600;border-radius:var(--radius-sm);display:inline-flex;align-items:center;gap:.75rem;transition:all .3s;text-decoration:none}.action-btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,.2)}.sent-notice{text-align:center;color:var(--secondary);font-size:.9rem;opacity:0}.reset-link{text-align:center;margin-top:1.5rem;opacity:0}.reset-link a{color:var(--accent);font-weight:500;text-decoration:none}.features-section,.testimonials-section,.pricing-section,.faq-section,.cta-banner{margin:4rem 0;padding:4rem 0}.section-header{text-align:center;margin-bottom:3rem;max-width:800px;margin-left:auto;margin-right:auto}.section-title{font-size:clamp(2rem,5vw,2.5rem);margin-bottom:1rem;text-align:center}.section-subtitle{color:var(--secondary);font-size:1.1rem;text-align:center}.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}.feature-card{background:var(--grad-surface);border:2px solid var(--color-rim);border-radius:var(--radius-squircle);padding:2.5rem;box-shadow:var(--clay-shadow);transition:all .5s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:visible}.feature-card::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:1}.feature-card::after{content:"";position:absolute;top:-100%;left:-100%;width:200%;height:200%;background:linear-gradient(45deg,transparent 45%,rgba(255,255,255,.3) 50%,transparent 55%);transform:rotate(-25deg);transition:all .7s ease;pointer-events:none;z-index:2}.feature-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px -10px rgba(99,102,241,.2);border-radius:44px}.feature-card:hover::after{top:-20%;left:-20%}.feature-icon{width:68px;height:68px;background:var(--grad-indigo);border-radius:var(--radius-organic);display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:1.5rem;position:relative;z-index:3;box-shadow:0 10px 20px -5px rgba(99,102,241,.4),inset 0 -4px 8px rgba(0,0,0,.1),inset 0 4px 8px rgba(255,255,255,.4)}.feature-title{font-size:1.25rem;font-weight:600;margin-bottom:.75rem;position:relative;z-index:3}.feature-desc{color:var(--secondary);font-size:.95rem;position:relative;z-index:3}.testimonials-section{padding:4rem 2rem;margin:4rem 2rem;background:var(--grad-indigo);color:var(--white);position:relative;overflow:hidden;border:2px solid rgba(255,255,255,.15);border-radius:80px;box-shadow:0 40px 100px -20px rgba(15,23,42,.4),0 10px 20px rgba(15,23,42,.2),inset 0 4px 15px rgba(255,255,255,.4),inset 0 -8px 20px rgba(0,0,0,.1);isolation:isolate;width:fit-content;margin:4rem auto}.section-title.testimonial-title,.section-subtitle.testimonial-subtitle{color:var(--white)}.testimonial-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}.testimonial-card{background:linear-gradient(135deg,#fff 0%,#f8fafc 100%);color:var(--primary);border:2px solid rgba(255,255,255,.6);border-radius:40px;padding:2rem;position:relative;overflow:hidden;transition:all .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 40px -10px rgba(15,23,42,.12),inset 0 4px 6px rgba(255,255,255,1),inset 0 -4px 8px rgba(15,23,42,.02)}.testimonial-card::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:1}.testimonial-card::after{content:"";position:absolute;top:-100%;left:-100%;width:200%;height:200%;background:linear-gradient(45deg,transparent 45%,rgba(255,255,255,.3) 50%,transparent 55%);transform:rotate(-25deg);transition:all .7s ease;pointer-events:none;z-index:2}.testimonial-card:hover{transform:translateY(-8px);border-radius:44px}.testimonial-card:hover::after{top:-20%;left:-20%}.testimonial-stars{color:var(--accent);margin-bottom:.75rem;font-size:1.25rem;letter-spacing:2px;position:relative;z-index:3}.testimonial-text{font-size:1.1rem;line-height:1.7;margin-bottom:1.5rem;font-style:italic;position:relative;z-index:3}.testimonial-author{display:flex;align-items:center;gap:.75rem;position:relative;z-index:3}.author-avatar{width:52px;height:52px;background:var(--grad-indigo);border-radius:var(--radius-organic);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;color:var(--white);box-shadow:0 8px 16px rgba(99,102,241,.3),inset 0 2px 4px rgba(255,255,255,.4)}.author-info h4{color:var(--primary);font-family:var(--font-heading);font-weight:700;font-size:1.1rem;margin-bottom:2px}.author-info p{color:var(--secondary);font-size:.9rem;font-weight:500}.pricing-section{padding:3rem 0}.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;padding-top:30px}.pricing-card{background:var(--grad-surface);border:2px solid var(--color-rim);border-radius:var(--radius-squircle);padding:2rem;box-shadow:var(--clay-shadow);transition:all .5s cubic-bezier(.34,1.56,.64,1);position:relative}.pricing-name{font-size:.85rem;color:var(--secondary);font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:1rem;opacity:.6}.pricing-price{font-family:var(--font-heading);font-size:3.5rem;font-weight:900;color:var(--primary);margin-bottom:2px;display:block;line-height:1}.pricing-period{font-size:.9rem;color:var(--secondary);font-weight:500;display:block;margin-bottom:1rem}.pricing-description{color:var(--secondary);font-size:1rem;line-height:1.6;margin-bottom:1.5rem}.pricing-features{list-style:none;margin-bottom:2rem;display:flex;flex-direction:column;gap:.75rem}.pricing-feature{display:flex;align-items:flex-start;gap:.75rem;font-size:.95rem;color:var(--secondary)}.feature-check{color:var(--success);font-weight:bold;flex-shrink:0}.pricing-cta{background:var(--primary);color:var(--white);padding:16px 32px;border-radius:var(--radius-organic);font-weight:800;font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;display:inline-block;width:100%;transition:all .4s cubic-bezier(.175,.885,.32,1.275);box-shadow:0 8px 20px rgba(15,23,42,.1),inset 0 4px 6px rgba(255,255,255,.2);text-decoration:none;text-align:center}.pricing-card.popular{background:var(--background)!important;box-shadow:0 40px 100px -20px var(--color-shadow-deep),0 0 0 2px var(--accent),inset 0 4px 8px var(--white);position:relative;transform:scale(1.02)}.popular-badge-wrapper{position:absolute;top:-20px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;z-index:20}.popular-badge{background:var(--grad-indigo);color:var(--white);padding:8px 18px;border-radius:var(--radius-organic);font-size:.75rem;font-weight:800;letter-spacing:.08em;border:2px solid rgba(255,255,255,.4);box-shadow:0 8px 16px rgba(99,102,241,.3),inset 0 2px 4px rgba(255,255,255,.4)}.faq-items{max-width:850px;margin:0 auto;display:flex;flex-direction:column;gap:1rem}.faq-item{background:linear-gradient(135deg,#fff 0%,#f8fafc 100%);border:2px solid rgba(255,255,255,.6);border-radius:40px;position:relative;overflow:hidden;transition:all .5s cubic-bezier(.34,1.56,.64,1);isolation:isolate;box-shadow:0 12px 24px -10px rgba(15,23,42,.08),inset 0 4px 6px rgba(255,255,255,1),inset 0 -4px 8px rgba(15,23,42,.01)}.faq-item::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");opacity:.02;pointer-events:none;z-index:1}.faq-question{width:100%;text-align:left;padding:1.5rem 2rem;font-family:var(--font-heading);font-size:1.1rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:5;color:var(--primary);background:transparent;border:none;cursor:pointer}.faq-answer{max-height:0;overflow:hidden;transition:all .5s cubic-bezier(.4,0,.2,1);color:var(--secondary);padding:0 2rem;font-size:1rem;line-height:1.7;position:relative;z-index:5}.faq-answer p{padding-bottom:1.5rem}.faq-answer.open{max-height:500px}.faq-toggle{width:36px;height:36px;background:var(--grad-indigo);color:var(--white);border-radius:var(--radius-organic);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;transition:all .5s cubic-bezier(.34,1.56,.64,1);border:2px solid rgba(255,255,255,.3);box-shadow:0 4px 10px rgba(99,102,241,.3),inset 0 2px 4px rgba(255,255,255,.4);flex-shrink:0}.faq-item.active .faq-toggle{transform:rotate(45deg) scale(1.1);background:var(--grad-pink);box-shadow:0 4px 12px rgba(244,114,182,.4)}.follower-element{position:fixed;top:0;left:0;width:250px;height:250px;object-fit:cover;transform:translate(-50%,-50%);z-index:9999;opacity:0;visibility:hidden;pointer-events:none;border-radius:12px}.cta-banner{text-align:center;padding:4rem 2rem;margin:4rem auto;background:var(--grad-indigo);color:var(--white);position:relative;overflow:hidden;border-radius:60px;border:4px solid rgba(255,255,255,.2);box-shadow:0 40px 100px -20px rgba(15,23,42,.4),inset 0 4px 15px rgba(255,255,255,.3),inset 0 -8px 20px rgba(0,0,0,.1);isolation:isolate;width:70%}.cta-banner::after{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.15) 0%,transparent 60%);pointer-events:none;z-index:-1}.banner-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;margin-bottom:1.5rem;text-align:center}.banner-subtitle{font-size:1.25rem;opacity:.9;max-width:650px;margin:0 auto 2rem;line-height:1.6}.banner-cta-container{display:flex;gap:1rem;justify-content:center;align-items:center;flex-wrap:wrap}.banner-btn{padding:20px 48px;font-size:1rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:var(--radius-organic);transition:all .4s cubic-bezier(.175,.885,.32,1.275);cursor:pointer;border:none;font-family:var(--font-body)}.banner-btn-primary{background:var(--white);color:var(--accent);border:4px solid var(--white);box-shadow:0 20px 40px -10px var(--color-shadow-deep),inset 0 6px 10px var(--white),inset 0 -6px 12px rgba(0,0,0,.1),0 0 0 1px rgba(255,255,255,.5)}.banner-btn-primary:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 15px 30px rgba(0,0,0,.2)}.banner-btn-secondary{background:rgba(255,255,255,.15);color:var(--white);backdrop-filter:blur(12px);border:2px solid rgba(255,255,255,.4);box-shadow:0 15px 30px rgba(15,23,42,.2),inset 0 4px 8px rgba(255,255,255,.2),inset 0 -4px 8px rgba(0,0,0,.1)}.banner-btn-secondary:hover{background:rgba(255,255,255,.2);transform:translateY(-5px);border-color:rgba(255,255,255,.5)}.footer{background:linear-gradient(180deg,var(--primary) 0%,#080c14 100%);color:var(--white);padding:4rem 0 2rem;position:relative;overflow:hidden;border-top:1px solid rgba(255,255,255,.05)}.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}.footer-brand h3{font-family:var(--font-heading);font-size:1.8rem;font-weight:900;letter-spacing:-.05em;margin-bottom:1.5rem;color:var(--white)}.footer-brand p{color:var(--secondary);font-size:1rem;line-height:1.6;max-width:300px;margin-bottom:2rem}.footer-col h4{font-family:var(--font-heading);font-size:1.1rem;font-weight:800;color:var(--white);margin-bottom:1.5rem;letter-spacing:-.02em}.footer-links{list-style:none}.footer-links li{margin-bottom:1rem}.footer-links a{color:var(--secondary);font-size:1rem;font-weight:500;transition:all .3s ease;text-decoration:none}.footer-links a:hover{color:var(--accent-cyan);transform:translateX(4px)}.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:3rem;border-top:1px solid rgba(255,255,255,.05);font-size:.9rem;color:var(--secondary);font-weight:500}.legal-buttons{display:flex;gap:1rem}.legal-btn{background:rgba(255,255,255,.03);color:var(--secondary);padding:10px 20px;font-size:.9rem;font-weight:600;border-radius:var(--radius-organic);transition:all .4s cubic-bezier(.175,.885,.32,1.275);border:1px solid rgba(255,255,255,.05);cursor:pointer;font-family:var(--font-body)}.legal-btn:hover{background:rgba(255,255,255,.07);color:var(--white);transform:translateY(-2px);border-color:rgba(255,255,255,.1)}.social-icons{display:flex;gap:1rem}.social-icon{width:44px;height:44px;background:rgba(255,255,255,.03);border-radius:var(--radius-organic);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--white);transition:all .4s cubic-bezier(.175,.885,.32,1.275);border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 10px rgba(0,0,0,.2),inset 0 2px 4px rgba(255,255,255,.05);position:relative;text-decoration:none}.social-icon:hover{background:var(--grad-indigo);transform:translateY(-4px) rotate(8deg);box-shadow:0 10px 20px rgba(99,102,241,.3);border-color:rgba(255,255,255,.2)}@media(max-width:1024px){.features-grid,.pricing-grid,.testimonial-grid{grid-template-columns:1fr}.gallery--bento{grid-template-columns:repeat(2,48vw);grid-template-rows:repeat(4,20vh)}.footer-content{grid-template-columns:1fr 1fr}}@media(max-width:768px){.section-title{font-size:2rem}.hero-initial-overlay .hero-title{font-size:2.5rem}.nav-links{display:none}#flair-container{display:none}.follower-element{display:none!important}.banner-cta-container{flex-direction:column}.cta-button,.banner-btn{width:100%;justify-content:center}.footer-content{grid-template-columns:1fr;text-align:center}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="container header-content">
+<a href="#" class="logo"><div class="logo-icon">🧬</div><span>VitalEdge</span></a>
+<nav class="nav-links">
+<a href="#how-it-works" class="nav-link">How It Works</a>
+<a href="#pricing" class="nav-link">Pricing</a>
+<a href="#faq" class="nav-link">FAQ</a>
+</nav>
+<button class="header-cta" onclick="document.getElementById('startQuizBtn').click()">Get Started</button>
+</div>
+</header>
+
+<div class="gallery-wrap">
+<div class="hero-initial-overlay">
+<div class="container">
+<div class="hero-content text-center">
+<span class="hero-label">FREE BIOHACKING DIAGNOSTIC</span>
+<h1 class="hero-title reveal-text">
+<div class="line-wrapper"><span>What's Your</span></div>
+<div class="line-wrapper"><span class="accent-color">Biological Optimization Score?</span></div>
+</h1>
+<p class="hero-subtitle reveal-sub">Discover your personalized supplement protocol in 60 seconds.</p>
+<div class="hero-cta-container">
+<button id="startQuizBtn" class="cta-button">Start Free Assessment ↗</button>
+</div>
+</div>
+</div>
+</div>
+<div id="gallery-8" class="gallery gallery--bento">
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png" alt=""></div>
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png" alt=""></div>
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bed548179ed021687d.png" alt=""></div>
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befb38cabb229231e2.png" alt=""></div>
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png" alt=""></div>
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png" alt=""></div>
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png" alt=""></div>
+<div class="gallery__item"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png" alt=""></div>
+</div>
+</div>
+
+<section id="quiz" class="quiz-section">
+<div id="flair-container"></div>
+<div class="container quiz-container">
+<div class="quiz-header">
+<h2 class="quiz-main-title">Let's Diagnose Your Performance Engine</h2>
+<p class="quiz-meta-info">5 questions • 60 seconds</p>
+</div>
+<div class="quiz-progress">
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<span class="progress-text"><span id="currentQ">1</span>/5 Questions</span>
+</div>
+<div id="questionContainer"></div>
+<div class="question-nav">
+<button id="prevBtn" class="nav-btn nav-prev" disabled>← Previous</button>
+<button id="nextBtn" class="nav-btn nav-next">Next →</button>
+</div>
+<p class="micro-copy">No account required • Instant results</p>
+</div>
+</section>
+
+<section id="how-it-works" class="features-section">
+<div class="container">
+<div class="section-header">
+<h2 class="section-title">Why Take The Diagnostic?</h2>
+<p class="section-subtitle">Most high-performers fail because they optimize the wrong biomarkers first.</p>
+</div>
+<div class="features-grid">
+<div class="feature-card">
+<div class="feature-icon">🎯</div>
+<h3 class="feature-title">Precision Diagnosis</h3>
+<p class="feature-desc">Identify exactly which biological systems are underperforming and where your biggest energy leaks are hiding.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">⚡</div>
+<h3 class="feature-title">Instant Action Plan</h3>
+<p class="feature-desc">Get prioritized supplement recommendations you can implement today—no vague wellness advice included.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">📈</div>
+<h3 class="feature-title">Benchmark Against Peers</h3>
+<p class="feature-desc">See how your optimization maturity compares to other high-performers at your stage.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="testimonials-section">
+<div class="container">
+<div class="section-header">
+<h2 class="section-title testimonial-title">Trusted by 12,500+ High-Performers</h2>
+<p class="section-subtitle testimonial-subtitle">Real insights that led to real performance gains.</p>
+</div>
+<div class="testimonial-grid">
+<div class="testimonial-card">
+<div class="testimonial-stars">★★★★★</div>
+<p class="testimonial-text">"This diagnostic exposed the one bottleneck I was blind to. Implemented their stack and saw 40% increase in morning energy within 3 weeks."</p>
+<div class="testimonial-author">
+<div class="author-avatar">MK</div>
+<div class="author-info">
+<h4>Marcus Kim</h4>
+<p>Founder, TechCo</p>
+</div>
+</div>
+</div>
+<div class="testimonial-card">
+<div class="testimonial-stars">★★★★★</div>
+<p class="testimonial-text">"Finally, a science-backed approach that actually works. My sleep quality improved 60% and brain fog is completely gone."</p>
+<div class="testimonial-author">
+<div class="author-avatar">EP</div>
+<div class="author-info">
+<h4>Elena Price</h4>
+<p>Executive, FinCorp</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="pricing" class="pricing-section">
+<div class="container">
+<div class="section-header">
+<h2 class="section-title">Upgrade Your Insights</h2>
+<p class="section-subtitle">Free diagnostic included with any paid tier.</p>
+</div>
+<div class="pricing-grid">
+<div class="pricing-card">
+<div class="pricing-name">DIAGNOSTIC</div>
+<div><span class="pricing-price">$0</span></div>
+<span class="pricing-period">Forever Free</span>
+<p class="pricing-description">Get your basic score and recommendations.</p>
+<ul class="pricing-features">
+<li class="pricing-feature"><span class="feature-check">✓</span> Basic Optimization Score</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> Tier Classification</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> Top 3 Bottlenecks</li>
+</ul>
+<a href="#" class="pricing-cta">Start Free Assessment</a>
+</div>
+<div class="pricing-card popular">
+<div class="popular-badge-wrapper">
+<div class="popular-badge">MOST POPULAR</div>
+</div>
+<div class="pricing-name">ADVANCED</div>
+<div><span class="pricing-price">$29</span></div>
+<span class="pricing-period">One-time purchase</span>
+<p class="pricing-description">Deep-dive analysis with action plan.</p>
+<ul class="pricing-features">
+<li class="pricing-feature"><span class="feature-check">✓</span> Everything in Free</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> Detailed Stack Protocol</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> Dosing Guidelines</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> 30-Day Implementation Plan</li>
+</ul>
+<a href="#" class="pricing-cta">Get Advanced Report</a>
+</div>
+<div class="pricing-card">
+<div class="pricing-name">ELITE</div>
+<div><span class="pricing-price">$99</span></div>
+<span class="pricing-period">One-time purchase</span>
+<p class="pricing-description">Full optimization with expert consultation.</p>
+<ul class="pricing-features">
+<li class="pricing-feature"><span class="feature-check">✓</span> Everything in Advanced</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> 1-on-1 Consultation</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> Custom Sourcing Guide</li>
+<li class="pricing-feature"><span class="feature-check">✓</span> 90-Day Support</li>
+</ul>
+<a href="#" class="pricing-cta">Get Elite Protocol</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="faq" class="faq-section">
+<div class="container">
+<div class="section-header">
+<h2 class="section-title">Frequently Asked Questions</h2>
+</div>
+<div class="faq-items">
+<div class="faq-item hover-trigger">
+<img class="follower-element" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png" alt="" style="width:250px;height:250px;object-fit:cover;border-radius:12px;">
+<button class="faq-question" aria-expanded="false">How long does the diagnostic take?<span class="faq-toggle">+</span></button>
+<div class="faq-answer"><p>Most users complete the full assessment in under 90 seconds. Just answer 5 quick questions about your energy levels, sleep quality, stress, workout intensity, and current supplement use.</p></div>
+</div>
+<div class="faq-item hover-trigger">
+<img class="follower-element" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png" alt="" style="width:250px;height:250px;object-fit:cover;border-radius:12px;">
+<button class="faq-question" aria-expanded="false">Are the recommendations science-backed?<span class="faq-toggle">+</span></button>
+<div class="faq-answer"><p>Yes. All our supplement protocols are based on peer-reviewed research and clinical studies. We only recommend ingredients with proven efficacy and safety profiles.</p></div>
+</div>
+<div class="faq-item hover-trigger">
+<img class="follower-element" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png" alt="" style="width:250px;height:250px;object-fit:cover;border-radius:12px;">
+<button class="faq-question" aria-expanded="false">Do I need to buy your supplements?<span class="faq-toggle">+</span></button>
+<div class="faq-answer"><p>No. We provide protocol recommendations and you're free to source ingredients anywhere. Our paid tiers include sourcing guides with trusted vendors.</p></div>
+</div>
+<div class="faq-item hover-trigger">
+<img class="follower-element" src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png" alt="" style="width:250px;height:250px;object-fit:cover;border-radius:12px;">
+<button class="faq-question" aria-expanded="false">What's the difference between tiers?<span class="faq-toggle">+</span></button>
+<div class="faq-answer"><p>The Starter tier is foundational vitamins (D3, Magnesium, Omega-3). The Optimizer adds nootropics and adaptogens (Lion's Mane, Rhodiola). The Elite tier is full-stack performance enhancement (NMN, CoQ10, custom dosing).</p></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="cta-banner">
+<div class="container">
+<h2 class="banner-title">Ready to Optimize Your Biological Engine?</h2>
+<p class="banner-subtitle">Join thousands who discovered their breakthrough through our diagnostic tool.</p>
+<div class="banner-cta-container">
+<button class="banner-btn banner-btn-primary" onclick="document.getElementById('startQuizBtn').click()">Take Free Assessment</button>
+<button class="banner-btn banner-btn-secondary" onclick="alert('Sample results coming soon!')">View Sample Results</button>
+</div>
+</div>
+</section>
+
+<footer class="footer">
+<div class="container">
+<div class="footer-content">
+<div class="footer-brand">
+<h3>🧬 VitalEdge</h3>
+<p>Understand where your performance engine is broken.</p>
+<div class="social-icons">
+<a href="#" class="social-icon">𝕏</a>
+<a href="#" class="social-icon">IN</a>
+<a href="#" class="social-icon">IG</a>
+</div>
+</div>
+<div class="footer-col">
+<h4>Product</h4>
+<ul class="footer-links">
+<li><a href="#">Diagnostic Tool</a></li>
+<li><a href="#">Advanced Reports</a></li>
+<li><a href="#">Elite Consultation</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Company</h4>
+<ul class="footer-links">
+<li><a href="#">About Us</a></li>
+<li><a href="#">Contact</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Resources</h4>
+<ul class="footer-links">
+<li><a href="#">Blog</a></li>
+<li><a href="#">Research</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<div>&copy; 2025 VitalEdge. All rights reserved.</div>
+<div class="legal-buttons">
+<button class="legal-btn" data-legal="privacy">Privacy Policy</button>
+<button class="legal-btn" data-legal="terms">Terms of Service</button>
+<button class="legal-btn" data-legal="cookie">Cookie Policy</button>
+</div>
+</div>
+</div>
+</footer>
+
+<div id="emailGateModal" class="modal-overlay">
+<div class="modal-content" data-lenis-prevent>
+<button class="modal-close" id="closeEmailBtn">×</button>
+<span class="modal-badge">UNLOCK YOUR RESULTS</span>
+<h2 class="modal-title">Enter Your Email Below</h2>
+<p class="modal-subtitle">Get your personalized biohacking report instantly.</p>
+<form id="emailForm" class="email-form">
+<label class="form-label" for="emailInput">Email Address</label>
+<input type="email" id="emailInput" class="form-input" placeholder="you@company.com" required>
+<div class="form-hint"><span>🔒</span> Secure • No spam • Unsubscribe anytime</div>
+<button type="submit" class="cta-button" style="width:100%">Send Results to My Inbox →</button>
+</form>
+<div class="result-previews">
+<p class="receive-label">You'll Receive:</p>
+<div class="preview-item"><span class="preview-check">✓</span><span>Your Exact Optimization Tier</span></div>
+<div class="preview-item"><span class="preview-check">✓</span><span>Top 3 Performance Bottlenecks</span></div>
+<div class="preview-item"><span class="preview-check">✓</span><span>Personalized Stack Protocol PDF</span></div>
+</div>
+</div>
+</div>
+
+<div id="resultModal" class="modal-overlay">
+<div class="result-modal" id="resultContent"></div>
+</div>
+
+<script>
+const quizData=[{question:"What's your #1 health goal right now?",options:[{text:"Increase energy & reduce fatigue",points:1,category:"starter"},{text:"Improve sleep quality",points:2,category:"starter"},{text:"Enhance mental clarity & focus",points:3,category:"optimizer"},{text:"Maximize athletic performance",points:4,category:"elite"}]},{question:"How would you describe your current supplement routine?",options:[{text:"I don't take any supplements",points:1,category:"starter"},{text:"Basic multivitamin only",points:2,category:"starter"},{text:"A few targeted supplements (D3, Magnesium, etc)",points:3,category:"optimizer"},{text:"Advanced stack with nootropics & adaptogens",points:4,category:"elite"}]},{question:"What's your biggest health challenge right now?",options:[{text:"Chronic fatigue & low energy",points:1,category:"starter"},{text:"Poor sleep or insomnia",points:2,category:"starter"},{text:"Brain fog & concentration issues",points:3,category:"optimizer"},{text:"Recovery time from workouts",points:4,category:"elite"}]},{question:"How often do you work out intensely?",options:[{text:"Never or rarely",points:1,category:"starter"},{text:"1-2 times per week",points:2,category:"starter"},{text:"3-4 times per week",points:3,category:"optimizer"},{text:"5+ times per week",points:4,category:"elite"}]},{question:"How quickly are you looking for results?",options:[{text:"I'm just exploring options",points:1,category:"starter"},{text:"Within 3 months",points:2,category:"starter"},{text:"Within 1 month",points:3,category:"optimizer"},{text:"Immediate optimization needed",points:4,category:"elite"}]}];
+
+const resultsData=[{category:"STARTER TIER",emoji:"🌱",title:"The Foundation Builder",summary:"Your results show you're just beginning your optimization journey. You have solid fundamentals to build on, but there's significant untapped potential in your biological systems.",mistakes:["Not supplementing foundational micronutrients (D3, Magnesium, Omega-3)","Inconsistent sleep schedule disrupting circadian rhythm","Insufficient protein intake for optimal cellular repair"],actionTitle:"Your Next Step: Build The Foundation",actionDesc:"Start with the essential trio: Vitamin D3 (5000 IU), Magnesium Glycinate (400mg), and high-quality Fish Oil (2g EPA/DHA). These three will address 80% of common deficiencies.",ctaText:"Get Starter Protocol →"},{category:"OPTIMIZER TIER",emoji:"⚡",title:"The Strategic Enhancer",summary:"You've mastered the basics and are ready for precision optimization. Your systems are functioning well, but strategic supplementation can unlock the next level of performance.",mistakes:["Missing cognitive enhancers during peak performance windows","Not cycling adaptogens for stress resilience","Suboptimal nutrient timing around workouts"],actionTitle:"Your Next Step: Add Cognitive Stack",actionDesc:"Layer in Lion's Mane (1500mg), Rhodiola Rosea (500mg), and Alpha-GPC (600mg) to enhance mental clarity, stress adaptation, and peak cognitive performance.",ctaText:"Get Optimizer Protocol →"},{category:"ELITE TIER",emoji:"🚀",title:"The Performance Maximizer",summary:"You're operating at a high level and ready for advanced interventions. You understand the nuances of biohacking and are prepared for sophisticated protocols.",mistakes:["Not tracking biomarkers to validate interventions","Missing longevity compounds (NMN, Resveratrol)","Inadequate mitochondrial support for cellular energy"],actionTitle:"Your Next Step: Full-Spectrum Optimization",actionDesc:"Implement the complete performance stack: NMN (500mg), CoQ10 (200mg), PQQ (20mg), plus personalized dosing based on bloodwork. This is where exponential gains happen.",ctaText:"Get Elite Protocol →"}];
+
+const STATE={currentQuestion:0,answers:[],userEmail:'',flairIndex:0,flairElements:[],mousePos:{x:0,y:0},lastMousePos:{x:0,y:0}};
+
+const flairAssets=['https://assets.codepen.io/16327/Revised+Flair.png','https://assets.codepen.io/16327/Revised+Flair-1.png','https://assets.codepen.io/16327/Revised+Flair-2.png','https://assets.codepen.io/16327/Revised+Flair-3.png','https://assets.codepen.io/16327/Revised+Flair-4.png','https://assets.codepen.io/16327/Revised+Flair-5.png','https://assets.codepen.io/16327/Revised+Flair-6.png','https://assets.codepen.io/16327/Revised+Flair-7.png','https://assets.codepen.io/16327/Revised+Flair-8.png'];
+
+const lenis=new Lenis({lerp:.15,smoothWheel:!0,wheelMultiplier:1.2});
+const raf=t=>{lenis.raf(t);requestAnimationFrame(raf)};
+requestAnimationFrame(raf);
+gsap.registerPlugin(ScrollTrigger,Flip);
+gsap.defaults({ease:'power3.out'});
+
+const createBentoTween=()=>{const e=document.querySelector('#gallery-8'),t=e.querySelectorAll('.gallery__item'),o=document.querySelector('.hero-initial-overlay'),n=gsap.timeline();n.to('.hero-initial-overlay .reveal-text span',{y:'0%',duration:1.2,stagger:.1,ease:'power4.out'}).to('.hero-initial-overlay .reveal-sub',{opacity:1,y:0,duration:.8},'-=0.8');e.classList.add('gallery--final');const a=Flip.getState(t);e.classList.remove('gallery--final');const r=Flip.to(a,{simple:!0,ease:'expoScale(1, 5)'}),s=gsap.timeline({scrollTrigger:{trigger:e,start:'center center',end:'+=100%',scrub:!0,pin:e.parentNode}});s.to(o,{opacity:0,y:-50,duration:.2},0);s.add(r,0)};
+
+document.addEventListener('DOMContentLoaded',createBentoTween);
+
+function initFlairs(){const e=document.getElementById('quiz');if(!e)return;const t=document.getElementById('flair-container');if(!t){const t=document.createElement('div');t.id='flair-container',e.insertBefore(t,e.firstChild)}const o=document.getElementById('flair-container');for(let e=0;e<100;e++){const t=document.createElement('img');t.className='flair',t.src=flairAssets[e%flairAssets.length],o.appendChild(t),STATE.flairElements.push(t)}}
+
+function playFlairAnimation(e,t,o){if(!e)return;gsap.killTweensOf(e);gsap.set(e,{opacity:1,scale:1,left:t,top:o,xPercent:-50,yPercent:-50,rotation:0,y:0,display:'block',position:'absolute'});let n=gsap.timeline();n.from(e,{opacity:0,scale:0,ease:'elastic.out(1,0.3)'}).to(e,{rotation:'random([-360, 360])'},'<').to(e,{y:'120vh',ease:'back.in(.4)',duration:1},0)}
+
+function updateImageTrail(){const e=Math.hypot(STATE.lastMousePos.x-STATE.mousePos.x,STATE.lastMousePos.y-STATE.mousePos.y);if(e>60){const e=STATE.flairIndex%STATE.flairElements.length,t=STATE.flairElements[e];t&&(playFlairAnimation(t,STATE.mousePos.x,STATE.mousePos.y),STATE.lastMousePos={...STATE.mousePos},STATE.flairIndex++)}}
+
+ScrollTrigger.create({trigger:'#quiz',start:'top 80%',once:!0,onEnter:()=>{initFlairs();const e=document.getElementById('quiz');e&&(e.addEventListener('mousemove',t=>{const o=e.getBoundingClientRect();STATE.mousePos={x:t.clientX-o.left,y:t.clientY-o.top}}),gsap.ticker.add(updateImageTrail))}});
+
+function renderQuestion(){const e=quizData[STATE.currentQuestion],t=questionContainer.children;t.length>0?gsap.to(t,{duration:.3,y:-20,opacity:0,ease:'power2.in',stagger:.05,onComplete:()=>injectNewQuestion(e)}):injectNewQuestion(e)}
+
+function injectNewQuestion(e){questionContainer.innerHTML=`<h2 class="question-title initial-hidden">${e.question}</h2>${e.options.map((e,t)=>`<div class="question-card initial-hidden" data-index="${t}"><div class="option-icon">${t+1}</div><span class="option-text">${e.text}</span></div>`).join('')}`;gsap.to(questionContainer.querySelector('.question-title'),{duration:.4,opacity:1,y:0,ease:'power3.out'});gsap.to(questionContainer.querySelectorAll('.question-card'),{duration:.4,opacity:1,y:0,stagger:.08,ease:'back.out(1.2)'});prevBtn.disabled=STATE.currentQuestion===0;nextBtn.textContent=STATE.currentQuestion===quizData.length-1?'Complete Quiz →':'Next →'}
+
+function selectAnswer(e){document.querySelectorAll('.question-card').forEach(t=>{t.classList.toggle('selected',parseInt(t.dataset.index)===e)});STATE.answers[STATE.currentQuestion]=e;setTimeout(goToNextQuestion,400)}
+
+function goToNextQuestion(){STATE.currentQuestion<quizData.length-1?(STATE.currentQuestion++,renderQuestion(),updateProgress()):openEmailGate()}
+
+function goToPreviousQuestion(){STATE.currentQuestion>0&&(STATE.currentQuestion--,renderQuestion(),updateProgress())}
+
+function updateProgress(){const e=(STATE.currentQuestion+1)/quizData.length*100;progressFill.style.width=`${e}%`;currentQSpan.textContent=STATE.currentQuestion+1}
+
+function openEmailGate(){emailGateModal.classList.add('active');document.body.style.overflow='hidden';lenis.stop();gsap.from('#emailGateModal .modal-content',{duration:.5,scale:.9,opacity:0,ease:'elastic.out(1, 0.75)'})}
+
+function closeEmailGate(){emailGateModal.classList.remove('active');document.body.style.overflow='';lenis.start()}
+
+function closeResultModal(){resultModal.classList.remove('active');document.body.style.overflow='';lenis.start()}
+
+function handleEmailSubmit(e){e.preventDefault();const t=document.getElementById('emailInput');STATE.userEmail=t.value;const o=e.target.querySelector('button[type="submit"]');o.textContent='Processing...';o.disabled=!0;setTimeout(()=>{calculateAndShowResults();closeEmailGate()},1500)}
+
+function calculateAndShowResults(){let e=0,t=quizData.length*4;quizData.forEach((t,o)=>{void 0!==STATE.answers[o]&&(e+=t.options[STATE.answers[o]].points)});let o;const n=e/t;o=n<=.4?0:n<=.6?1:2;showResults(o,Math.round(100*n))}
+
+function showResults(e,t){const o=resultsData[e];resultContent.innerHTML=`<div class="result-avatar-container"><img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png" alt="" class="result-avatar-img"><span class="result-badge initial-hidden"><span class="result-icon">${o.emoji}</span>${o.category}</span></div><h2 class="result-headline initial-hidden">${o.title}</h2><p class="result-summary initial-hidden">${o.summary}</p><div class="result-mistakes initial-hidden"><div class="mistake-title"><span style="color:var(--accent);">⚠️</span>Top 3 Performance Leaks</div><ul class="mistake-list">${o.mistakes.map(e=>`<li class="mistake-item initial-hidden"><span class="mistake-icon">•</span><span>${e}</span></li>`).join('')}</ul></div><div class="recommended-action initial-hidden"><div class="action-title">${o.actionTitle}</div><p class="action-desc">${o.actionDesc}</p><div class="action-cta"><a href="#" class="action-btn">${o.ctaText}</a></div></div><p class="sent-notice">📧 Full report sent to ${STATE.userEmail}</p><div class="reset-link"><a href="#" onclick="location.reload()">Take Quiz Again</a></div>`;resultModal.classList.add('active');document.body.style.overflow='hidden';lenis.stop();const n=gsap.timeline();n.fromTo('#resultModal .result-modal',{clipPath:'polygon(0 0, 0% 0, 0% 100%, 0% 100%)'},{clipPath:'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',duration:.6,ease:'power2.out'}).to('.result-avatar-img',{scale:1,opacity:1,duration:.5,ease:'back.out(1.7)'},'-=0.2').to('.result-badge',{y:0,opacity:1,duration:.4},'-=0.3').to('.result-headline',{scale:1,opacity:1,duration:.4},'-=0.2').to('.result-summary',{x:0,opacity:1,duration:.4},'-=0.2').to('.result-mistakes',{opacity:1,duration:.4},'-=0.2').to('.mistake-item',{x:0,opacity:1,stagger:.1},'-=0.2').to('.recommended-action',{y:0,opacity:1,duration:.4},'-=0.2').to(['.sent-notice','.reset-link'],{opacity:1,duration:.4})}
+
+let questionContainer,progressFill,currentQSpan,prevBtn,nextBtn,emailGateModal,resultModal,resultContent,closeEmailBtn,closeResultBtn;
+
+function initQuiz(){questionContainer=document.getElementById('questionContainer');progressFill=document.getElementById('progressFill');currentQSpan=document.getElementById('currentQ');prevBtn=document.getElementById('prevBtn');nextBtn=document.getElementById('nextBtn');emailGateModal=document.getElementById('emailGateModal');resultModal=document.getElementById('resultModal');resultContent=document.getElementById('resultContent');closeEmailBtn=document.getElementById('closeEmailBtn');closeResultBtn=document.getElementById('closeResultBtn');questionContainer.addEventListener('click',e=>{const t=e.target.closest('.question-card');if(t){const e=parseInt(t.dataset.index);selectAnswer(e)}});closeEmailBtn.addEventListener('click',closeEmailGate);closeResultBtn&&closeResultBtn.addEventListener('click',closeResultModal);const e=document.getElementById('emailForm');e&&e.addEventListener('submit',handleEmailSubmit);renderQuestion();updateProgress()}
+
+document.addEventListener('DOMContentLoaded',initQuiz);
+
+document.getElementById('startQuizBtn').addEventListener('click',()=>{lenis.scrollTo('#quiz',{offset:-80,duration:1.5})});
+
+prevBtn&&prevBtn.addEventListener('click',goToPreviousQuestion);
+nextBtn&&nextBtn.addEventListener('click',goToNextQuestion);
+
+emailGateModal.addEventListener('click',e=>{e.target===emailGateModal&&closeEmailGate()});
+resultModal.addEventListener('click',e=>{e.target===resultModal&&closeResultModal()});
+
+document.addEventListener('keydown',e=>{'Escape'===e.key&&(closeEmailGate(),closeResultModal())});
+
+document.querySelectorAll('.faq-question').forEach(e=>{e.addEventListener('click',()=>{const t=e.parentElement,o=t.querySelector('.faq-answer'),n=!t.classList.contains('active');document.querySelectorAll('.faq-item.active').forEach(e=>{e!==t&&(e.classList.remove('active'),e.querySelector('.faq-question').setAttribute('aria-expanded','false'),gsap.to(e.querySelector('.faq-answer'),{maxHeight:0,duration:.3,ease:'power2.inOut'}))});t.classList.toggle('active');e.setAttribute('aria-expanded',n);gsap.to(o,{maxHeight:n?o.scrollHeight+40:0,duration:.4,ease:'power2.inOut'})})});
+
+gsap.set('.hover-trigger .follower-element',{yPercent:-50,xPercent:-50});
+let isInitialFrame;
+gsap.utils.toArray('.hover-trigger').forEach(e=>{const t=e.querySelector('.follower-element');if(!t)return;const o=gsap.quickTo(t,'x',{duration:.4,ease:'power3'}),n=gsap.quickTo(t,'y',{duration:.4,ease:'power3'}),a=e=>{isInitialFrame?(o(e.clientX),n(e.clientY),isInitialFrame=!1):(o(e.clientX),n(e.clientY))},r=()=>document.addEventListener('mousemove',a),s=()=>document.removeEventListener('mousemove',a),i=gsap.to(t,{autoAlpha:1,ease:'none',paused:!0,duration:.1,onReverseComplete:s});e.addEventListener('mouseenter',e=>{isInitialFrame=!0,i.play(),r(),a(e)}),e.addEventListener('mouseleave',()=>i.reverse())});
+
+document.querySelector('.legal-buttons')&&document.querySelector('.legal-buttons').addEventListener('click',e=>{const t=e.target.closest('.legal-btn');if(t){const e=t.dataset.legal,o={privacy:'Privacy Policy',terms:'Terms of Service',cookie:'Cookie Policy'};alert(o[e]||'Legal Information')}});
+</script>
+</body>
+</html>

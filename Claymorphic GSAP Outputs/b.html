@@ -1,0 +1,1418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VitalEdge | High-Performance Health Diagnostic</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+
+    <style>
+      :root {
+        /* Palette: Clinical Luxury */
+        --primary: #0f172a; /* Deep Slate */
+        --background: #f8fafc; /* Ice White */
+        --surface: #ffffff;
+        --secondary: #64748b;
+        --accent: #134e4a; /* Deep Emerald - Premium Wellness */
+        --accent-light: #2dd4bf; /* Teal */
+        --accent-gradient: linear-gradient(135deg, #134e4a 0%, #0f766e 100%);
+
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+
+        --border-light: rgba(255, 255, 255, 0.8);
+        --shadow-light: rgba(255, 255, 255, 0.8);
+        --shadow-deep: rgba(15, 23, 42, 0.08);
+
+        /* Neumorphic/Claymorphic Shadows */
+        --clay-shadow:
+          12px 12px 24px rgba(15, 23, 42, 0.05),
+          -8px -8px 16px rgba(255, 255, 255, 0.9),
+          inset 2px 2px 4px rgba(255, 255, 255, 0.6),
+          inset -2px -2px 4px rgba(15, 23, 42, 0.02);
+
+        --clay-shadow-hover:
+          16px 16px 32px rgba(15, 23, 42, 0.08),
+          -10px -10px 20px rgba(255, 255, 255, 1),
+          inset 2px 2px 4px rgba(255, 255, 255, 0.8);
+
+        --radius-squircle: 32px;
+        --radius-pill: 100px;
+
+        --font-heading: "Bricolage Grotesque", sans-serif;
+        --font-body: "Plus Jakarta Sans", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--background);
+        color: var(--text-main);
+        font-family: var(--font-body);
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* --- Claymorphic Utilities --- */
+      .clay-card {
+        background: var(--surface);
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-squircle);
+        box-shadow: var(--clay-shadow);
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .clay-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .clay-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--clay-shadow-hover);
+      }
+
+      /* --- Buttons --- */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 32px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: var(--radius-pill);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--accent-gradient);
+        color: white;
+        box-shadow: 0 10px 20px -5px rgba(19, 78, 74, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 25px -5px rgba(19, 78, 74, 0.5);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: var(--text-main);
+        border: 2px solid rgba(15, 23, 42, 0.1);
+      }
+
+      /* --- Hero Section (Bento Grid) --- */
+      .gallery-wrap {
+        position: relative;
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero-initial-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        pointer-events: none; /* Let clicks pass through to buttons */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: linear-gradient(
+          180deg,
+          rgba(248, 250, 252, 0) 0%,
+          rgba(248, 250, 252, 0.9) 80%,
+          var(--background) 100%
+        );
+      }
+
+      .hero-content {
+        pointer-events: auto;
+        max-width: 800px;
+        padding: 20px;
+      }
+
+      .hero-label {
+        display: inline-block;
+        background: rgba(19, 78, 74, 0.1);
+        color: var(--accent);
+        padding: 8px 16px;
+        border-radius: 100px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+      }
+
+      .hero-title {
+        font-size: clamp(3rem, 6vw, 5rem);
+        color: var(--primary);
+        margin-bottom: 24px;
+        overflow: hidden; /* For reveal animation */
+      }
+
+      .hero-title div {
+        overflow: hidden;
+      }
+      .hero-title span {
+        display: block;
+        transform: translateY(100%);
+      }
+      .hero-title .accent-color {
+        color: var(--accent);
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--secondary);
+        margin-bottom: 40px;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .gallery--bento {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(3, 32.5vw);
+        grid-template-rows: repeat(4, 23vh);
+        justify-content: center;
+        align-content: center;
+        will-change: transform;
+        backface-visibility: hidden;
+        position: absolute;
+      }
+
+      .gallery__item {
+        border-radius: 24px;
+        overflow: hidden;
+        background: #e2e8f0;
+        position: relative;
+      }
+
+      .gallery__item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.7s ease;
+      }
+
+      .gallery__item:hover img {
+        transform: scale(1.05);
+      }
+
+      /* Bento Layout Config */
+      .gallery--bento .gallery__item:nth-child(1) {
+        grid-area: 1/1/3/2;
+      }
+      .gallery--bento .gallery__item:nth-child(2) {
+        grid-area: 1/2/2/3;
+      }
+      .gallery--bento .gallery__item:nth-child(3) {
+        grid-area: 2/2/4/3;
+      }
+      .gallery--bento .gallery__item:nth-child(4) {
+        grid-area: 1/3/3/3;
+      }
+      .gallery--bento .gallery__item:nth-child(5) {
+        grid-area: 3/1/3/2;
+      }
+      .gallery--bento .gallery__item:nth-child(6) {
+        grid-area: 3/3/5/4;
+      }
+      .gallery--bento .gallery__item:nth-child(7) {
+        grid-area: 4/1/5/2;
+      }
+      .gallery--bento .gallery__item:nth-child(8) {
+        grid-area: 4/2/5/3;
+      }
+
+      .gallery--final {
+        grid-template-columns: repeat(3, 100vw);
+        grid-template-rows: repeat(4, 50vh);
+        gap: 1vh;
+      }
+
+      /* --- Quiz Section --- */
+      .quiz-section {
+        padding: 120px 0;
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+
+      .quiz-container {
+        max-width: 800px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .quiz-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .quiz-main-title {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+      }
+
+      .quiz-meta-info {
+        color: var(--secondary);
+        font-weight: 500;
+      }
+
+      /* Progress Bar */
+      .quiz-progress {
+        margin-bottom: 40px;
+      }
+
+      .progress-bar {
+        height: 12px;
+        background: #e2e8f0;
+        border-radius: 100px;
+        overflow: hidden;
+        box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+        margin-bottom: 12px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-gradient);
+        border-radius: 100px;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .progress-text {
+        font-size: 0.9rem;
+        color: var(--secondary);
+        text-align: right;
+        font-weight: 600;
+      }
+
+      /* Question Cards */
+      .question-card {
+        padding: 24px;
+        margin-bottom: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        border: 2px solid transparent;
+      }
+
+      .question-card.selected {
+        border-color: var(--accent);
+        background: rgba(19, 78, 74, 0.03);
+      }
+
+      .option-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: var(--secondary);
+        flex-shrink: 0;
+      }
+
+      .question-card.selected .option-icon {
+        background: var(--accent);
+        color: white;
+      }
+
+      .option-text {
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+
+      .question-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+      }
+
+      .nav-btn {
+        background: transparent;
+        border: none;
+        font-family: var(--font-body);
+        font-weight: 600;
+        color: var(--secondary);
+        cursor: pointer;
+        padding: 12px 24px;
+        border-radius: 12px;
+        transition: all 0.2s;
+      }
+
+      .nav-btn:not(:disabled):hover {
+        color: var(--accent);
+        background: rgba(19, 78, 74, 0.05);
+      }
+
+      .nav-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      /* Flair / Trail */
+      #flair-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 5;
+        overflow: hidden;
+      }
+
+      .flair {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        opacity: 0;
+        pointer-events: none;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+      }
+
+      /* --- Modals --- */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.95);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        backdrop-filter: blur(10px);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal-content {
+        background: var(--surface);
+        width: 90%;
+        max-width: 500px;
+        padding: 48px;
+        border-radius: 40px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        position: relative;
+        text-align: center;
+        transform: scale(0.9);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .modal-overlay.active .modal-content {
+        transform: scale(1);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--secondary);
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 16px 20px;
+        border-radius: 16px;
+        border: 2px solid #e2e8f0;
+        background: #f8fafc;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        margin-bottom: 12px;
+        transition: all 0.2s;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(19, 78, 74, 0.1);
+      }
+
+      /* Results */
+      .result-avatar-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 24px;
+      }
+
+      .result-avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .result-badge {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        background: var(--accent);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        white-space: nowrap;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .result-headline {
+        font-size: 2rem;
+        margin-bottom: 16px;
+        color: var(--primary);
+      }
+      .result-summary {
+        color: var(--secondary);
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+
+      .mistake-list {
+        list-style: none;
+        text-align: left;
+        margin-bottom: 32px;
+        background: #f1f5f9;
+        padding: 24px;
+        border-radius: 20px;
+      }
+
+      .mistake-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+      }
+
+      .mistake-icon {
+        color: var(--accent);
+        font-weight: bold;
+      }
+
+      /* --- Features Section --- */
+      .features-section {
+        padding: 100px 0;
+      }
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 16px;
+      }
+      .section-subtitle {
+        color: var(--secondary);
+        font-size: 1.1rem;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+      }
+
+      .feature-card {
+        padding: 40px 32px;
+        text-align: center;
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 24px;
+        display: block;
+      }
+
+      /* --- Footer --- */
+      .footer {
+        padding: 80px 0 40px;
+        border-top: 1px solid #e2e8f0;
+        background: #f1f5f9;
+      }
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 40px;
+        margin-bottom: 60px;
+      }
+      .footer-col h4 {
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+      }
+      .footer-links {
+        list-style: none;
+      }
+      .footer-links li {
+        margin-bottom: 12px;
+      }
+      .footer-links a {
+        text-decoration: none;
+        color: var(--secondary);
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .gallery--bento {
+          grid-template-columns: repeat(2, 48vw);
+        }
+        .gallery--bento .gallery__item:nth-child(1) {
+          grid-area: 1/1/2/2;
+        }
+        .gallery--bento .gallery__item:nth-child(2) {
+          grid-area: 1/2/2/3;
+        }
+        .gallery--bento .gallery__item:nth-child(3) {
+          grid-area: 2/1/3/2;
+        }
+        .gallery--bento .gallery__item:nth-child(4) {
+          grid-area: 2/2/3/3;
+        }
+        .gallery--bento .gallery__item:nth-child(5) {
+          grid-area: 3/1/4/2;
+        }
+        .gallery--bento .gallery__item:nth-child(6) {
+          grid-area: 3/2/4/3;
+        }
+        .gallery--bento .gallery__item:nth-child(7) {
+          grid-area: 4/1/5/2;
+        }
+        .gallery--bento .gallery__item:nth-child(8) {
+          grid-area: 4/2/5/3;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .gallery--bento {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto;
+        }
+        .gallery--bento .gallery__item {
+          height: 200px;
+          grid-area: auto !important;
+        }
+        .modal-content {
+          padding: 32px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <div class="gallery-wrap">
+      <div class="hero-initial-overlay">
+        <div class="container hero-content">
+          <span class="hero-label">VitalEdge Diagnostic</span>
+          <h1 class="hero-title reveal-text">
+            <div><span>Unlock Your</span></div>
+            <div><span class="accent-color">Biological Potential</span></div>
+          </h1>
+          <p class="hero-subtitle reveal-sub">
+            Discover the precise supplement stack your body needs to perform at
+            elite levels.
+          </p>
+          <div class="hero-cta-container">
+            <button id="startQuizBtn" class="btn btn-primary">
+              Start Free Assessment ↗
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="gallery-8" class="gallery gallery--bento">
+        <!-- Permitted Images -->
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+            alt="Biohacking Lab"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png"
+            alt="Wellness Spa"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png"
+            alt="Molecular Structure"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png"
+            alt="Mindset Focus"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befb38cabb229231e2.png"
+            alt="Lifestyle Balance"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png"
+            alt="Premium Living"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png"
+            alt="Health Metrics"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+            alt="Clinical Precision"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="quiz-section">
+      <div id="flair-container"></div>
+
+      <div class="container quiz-container">
+        <div class="quiz-header">
+          <h2 class="quiz-main-title">Let's Diagnose Your Bio-Engine</h2>
+          <p class="quiz-meta-info">6 questions • 90 seconds</p>
+        </div>
+
+        <div class="quiz-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-text"
+            ><span id="currentQ">1</span>/6 Questions</span
+          >
+        </div>
+
+        <div id="questionContainer"></div>
+
+        <div class="question-nav">
+          <button id="prevBtn" class="nav-btn nav-prev" disabled>
+            ← Previous
+          </button>
+          <button id="nextBtn" class="nav-btn nav-next">Next →</button>
+        </div>
+
+        <p
+          class="micro-copy"
+          style="
+            text-align: center;
+            margin-top: 24px;
+            color: var(--secondary);
+            font-size: 0.85rem;
+          "
+        >
+          No account required • Clinical grade analysis
+        </p>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="how-it-works" class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Why Take The Diagnostic?</h2>
+          <p class="section-subtitle">
+            Most high-performers fail because they optimize the wrong biological
+            markers first.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card clay-card">
+            <span class="feature-icon">🎯</span>
+            <h3 class="feature-title">Precision Diagnosis</h3>
+            <p class="feature-desc">
+              Identify exactly which nutrient gaps are causing your afternoon
+              crashes or brain fog.
+            </p>
+          </div>
+          <div class="feature-card clay-card">
+            <span class="feature-icon">⚡</span>
+            <h3 class="feature-title">Instant Action Plan</h3>
+            <p class="feature-desc">
+              Get a prioritized supplement stack recommendation you can
+              implement immediately.
+            </p>
+          </div>
+          <div class="feature-card clay-card">
+            <span class="feature-icon">📈</span>
+            <h3 class="feature-title">Benchmark Against Peers</h3>
+            <p class="feature-desc">
+              See how your bio-metrics compare to other top 1% performers in
+              your industry.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <h3 style="color: var(--accent)">VitalEdge</h3>
+            <p
+              style="
+                color: var(--secondary);
+                margin-top: 12px;
+                max-width: 300px;
+              "
+            >
+              Precision supplementation for the modern high-performer.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul class="footer-links">
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Science</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <ul class="footer-links">
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+        <div
+          style="
+            text-align: center;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            padding-top: 40px;
+            border-top: 1px solid #e2e8f0;
+          "
+        >
+          &copy; 2025 VitalEdge. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <!-- Email Gate Modal -->
+    <div id="emailGateModal" class="modal-overlay">
+      <div class="modal-content" data-lenis-prevent>
+        <button class="modal-close" id="closeEmailBtn">×</button>
+        <span
+          class="hero-label"
+          style="margin-bottom: 16px; display: inline-block"
+          >UNLOCK YOUR RESULTS</span
+        >
+        <h2 class="modal-title" style="margin-bottom: 12px">
+          Enter Your Email
+        </h2>
+        <p
+          class="modal-subtitle"
+          style="color: var(--secondary); margin-bottom: 32px"
+        >
+          Get your personalized VitalEdge protocol instantly.
+        </p>
+
+        <form id="emailForm" class="email-form">
+          <input
+            type="email"
+            id="emailInput"
+            class="form-input"
+            placeholder="you@company.com"
+            required
+          />
+          <button type="submit" class="btn btn-primary" style="width: 100%">
+            Send My Protocol →
+          </button>
+        </form>
+
+        <div
+          style="margin-top: 24px; font-size: 0.85rem; color: var(--secondary)"
+        >
+          🔒 Secure • No spam • Unsubscribe anytime
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultModal" class="modal-overlay">
+      <div
+        class="modal-content"
+        data-lenis-prevent
+        style="max-width: 600px; text-align: left"
+      >
+        <button
+          class="modal-close"
+          onclick="
+            document.getElementById('resultModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            lenis.start();
+          "
+        >
+          ×
+        </button>
+
+        <div id="resultContent"></div>
+      </div>
+    </div>
+
+    <script>
+      // --- 1. Initialization & Lenis ---
+      gsap.registerPlugin(ScrollTrigger, Flip);
+
+      const lenis = new Lenis({
+        lerp: 0.1,
+        smoothWheel: true,
+        wheelMultiplier: 1,
+      });
+
+      const raf = (time) => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+
+      // --- 2. Hero Flip Animation ---
+      const galleryElement = document.querySelector("#gallery-8");
+      const galleryItems = galleryElement.querySelectorAll(".gallery__item");
+      const heroOverlay = document.querySelector(".hero-initial-overlay");
+
+      // Initial Text Reveal
+      const tlReveal = gsap.timeline();
+      tlReveal
+        .to(".hero-initial-overlay .reveal-text span", {
+          y: "0%",
+          duration: 1.2,
+          stagger: 0.15,
+          ease: "power4.out",
+        })
+        .to(
+          ".hero-initial-overlay .reveal-sub",
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+          },
+          "-=0.8",
+        );
+
+      // Flip Setup
+      galleryElement.classList.add("gallery--final");
+      const flipState = Flip.getState(galleryItems);
+      galleryElement.classList.remove("gallery--final");
+
+      const flip = Flip.to(flipState, {
+        simple: true,
+        ease: "expoScale(1, 5)",
+      });
+
+      const tlMain = gsap.timeline({
+        scrollTrigger: {
+          trigger: galleryElement,
+          start: "top center",
+          end: "+=100%",
+          scrub: true,
+          pin: galleryElement.parentNode,
+          anticipatePin: 1,
+        },
+      });
+
+      tlMain.to(heroOverlay, { opacity: 0, y: -50, duration: 0.2 }, 0);
+      tlMain.add(flip, 0);
+
+      // --- 3. Quiz Logic ---
+      const quizData = [
+        {
+          question: "How would you describe your current daily energy levels?",
+          options: [
+            { text: "Steady and high all day", points: 3 },
+            { text: "Good morning, crash by 3pm", points: 1 },
+            { text: "Constantly tired, need caffeine", points: 0 },
+            { text: "Erratic, depends on sleep", points: 1 },
+          ],
+        },
+        {
+          question: "How is your sleep quality and recovery?",
+          options: [
+            { text: "Deep, 7-8 hours, wake refreshed", points: 3 },
+            { text: "Frequent waking, hard to fall asleep", points: 0 },
+            { text: "Okay, but need alarm to wake up", points: 1 },
+            { text: "Inconsistent schedule", points: 1 },
+          ],
+        },
+        {
+          question: "What is your current workout intensity?",
+          options: [
+            { text: "Elite athlete level (daily)", points: 3 },
+            { text: "Moderate (3-4x week)", points: 2 },
+            { text: "Light / Occasional", points: 1 },
+            { text: "Sedentary lifestyle", points: 0 },
+          ],
+        },
+        {
+          question: "How do you handle high-stress situations?",
+          options: [
+            { text: "Calm and focused", points: 3 },
+            { text: "Anxious but functional", points: 1 },
+            { text: "Overwhelmed easily", points: 0 },
+            { text: "Physical symptoms (headaches)", points: 0 },
+          ],
+        },
+        {
+          question: "What supplements are you currently taking?",
+          options: [
+            { text: "None / Just Multivitamin", points: 0 },
+            { text: "Basic vitamins (C, D, Zinc)", points: 1 },
+            { text: "Some nootropics or pre-workout", points: 2 },
+            { text: "Comprehensive stack already", points: 3 },
+          ],
+        },
+        {
+          question: "What is your primary health goal right now?",
+          options: [
+            { text: "Just want to feel 'normal'", points: 0 },
+            { text: "Fix specific issue (sleep/focus)", points: 1 },
+            { text: "Optimize performance further", points: 2 },
+            { text: "Maximum longevity & output", points: 3 },
+          ],
+        },
+      ];
+
+      const resultsData = [
+        {
+          category: "FOUNDATIONAL",
+          title: "The VitalEdge Starter",
+          summary:
+            "Your bio-metrics indicate a need for foundational support. You're likely experiencing nutrient gaps that are dragging down your baseline energy.",
+          image:
+            "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png",
+          mistakes: [
+            "Relying on caffeine instead of cellular energy",
+            "Missing key micronutrients (Magnesium, B-Complex)",
+            "Inconsistent sleep hygiene protocols",
+          ],
+          ctaText: "Get The Starter Pack",
+        },
+        {
+          category: "OPTIMIZED",
+          title: "The VitalEdge Optimizer",
+          summary:
+            "You have a solid foundation but are hitting a performance ceiling. Your body needs targeted nootropics and adaptogens to break through stress barriers.",
+          image:
+            "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png",
+          mistakes: [
+            "Under-dosing on cognitive enhancers",
+            "Ignoring cortisol management",
+            "Lack of specific recovery agents post-workout",
+          ],
+          ctaText: "Get The Optimizer Pack",
+        },
+        {
+          category: "ELITE",
+          title: "The VitalEdge Elite",
+          summary:
+            "You are operating at a high level but require full-stack enhancement to sustain peak output. This protocol is designed for maximum biological efficiency.",
+          image:
+            "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png",
+          mistakes: [
+            "Not leveraging synergistic compound stacks",
+            "Missing advanced mitochondrial support",
+            "Sub-optimal dosing timing",
+          ],
+          ctaText: "Get The Elite Protocol",
+        },
+      ];
+
+      let STATE = {
+        currentQuestion: 0,
+        answers: [],
+        score: 0,
+        flairElements: [],
+        flairIndex: 0,
+        mousePos: { x: 0, y: 0 },
+        lastMousePos: { x: 0, y: 0 },
+      };
+
+      const questionContainer = document.getElementById("questionContainer");
+      const progressFill = document.getElementById("progressFill");
+      const currentQSpan = document.getElementById("currentQ");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const emailGateModal = document.getElementById("emailGateModal");
+      const resultModal = document.getElementById("resultModal");
+
+      function renderQuestion() {
+        const q = quizData[STATE.currentQuestion];
+
+        // Animate out old
+        gsap.to(questionContainer, {
+          opacity: 0,
+          y: 20,
+          duration: 0.2,
+          onComplete: () => {
+            questionContainer.innerHTML = `
+                    <h2 class="question-title" style="margin-bottom: 24px; font-size: 1.5rem;">${q.question}</h2>
+                    ${q.options
+                      .map(
+                        (opt, idx) => `
+                    <div class="question-card clay-card initial-hidden" data-index="${idx}" onclick="selectAnswer(${idx})">
+                        <div class="option-icon">${String.fromCharCode(65 + idx)}</div>
+                        <span class="option-text">${opt.text}</span>
+                    </div>
+                    `,
+                      )
+                      .join("")}
+                `;
+
+            // Animate in new
+            gsap.to(questionContainer, { opacity: 1, y: 0, duration: 0.3 });
+            gsap.from(questionContainer.querySelectorAll(".question-card"), {
+              opacity: 0,
+              y: 20,
+              stagger: 0.08,
+              ease: "back.out(1.2)",
+              duration: 0.4,
+            });
+          },
+        });
+
+        // Update UI
+        currentQSpan.textContent = STATE.currentQuestion + 1;
+        progressFill.style.width = `${(STATE.currentQuestion / quizData.length) * 100}%`;
+        prevBtn.disabled = STATE.currentQuestion === 0;
+        nextBtn.textContent =
+          STATE.currentQuestion === quizData.length - 1 ? "Finish →" : "Next →";
+      }
+
+      function selectAnswer(index) {
+        // Visual selection
+        document.querySelectorAll(".question-card").forEach((card, i) => {
+          card.classList.toggle("selected", i === index);
+          if (i === index) {
+            gsap.to(card, { scale: 1.02, duration: 0.2 });
+          } else {
+            gsap.to(card, { scale: 1, duration: 0.2 });
+          }
+        });
+
+        STATE.answers[STATE.currentQuestion] = index;
+        STATE.score += quizData[STATE.currentQuestion].options[index].points;
+
+        setTimeout(() => {
+          if (STATE.currentQuestion < quizData.length - 1) {
+            STATE.currentQuestion++;
+            renderQuestion();
+          } else {
+            openEmailGate();
+          }
+        }, 600);
+      }
+
+      prevBtn.addEventListener("click", () => {
+        if (STATE.currentQuestion > 0) {
+          STATE.currentQuestion--;
+          renderQuestion();
+        }
+      });
+
+      nextBtn.addEventListener("click", () => {
+        // Only allow next if answered (optional, but good UX)
+        if (STATE.answers[STATE.currentQuestion] !== undefined) {
+          if (STATE.currentQuestion < quizData.length - 1) {
+            STATE.currentQuestion++;
+            renderQuestion();
+          }
+        }
+      });
+
+      document.getElementById("startQuizBtn").addEventListener("click", () => {
+        lenis.scrollTo("#quiz");
+      });
+
+      // --- 4. Modals & Results ---
+      function openEmailGate() {
+        emailGateModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        lenis.stop();
+      }
+
+      document.getElementById("closeEmailBtn").addEventListener("click", () => {
+        emailGateModal.classList.remove("active");
+        document.body.style.overflow = "auto";
+        lenis.start();
+      });
+
+      document.getElementById("emailForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("emailInput").value;
+        if (email) {
+          emailGateModal.classList.remove("active");
+          showResults();
+        }
+      });
+
+      function showResults() {
+        // Calculate Result
+        const maxScore = 18; // 6 questions * 3 max points
+        let resultIndex = 0;
+
+        if (STATE.score >= 12)
+          resultIndex = 2; // Elite
+        else if (STATE.score >= 6)
+          resultIndex = 1; // Optimizer
+        else resultIndex = 0; // Starter
+
+        const result = resultsData[resultIndex];
+
+        const content = document.getElementById("resultContent");
+        content.innerHTML = `
+                <div class="result-avatar-container">
+                    <img src="${result.image}" alt="Result" class="result-avatar-img">
+                    <span class="result-badge">${result.category}</span>
+                </div>
+                <h2 class="result-headline">${result.title}</h2>
+                <p class="result-summary">${result.summary}</p>
+
+                <div class="mistake-list">
+                    <div style="font-weight:700; margin-bottom:12px; color:var(--primary);">⚠️ Optimization Leaks Detected:</div>
+                    ${result.mistakes
+                      .map(
+                        (m) => `
+                    <div class="mistake-item">
+                        <span class="mistake-icon">•</span>
+                        <span>${m}</span>
+                    </div>
+                    `,
+                      )
+                      .join("")}
+                </div>
+
+                <button class="btn btn-primary" style="width:100%">${result.ctaText}</button>
+                <p style="text-align:center; margin-top:16px; font-size:0.85rem; color:var(--secondary);">
+                    Full report sent to your inbox.
+                </p>
+            `;
+
+        resultModal.classList.add("active");
+        lenis.stop();
+
+        // Animate elements
+        gsap.from(".result-avatar-container", {
+          scale: 0,
+          duration: 0.5,
+          ease: "back.out(1.7)",
+        });
+        gsap.from(".result-headline", {
+          y: 20,
+          opacity: 0,
+          delay: 0.2,
+          duration: 0.5,
+        });
+        gsap.from(".result-summary", {
+          y: 20,
+          opacity: 0,
+          delay: 0.3,
+          duration: 0.5,
+        });
+        gsap.from(".mistake-list", {
+          y: 20,
+          opacity: 0,
+          delay: 0.4,
+          duration: 0.5,
+        });
+      }
+
+      // --- 5. Falling Icon Trail System ---
+      const flairAssets = [
+        "https://assets.codepen.io/16327/Revised+Flair.png",
+        "https://assets.codepen.io/16327/Revised+Flair-1.png",
+        "https://assets.codepen.io/16327/Revised+Flair-2.png",
+        "https://assets.codepen.io/16327/Revised+Flair-3.png",
+        "https://assets.codepen.io/16327/Revised+Flair-4.png",
+      ];
+
+      const quizSection = document.getElementById("quiz");
+      const flairContainer = document.getElementById("flair-container");
+
+      // Create flair elements
+      for (let i = 0; i < 50; i++) {
+        const img = document.createElement("img");
+        img.className = "flair";
+        img.src = flairAssets[i % flairAssets.length];
+        flairContainer.appendChild(img);
+        STATE.flairElements.push(img);
+      }
+
+      function playFlairAnimation(shape, x, y) {
+        gsap.killTweensOf(shape);
+        gsap.set(shape, {
+          opacity: 1,
+          scale: 0.5,
+          left: x,
+          top: y,
+          xPercent: -50,
+          yPercent: -50,
+          rotation: 0,
+          y: 0,
+          display: "block",
+          position: "absolute",
+        });
+
+        gsap
+          .timeline()
+          .to(shape, {
+            opacity: 1,
+            scale: 1,
+            ease: "elastic.out(1,0.5)",
+            duration: 0.4,
+          })
+          .to(shape, { rotation: "random([-360, 360])" }, "<")
+          .to(
+            shape,
+            { y: "150px", opacity: 0, ease: "power2.in", duration: 0.8 },
+            0,
+          );
+      }
+
+      function updateImageTrail() {
+        const travelDistance = Math.hypot(
+          STATE.lastMousePos.x - STATE.mousePos.x,
+          STATE.lastMousePos.y - STATE.mousePos.y,
+        );
+
+        if (travelDistance > 40) {
+          const wrappedIdx = STATE.flairIndex % STATE.flairElements.length;
+          const img = STATE.flairElements[wrappedIdx];
+          playFlairAnimation(img, STATE.mousePos.x, STATE.mousePos.y);
+          STATE.lastMousePos = { ...STATE.mousePos };
+          STATE.flairIndex++;
+        }
+      }
+
+      quizSection.addEventListener("mousemove", (e) => {
+        const rect = quizSection.getBoundingClientRect();
+        STATE.mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      });
+
+      gsap.ticker.add(updateImageTrail);
+    </script>
+  </body>
+</html>

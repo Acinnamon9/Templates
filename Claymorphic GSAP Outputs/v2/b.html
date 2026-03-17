@@ -1,0 +1,2887 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VitalEdge Biohacking Diagnostic | Optimize Your Biology</title>
+    <meta
+      name="description"
+      content="Discover your personalized supplement protocol in 60 seconds. Science-backed stacks for high-performers."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script>
+    <style>
+      :root {
+        --primary: #0f172a;
+        --background: #f8fafc;
+        --secondary: #64748b;
+        --accent: #273c39;
+        --accent-pink: #f472b6;
+        --accent-cyan: #22d3ee;
+        --success: #10b981;
+        --border: #e2e8f0;
+        --white: #ffffff;
+        --color-rim: rgba(255, 255, 255, 0.85);
+        --color-shadow-light: rgba(15, 23, 42, 0.08);
+        --color-shadow-deep: rgba(15, 23, 42, 0.2);
+        --grad-surface: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        --grad-accent: linear-gradient(135deg, #273c39 0%, #1a2e2b 100%);
+        --clay-shadow:
+          12px 12px 24px rgba(0, 0, 0, 0.05),
+          -8px -8px 16px rgba(255, 255, 255, 0.8),
+          inset 4px 4px 8px rgba(255, 255, 255, 0.5),
+          inset -4px -4px 8px rgba(0, 0, 0, 0.02);
+        --radius-sm: 8px;
+        --radius-md: 16px;
+        --radius-lg: 32px;
+        --radius-organic: 30% 20% 15% 45% / 60% 30% 70% 40%;
+        --radius-squircle: 40px;
+        --transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-body), "Plus Jakarta Sans", sans-serif;
+        background-color: var(--background);
+        color: var(--primary);
+        overflow-x: hidden;
+        position: relative;
+        scroll-behavior: smooth;
+      }
+
+      .font-heading {
+        font-family: var(--font-heading), "Bricolage Grotesque", sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+
+      .font-body {
+        font-family: var(--font-body), "Plus Jakarta Sans", sans-serif;
+        line-height: 1.6;
+      }
+
+      .font-label {
+        font-family: var(--font-body), "Plus Jakarta Sans", sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.01em;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 1.5rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        background: rgba(248, 250, 252, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        transition: all 0.3s ease;
+      }
+
+      .navbar.scrolled {
+        padding: 1rem 5%;
+        background: rgba(248, 250, 252, 0.98);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      }
+
+      .nav-logo {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--accent);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .nav-logo span {
+        background: linear-gradient(135deg, var(--accent) 0%, #1a2e2b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2.5rem;
+      }
+
+      .nav-link {
+        text-decoration: none;
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 1.05rem;
+        position: relative;
+        padding: 0.5rem 0;
+        transition: var(--transition);
+      }
+
+      .nav-link:hover {
+        color: var(--accent);
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent);
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        color: var(--primary);
+        cursor: pointer;
+      }
+
+      /* Clay Card System */
+      .clay-card {
+        background: var(--grad-surface);
+        border: 2px solid var(--color-rim);
+        border-radius: var(--radius-squircle);
+        padding: 2.5rem;
+        box-shadow: var(--clay-shadow);
+        transition: var(--transition);
+        position: relative;
+        overflow: visible;
+      }
+
+      .clay-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.025;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .clay-card::after {
+        content: "";
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent 45%,
+          rgba(255, 255, 255, 0.3) 50%,
+          transparent 55%
+        );
+        transform: rotate(-25deg);
+        transition: all 0.7s ease;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .clay-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -10px rgba(39, 60, 57, 0.25);
+        border-radius: 44px;
+      }
+
+      .clay-card:hover::after {
+        top: -20%;
+        left: -20%;
+      }
+
+      /* Bento Hero Grid */
+      .gallery-wrap {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero-initial-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+        opacity: 1;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        padding: 2rem;
+        text-align: center;
+        z-index: 20;
+      }
+
+      .hero-label {
+        display: inline-block;
+        background: rgba(39, 60, 57, 0.1);
+        color: var(--accent);
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .hero-title {
+        font-size: 5rem;
+        line-height: 0.9;
+        margin: 1rem 0;
+        color: var(--primary);
+        overflow: hidden;
+      }
+
+      .hero-title .accent-color {
+        color: var(--accent);
+      }
+
+      .hero-title div {
+        overflow: hidden;
+      }
+
+      .hero-title span {
+        display: inline-block;
+        transform: translateY(100%);
+      }
+
+      .hero-subtitle {
+        font-size: 1.5rem;
+        color: var(--secondary);
+        margin: 1.5rem 0 2.5rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+
+      .hero-cta-container {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        justify-content: center;
+      }
+
+      .cta-button {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 20px rgba(39, 60, 57, 0.3);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(39, 60, 57, 0.4);
+      }
+
+      .gallery {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        display: grid;
+        gap: 1vh;
+        grid-template-columns: repeat(3, 32.5vw);
+        grid-template-rows: repeat(4, 23vh);
+        justify-content: center;
+        align-content: center;
+        will-change: transform;
+        backface-visibility: hidden;
+        z-index: 1;
+      }
+
+      .gallery__item {
+        position: relative;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: #e2e8f0;
+      }
+
+      .gallery__item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.8s ease;
+      }
+
+      .gallery--bento .gallery__item:nth-child(1) {
+        grid-area: 1/1/3/2;
+      }
+      .gallery--bento .gallery__item:nth-child(2) {
+        grid-area: 1/2/2/3;
+      }
+      .gallery--bento .gallery__item:nth-child(3) {
+        grid-area: 2/2/4/3;
+      }
+      .gallery--bento .gallery__item:nth-child(4) {
+        grid-area: 1/3/3/3;
+      }
+      .gallery--bento .gallery__item:nth-child(5) {
+        grid-area: 3/1/3/2;
+      }
+      .gallery--bento .gallery__item:nth-child(6) {
+        grid-area: 3/3/5/4;
+      }
+      .gallery--bento .gallery__item:nth-child(7) {
+        grid-area: 4/1/5/2;
+      }
+      .gallery--bento .gallery__item:nth-child(8) {
+        grid-area: 4/2/5/3;
+      }
+
+      .gallery--final {
+        grid-template-columns: repeat(3, 100vw);
+        grid-template-rows: repeat(4, 49.5vh);
+        gap: 1vh;
+      }
+
+      /* Quiz Section */
+      .quiz-section {
+        padding: 8rem 0 5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .quiz-atmosphere {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.08;
+        pointer-events: none;
+      }
+
+      .liquid-bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(40px) contrast(1.2);
+      }
+
+      #flair-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .flair {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        opacity: 0;
+        pointer-events: none;
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+      }
+
+      .quiz-container {
+        position: relative;
+        z-index: 10;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      .quiz-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .quiz-main-title {
+        font-size: 3.2rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--accent) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .quiz-meta-info {
+        color: var(--secondary);
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+      }
+
+      .quiz-progress {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 3rem;
+      }
+
+      .progress-bar {
+        flex: 1;
+        height: 12px;
+        background: rgba(39, 60, 57, 0.08);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 20%;
+        background: var(--accent);
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .progress-text {
+        font-weight: 600;
+        color: var(--secondary);
+        min-width: 80px;
+        text-align: right;
+      }
+
+      .question-title {
+        font-size: 2.4rem;
+        margin-bottom: 2.5rem;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .question-card {
+        background: white;
+        border: 2px solid var(--border);
+        border-radius: 24px;
+        padding: 1.8rem;
+        margin-bottom: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: var(--transition);
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      .question-card:hover {
+        border-color: rgba(39, 60, 57, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .question-card.selected {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(39, 60, 57, 0.25);
+      }
+
+      .question-card.selected .option-icon {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      .option-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(39, 60, 57, 0.08);
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+        transition: var(--transition);
+      }
+
+      .option-text {
+        font-size: 1.25rem;
+        line-height: 1.5;
+      }
+
+      .question-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2.5rem;
+        gap: 1.5rem;
+      }
+
+      .nav-btn {
+        flex: 1;
+        padding: 1rem;
+        background: rgba(39, 60, 57, 0.05);
+        border: 2px solid var(--border);
+        border-radius: 24px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .nav-btn:hover:not(:disabled) {
+        background: rgba(39, 60, 57, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .nav-next {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+
+      .nav-next:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(39, 60, 57, 0.3);
+      }
+
+      .micro-copy {
+        text-align: center;
+        color: var(--secondary);
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+        font-style: italic;
+      }
+
+      /* Modal System */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.98);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 40px;
+        width: 90%;
+        max-width: 600px;
+        padding: 3rem;
+        position: relative;
+        transform: scale(0.95);
+        opacity: 0;
+        transition:
+          transform 0.4s ease,
+          opacity 0.4s ease;
+      }
+
+      .modal-overlay.active .modal-content {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: var(--secondary);
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+      }
+
+      .modal-close:hover {
+        color: var(--primary);
+        background: rgba(0, 0, 0, 0.03);
+        transform: rotate(90deg);
+      }
+
+      .modal-badge {
+        display: inline-block;
+        background: rgba(39, 60, 57, 0.1);
+        color: var(--accent);
+        padding: 0.4rem 1.2rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        margin-bottom: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .modal-title {
+        font-size: 2.8rem;
+        margin: 0.5rem 0 1.2rem;
+        line-height: 1.1;
+      }
+
+      .modal-subtitle {
+        color: var(--secondary);
+        font-size: 1.3rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .email-form {
+        margin: 2.5rem 0;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        font-size: 1.05rem;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 1.2rem 1.5rem;
+        border: 2px solid var(--border);
+        border-radius: 20px;
+        font-family: var(--font-body);
+        font-size: 1.1rem;
+        transition: var(--transition);
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(39, 60, 57, 0.15);
+      }
+
+      .form-hint {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--secondary);
+        font-size: 0.9rem;
+        margin: 0.8rem 0 1.8rem;
+      }
+
+      .result-previews {
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .receive-label {
+        font-weight: 600;
+        margin-bottom: 1.2rem;
+        color: var(--accent);
+        font-size: 1.1rem;
+      }
+
+      .preview-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        margin-bottom: 0.9rem;
+        font-size: 1.05rem;
+      }
+
+      .preview-check {
+        color: var(--success);
+        font-weight: bold;
+        font-size: 1.4rem;
+        line-height: 1;
+        margin-top: -0.2rem;
+      }
+
+      #resultModal .modal-content {
+        max-width: 700px;
+        padding: 3.5rem;
+      }
+
+      .result-avatar-container {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        position: relative;
+      }
+
+      .result-avatar-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--accent);
+        background: var(--accent);
+        display: block;
+        margin: 0 auto 1.5rem;
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      .result-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(39, 60, 57, 0.1);
+        color: var(--accent);
+        padding: 0.6rem 1.8rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.3rem;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .result-icon {
+        font-size: 1.8rem;
+        line-height: 1;
+      }
+
+      .result-headline {
+        font-size: 3rem;
+        margin: 0.5rem 0 1.5rem;
+        line-height: 1.1;
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      .result-summary {
+        font-size: 1.35rem;
+        color: var(--secondary);
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      .result-mistakes {
+        background: rgba(39, 60, 57, 0.03);
+        border-radius: 24px;
+        padding: 2rem;
+        margin: 2.5rem 0;
+        opacity: 0;
+      }
+
+      .mistake-title {
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .mistake-list {
+        list-style: none;
+        padding-left: 1rem;
+      }
+
+      .mistake-item {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        display: flex;
+        gap: 1rem;
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      .mistake-item:last-child {
+        border-bottom: none;
+      }
+
+      .mistake-icon {
+        color: var(--accent);
+        font-weight: bold;
+        font-size: 1.8rem;
+        line-height: 1;
+        margin-top: -0.3rem;
+      }
+
+      .recommended-action {
+        background: linear-gradient(
+          135deg,
+          rgba(39, 60, 57, 0.05) 0%,
+          rgba(255, 255, 255, 0.8) 100%
+        );
+        border-radius: 28px;
+        padding: 2.5rem;
+        text-align: center;
+        margin: 3rem 0;
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      .action-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+      }
+
+      .action-desc {
+        color: var(--secondary);
+        font-size: 1.2rem;
+        margin-bottom: 1.8rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .action-btn {
+        display: inline-block;
+        background: var(--accent);
+        color: white;
+        text-decoration: none;
+        padding: 1.1rem 2.8rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.2rem;
+        transition: var(--transition);
+      }
+
+      .action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(39, 60, 57, 0.35);
+      }
+
+      .sent-notice {
+        text-align: center;
+        color: var(--success);
+        font-weight: 600;
+        font-size: 1.15rem;
+        margin: 2.5rem 0 1.5rem;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .reset-link {
+        text-align: center;
+        margin-top: 1.5rem;
+      }
+
+      .reset-link a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+      }
+
+      .reset-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Features Section */
+      .features-section {
+        padding: 7rem 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .features-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.06;
+        pointer-events: none;
+      }
+
+      .feature-bg-element {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(60px) contrast(1.3);
+      }
+
+      .section-header {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto 4rem;
+      }
+
+      .section-title {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+      }
+
+      .section-subtitle {
+        font-size: 1.4rem;
+        color: var(--secondary);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .feature-card {
+        padding: 2.5rem;
+        text-align: center;
+        transition: var(--transition);
+        position: relative;
+        z-index: 2;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .feature-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1.8rem;
+        background: rgba(39, 60, 57, 0.08);
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        color: var(--accent);
+      }
+
+      .feature-title {
+        font-size: 1.8rem;
+        margin: 1.2rem 0 1rem;
+      }
+
+      .feature-desc {
+        color: var(--secondary);
+        font-size: 1.15rem;
+      }
+
+      /* Testimonials */
+      .testimonials-section {
+        padding: 7rem 0;
+        background: rgba(39, 60, 57, 0.02);
+      }
+
+      .testimonial-title {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--accent) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .testimonial-subtitle {
+        color: var(--secondary);
+        max-width: 700px;
+        margin: 0 auto 4rem;
+      }
+
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .testimonial-card {
+        background: white;
+        border-radius: 32px;
+        padding: 2.8rem;
+        position: relative;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        transition: var(--transition);
+      }
+
+      .testimonial-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+      }
+
+      .testimonial-stars {
+        color: #fbbf24;
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+        letter-spacing: 4px;
+      }
+
+      .testimonial-text {
+        font-size: 1.35rem;
+        font-style: italic;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        position: relative;
+      }
+
+      .testimonial-text::before {
+        content: '"';
+        position: absolute;
+        left: -25px;
+        top: -20px;
+        font-size: 5rem;
+        color: rgba(39, 60, 57, 0.1);
+        font-family: serif;
+        line-height: 1;
+      }
+
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .author-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
+
+      .author-info h4 {
+        font-size: 1.4rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .author-info p {
+        color: var(--secondary);
+        font-size: 1.05rem;
+      }
+
+      /* FAQ Section */
+      .faq-section {
+        padding: 7rem 0;
+      }
+
+      .faq-items {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .faq-item {
+        position: relative;
+      }
+
+      .follower-element {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0;
+        transform: translate(-50%, -100%);
+        filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+      }
+
+      .faq-question {
+        width: 100%;
+        text-align: left;
+        background: white;
+        border: 2px solid var(--border);
+        border-radius: 28px;
+        padding: 1.8rem 2.5rem;
+        font-family: var(--font-body);
+        font-size: 1.35rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: var(--transition);
+      }
+
+      .faq-question:hover {
+        border-color: rgba(39, 60, 57, 0.3);
+      }
+
+      .faq-item.active .faq-question {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+
+      .faq-toggle {
+        font-size: 1.8rem;
+        transition: transform 0.3s ease;
+      }
+
+      .faq-item.active .faq-toggle {
+        transform: rotate(45deg);
+      }
+
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        background: rgba(39, 60, 57, 0.02);
+        border-radius: 0 0 28px 28px;
+      }
+
+      .faq-answer p {
+        padding: 1.8rem 2.5rem;
+        font-size: 1.15rem;
+        line-height: 1.7;
+        color: var(--secondary);
+      }
+
+      /* CTA Banner */
+      .cta-banner {
+        padding: 5rem 0;
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          rgba(39, 60, 57, 0.08) 0%,
+          rgba(255, 255, 255, 0.5) 100%
+        );
+        border-radius: 40px;
+        margin: 5rem auto;
+        max-width: 1000px;
+      }
+
+      .banner-title {
+        font-size: 3rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .banner-subtitle {
+        font-size: 1.4rem;
+        color: var(--secondary);
+        max-width: 650px;
+        margin: 0 auto 2.5rem;
+      }
+
+      .banner-cta-container {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+      }
+
+      .banner-btn {
+        padding: 1.1rem 2.8rem;
+        border-radius: 50px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 1.15rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .banner-btn-primary {
+        background: var(--accent);
+        color: white;
+        border: none;
+      }
+
+      .banner-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(39, 60, 57, 0.35);
+      }
+
+      .banner-btn-secondary {
+        background: transparent;
+        color: var(--accent);
+        border: 2px solid var(--accent);
+      }
+
+      .banner-btn-secondary:hover {
+        background: rgba(39, 60, 57, 0.05);
+        transform: translateY(-2px);
+      }
+
+      .pulse {
+        position: relative;
+      }
+
+      .pulse::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: 0 0 0 0 rgba(39, 60, 57, 0.4);
+        animation: pulse 2s infinite;
+        z-index: -1;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(39, 60, 57, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 12px rgba(39, 60, 57, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(39, 60, 57, 0);
+        }
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--primary);
+        color: rgba(255, 255, 255, 0.85);
+        padding: 5rem 0 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .footer-texture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.08;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .texture-overlay {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: contrast(1.2) brightness(1.1);
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .footer-brand h3 {
+        font-size: 2.2rem;
+        margin-bottom: 1.2rem;
+        color: white;
+      }
+
+      .footer-brand p {
+        margin-bottom: 1.8rem;
+        max-width: 300px;
+        line-height: 1.7;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: var(--transition);
+      }
+
+      .social-icon:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .footer-col h4 {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+        color: white;
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 0.9rem;
+      }
+
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: var(--transition);
+        font-size: 1.05rem;
+      }
+
+      .footer-links a:hover {
+        color: white;
+        transform: translateX(3px);
+      }
+
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 3rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 3rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .legal-buttons {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .legal-btn {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .legal-btn:hover {
+        color: white;
+      }
+
+      /* Responsive */
+      @media (max-width: 1200px) {
+        .hero-title {
+          font-size: 4.2rem;
+        }
+        .gallery {
+          gap: 0.8vh;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .nav-links {
+          display: none;
+        }
+        .mobile-menu-btn {
+          display: block;
+        }
+        .hero-title {
+          font-size: 3.8rem;
+        }
+        .gallery {
+          display: none;
+        }
+        .hero-initial-overlay {
+          position: relative;
+          height: auto;
+          padding: 8rem 0;
+        }
+        .features-grid,
+        .testimonial-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .footer-content {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        :root {
+          --radius-squircle: 32px;
+        }
+        .hero-title {
+          font-size: 3rem;
+        }
+        .hero-subtitle {
+          font-size: 1.3rem;
+        }
+        .quiz-main-title {
+          font-size: 2.6rem;
+        }
+        .question-title {
+          font-size: 2rem;
+        }
+        .option-text {
+          font-size: 1.15rem;
+        }
+        .section-title {
+          font-size: 2.8rem;
+        }
+        .features-grid,
+        .testimonial-grid {
+          grid-template-columns: 1fr;
+        }
+        .question-nav {
+          flex-direction: column;
+        }
+        .nav-btn {
+          padding: 1.2rem;
+        }
+        .modal-content {
+          padding: 2.5rem 2rem;
+        }
+        .result-headline {
+          font-size: 2.4rem;
+        }
+        .banner-title {
+          font-size: 2.4rem;
+        }
+        .banner-cta-container {
+          flex-direction: column;
+        }
+        .banner-btn {
+          width: 100%;
+        }
+        .footer-content {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .social-icons {
+          justify-content: center;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 1.5rem;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: 2.6rem;
+          line-height: 1.05;
+        }
+        .hero-label {
+          padding: 0.4rem 1rem;
+          font-size: 0.85rem;
+        }
+        .hero-subtitle {
+          font-size: 1.2rem;
+        }
+        .quiz-main-title {
+          font-size: 2.2rem;
+        }
+        .question-card {
+          flex-direction: column;
+          text-align: center;
+          padding: 1.6rem;
+        }
+        .option-icon {
+          width: 42px;
+          height: 42px;
+          font-size: 1.3rem;
+        }
+        .section-title {
+          font-size: 2.4rem;
+        }
+        .modal-title {
+          font-size: 2.4rem;
+        }
+        .result-avatar-img {
+          width: 100px;
+          height: 100px;
+        }
+        .result-headline {
+          font-size: 2.2rem;
+        }
+        .result-summary {
+          font-size: 1.2rem;
+        }
+        .clay-card {
+          padding: 2rem;
+        }
+        .cta-banner {
+          padding: 3.5rem 1.5rem;
+          border-radius: 32px;
+        }
+        .navbar {
+          padding: 1rem 5%;
+        }
+      }
+
+      .initial-hidden {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="#" class="nav-logo font-heading">Vital<span>Edge</span></a>
+      <div class="nav-links">
+        <a href="#how-it-works" class="nav-link font-body">How It Works</a>
+        <a href="#quiz" class="nav-link font-body">Take Assessment</a>
+        <a href="#faq" class="nav-link font-body">FAQ</a>
+      </div>
+      <button class="mobile-menu-btn">☰</button>
+    </nav>
+
+    <!-- Hero Bento Grid -->
+    <div class="gallery-wrap">
+      <div class="hero-initial-overlay">
+        <div class="container">
+          <div class="hero-content">
+            <span class="hero-label">BIOHACKING DIAGNOSTIC</span>
+            <h1 class="hero-title font-heading">
+              <div><span>What's Your</span></div>
+              <div><span class="accent-color">Biological Score?</span></div>
+            </h1>
+            <p class="hero-subtitle font-body">
+              Discover your personalized supplement protocol in 60 seconds.
+            </p>
+            <div class="hero-cta-container">
+              <button id="startQuizBtn" class="cta-button">
+                Start Free Assessment ↗
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="gallery-8" class="gallery gallery--bento">
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+            alt="Biohacking precision"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png"
+            alt="Neural pathways"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png"
+            alt="Wellness lifestyle"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+            alt="Molecular structure"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png"
+            alt="Precision health"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png"
+            alt="Cognitive enhancement"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png"
+            alt="Performance optimization"
+          />
+        </div>
+        <div class="gallery__item">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png"
+            alt="Biological rhythm"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="quiz-section">
+      <div class="quiz-atmosphere">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+          class="liquid-bg"
+          alt="Molecular background"
+        />
+      </div>
+      <div id="flair-container"></div>
+
+      <div class="container quiz-container">
+        <div class="quiz-header">
+          <h2 class="quiz-main-title font-heading">
+            Let's Diagnose Your Biology
+          </h2>
+          <p class="quiz-meta-info font-body">5 questions • 60 seconds</p>
+        </div>
+
+        <div class="quiz-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-text"
+            ><span id="currentQ">1</span>/5 Questions</span
+          >
+        </div>
+
+        <div id="questionContainer">
+          <!-- Questions injected by JS -->
+        </div>
+
+        <div class="question-nav">
+          <button id="prevBtn" class="nav-btn nav-prev" disabled>
+            ← Previous
+          </button>
+          <button id="nextBtn" class="nav-btn nav-next">Next →</button>
+        </div>
+
+        <p class="micro-copy font-body">
+          No account required • Science-backed recommendations
+        </p>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="how-it-works" class="features-section">
+      <div class="features-bg">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+          alt="Biohacking elements"
+          class="feature-bg-element"
+        />
+      </div>
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title font-heading">Why Take The Diagnostic?</h2>
+          <p class="section-subtitle font-body">
+            Most high-performers waste money on supplements that don't address
+            their specific biological bottlenecks.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card clay-card">
+            <div class="feature-icon">🔬</div>
+            <h3 class="feature-title font-heading">Precision Diagnosis</h3>
+            <p class="feature-desc font-body">
+              Identify exactly which biological systems need support—energy
+              production, stress resilience, or cognitive function.
+            </p>
+          </div>
+          <div class="feature-card clay-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title font-heading">Personalized Protocol</h3>
+            <p class="feature-desc font-body">
+              Get a custom supplement stack calibrated to your unique
+              biology—not generic advice that works for "most people."
+            </p>
+          </div>
+          <div class="feature-card clay-card">
+            <div class="feature-icon">📈</div>
+            <h3 class="feature-title font-heading">Performance Benchmark</h3>
+            <p class="feature-desc font-body">
+              See how your biological optimization compares to other executives,
+              founders, and elite performers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title testimonial-title font-heading">
+            Trusted by 8,500+ High-Performers
+          </h2>
+          <p class="section-subtitle testimonial-subtitle font-body">
+            Real biology upgrades that led to measurable performance gains.
+          </p>
+        </div>
+
+        <div class="testimonial-grid">
+          <div class="testimonial-card clay-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text font-body">
+              "The diagnostic revealed my mitochondrial function was my
+              bottleneck—not sleep like I assumed. After 3 weeks on their Elite
+              stack, my afternoon energy crashes vanished and my deep work
+              capacity increased by 40%."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">MJ</div>
+              <div class="author-info">
+                <h4>Maya J.</h4>
+                <p>CEO, Neurotech Startup</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card clay-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text font-body">
+              "I've spent $10k+ on supplements over the years with minimal
+              results. VitalEdge's diagnostic pinpointed exactly what my body
+              needed. The Optimizer pack gave me mental clarity I haven't felt
+              since my 20s—without the jitters of stimulants."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">DR</div>
+              <div class="author-info">
+                <h4>David R.</h4>
+                <p>Partner, Venture Capital</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title font-heading">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-items">
+          <div class="faq-item hover-trigger">
+            <img
+              class="follower-element"
+              src="https://assets.codepen.io/16327/Revised+Flair.png"
+              alt=""
+            />
+            <button
+              class="faq-question font-body"
+              aria-expanded="false"
+              aria-controls="faq-ans-1"
+            >
+              How scientifically validated is this diagnostic?
+              <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-1">
+              <p>
+                Our diagnostic algorithm was developed with functional medicine
+                physicians and is based on established biomarkers of
+                performance. While not a medical diagnostic tool, it effectively
+                identifies patterns correlated with specific supplement needs
+                based on 12,000+ user outcomes.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item hover-trigger">
+            <img
+              class="follower-element"
+              src="https://assets.codepen.io/16327/Revised+Flair-2.png"
+              alt=""
+            />
+            <button
+              class="faq-question font-body"
+              aria-expanded="false"
+              aria-controls="faq-ans-2"
+            >
+              What makes your supplement packs different from others?
+              <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-2">
+              <p>
+                Each pack contains clinically-dosed, third-party tested
+                ingredients with proven bioavailability—not proprietary blends
+                that hide ineffective doses. We formulate for synergistic
+                effects (e.g., pairing L-Theanine with caffeine for smooth
+                focus) and exclude fillers, binders, and unnecessary additives.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item hover-trigger">
+            <img
+              class="follower-element"
+              src="https://assets.codepen.io/16327/Revised+Flair-5.png"
+              alt=""
+            />
+            <button
+              class="faq-question font-body"
+              aria-expanded="false"
+              aria-controls="faq-ans-3"
+            >
+              How quickly will I see results?
+              <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-answer" id="faq-ans-3">
+              <p>
+                Most users notice subtle shifts in energy stability and mental
+                clarity within 7-10 days. Full adaptation (improved sleep
+                architecture, stress resilience, workout recovery) typically
+                occurs within 4-6 weeks of consistent use. We include a 30-day
+                protocol guide with each pack to maximize results.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <div class="container">
+      <section class="cta-banner clay-card">
+        <h2 class="banner-title font-heading">
+          Ready to Optimize Your Biology?
+        </h2>
+        <p class="banner-subtitle font-body">
+          Join thousands of executives, founders, and elite performers who
+          discovered their breakthrough through our diagnostic tool.
+        </p>
+        <div class="banner-cta-container">
+          <button class="banner-btn banner-btn-primary pulse" id="ctaQuizBtn">
+            Take Free Assessment
+          </button>
+          <button class="banner-btn banner-btn-secondary">
+            View Sample Results
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-texture">
+        <img
+          src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+          alt="Molecular texture"
+          class="texture-overlay"
+        />
+      </div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <h3>VitalEdge</h3>
+            <p>
+              Precision supplement protocols for high-performers who demand
+              biological excellence.
+            </p>
+            <div class="social-icons">
+              <a href="#" class="social-icon">𝕏</a>
+              <a href="#" class="social-icon">IG</a>
+              <a href="#" class="social-icon">LI</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Protocol</h4>
+            <ul class="footer-links">
+              <li><a href="#">Diagnostic Tool</a></li>
+              <li><a href="#">Starter Pack</a></li>
+              <li><a href="#">Optimizer Pack</a></li>
+              <li><a href="#">Elite Pack</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Science</h4>
+            <ul class="footer-links">
+              <li><a href="#">Research</a></li>
+              <li><a href="#">Third-Party Testing</a></li>
+              <li><a href="#">Sourcing Standards</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Support</h4>
+            <ul class="footer-links">
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Shipping Policy</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div>&copy; 2026 VitalEdge. All rights reserved.</div>
+          <div class="legal-buttons">
+            <button class="legal-btn" data-legal="privacy">
+              Privacy Policy
+            </button>
+            <button class="legal-btn" data-legal="terms">
+              Terms of Service
+            </button>
+            <button class="legal-btn" data-legal="cookie">Cookie Policy</button>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Email Gate Modal -->
+    <div id="emailGateModal" class="modal-overlay">
+      <div class="modal-content" data-lenis-prevent>
+        <button class="modal-close" id="closeEmailBtn">×</button>
+        <span class="modal-badge">UNLOCK YOUR BIOLOGICAL PROFILE</span>
+        <h2 class="modal-title font-heading">Enter Your Email Below</h2>
+        <p class="modal-subtitle font-body">
+          Get your personalized supplement protocol instantly.
+        </p>
+
+        <form id="emailForm" class="email-form">
+          <label class="form-label font-body" for="emailInput"
+            >Work Email Address</label
+          >
+          <input
+            type="email"
+            id="emailInput"
+            class="form-input font-body"
+            placeholder="you@company.com"
+            required
+          />
+          <div class="form-hint font-body">
+            <span>🔒</span> Secure • No spam • Unsubscribe anytime
+          </div>
+          <button type="submit" class="cta-button pulse" style="width: 100%">
+            Send My Protocol →
+          </button>
+        </form>
+
+        <div class="result-previews">
+          <p class="receive-label font-body">You'll Receive:</p>
+          <div class="preview-item">
+            <span class="preview-check">✓</span>
+            <span>Your Exact Biological Optimization Tier</span>
+          </div>
+          <div class="preview-item">
+            <span class="preview-check">✓</span>
+            <span>Top 3 Biological Bottlenecks</span>
+          </div>
+          <div class="preview-item">
+            <span class="preview-check">✓</span>
+            <span>Personalized Supplement Protocol PDF</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultModal" class="modal-overlay">
+      <div class="modal-content" data-lenis-prevent>
+        <button class="modal-close" id="closeResultBtn">×</button>
+        <div id="resultContent">
+          <!-- Results injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Initialize Lenis smooth scrolling
+      const lenis = new Lenis({
+        lerp: 0.15,
+        smoothWheel: true,
+        wheelMultiplier: 1.2,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // GSAP registration
+      gsap.registerPlugin(ScrollTrigger, Flip);
+
+      // DOM Elements
+      const navbar = document.querySelector(".navbar");
+      const startQuizBtn = document.getElementById("startQuizBtn");
+      const ctaQuizBtn = document.getElementById("ctaQuizBtn");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const questionContainer = document.getElementById("questionContainer");
+      const progressFill = document.getElementById("progressFill");
+      const currentQ = document.getElementById("currentQ");
+      const emailGateModal = document.getElementById("emailGateModal");
+      const closeEmailBtn = document.getElementById("closeEmailBtn");
+      const emailForm = document.getElementById("emailForm");
+      const emailInput = document.getElementById("emailInput");
+      const resultModal = document.getElementById("resultModal");
+      const closeResultBtn = document.getElementById("closeResultBtn");
+      const resultContent = document.getElementById("resultContent");
+      const quizSection = document.getElementById("quiz");
+      const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+
+      // Quiz State
+      const STATE = {
+        currentQuestion: 0,
+        answers: {},
+        flairElements: [],
+        flairIndex: 0,
+        mousePos: { x: 0, y: 0 },
+        lastMousePos: { x: 0, y: 0 },
+        userEmail: "",
+        score: 0,
+        resultIndex: 0,
+      };
+
+      // Flair Assets for falling icons
+      const flairAssets = [
+        "https://assets.codepen.io/16327/Revised+Flair.png",
+        "https://assets.codepen.io/16327/Revised+Flair-1.png",
+        "https://assets.codepen.io/16327/Revised+Flair-2.png",
+        "https://assets.codepen.io/16327/Revised+Flair-3.png",
+        "https://assets.codepen.io/16327/Revised+Flair-4.png",
+        "https://assets.codepen.io/16327/Revised+Flair-5.png",
+        "https://assets.codepen.io/16327/Revised+Flair-6.png",
+        "https://assets.codepen.io/16327/Revised+Flair-7.png",
+        "https://assets.codepen.io/16327/Revised+Flair-8.png",
+      ];
+
+      // Quiz Data - 5 clinically-grounded questions
+      const quizData = [
+        {
+          question:
+            "How would you rate your consistent energy levels throughout the day?",
+          options: [
+            {
+              text: "Frequent crashes and afternoon slumps",
+              points: 1,
+              category: "starter",
+            },
+            {
+              text: "Generally stable but dips under stress",
+              points: 2,
+              category: "optimizer",
+            },
+            {
+              text: "Consistently high with minimal fluctuations",
+              points: 3,
+              category: "elite",
+            },
+          ],
+        },
+        {
+          question: "How would you describe your sleep quality and recovery?",
+          options: [
+            {
+              text: "Struggle to fall/stay asleep; wake unrefreshed",
+              points: 1,
+              category: "starter",
+            },
+            {
+              text: "Decent sleep but slow to recover from poor nights",
+              points: 2,
+              category: "optimizer",
+            },
+            {
+              text: "Deep, restorative sleep; bounce back quickly",
+              points: 3,
+              category: "elite",
+            },
+          ],
+        },
+        {
+          question: "How does your body respond to psychological stress?",
+          options: [
+            {
+              text: "Frequently overwhelmed; slow to recover",
+              points: 1,
+              category: "starter",
+            },
+            {
+              text: "Manageable stress but feel drained afterward",
+              points: 2,
+              category: "optimizer",
+            },
+            {
+              text: "Thrive under pressure; rapid recovery",
+              points: 3,
+              category: "elite",
+            },
+          ],
+        },
+        {
+          question:
+            "What's your current workout intensity and recovery capacity?",
+          options: [
+            {
+              text: "Light activity; need 2+ days to recover",
+              points: 1,
+              category: "starter",
+            },
+            {
+              text: "Moderate training; recover in 24-48 hours",
+              points: 2,
+              category: "optimizer",
+            },
+            {
+              text: "High-intensity training; recover within 24 hours",
+              points: 3,
+              category: "elite",
+            },
+          ],
+        },
+        {
+          question: "How sophisticated is your current supplement regimen?",
+          options: [
+            {
+              text: "Minimal or inconsistent use of basic vitamins",
+              points: 1,
+              category: "starter",
+            },
+            {
+              text: "Strategic use of 3-5 targeted supplements",
+              points: 2,
+              category: "optimizer",
+            },
+            {
+              text: "Advanced stack with cycling and biomarker tracking",
+              points: 3,
+              category: "elite",
+            },
+          ],
+        },
+      ];
+
+      // Results Data - 3 personalized protocols
+      const resultsData = [
+        {
+          category: "FOUNDATIONAL PROFILE",
+          emoji: "🌱",
+          title: "The Starter Protocol",
+          summary:
+            "Your biology shows foundational gaps in energy production and stress resilience. Before advanced biohacking, we need to establish metabolic stability with clinically-dosed essentials.",
+          mistakes: [
+            "Mistake 1: Taking random supplements without addressing core nutrient deficiencies first",
+            "Mistake 2: Overlooking mitochondrial support when experiencing energy crashes",
+            "Mistake 3: Using stimulants to mask fatigue instead of fixing root causes",
+          ],
+          actionTitle: "Your Next Step: Metabolic Foundation",
+          actionDesc:
+            "Build unshakeable energy by optimizing cellular ATP production and nervous system regulation—without stimulants or crashes.",
+          ctaText: "Get Starter Protocol →",
+          packImage:
+            "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png",
+        },
+        {
+          category: "OPTIMIZATION PROFILE",
+          emoji: "⚡",
+          title: "The Optimizer Protocol",
+          summary:
+            "Your biology has solid foundations but needs targeted enhancement for cognitive performance and stress resilience. You're ready for strategic nootropics and adaptogens to unlock next-level focus.",
+          mistakes: [
+            "Mistake 1: Using single-ingredient nootropics without synergistic pairing",
+            "Mistake 2: Taking adaptogens inconsistently, missing cumulative benefits",
+            "Mistake 3: Overlooking gut-brain axis support for sustained mental clarity",
+          ],
+          actionTitle: "Your Next Step: Cognitive Amplification",
+          actionDesc:
+            "Elevate focus, processing speed, and stress resilience with precision-dosed nootropics and adaptogens that work in concert—not isolation.",
+          ctaText: "Get Optimizer Protocol →",
+          packImage:
+            "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png",
+        },
+        {
+          category: "ELITE PERFORMANCE PROFILE",
+          emoji: "🚀",
+          title: "The Elite Protocol",
+          summary:
+            "Your biology is already highly optimized—you're operating at 85% capacity. To break through the final ceiling, you need advanced compounds that enhance cellular repair, neuroplasticity, and metabolic flexibility.",
+          mistakes: [
+            "Mistake 1: Plateauing with basic stacks when your biology demands advanced compounds",
+            "Mistake 2: Neglecting circadian rhythm optimization for peak hormonal function",
+            "Mistake 3: Missing synergistic timing protocols that amplify compound efficacy",
+          ],
+          actionTitle: "Your Next Step: Full-Stack Enhancement",
+          actionDesc:
+            "Deploy our most advanced formulation with NAD+ precursors, senolytics, and neuroregenerative compounds to push beyond conventional performance limits.",
+          ctaText: "Get Elite Protocol →",
+          packImage:
+            "https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png",
+        },
+      ];
+
+      // Initialize falling icon trail system
+      function initFlairs() {
+        const container = document.getElementById("flair-container");
+
+        for (let i = 0; i < 100; i++) {
+          const img = document.createElement("img");
+          img.className = "flair";
+          img.src = flairAssets[i % flairAssets.length];
+          container.appendChild(img);
+          STATE.flairElements.push(img);
+        }
+
+        // Start animation ticker only after initialization
+        gsap.ticker.add(updateImageTrail);
+      }
+
+      // Play flair animation
+      function playFlairAnimation(shape, x, y) {
+        gsap.killTweensOf(shape);
+        gsap.set(shape, {
+          opacity: 1,
+          scale: 1,
+          left: x,
+          top: y,
+          xPercent: -50,
+          yPercent: -50,
+          rotation: 0,
+          y: 0,
+          display: "block",
+          position: "absolute",
+        });
+
+        let tl = gsap.timeline();
+        tl.from(shape, {
+          opacity: 0,
+          scale: 0,
+          ease: "elastic.out(1,0.3)",
+          duration: 0.6,
+        })
+          .to(
+            shape,
+            {
+              rotation: gsap.utils.random(-360, 360),
+              duration: 0.1,
+            },
+            "<",
+          )
+          .to(
+            shape,
+            {
+              y: "120vh",
+              ease: "back.in(0.4)",
+              duration: 1.8,
+            },
+            0,
+          );
+      }
+
+      // Update image trail based on mouse movement
+      function updateImageTrail() {
+        const travelDistance = Math.hypot(
+          STATE.lastMousePos.x - STATE.mousePos.x,
+          STATE.lastMousePos.y - STATE.mousePos.y,
+        );
+
+        if (travelDistance > 60) {
+          const wrappedIdx = STATE.flairIndex % STATE.flairElements.length;
+          const img = STATE.flairElements[wrappedIdx];
+          playFlairAnimation(img, STATE.mousePos.x, STATE.mousePos.y);
+          STATE.lastMousePos = { ...STATE.mousePos };
+          STATE.flairIndex++;
+        }
+      }
+
+      // Render current question
+      function renderQuestion() {
+        const q = quizData[STATE.currentQuestion];
+
+        questionContainer.innerHTML = `
+        <h2 class="question-title font-heading">${q.question}</h2>
+        ${q.options
+          .map(
+            (opt, idx) => `
+          <div class="question-card clay-card" data-index="${idx}">
+            <div class="option-icon">${idx + 1}</div>
+            <span class="option-text font-body">${opt.text}</span>
+          </div>
+        `,
+          )
+          .join("")}
+      `;
+
+        // Animate question title
+        gsap.to(questionContainer.querySelector(".question-title"), {
+          duration: 0.5,
+          opacity: 1,
+          y: 0,
+          ease: "power3.out",
+        });
+
+        // Animate options with stagger
+        gsap.to(questionContainer.querySelectorAll(".question-card"), {
+          duration: 0.5,
+          opacity: 1,
+          y: 0,
+          stagger: 0.12,
+          ease: "back.out(1.4)",
+        });
+
+        // Set progress bar
+        const progress = ((STATE.currentQuestion + 1) / quizData.length) * 100;
+        gsap.to(progressFill, {
+          width: `${progress}%`,
+          duration: 0.6,
+          ease: "power2.out",
+        });
+
+        currentQ.textContent = STATE.currentQuestion + 1;
+
+        // Add event listeners to options
+        document.querySelectorAll(".question-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            // Remove selected class from all cards
+            document.querySelectorAll(".question-card").forEach((c) => {
+              c.classList.remove("selected");
+            });
+
+            // Add selected class to clicked card
+            card.classList.add("selected");
+
+            // Store answer
+            const index = parseInt(card.dataset.index);
+            STATE.answers[STATE.currentQuestion] = index;
+
+            // Auto-advance after brief delay
+            setTimeout(goToNextQuestion, 450);
+          });
+        });
+
+        // Update navigation buttons
+        prevBtn.disabled = STATE.currentQuestion === 0;
+        nextBtn.textContent =
+          STATE.currentQuestion === quizData.length - 1
+            ? "Get My Protocol →"
+            : "Next →";
+      }
+
+      // Navigate to next question
+      function goToNextQuestion() {
+        if (
+          STATE.currentQuestion < quizData.length - 1 &&
+          STATE.answers[STATE.currentQuestion] !== undefined
+        ) {
+          STATE.currentQuestion++;
+          renderQuestion();
+        } else if (
+          STATE.currentQuestion === quizData.length - 1 &&
+          STATE.answers[STATE.currentQuestion] !== undefined
+        ) {
+          calculateScore();
+          openEmailGate();
+        }
+      }
+
+      // Navigate to previous question
+      function goToPrevQuestion() {
+        if (STATE.currentQuestion > 0) {
+          STATE.currentQuestion--;
+          renderQuestion();
+        }
+      }
+
+      // Calculate final score and determine result
+      function calculateScore() {
+        STATE.score = 0;
+        let categoryCounts = { starter: 0, optimizer: 0, elite: 0 };
+
+        for (let i = 0; i < quizData.length; i++) {
+          const answerIndex = STATE.answers[i];
+          const points = quizData[i].options[answerIndex].points;
+          const category = quizData[i].options[answerIndex].category;
+
+          STATE.score += points;
+          categoryCounts[category]++;
+        }
+
+        // Determine result based on category dominance
+        if (categoryCounts.elite >= 3) {
+          STATE.resultIndex = 2; // Elite
+        } else if (
+          categoryCounts.optimizer >= 3 ||
+          (categoryCounts.starter < 2 && categoryCounts.elite < 2)
+        ) {
+          STATE.resultIndex = 1; // Optimizer
+        } else {
+          STATE.resultIndex = 0; // Starter
+        }
+      }
+
+      // Open email gate modal
+      function openEmailGate() {
+        emailGateModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        lenis.stop();
+
+        gsap.from(emailGateModal.querySelector(".modal-content"), {
+          duration: 0.6,
+          scale: 0.92,
+          opacity: 0,
+          ease: "elastic.out(1, 0.65)",
+        });
+      }
+
+      // Close email gate modal
+      function closeEmailGate() {
+        emailGateModal.classList.remove("active");
+        document.body.style.overflow = "auto";
+        lenis.start();
+      }
+
+      // Show results modal
+      function showResults() {
+        const result = resultsData[STATE.resultIndex];
+
+        resultContent.innerHTML = `
+        <div class="result-avatar-container">
+          <img src="${result.packImage}" alt="Protocol pack" class="result-avatar-img">
+          <span class="result-badge font-heading">
+            <span class="result-icon">${result.emoji}</span>
+            ${result.category}
+          </span>
+        </div>
+        <h2 class="result-headline font-heading">${result.title}</h2>
+        <p class="result-summary font-body">${result.summary}</p>
+
+        <div class="result-mistakes">
+          <div class="mistake-title font-heading">
+            <span style="color:var(--accent);">⚠️</span>
+            Top 3 Biological Leaks
+          </div>
+          <ul class="mistake-list">
+            ${result.mistakes
+              .map(
+                (m) => `
+              <li class="mistake-item font-body">
+                <span class="mistake-icon">•</span>
+                <span>${m}</span>
+              </li>
+            `,
+              )
+              .join("")}
+          </ul>
+        </div>
+
+        <div class="recommended-action">
+          <div class="action-title font-heading">${result.actionTitle}</div>
+          <p class="action-desc font-body">${result.actionDesc}</p>
+          <div class="action-cta">
+            <a href="#" class="action-btn">${result.ctaText}</a>
+          </div>
+        </div>
+
+        <p class="sent-notice font-body">📧 Full protocol sent to ${STATE.userEmail}</p>
+        <div class="reset-link"><a href="#" id="resetQuiz">Take Quiz Again</a></div>
+      `;
+
+        resultModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        lenis.stop();
+
+        // Animate results with cascade effect
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.fromTo(
+          resultModal.querySelector(".modal-content"),
+          { clipPath: "polygon(0 0, 0% 0, 0% 100%, 0% 100%)" },
+          {
+            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+            duration: 0.7,
+            ease: "power2.out",
+          },
+        )
+          .to(
+            ".result-avatar-img",
+            { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)" },
+            "-=0.3",
+          )
+          .to(".result-badge", { y: 0, opacity: 1, duration: 0.5 }, "-=0.4")
+          .to(
+            ".result-headline",
+            { scale: 1, opacity: 1, duration: 0.5 },
+            "-=0.3",
+          )
+          .to(".result-summary", { x: 0, opacity: 1, duration: 0.5 }, "-=0.3")
+          .to(".result-mistakes", { opacity: 1, duration: 0.5 }, "-=0.2")
+          .to(".mistake-item", { x: 0, opacity: 1, stagger: 0.12 }, "-=0.3")
+          .to(
+            ".recommended-action",
+            { y: 0, opacity: 1, duration: 0.6 },
+            "-=0.2",
+          )
+          .to(".sent-notice", { opacity: 1, duration: 0.4 }, "-=0.2")
+          .to(".reset-link", { opacity: 1, duration: 0.4 });
+
+        // Add reset quiz handler
+        document.getElementById("resetQuiz").addEventListener("click", (e) => {
+          e.preventDefault();
+          resultModal.classList.remove("active");
+          document.body.style.overflow = "auto";
+          lenis.start();
+
+          // Reset quiz state
+          STATE.currentQuestion = 0;
+          STATE.answers = {};
+          STATE.score = 0;
+          STATE.resultIndex = 0;
+
+          // Scroll to quiz section smoothly
+          lenis.scrollTo("#quiz", { offset: -100, duration: 1200 });
+
+          // Re-render first question after scroll
+          setTimeout(renderQuestion, 800);
+        });
+      }
+
+      // Close results modal
+      function closeResults() {
+        resultModal.classList.remove("active");
+        document.body.style.overflow = "auto";
+        lenis.start();
+      }
+
+      // Initialize bento grid animation
+      function initBentoAnimation() {
+        const galleryElement = document.querySelector("#gallery-8");
+        const galleryItems = galleryElement.querySelectorAll(".gallery__item");
+        const heroOverlay = document.querySelector(".hero-initial-overlay");
+
+        // Initial text reveal animation
+        gsap.to(".hero-initial-overlay .hero-title span", {
+          y: "0%",
+          duration: 1.1,
+          stagger: 0.09,
+          ease: "power4.out",
+          delay: 0.3,
+        });
+
+        gsap.to(".hero-subtitle", {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: "power3.out",
+          delay: 1.0,
+        });
+
+        // GSAP Flip animation for bento grid expansion (FORWARD direction)
+        galleryElement.classList.add("gallery--final");
+        const flipState = Flip.getState(galleryItems, {
+          props: "borderRadius",
+        });
+        galleryElement.classList.remove("gallery--final");
+
+        const flip = Flip.to(flipState, {
+          duration: 1.2,
+          ease: "expoScale(1, 5)",
+          absolute: true,
+        });
+
+        // Scroll-triggered animation
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: galleryElement.parentNode,
+              start: "top top",
+              end: "+=100%",
+              scrub: true,
+              pin: galleryElement.parentNode,
+              anticipatePin: 1,
+            },
+          })
+          .to(
+            heroOverlay,
+            {
+              opacity: 0,
+              y: -60,
+              duration: 0.3,
+              ease: "power2.in",
+            },
+            0,
+          )
+          .add(flip, 0);
+      }
+
+      // Initialize FAQ hover effects
+      function initFAQEffects() {
+        gsap.utils.toArray(".hover-trigger").forEach((trigger) => {
+          const followerMedia = trigger.querySelector(".follower-element");
+          if (!followerMedia) return;
+
+          gsap.set(followerMedia, { yPercent: -100, xPercent: 0 });
+
+          let isInitialFrame = true;
+          const syncX = gsap.quickTo(followerMedia, "x", {
+            duration: 0.45,
+            ease: "power3",
+          });
+          const syncY = gsap.quickTo(followerMedia, "y", {
+            duration: 0.45,
+            ease: "power3",
+          });
+
+          const reconcilePointer = (event) => {
+            const rect = trigger.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            if (isInitialFrame) {
+              syncX(x);
+              syncY(y);
+              isInitialFrame = false;
+            } else {
+              syncX(x);
+              syncY(y);
+            }
+          };
+
+          trigger.addEventListener("mouseenter", (event) => {
+            isInitialFrame = true;
+            gsap.to(followerMedia, {
+              autoAlpha: 1,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+            document.addEventListener("mousemove", reconcilePointer);
+            reconcilePointer(event);
+          });
+
+          trigger.addEventListener("mouseleave", () => {
+            gsap.to(followerMedia, {
+              autoAlpha: 0,
+              duration: 0.4,
+              ease: "power2.in",
+            });
+            document.removeEventListener("mousemove", reconcilePointer);
+          });
+        });
+
+        // FAQ accordion functionality
+        document.querySelectorAll(".faq-question").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const faqItem = btn.parentElement;
+            const answer = faqItem.querySelector(".faq-answer");
+            const isOpening = !faqItem.classList.contains("active");
+
+            // Close other open items
+            document.querySelectorAll(".faq-item.active").forEach((item) => {
+              if (item !== faqItem) {
+                item.classList.remove("active");
+                item
+                  .querySelector(".faq-question")
+                  .setAttribute("aria-expanded", "false");
+                gsap.to(item.querySelector(".faq-answer"), {
+                  maxHeight: 0,
+                  duration: 0.35,
+                  ease: "power2.inOut",
+                });
+              }
+            });
+
+            // Toggle current item
+            faqItem.classList.toggle("active");
+            btn.setAttribute("aria-expanded", isOpening);
+
+            gsap.to(answer, {
+              maxHeight: isOpening ? answer.scrollHeight + 40 : 0,
+              duration: 0.45,
+              ease: "power2.inOut",
+            });
+          });
+        });
+      }
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 100) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            lenis.scrollTo(targetElement, { offset: -100, duration: 1200 });
+          }
+        });
+      });
+
+      // Event Listeners
+      startQuizBtn.addEventListener("click", () => {
+        lenis.scrollTo("#quiz", { offset: -100, duration: 1200 });
+      });
+
+      ctaQuizBtn.addEventListener("click", () => {
+        lenis.scrollTo("#quiz", { offset: -100, duration: 1200 });
+      });
+
+      prevBtn.addEventListener("click", goToPrevQuestion);
+      nextBtn.addEventListener("click", goToNextQuestion);
+
+      closeEmailBtn.addEventListener("click", closeEmailGate);
+      closeResultBtn.addEventListener("click", closeResults);
+
+      // Close modals on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (emailGateModal.classList.contains("active")) closeEmailGate();
+          if (resultModal.classList.contains("active")) closeResults();
+        }
+      });
+
+      // Email form submission
+      emailForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        STATE.userEmail = emailInput.value.trim();
+        closeEmailGate();
+        setTimeout(showResults, 300);
+      });
+
+      // Legal buttons
+      document.querySelectorAll(".legal-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          alert(
+            `Viewing ${btn.dataset.legal.replace("-", " ")}... (Demo placeholder)`,
+          );
+        });
+      });
+
+      // Mobile menu toggle
+      mobileMenuBtn.addEventListener("click", () => {
+        const navLinks = document.querySelector(".nav-links");
+        navLinks.style.display =
+          navLinks.style.display === "flex" ? "none" : "flex";
+      });
+
+      // Initialize everything on load
+      window.addEventListener("load", () => {
+        // Initialize bento grid animation
+        initBentoAnimation();
+
+        // Initialize quiz
+        renderQuestion();
+
+        // Initialize flair system (only when quiz section is in view)
+        const flairObserver = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              initFlairs();
+              quizSection.addEventListener("mousemove", (e) => {
+                const rect = quizSection.getBoundingClientRect();
+                STATE.mousePos = {
+                  x: e.clientX - rect.left,
+                  y: e.clientY - rect.top,
+                };
+              });
+
+              flairObserver.unobserve(entries[0].target);
+            }
+          },
+          { threshold: 0.1 },
+        );
+
+        flairObserver.observe(quizSection);
+
+        // Initialize FAQ effects
+        initFAQEffects();
+
+        // Fix section spacing issues
+        document.querySelectorAll("section").forEach((section) => {
+          if (!section.style.padding) {
+            section.style.padding = "7rem 0";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
