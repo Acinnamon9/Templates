@@ -4,10 +4,11 @@ const CONFIG = {
   WHEEL_MULTIPLIER: 1.2,
   GSAP_DEFAULT_EASE: "power3.out",
   FLAIR_BURST_COUNT: 8,
-  FLAIR_MAX_ELEMENTS: 40,
+  FLAIR_MAX_ELEMENTS: 100,
   SCROLL_END_GALLERY: "+=150%",
   ACCENT_COLOR: "#B85C38",
-  BORDER_COLOR: "#E6E2DA"
+  BORDER_COLOR: "#E6E2DA",
+  FLAIR_GAP: 60,
 };
 
 // Initialize Lenis with high-snappiness settings for faster response
@@ -41,7 +42,7 @@ const createBentoTween = () => {
     // Initial reveal animation (run once)
     const tlReveal = gsap.timeline();
     tlReveal
-      .to(".hero-initial-overlay .line-mask span", {
+      .to(".hero-initial-overlay .reveal-text span", {
         y: "0%",
         duration: 1.2,
         stagger: 0.1,
@@ -64,16 +65,16 @@ const createBentoTween = () => {
 
     const flip = Flip.to(flipState, {
       simple: true,
-      ease: "none", // We use scrub for the feel
+      ease: "expoScale(1, 5)",
     });
 
     const tlMain = gsap.timeline({
       scrollTrigger: {
-        trigger: ".gallery-wrap",
-        start: "top top",
-        end: CONFIG.SCROLL_END_GALLERY,
+        trigger: galleryElement,
+        start: "center center",
+        end: "+=100%",
         scrub: true,
-        pin: true,
+        pin: galleryElement.parentNode,
       },
     });
 
@@ -91,17 +92,6 @@ const createBentoTween = () => {
     // Run the Flip animation
     tlMain.add(flip, 0);
 
-    // Brighten on scroll for that premium feel
-    tlMain.to(
-      galleryElement.querySelectorAll(".gallery__item img"),
-      {
-        filter: "brightness(1) grayscale(0)",
-        duration: 0.5,
-        stagger: 0.05,
-      },
-      0.1,
-    );
-
     return () => gsap.set(galleryItems, { clearProps: "all" });
   });
 
@@ -118,31 +108,9 @@ window.addEventListener("resize", createBentoTween);
 // Initialize on load variable
 let bentoCleanup;
 
-// Background Texture: Slow Breathing Parallax
-gsap.to(".hero-bg", {
-  x: "5%",
-  y: "-5%",
-  repeat: -1,
-  yoyo: true,
-  duration: 8,
-  ease: "sine.inOut",
-});
+// Hero Parallax and Legacy Background Animations removed (Protocol: Subtractive Design)
+// Logic replaced by Bento Gallery and Initial Overlay reveal.
 
-// Hero Parallax Orchestration
-const heroTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: ".hero",
-    start: "top top",
-    end: "bottom top",
-    scrub: true,
-  },
-});
-
-heroTl
-  .to(".hero-bg", { yPercent: 30, ease: "none" })
-  .to(".hero-title", { yPercent: -10, ease: "none" }, 0)
-  .to(".hero-image-wrapper", { yPercent: 15, ease: "none" }, "-=0.3")
-  .to(".floating-badge", { yPercent: 40, rotate: 5, ease: "none" }, "-=0.3");
 
 // Data is now sourced from data.js
 
@@ -152,7 +120,9 @@ const STATE = {
   answers: [],
   userEmail: "",
   flairIndex: 0,
-  flairElements: []
+  flairElements: [],
+  mousePos: { x: 0, y: 0 },
+  lastMousePos: { x: 0, y: 0 },
 };
 
 // Flair (Falling Icons) Animation State
@@ -171,7 +141,18 @@ const flairAssets = [
 const getFlairWrapper = (idx) => idx % STATE.flairElements.length;
 
 // DOM Elements (Selected after DOM is ready)
-let startQuizBtn, quizSection, questionContainer, progressFill, currentQSpan, prevBtn, nextBtn, emailGateModal, resultModal, resultContent, closeEmailBtn, closeResultBtn;
+let startQuizBtn,
+  quizSection,
+  questionContainer,
+  progressFill,
+  currentQSpan,
+  prevBtn,
+  nextBtn,
+  emailGateModal,
+  resultModal,
+  resultContent,
+  closeEmailBtn,
+  closeResultBtn;
 
 function setupDOMElements() {
   startQuizBtn = document.getElementById("startQuizBtn");
@@ -192,34 +173,42 @@ function setupDOMElements() {
 function initQuiz() {
   setupDOMElements();
   setupListeners();
-  if (typeof quizData === 'undefined' || !quizData.length) {
+  if (typeof quizData === "undefined" || !quizData.length) {
     console.error("Quiz data not loaded!");
     return;
   }
-  
+
   // Attach form listener
-  const emailForm = document.getElementById('emailForm');
+  const emailForm = document.getElementById("emailForm");
   if (emailForm) {
-    emailForm.addEventListener('submit', handleEmailSubmit);
+    emailForm.addEventListener("submit", handleEmailSubmit);
   }
 
   renderQuestion();
   updateProgress();
+  console.log("Quiz initialized");
 }
 
 function initFlairs() {
   if (!quizSection) {
-    console.warn("Quiz section not found");
+    quizSection = document.getElementById("quiz");
+  }
+
+  if (!quizSection) {
+    console.warn(
+      "Falling icons: Quiz section not found for flair initialization",
+    );
     return;
   }
-  
+
   // Check if already initialized
   if (document.getElementById("flair-container")) return;
-  
+
+  console.log("Initializing falling icons...");
   const container = document.createElement("div");
   container.id = "flair-container";
-  (quizSection || document.getElementById("quiz")).appendChild(container); // ✅ Append to quizSection for local absolute positioning
-  
+  quizSection.appendChild(container);
+
   for (let i = 0; i < CONFIG.FLAIR_MAX_ELEMENTS; i++) {
     const img = document.createElement("img");
     img.className = "flair";
@@ -227,36 +216,55 @@ function initFlairs() {
     container.appendChild(img);
     STATE.flairElements.push(img);
   }
+  console.log(`Created ${STATE.flairElements.length} flair elements`);
 }
 
 /**
  * Play a GSAP animation on a specific flair element (Demo Aligned)
  */
 function playFlairAnimation(shape, x, y) {
-  let tl = gsap.timeline();
-  
+  if (!shape) return;
+
+  // Kill existing animations on this specific element
+  gsap.killTweensOf(shape);
+
+  // Reset and position
   gsap.set(shape, {
-    clearProps: "all",
     opacity: 1,
+    scale: 1,
     left: x,
     top: y,
     xPercent: -50,
     yPercent: -50,
+    rotation: 0,
+    y: 0, // Reset the "y" transform offset
+    display: "block",
+    position: "absolute", // ✅ Ensure position is preserved
   });
-  
+
+  let tl = gsap.timeline();
+
   tl.from(shape, {
     opacity: 0,
     scale: 0,
     ease: "elastic.out(1,0.3)",
   })
-  .to(shape, {
-    rotation: "random([-360, 360])",
-  }, "<")
-  .to(shape, {
-    y: "120vh",
-    ease: "back.in(.4)",
-    duration: 1,
-  }, 0);
+    .to(
+      shape,
+      {
+        rotation: "random([-360, 360])",
+      },
+      "<",
+    )
+    .to(
+      shape,
+      {
+        y: "120vh",
+        ease: "back.in(.4)",
+        duration: 1,
+      },
+      0,
+    );
 }
 
 // Test function - for manual verification
@@ -277,13 +285,37 @@ function triggerFlairBurst(x, y) {
   for (let i = 0; i < burstCount; i++) {
     const wrappedIdx = getFlairWrapper(STATE.flairIndex);
     const img = STATE.flairElements[wrappedIdx];
-    
+
     // Add some random offset to the burst origin
     const offsetX = (Math.random() - 0.5) * 40;
     const offsetY = (Math.random() - 0.5) * 40;
-    
+
     playFlairAnimation(img, x + offsetX, y + offsetY);
     STATE.flairIndex++;
+  }
+}
+
+/**
+ * Image Trail logic for falling icons
+ */
+function updateImageTrail() {
+  if (!quizSection || !STATE.flairElements || STATE.flairElements.length === 0)
+    return;
+
+  const travelDistance = Math.hypot(
+    STATE.lastMousePos.x - STATE.mousePos.x,
+    STATE.lastMousePos.y - STATE.mousePos.y,
+  );
+
+  if (travelDistance > CONFIG.FLAIR_GAP) {
+    const wrappedIdx = getFlairWrapper(STATE.flairIndex);
+    const img = STATE.flairElements[wrappedIdx];
+
+    if (img) {
+      playFlairAnimation(img, STATE.mousePos.x, STATE.mousePos.y);
+      STATE.lastMousePos = { ...STATE.mousePos };
+      STATE.flairIndex++;
+    }
   }
 }
 
@@ -293,7 +325,7 @@ function renderQuestion() {
   if (!q) return;
 
   const oldContent = questionContainer.children;
-  
+
   if (oldContent.length > 0) {
     gsap.to(oldContent, {
       duration: 0.3,
@@ -311,7 +343,8 @@ function renderQuestion() {
 function injectNewQuestion(q) {
   questionContainer.innerHTML = `
     <h2 class="question-title initial-hidden">${q.question}</h2>
-    ${q.options.map(
+    ${q.options
+      .map(
         (opt, idx) => `
         <div class="question-card initial-hidden" data-index="${idx}" id="option-${idx}" role="radio" aria-checked="false">
             <div class="option-icon">${idx + 1}</div>
@@ -340,7 +373,10 @@ function injectNewQuestion(q) {
 
   // Update navigation state
   prevBtn.disabled = STATE.currentQuestion === 0;
-  nextBtn.textContent = STATE.currentQuestion === quizData.length - 1 ? "Complete Quiz →" : "Next →";
+  nextBtn.textContent =
+    STATE.currentQuestion === quizData.length - 1
+      ? "Complete Quiz →"
+      : "Next →";
 }
 
 function setupListeners() {
@@ -355,27 +391,10 @@ function setupListeners() {
     }
   });
 
-  // Handle Hover Animation (Event Delegation)
-  questionContainer.addEventListener("mouseover", (e) => {
-    const card = e.target.closest(".question-card");
-    if (card && !card.classList.contains("animating")) {
-      const rect = card.getBoundingClientRect();
-      const quizRect = quizSection.getBoundingClientRect();
-      
-      // Calculate position relative to the quiz container
-      const centerX = rect.left - quizRect.left + rect.width / 2;
-      const centerY = rect.top - quizRect.top + rect.height / 2;
-      
-      triggerFlairBurst(centerX, centerY);
-      
-      card.classList.add("animating");
-      setTimeout(() => card.classList.remove("animating"), 600);
-    }
-  });
-
   // Modal Close Buttons
   if (closeEmailBtn) closeEmailBtn.addEventListener("click", closeEmailGate);
-  if (closeResultBtn) closeResultBtn.addEventListener("click", closeResultModal);
+  if (closeResultBtn)
+    closeResultBtn.addEventListener("click", closeResultModal);
 
   // Footer Legal Buttons (Event Delegation)
   const footerLegal = document.querySelector(".legal-buttons");
@@ -388,11 +407,24 @@ function setupListeners() {
           privacy: "Privacy Policy",
           terms: "Terms of Service",
           cookie: "Cookie Policy",
-          support: "Contact Support"
+          support: "Contact Support",
         };
         alert(messages[type] || "Legal Information");
       }
     });
+  }
+
+  // Handle Mouse Trail for Falling Icons
+  if (quizSection) {
+    quizSection.addEventListener("mousemove", (e) => {
+      const rect = quizSection.getBoundingClientRect();
+      STATE.mousePos = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    });
+
+    gsap.ticker.add(updateImageTrail);
   }
 }
 
@@ -441,6 +473,7 @@ function updateProgress() {
 function openEmailGate() {
   emailGateModal.classList.add("active");
   document.body.style.overflow = "hidden";
+  lenis.stop(); // Stop Lenis from capturing background scroll
 
   // Premium modal entry
   gsap.from("#emailGateModal .modal-content", {
@@ -455,6 +488,7 @@ function openEmailGate() {
 function closeEmailGate() {
   emailGateModal.classList.remove("active");
   document.body.style.overflow = "";
+  lenis.start(); // Resume Lenis
 }
 
 // Handle Email Submit
@@ -562,6 +596,7 @@ function showResults(resultIndex, score) {
 
   resultModal.classList.add("active");
   document.body.style.overflow = "hidden";
+  lenis.stop();
 
   // Result Cascade Animation
   const tl = gsap.timeline();
@@ -594,8 +629,16 @@ const handleModalOutsideClick = (modal, closeFn) => (e) => {
   if (e.target === modal) closeFn();
 };
 
-if (emailGateModal) emailGateModal.addEventListener("click", handleModalOutsideClick(emailGateModal, closeEmailGate));
-if (resultModal) resultModal.addEventListener("click", handleModalOutsideClick(resultModal, closeResultModal));
+if (emailGateModal)
+  emailGateModal.addEventListener(
+    "click",
+    handleModalOutsideClick(emailGateModal, closeEmailGate),
+  );
+if (resultModal)
+  resultModal.addEventListener(
+    "click",
+    handleModalOutsideClick(resultModal, closeResultModal),
+  );
 
 // Keyboard Navigation
 document.addEventListener("keydown", (e) => {
@@ -608,14 +651,15 @@ document.addEventListener("keydown", (e) => {
 // Event Listeners for Nav
 if (startQuizBtn) {
   startQuizBtn.addEventListener("click", () => {
-    if (typeof lenis !== 'undefined') {
-      lenis.scrollTo("#quiz", { 
+    if (typeof lenis !== "undefined") {
+      lenis.scrollTo("#quiz", {
         offset: -80,
         duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       });
     } else {
-      const offsetTop = quizSection.getBoundingClientRect().top + window.pageYOffset - 80;
+      const offsetTop =
+        quizSection.getBoundingClientRect().top + window.pageYOffset - 80;
       window.scrollTo({ top: offsetTop, behavior: "smooth" });
     }
   });
@@ -628,6 +672,7 @@ if (nextBtn) nextBtn.addEventListener("click", goToNextQuestion);
 function closeResultModal() {
   resultModal.classList.remove("active");
   document.body.style.overflow = "";
+  lenis.start();
 }
 
 // Auto-initialize Quiz on Scroll
@@ -638,12 +683,13 @@ ScrollTrigger.create({
     initQuiz();
     initFlairs();
   },
-  once: true
 });
 
 // Fallback initialization if already past the point
 window.addEventListener("load", () => {
-  if (window.scrollY > 0) {
+  // Always try to initialize if section exists
+  const qSection = document.getElementById("quiz");
+  if (qSection) {
     initQuiz();
     initFlairs();
   }
@@ -660,7 +706,9 @@ document.querySelectorAll(".faq-question").forEach((btn) => {
     document.querySelectorAll(".faq-item.active").forEach((item) => {
       if (item !== faqItem) {
         item.classList.remove("active");
-        item.querySelector(".faq-question").setAttribute("aria-expanded", "false");
+        item
+          .querySelector(".faq-question")
+          .setAttribute("aria-expanded", "false");
         gsap.to(item.querySelector(".faq-answer"), {
           maxHeight: 0,
           duration: 0.3,
@@ -677,6 +725,50 @@ document.querySelectorAll(".faq-question").forEach((btn) => {
       ease: "power2.inOut",
     });
   });
+});
+
+// FAQ Cursor Image Hover Effect
+gsap.set(".hover-trigger .follower-element", { yPercent: -50, xPercent: -50 });
+
+let isInitialFrame;
+
+gsap.utils.toArray(".hover-trigger").forEach((trigger) => {
+  const followerMedia = trigger.querySelector(".follower-element");
+  if (!followerMedia) return;
+
+  const syncX = gsap.quickTo(followerMedia, "x", { duration: 0.4, ease: "power3" });
+  const syncY = gsap.quickTo(followerMedia, "y", { duration: 0.4, ease: "power3" });
+
+  const reconcilePointer = (event) => {
+    if (isInitialFrame) {
+      syncX(event.clientX, event.clientX);
+      syncY(event.clientY, event.clientY);
+      isInitialFrame = false;
+    } else {
+      syncX(event.clientX);
+      syncY(event.clientY);
+    }
+  };
+
+  const enableGlobalTracking = () => document.addEventListener("mousemove", reconcilePointer);
+  const disableGlobalTracking = () => document.removeEventListener("mousemove", reconcilePointer);
+
+  const opacityTimeline = gsap.to(followerMedia, {
+    autoAlpha: 1,
+    ease: "none",
+    paused: true,
+    duration: 0.1,
+    onReverseComplete: disableGlobalTracking,
+  });
+
+  trigger.addEventListener("mouseenter", (event) => {
+    isInitialFrame = true;
+    opacityTimeline.play();
+    enableGlobalTracking();
+    reconcilePointer(event);
+  });
+
+  trigger.addEventListener("mouseleave", () => opacityTimeline.reverse());
 });
 
 // Feature Cards: Hover Lift + Shadow Depth
@@ -713,7 +805,12 @@ const stats = [
 ];
 
 stats.forEach((stat) => {
-  const target = document.querySelectorAll(stat.el)[stat.index || 0];
+  const targets = document.querySelectorAll(stat.el);
+  const target = targets[stat.index || 0];
+
+  // Protocol: Guard Clause for missing elements
+  if (!target) return;
+
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
@@ -742,13 +839,13 @@ mediumZoom(".hero-image");
 window.addEventListener("load", () => {
   // Initialize Bento Gallery
   bentoCleanup = createBentoTween();
-  
+
   // initFlairs() removed from here - now triggered by ScrollTrigger
 
   const masterTl = gsap.timeline();
 
   masterTl
-    .to(".line-mask span", {
+    .to(".reveal-text span", {
       y: 0,
       duration: 1.2,
       stagger: 0.15,
@@ -783,3 +880,133 @@ window.addEventListener("resize", () => {
   bentoCleanup = createBentoTween();
   ScrollTrigger.refresh();
 });
+
+// /*
+//     Step 1: Dependency Verification
+//     Success Log: [Check] GSAP Engine found.
+// */
+// if (typeof gsap !== "undefined") {
+//   console.log("✅ [Check] Step 1: GSAP Engine Dependency Verified.");
+// } else {
+//   console.error(
+//     "❌ [Error] Step 1: GSAP Engine not found. Ensure script tags are in correct order.",
+//   );
+// }
+
+// /*
+//     Step 2: DOM Audit
+//     Success Log: [Query] Triggers located.
+// */
+// const triggers = gsap.utils.toArray(".hover-trigger");
+// if (triggers.length > 0) {
+//   console.log(
+//     `✅ [Query] Step 2: DOM Audit Successful. Found ${triggers.length} triggers.`,
+//   );
+// } else {
+//   console.warn(
+//     "⚠️ [Warning] Step 2: No elements with class '.hover-trigger' found.",
+//   );
+// }
+
+// // Global state for frame synchronization
+// let isInitialFrame;
+
+// // Initial state setup for followers: Ensure they start centered on the invisible coordinate
+// gsap.set(".hover-trigger .follower-element", { yPercent: -50, xPercent: -50 });
+
+// triggers.forEach((trigger, index) => {
+//   /*
+//         Step 3: Engine Initialization
+//         Success Log: [Init] quickTo setters created.
+//     */
+//   const followerMedia = trigger.querySelector(".follower-element");
+//   if (!followerMedia) {
+//     console.error(
+//       `❌ [Error] Step 3: Trigger #${index} missing '.follower-element'.`,
+//     );
+//     return;
+//   }
+
+//   // Creating high-performance setters for frame-by-frame updates
+//   const syncX = gsap.quickTo(followerMedia, "x", {
+//     duration: 0.4,
+//     ease: "power3",
+//   });
+//   const syncY = gsap.quickTo(followerMedia, "y", {
+//     duration: 0.4,
+//     ease: "power3",
+//   });
+//   console.log(
+//     `✅ [Init] Step 3: GSAP quickTo setters initialized for Trigger #${index}.`,
+//   );
+
+//   const reconcilePointer = (event) => {
+//     if (isInitialFrame) {
+//       console.log(
+//         `✨ [Sync] Step 5a: Initial frame sync at (${event.clientX}, ${event.clientY})`,
+//       );
+//       syncX(event.clientX, event.clientX);
+//       syncY(event.clientY, event.clientY);
+//       isInitialFrame = false;
+//     } else {
+//       syncX(event.clientX);
+//       syncY(event.clientY);
+//     }
+//   };
+
+//   const enableGlobalTracking = () => {
+//     console.log(
+//       `🟢 [Event] Step 5b: MouseMove tracking ENABLED for Trigger #${index}`,
+//     );
+//     document.addEventListener("mousemove", reconcilePointer);
+//   };
+
+//   const disableGlobalTracking = () => {
+//     console.log(
+//       `🔴 [Event] Step 6a: MouseMove tracking DISABLED for Trigger #${index}`,
+//     );
+//     document.removeEventListener("mousemove", reconcilePointer);
+//   };
+
+//   const opacityTimeline = gsap.to(followerMedia, {
+//     autoAlpha: 1,
+//     ease: "none",
+//     paused: true,
+//     duration: 0.1,
+//     onReverseComplete: () => {
+//       console.log(
+//         `✅ [Timeline] Step 6b: Success: Visibility clean-up for Trigger #${index}`,
+//       );
+//       disableGlobalTracking();
+//     },
+//   });
+
+//   /*
+//         Step 4: Binding Confirmation
+//         Success Log: [Event] Interaction listeners bound.
+//     */
+//   trigger.addEventListener("mouseenter", (event) => {
+//     console.log(
+//       `🤝 [Interaction] Step 5: Success: Intersection Handshake for Trigger #${index}`,
+//     );
+//     isInitialFrame = true;
+//     opacityTimeline.play();
+//     enableGlobalTracking();
+//     reconcilePointer(event);
+//   });
+
+//   trigger.addEventListener("mouseleave", () => {
+//     console.log(
+//       `👋 [Interaction] Step 6: Success: Termination sequence for Trigger #${index}`,
+//     );
+//     opacityTimeline.reverse();
+//   });
+
+//   console.log(
+//     `✅ [Bind] Step 4: Logic successfully attached to Trigger #${index}.`,
+//   );
+// });
+
+// console.log(
+//   "🚀 [System] All steps completed. Cursor Image Hover Module ACTIVE.",
+// );

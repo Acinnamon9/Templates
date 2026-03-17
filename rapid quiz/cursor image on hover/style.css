@@ -1,3 +1,7 @@
+:root {
+  --border-alpha-low: rgba(0, 0, 0, 0.1);
+}
+
 body {
   display: flex;
   align-items: center;
@@ -13,23 +17,26 @@ ul {
   padding: 0;
 }
 
-.container {
+.hover-trigger {
   display: inline-block;
-  border-bottom: 2px solid var(--color-surface25);
+  border-bottom: 2px solid var(--border-alpha-low);
   width: 100%;
   padding: 2rem;
 }
 
-.container img.swipeimage {
+.hover-trigger .follower-element {
   position: fixed;
   top: 0;
   left: 0;
   width: 350px;
   height: 350px;
   object-fit: cover;
-  transform: translateX(-50%) translateY(-50%);
+  transform: translate(-50%, -50%);
   z-index: 9;
   opacity: 0;
-  visibily: hidden;
+  visibility: hidden;
   pointer-events: none;
+  /* Rule 10.1: Prevent Interpolation Lag */
+  transition: opacity 0.1s ease-out, visibility 0.1s ease-out;
 }
+

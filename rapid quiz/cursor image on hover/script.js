@@ -1,37 +1,38 @@
-gsap.set(".container img.swipeimage", { yPercent: -50, xPercent: -50 });
+gsap.set(".hover-trigger .follower-element", { yPercent: -50, xPercent: -50 });
 
-let firstEnter;
+let isInitialFrame;
 
-gsap.utils.toArray(".container").forEach((el) => {
-  const image = el.querySelector("img.swipeimage"),
-    setX = gsap.quickTo(image, "x", { duration: 0.4, ease: "power3" }),
-    setY = gsap.quickTo(image, "y", { duration: 0.4, ease: "power3" }),
-    align = (e) => {
-      if (firstEnter) {
-        setX(e.clientX, e.clientX); //https://gsap.com/docs/v3/GSAP/gsap.quickTo()/#optionally-define-a-start-value
-        setY(e.clientY, e.clientY);
-        firstEnter = false;
+gsap.utils.toArray(".hover-trigger").forEach((trigger) => {
+  const followerMedia = trigger.querySelector(".follower-element"),
+    syncX = gsap.quickTo(followerMedia, "x", { duration: 0.4, ease: "power3" }),
+    syncY = gsap.quickTo(followerMedia, "y", { duration: 0.4, ease: "power3" }),
+    reconcilePointer = (event) => {
+      if (isInitialFrame) {
+        // Force immediate sync on first interaction frame
+        syncX(event.clientX, event.clientX);
+        syncY(event.clientY, event.clientY);
+        isInitialFrame = false;
       } else {
-        setX(e.clientX);
-        setY(e.clientY);
+        syncX(event.clientX);
+        syncY(event.clientY);
       }
     },
-    startFollow = () => document.addEventListener("mousemove", align),
-    stopFollow = () => document.removeEventListener("mousemove", align),
-    fade = gsap.to(image, {
+    enableGlobalTracking = () => document.addEventListener("mousemove", reconcilePointer),
+    disableGlobalTracking = () => document.removeEventListener("mousemove", reconcilePointer),
+    opacityTimeline = gsap.to(followerMedia, {
       autoAlpha: 1,
       ease: "none",
       paused: true,
       duration: 0.1,
-      onReverseComplete: stopFollow,
+      onReverseComplete: disableGlobalTracking,
     });
 
-  el.addEventListener("mouseenter", (e) => {
-    firstEnter = true;
-    fade.play();
-    startFollow();
-    align(e);
+  trigger.addEventListener("mouseenter", (event) => {
+    isInitialFrame = true;
+    opacityTimeline.play();
+    enableGlobalTracking();
+    reconcilePointer(event);
   });
 
-  el.addEventListener("mouseleave", () => fade.reverse());
+  trigger.addEventListener("mouseleave", () => opacityTimeline.reverse());
 });

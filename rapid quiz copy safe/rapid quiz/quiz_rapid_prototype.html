@@ -9,7 +9,7 @@
 
     <!-- Google Fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
 
@@ -144,6 +144,14 @@
          QUIZ SECTION (Initially Hidden)
          ============================================ -->
       <section id="quiz" class="quiz-section">
+        <!-- LIQUID BACKGROUND OVERLAY -->
+        <div class="quiz-atmosphere">
+          <img
+            src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png"
+            alt="Liquid diagnostics"
+            class="liquid-bg"
+          />
+        </div>
         <div class="container quiz-container">
           <div class="quiz-header">
             <h2 class="quiz-main-title">Let's Diagnose Your Growth Engine</h2>
@@ -181,7 +189,6 @@
          FEATURES SECTION
          ============================================ -->
       <section id="how-it-works" class="features-section">
-        <div class="cursor-glow" id="featuresGlow"></div>
         <!-- BIOLOGICAL MOTION BACKGROUND -->
         <div class="features-bg">
           <img
@@ -231,7 +238,6 @@
          TESTIMONIALS SECTION
          ============================================ -->
       <section class="testimonials-section">
-        <div class="cursor-glow" id="testimonialsGlow"></div>
         <div class="testimonials-bg">
           <img
             src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=2000"
@@ -398,12 +404,7 @@
           </div>
 
           <div class="faq-items">
-            <div class="faq-item hover-trigger">
-              <img
-                class="follower-element"
-                src="https://assets.codepen.io/16327/portrait-image-8.jpg"
-                alt="Portrait 8"
-              />
+            <div class="faq-item">
               <button
                 class="faq-question"
                 aria-expanded="false"
@@ -420,12 +421,7 @@
               </div>
             </div>
 
-            <div class="faq-item hover-trigger">
-              <img
-                class="follower-element"
-                src="https://assets.codepen.io/16327/portrait-image-3.jpg"
-                alt="Portrait 3"
-              />
+            <div class="faq-item">
               <button
                 class="faq-question"
                 aria-expanded="false"
@@ -442,12 +438,7 @@
               </div>
             </div>
 
-            <div class="faq-item hover-trigger">
-              <img
-                class="follower-element"
-                src="https://assets.codepen.io/16327/portrait-image-1.jpg"
-                alt="Portrait 1"
-              />
+            <div class="faq-item">
               <button
                 class="faq-question"
                 aria-expanded="false"
@@ -464,12 +455,7 @@
               </div>
             </div>
 
-            <div class="faq-item hover-trigger">
-              <img
-                class="follower-element"
-                src="https://assets.codepen.io/16327/portrait-image-14.jpg"
-                alt="Portrait 14"
-              />
+            <div class="faq-item">
               <button
                 class="faq-question"
                 aria-expanded="false"
@@ -486,12 +472,7 @@
               </div>
             </div>
 
-            <div class="faq-item hover-trigger">
-              <img
-                class="follower-element"
-                src="https://assets.codepen.io/16327/portrait-image-6.jpg"
-                alt="Portrait 6"
-              />
+            <div class="faq-item">
               <button
                 class="faq-question"
                 aria-expanded="false"
@@ -606,7 +587,7 @@
          EMAIL GATE MODAL
          ============================================ -->
     <div id="emailGateModal" class="modal-overlay">
-      <div class="modal-content" data-lenis-prevent>
+      <div class="modal-content">
         <button class="modal-close" id="closeEmailBtn" aria-label="Close Modal">
           ×
         </button>
@@ -659,7 +640,7 @@
          RESULT MODAL (Will Be Populated Dynamically)
          ============================================ -->
     <div id="resultModal" class="modal-overlay">
-      <div class="modal-content result-modal" data-lenis-prevent>
+      <div class="modal-content result-modal">
         <button
           class="modal-close"
           id="closeResultBtn"
