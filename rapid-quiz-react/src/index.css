@@ -103,6 +103,21 @@
     padding: 0 var(--spacing-lg);
   }
 
+  .gallery--bento {
+    display: grid;
+    grid-template-columns: var(--grid-template-columns-bento);
+    grid-template-rows: var(--grid-template-rows-bento);
+    gap: 1vh;
+    padding: 1vw;
+    background-color: var(--color-primary);
+    transition: all 1s;
+  }
+
+  .gallery--final {
+    grid-template-columns: var(--grid-template-columns-bento-final);
+    grid-template-rows: var(--grid-template-rows-bento-final);
+  }
+
   .line-mask {
     overflow: hidden;
     display: block;

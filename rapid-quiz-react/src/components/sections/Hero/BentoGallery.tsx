@@ -24,7 +24,7 @@ const BentoGallery: React.FC<BentoGalleryProps> = ({ images, galleryRef }) => {
   return (
     <div 
       id="gallery-8" 
-      className="gallery grid gap-[1vh] w-full h-full p-[1vw] bg-primary transition-all duration-1000 grid-cols-bento grid-rows-bento justify-center align-center" 
+      className="gallery gallery--bento w-full h-full" 
       ref={galleryRef}
     >
       {images.map((src, i) => (

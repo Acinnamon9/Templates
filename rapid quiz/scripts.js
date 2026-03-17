@@ -1,23 +1,31 @@
-// ============================================
-// INITIALIZATION & MOTION ENGINE
-// ============================================
+// --- Configuration ---
+const CONFIG = {
+  LENIS_LERP: 0.15,
+  WHEEL_MULTIPLIER: 1.2,
+  GSAP_DEFAULT_EASE: "power3.out",
+  FLAIR_BURST_COUNT: 8,
+  FLAIR_MAX_ELEMENTS: 40,
+  SCROLL_END_GALLERY: "+=150%",
+  ACCENT_COLOR: "#B85C38",
+  BORDER_COLOR: "#E6E2DA"
+};
 
 // Initialize Lenis with high-snappiness settings for faster response
 const lenis = new Lenis({
-  lerp: 0.15,
+  lerp: CONFIG.LENIS_LERP,
   smoothWheel: true,
-  wheelMultiplier: 1.2,
+  wheelMultiplier: CONFIG.WHEEL_MULTIPLIER,
 });
 
-function raf(time) {
+const raf = (time) => {
   lenis.raf(time);
   requestAnimationFrame(raf);
-}
+};
 requestAnimationFrame(raf);
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger, Flip);
-gsap.defaults({ ease: "power3.out" });
+gsap.defaults({ ease: CONFIG.GSAP_DEFAULT_EASE });
 
 let flipCtx;
 
@@ -63,7 +71,7 @@ const createBentoTween = () => {
       scrollTrigger: {
         trigger: ".gallery-wrap",
         start: "top top",
-        end: "+=150%",
+        end: CONFIG.SCROLL_END_GALLERY,
         scrub: true,
         pin: true,
       },
@@ -138,10 +146,14 @@ heroTl
 
 // Data is now sourced from data.js
 
-// State Management
-let currentQuestion = 0;
-let answers = [];
-let userEmail = "";
+// --- State Management ---
+const STATE = {
+  currentQuestion: 0,
+  answers: [],
+  userEmail: "",
+  flairIndex: 0,
+  flairElements: []
+};
 
 // Flair (Falling Icons) Animation State
 const flairAssets = [
@@ -155,12 +167,11 @@ const flairAssets = [
   "https://assets.codepen.io/16327/Revised+Flair-7.png",
   "https://assets.codepen.io/16327/Revised+Flair-8.png",
 ];
-let flairElements = [];
-let flairIndex = 0;
-const flairWrapper = (idx) => idx % flairElements.length;
+
+const getFlairWrapper = (idx) => idx % STATE.flairElements.length;
 
 // DOM Elements (Selected after DOM is ready)
-let startQuizBtn, quizSection, questionContainer, progressFill, currentQSpan, prevBtn, nextBtn, emailGateModal, resultModal, resultContent;
+let startQuizBtn, quizSection, questionContainer, progressFill, currentQSpan, prevBtn, nextBtn, emailGateModal, resultModal, resultContent, closeEmailBtn, closeResultBtn;
 
 function setupDOMElements() {
   startQuizBtn = document.getElementById("startQuizBtn");
@@ -173,6 +184,8 @@ function setupDOMElements() {
   emailGateModal = document.getElementById("emailGateModal");
   resultModal = document.getElementById("resultModal");
   resultContent = document.getElementById("resultContent");
+  closeEmailBtn = document.getElementById("closeEmailBtn");
+  closeResultBtn = document.getElementById("closeResultBtn");
 }
 
 // Initialize Quiz
@@ -207,12 +220,12 @@ function initFlairs() {
   container.id = "flair-container";
   (quizSection || document.getElementById("quiz")).appendChild(container); // ✅ Append to quizSection for local absolute positioning
   
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < CONFIG.FLAIR_MAX_ELEMENTS; i++) {
     const img = document.createElement("img");
     img.className = "flair";
     img.src = flairAssets[i % flairAssets.length];
     container.appendChild(img);
-    flairElements.push(img);
+    STATE.flairElements.push(img);
   }
 }
 
@@ -247,8 +260,8 @@ function playFlairAnimation(shape, x, y) {
 }
 
 // Test function - for manual verification
-window.testFlair = function() {
-  if (flairElements.length > 0) {
+window.testFlair = () => {
+  if (STATE.flairElements.length > 0) {
     triggerFlairBurst(window.innerWidth / 2, window.innerHeight / 2);
     console.log("Flair test triggered!");
   } else {
@@ -260,23 +273,23 @@ window.testFlair = function() {
  * Trigger a burst of flairs from a specific coordinate
  */
 function triggerFlairBurst(x, y) {
-  const burstCount = 8;
+  const burstCount = CONFIG.FLAIR_BURST_COUNT;
   for (let i = 0; i < burstCount; i++) {
-    const wrappedIdx = flairWrapper(flairIndex);
-    const img = flairElements[wrappedIdx];
+    const wrappedIdx = getFlairWrapper(STATE.flairIndex);
+    const img = STATE.flairElements[wrappedIdx];
     
     // Add some random offset to the burst origin
     const offsetX = (Math.random() - 0.5) * 40;
     const offsetY = (Math.random() - 0.5) * 40;
     
     playFlairAnimation(img, x + offsetX, y + offsetY);
-    flairIndex++;
+    STATE.flairIndex++;
   }
 }
 
 // Render Current Question
 function renderQuestion() {
-  const q = quizData[currentQuestion];
+  const q = quizData[STATE.currentQuestion];
   if (!q) return;
 
   const oldContent = questionContainer.children;
@@ -297,10 +310,10 @@ function renderQuestion() {
 
 function injectNewQuestion(q) {
   questionContainer.innerHTML = `
-    <h2 class="question-title" style="font-size: 1.25rem; margin-bottom: var(--spacing-sm); opacity: 0;">${q.question}</h2>
+    <h2 class="question-title initial-hidden">${q.question}</h2>
     ${q.options.map(
         (opt, idx) => `
-        <div class="question-card" data-index="${idx}" id="option-${idx}" role="radio" aria-checked="false" style="opacity: 0; transform: translateY(20px);">
+        <div class="question-card initial-hidden" data-index="${idx}" id="option-${idx}" role="radio" aria-checked="false">
             <div class="option-icon">${idx + 1}</div>
             <span class="option-text">${opt.text}</span>
         </div>
@@ -326,8 +339,8 @@ function injectNewQuestion(q) {
   });
 
   // Update navigation state
-  prevBtn.disabled = currentQuestion === 0;
-  nextBtn.textContent = currentQuestion === quizData.length - 1 ? "Complete Quiz →" : "Next →";
+  prevBtn.disabled = STATE.currentQuestion === 0;
+  nextBtn.textContent = STATE.currentQuestion === quizData.length - 1 ? "Complete Quiz →" : "Next →";
 }
 
 function setupListeners() {
@@ -359,6 +372,28 @@ function setupListeners() {
       setTimeout(() => card.classList.remove("animating"), 600);
     }
   });
+
+  // Modal Close Buttons
+  if (closeEmailBtn) closeEmailBtn.addEventListener("click", closeEmailGate);
+  if (closeResultBtn) closeResultBtn.addEventListener("click", closeResultModal);
+
+  // Footer Legal Buttons (Event Delegation)
+  const footerLegal = document.querySelector(".legal-buttons");
+  if (footerLegal) {
+    footerLegal.addEventListener("click", (e) => {
+      const btn = e.target.closest(".legal-btn");
+      if (btn) {
+        const type = btn.dataset.legal;
+        const messages = {
+          privacy: "Privacy Policy",
+          terms: "Terms of Service",
+          cookie: "Cookie Policy",
+          support: "Contact Support"
+        };
+        alert(messages[type] || "Legal Information");
+      }
+    });
+  }
 }
 
 // Select Answer
@@ -369,7 +404,7 @@ function selectAnswer(index) {
     card.setAttribute("aria-checked", isSelected);
   });
 
-  answers[currentQuestion] = index;
+  STATE.answers[STATE.currentQuestion] = index;
 
   // Auto advance
   setTimeout(goToNextQuestion, 400);
@@ -377,8 +412,8 @@ function selectAnswer(index) {
 
 // Navigation
 function goToNextQuestion() {
-  if (currentQuestion < quizData.length - 1) {
-    currentQuestion++;
+  if (STATE.currentQuestion < quizData.length - 1) {
+    STATE.currentQuestion++;
     renderQuestion();
     updateProgress();
   } else {
@@ -387,8 +422,8 @@ function goToNextQuestion() {
 }
 
 function goToPreviousQuestion() {
-  if (currentQuestion > 0) {
-    currentQuestion--;
+  if (STATE.currentQuestion > 0) {
+    STATE.currentQuestion--;
     renderQuestion();
     updateProgress();
   }
@@ -397,9 +432,9 @@ function goToPreviousQuestion() {
 // Update Progress Bar
 function updateProgress() {
   if (!quizData) return;
-  const percentage = ((currentQuestion + 1) / quizData.length) * 100;
+  const percentage = ((STATE.currentQuestion + 1) / quizData.length) * 100;
   progressFill.style.width = `${percentage}%`;
-  currentQSpan.textContent = currentQuestion + 1;
+  currentQSpan.textContent = STATE.currentQuestion + 1;
 }
 
 // Open Email Gate
@@ -427,7 +462,7 @@ function handleEmailSubmit(e) {
   e.preventDefault();
 
   const emailInput = document.getElementById("emailInput");
-  userEmail = emailInput.value;
+  STATE.userEmail = emailInput.value;
 
   // Simulate API submission
   const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -447,8 +482,8 @@ function calculateAndShowResults() {
   let maxPoints = quizData.length * 4;
 
   quizData.forEach((q, idx) => {
-    if (answers[idx] !== undefined) {
-      totalPoints += q.options[answers[idx]].points;
+    if (STATE.answers[idx] !== undefined) {
+      totalPoints += q.options[STATE.answers[idx]].points;
     }
   });
 
@@ -477,52 +512,52 @@ function showResults(resultIndex, score) {
           <div class="result-avatar-container">
               <img src="https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png" 
                    alt="Founder mindset" 
-                   class="result-avatar-img" style="opacity: 0;">
-              <span class="result-badge" style="opacity: 0;">
-                  <span class="result-icon">${result.emoji}</span>
-                  ${result.category}
-              </span>
-          </div>
-          <h2 class="result-headline" style="opacity: 0;">${result.title}</h2>
-          <p class="result-summary" style="opacity: 0;">${result.summary}</p>
+                   class="result-avatar-img">
+          <span class="result-badge initial-hidden">
+              <span class="result-icon">${result.emoji}</span>
+              ${result.category}
+          </span>
+      </div>
+      <h2 class="result-headline initial-hidden">${result.title}</h2>
+      <p class="result-summary initial-hidden">${result.summary}</p>
 
-          
-          <div class="result-mistakes" style="opacity: 0;">
-              <div class="mistake-title">
-                  <span style="color: var(--accent);">⚠️</span>
-                  Top 3 Revenue Leaks
-              </div>
-              <ul class="mistake-list">
-                  ${result.mistakes
-                    .map(
-                      (m) => `
-                      <li class="mistake-item" style="opacity: 0; transform: translateX(20px);">
-                          <span class="mistake-icon">•</span>
-                          <span>${m}</span>
-                      </li>
-                  `,
-                    )
-                    .join("")}
-              </ul>
+      
+      <div class="result-mistakes initial-hidden">
+          <div class="mistake-title">
+              <span style="color: var(--accent);">⚠️</span>
+              Top 3 Revenue Leaks
           </div>
-          
-          <div class="recommended-action" style="opacity: 0;">
-              <div class="action-title">${result.actionTitle}</div>
-              <p class="action-desc">${result.actionDesc}</p>
-              <div class="action-cta">
-                  <a href="#" class="action-btn" style="background: white; color: var(--primary);">
-                      <span>${result.ctaText}</span>
-                  </a>
-              </div>
+          <ul class="mistake-list">
+              ${result.mistakes
+                .map(
+                  (m) => `
+                  <li class="mistake-item initial-hidden">
+                      <span class="mistake-icon">•</span>
+                      <span>${m}</span>
+                  </li>
+              `,
+                )
+                .join("")}
+          </ul>
+      </div>
+      
+      <div class="recommended-action initial-hidden">
+          <div class="action-title">${result.actionTitle}</div>
+          <p class="action-desc">${result.actionDesc}</p>
+          <div class="action-cta">
+              <a href="#" class="action-btn">
+                  <span>${result.ctaText}</span>
+              </a>
           </div>
-          
-          <p class="sent-notice" style="text-align: center; color: var(--secondary); font-size: 0.9rem; opacity: 0;">
-              📧 Full report sent to ${userEmail}
-          </p>
-          
-          <div class="reset-link" style="text-align: center; margin-top: var(--spacing-md); opacity: 0;">
-              <a href="#" style="color: var(--accent); font-weight: 500;">View Another Result Type</a>
-          </div>
+      </div>
+      
+      <p class="sent-notice">
+          📧 Full report sent to ${STATE.userEmail}
+      </p>
+      
+      <div class="reset-link">
+          <a href="#">View Another Result Type</a>
+      </div>
       `;
 
   resultModal.classList.add("active");
@@ -554,13 +589,23 @@ function showResults(resultIndex, score) {
     .to([".sent-notice", ".reset-link"], { opacity: 1, duration: 0.4 });
 }
 
-// Close Result Modal
-function closeResultModal() {
-  resultModal.classList.remove("active");
-  document.body.style.overflow = "";
-}
+// --- Modal Click Handlers ---
+const handleModalOutsideClick = (modal, closeFn) => (e) => {
+  if (e.target === modal) closeFn();
+};
 
-// Event Listeners
+if (emailGateModal) emailGateModal.addEventListener("click", handleModalOutsideClick(emailGateModal, closeEmailGate));
+if (resultModal) resultModal.addEventListener("click", handleModalOutsideClick(resultModal, closeResultModal));
+
+// Keyboard Navigation
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeEmailGate();
+    closeResultModal();
+  }
+});
+
+// Event Listeners for Nav
 if (startQuizBtn) {
   startQuizBtn.addEventListener("click", () => {
     if (typeof lenis !== 'undefined') {
@@ -578,6 +623,12 @@ if (startQuizBtn) {
 
 if (prevBtn) prevBtn.addEventListener("click", goToPreviousQuestion);
 if (nextBtn) nextBtn.addEventListener("click", goToNextQuestion);
+
+// Close Result Modal
+function closeResultModal() {
+  resultModal.classList.remove("active");
+  document.body.style.overflow = "";
+}
 
 // Auto-initialize Quiz on Scroll
 ScrollTrigger.create({
@@ -634,7 +685,7 @@ document.querySelectorAll(".feature-card").forEach((card) => {
     gsap.to(card, {
       y: -12,
       boxShadow: "0 15px 45px rgba(26, 26, 26, 0.12)",
-      borderColor: "#B85C38",
+      borderColor: CONFIG.ACCENT_COLOR,
       duration: 0.3,
       ease: "power2.out",
     });
@@ -644,7 +695,7 @@ document.querySelectorAll(".feature-card").forEach((card) => {
     gsap.to(card, {
       y: 0,
       boxShadow: "0 4px 20px rgba(26, 26, 26, 0.08)",
-      borderColor: "#E6E2DA",
+      borderColor: CONFIG.BORDER_COLOR,
       duration: 0.3,
       ease: "power2.in",
     });
@@ -684,26 +735,8 @@ stats.forEach((stat) => {
   observer.observe(target);
 });
 
-// Event Listeners for Modal Clicks
-emailGateModal.addEventListener("click", (e) => {
-  if (e.target === emailGateModal) {
-    closeEmailGate();
-  }
-});
-
-resultModal.addEventListener("click", (e) => {
-  if (e.target === resultModal) {
-    closeResultModal();
-  }
-});
-
-// Keyboard Navigation
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    closeEmailGate();
-    closeResultModal();
-  }
-});
+// --- Global Initializations ---
+mediumZoom(".hero-image");
 
 // Page Load Animation: Editorial Reveal & Bento Init
 window.addEventListener("load", () => {
