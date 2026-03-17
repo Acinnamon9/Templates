@@ -356,13 +356,30 @@ Do NOT use CSS `max-height` transitions or `.active` class toggling via CSS — 
 ### S10: Marquee / Integration Strip
 
 - Label centered above
-- **CSS marquee only**:
+- **CSS marquee only** — the key to a seamless loop is: (1) duplicate the entire set of items so the second copy starts exactly where the first ends, (2) use a generous `gap` between pills so there's no visual crowding, and (3) add matching `padding-right` on each half equal to the gap so the seam between the last pill of set 1 and the first pill of set 2 has the same spacing as all other pills:
 ```css
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.marquee-track{display:flex;gap:32px;animation:marquee 20s linear infinite;width:max-content}
+.marquee-track{display:flex;gap:40px;animation:marquee 25s linear infinite;width:max-content}
+.marquee-half{display:flex;gap:40px;padding-right:40px}
 .marquee-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
 ```
-- 8–10 items in `.neu-raised-sm rounded-full` pills, duplicated 2× for seamless loop
+- 8–10 items in `.neu-raised-sm rounded-full px-6 py-3` pills (generous horizontal padding so text breathes)
+- Structure: `.marquee-wrap` > `.marquee-track` > two identical `.marquee-half` divs each containing the full set of pills. The animation translates by -50% so set 2 seamlessly replaces set 1. The `padding-right` on each half matches the `gap` so the seam is invisible.
+- Example HTML:
+```html
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-half">
+      <span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap">BRAND 1</span>
+      <span class="neu-raised-sm rounded-full px-6 py-3 text-sm font-bold text-gray-500 whitespace-nowrap">BRAND 2</span>
+      <!-- ... all items ... -->
+    </div>
+    <div class="marquee-half">
+      <!-- exact duplicate of above -->
+    </div>
+  </div>
+</div>
+```
 
 ### S11: About / Team
 
@@ -418,29 +435,31 @@ window.addEventListener('DOMContentLoaded', function() {
 
 ## 8. Image Library
 
-Use real hosted images throughout — never placeholder boxes or broken paths.
+Use real hosted images throughout — never placeholder boxes or broken paths. Always pick from the Aura James collection first. Use any image freely — category match is not required.
 
-### Priority 1: Aura James Collection (CDN-hosted, always available)
+### Aura James Collection (hardcoded CDN URLs — always use these)
 
-| ID | Context | URL | Best Used For |
-|---|---|---|---|
-| `atm_wealth` | Wealth & Heritage | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png` | Finance, luxury, coaching backgrounds |
-| `atm_biohacking` | Biohacking / Health-tech | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png` | Health, wellness, fitness, tech hero images |
-| `atm_estate` | Luxury Estate | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bed548179ed021687d.png` | Real estate, architecture, aspirational |
-| `hero_wealth` | Luxury Object | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befb38cabb229231e2.png` | Finance, legal, premium hero |
-| `hero_biohacking` | Biosensing Art | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png` | Fitness, health, performance, tech |
-| `hero_estate` | Cinematic Mansion | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png` | Real estate, hospitality, luxury |
-| `hero_mindset` | Founder / Leader | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png` | Coaching, agency, personal brand |
-| `process_lifestyle` | Elite Social Proof | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png` | Testimonials, lifestyle proof |
-| `process_biological` | Technical / Science | `https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png` | Health tech, biotech |
+```
+atm_wealth      https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439beeba48751402641db.png
+atm_biohacking  https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c58e28e626115.png
+atm_estate      https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bed548179ed021687d.png
+hero_wealth     https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befb38cabb229231e2.png
+hero_biohacking https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png
+hero_estate     https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439befc5128f11e732220.png
+hero_mindset    https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439be070c582337626116.png
+process_lifestyle https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b43b27eba4875b6d267ef7.png
+process_biological https://assets.cdn.filesafe.space/3Mh94ewIWZaOQuAxTDt4/media/69b439bebfc81f54f4f24807.png
+```
 
-### Priority 2: Unsplash
+Pick any of these for any section. For a 12-section page, rotate through all 9 — use each image once, then reuse as needed. Prefer `hero_mindset` or `hero_biohacking` for the S2 hero frame, `process_lifestyle` or `atm_wealth` for demo/proof sections.
 
-Format: `https://images.unsplash.com/photo-[ID]?q=80&w=870&auto=format&fit=crop`
+### Fallback: Unsplash
 
-| Category | Suggested Photo IDs |
+Only use Unsplash if you need more images beyond the 9 above. Format: `https://images.unsplash.com/photo-[ID]?q=80&w=870&auto=format&fit=crop`
+
+| Category | Photo IDs |
 |---|---|
-| Fitness / gym | `1534438327167-1dcbe013c94b`, `1517836357163-dcda8edfe2b6`, `1581009137042-c6f2a95ef2c8` |
+| Fitness / gym | `1534438327167-1dcbe013c94b`, `1517836357163-dcda8edfe2b6` |
 | Coaching / mindset | `1522075469751-3a6694fb2f61`, `1507003211169-0a1dd7228f2d` |
 | Health / medical | `1559757148-5c350d0d3c56`, `1576091160550-2173dba999ef` |
 | Tech / SaaS | `1518770660439-4636190af475`, `1563013544-824ae1b704d3` |
@@ -451,12 +470,12 @@ Format: `https://images.unsplash.com/photo-[ID]?q=80&w=870&auto=format&fit=crop`
 
 ### Image Usage Rules
 
-- **Match images to the business category** — a fitness business should NEVER show luxury jets/mansions. Use the "Best Used For" column in the Aura James table to pick the right image. If no Aura James image fits the category, use an Unsplash image from the matching category row instead.
-- Hero preview frame: use the most relevant image as full-bleed `absolute inset-0 w-full h-full object-cover`
-- For team/avatar circles: gradient backgrounds with initials (safer)
-- Feature card icons: inline SVG or Unicode emoji in `48px` gradient circle
+- Hero preview frame: full-bleed `absolute inset-0 w-full h-full object-cover`
+- Demo/interactive section: `w-full h-48 object-cover rounded-2xl`
+- Team/avatar circles: gradient backgrounds with initials (safer than faces)
+- Feature card icons: inline SVG or Unicode emoji — never images
 - Never use `placeholder.com`, `via.placeholder`, or `picsum.photos`
-- Never use local file paths — only absolute https:// URLs
+- Never use local file paths — only absolute `https://` URLs
 
 ---
 
