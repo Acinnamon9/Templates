@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1a1a1a;
+  --color-background: #f6f4ef;
+  --color-secondary: #6b6b6b;
+  --color-accent: #b85c38;
+  --color-border: #e6e2da;
+  --color-white: #ffffff;
+  
+  --font-heading: "Fraunces", serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 48px;
+  --spacing-xl: 96px;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+
+  --shadow-card: 0 4px 20px rgba(26, 26, 26, 0.08);
+  --shadow-hover: 0 8px 30px rgba(26, 26, 26, 0.12);
+
+  /* Bento Grid Templates */
+  --grid-template-columns-bento: repeat(3, 32.5vw);
+  --grid-template-columns-bento-final: repeat(3, 100vw);
+  --grid-template-rows-bento: repeat(4, 23.5vh);
+  --grid-template-rows-bento-final: repeat(4, 49.5vh);
+}
+
+@layer base {
+  *, ::before, ::after {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--duration-fast);
+  }
+
+  button {
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all var(--duration-normal);
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  html.lenis {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+  }
+
+  .line-mask {
+    overflow: hidden;
+    display: block;
+  }
+
+  .line-mask span {
+    display: block;
+    transform: translateY(110%);
+  }
+
+  .reveal-sub {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+
+  .flair {
+    position: absolute;
+    width: 2.5rem;
+    height: 2.5rem;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  #flair-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+}
