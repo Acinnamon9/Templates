@@ -1,0 +1,312 @@
+{
+  "role": "system",
+  "instruction": "You are a senior frontend engineer and conversion-focused landing page builder. Your job is to strictly follow the provided design system and generate a complete HTML page. Do not explain anything. Output only valid HTML."
+},
+{
+  "role": "user",
+  "input": {
+    "skill_description": "{{SKILL}}",
+
+    "business_context": {
+      "brand_name": "ForgeFlow /// PRO",
+      "tagline": "BUILD. SHIP. SCALE.",
+      "offer": "An AI-powered execution system for founders and builders that converts ideas into production-ready products, landing pages, and growth systems in hours instead of weeks.",
+      
+      "target_audience": "indie hackers, startup founders, product builders, developers, and high-agency creators who prioritize speed and execution over perfection",
+
+      "value_proposition": "Stop planning. Start shipping. ForgeFlow eliminates friction between idea and execution by combining AI workflows, templates, and automation into a single brutal execution engine.",
+
+      "cta_primary": "START BUILDING NOW",
+      "cta_secondary": "VIEW LIVE DEMO",
+
+      "features": [
+        {
+          "title": "SHIP IN HOURS",
+          "description": "Turn raw ideas into production-ready assets. Landing pages, funnels, and product flows generated instantly.",
+          "metric": "10x FASTER OUTPUT"
+        },
+        {
+          "title": "NO-FLuff SYSTEM",
+          "description": "No dashboards. No distractions. Just execution pipelines that move you forward every single day.",
+          "metric": "ZERO WASTE"
+        },
+        {
+          "title": "BUILDER-FIRST AI",
+          "description": "Designed for people who build. Not marketers. Not managers. Pure execution infrastructure.",
+          "metric": "100% FOCUSED"
+        }
+      ],
+
+      "stats": [
+        {
+          "value": "12,400+",
+          "label": "ACTIVE BUILDERS"
+        },
+        {
+          "value": "3.2M+",
+          "label": "ASSETS GENERATED"
+        },
+        {
+          "value": "4.8/5",
+          "label": "USER RATING"
+        },
+        {
+          "value": "24h",
+          "label": "AVG BUILD TIME"
+        }
+      ],
+
+      "social_proof": [
+        "USED BY TOP INDIE HACKERS",
+        "TRUSTED BY YC FOUNDERS",
+        "POWERING 7-FIGURE PRODUCTS"
+      ],
+
+      "cta_section": {
+        "headline": "READY TO SHIP?",
+        "highlight_word": "SHIP.",
+        "subtext": "Stop thinking. Start executing. Join thousands of builders already shipping faster.",
+        "cta": "GET ACCESS NOW"
+      },
+
+      "navigation": [
+        "PRODUCT",
+        "PRICING",
+        "DOCS",
+        "COMMUNITY"
+      ],
+
+      "footer": {
+        "columns": [
+          {
+            "title": "PRODUCT",
+            "links": ["Features", "Templates", "Integrations"]
+          },
+          {
+            "title": "COMPANY",
+            "links": ["About", "Careers", "Contact"]
+          },
+          {
+            "title": "RESOURCES",
+            "links": ["Docs", "Guides", "API"]
+          }
+        ],
+        "bottom_text": "© 2026 ForgeFlow /// PRO — BUILT FOR EXECUTION"
+      }
+    },
+
+    "task": [
+      "Generate a complete HTML page using the provided design system",
+      "Strictly follow all constraints (colors, borders, typography, layout)",
+      "Use the canonical structure: nav → hero → features → CTA → footer",
+      "Apply brutalist rules (no border-radius, no shadows, bold typography)",
+      "Ensure responsiveness (stack on mobile)",
+      "Ensure accessibility (aria labels, focus states)",
+      "Inline CSS inside <style> tag (no external dependencies except fonts)",
+      "Validate against the design system QA checklist before outputting",
+      "Reject any use of border-radius, box-shadow, gradients, or soft UI patterns"
+    ],
+
+    "output_constraints": {
+      "format": "html_only",
+      "no_explanations": true,
+      "no_markdown": true,
+      "include_doctype": true,
+      "fully_self_contained": true
+    }
+  },
+  "SKILL":" ---
+name: neo-brutalism-funnel
+description: Generate high-converting, single-file HTML funnel pages in a Neo-Brutalist aesthetic. Raw concrete architecture meets digital product marketing — hard borders, oversized type, flat color blocks, zero softness. Output is always a standalone .html file with 8+ sections. Trigger when someone describes a product or business and asks for a landing page, funnel, or site with a bold, raw, or brutalist visual direction.
+---
+
+# Neo-Brutalism Funnel Generator
+
+## Surface Model
+
+**Classification: Solid-Border Floating (SBF)**
+
+Brutalism is a hard-surface system. Cards do not dissolve into the background — they declare themselves. The page is white. Every card and section is separated by a thick ink border (4px). Color fills entire blocks, never washes over them. No gradients. No blur. No radius. The border IS the depth system.
+
+- Background: pure white `#FFFFFF`
+- Border: near-black `#111827`, always 4px (12px on footer top)
+- Accent fills: flat, 100% opaque, one hue per block
+- Inversion: one full-page-width section flips to black-on-white — this is the emotional anchor
+
+---
+
+## Token Set
+
+```
+--ink:       #111827   (border, body text, inversion bg)
+--surface:   #FFFFFF   (page background, most card fills)
+--terra:     #DD614C   (primary — terracotta, CTAs)
+--gold:      #DAA144   (secondary — amber, warmth)
+--emerald:   #16A34A   (success, growth stats)
+--orange:    #D97706   (warning, urgency callouts)
+--red:       #DC2626   (danger, bold claims)
+
+Synthesized to complete the palette:
+--indigo:    #6366F1   (authority, hero)
+--rose:      #F43F5E   (trust, testimonials)
+--cyan:      #06B6D4   (community, open CTA)
+```
+
+**Typography:** Darker Grotesque — 900 for all display and UI labels, 700 for body. JetBrains Mono for code/version strings. Uppercase everywhere in headings and nav. Tight tracking on display (`-0.04em`). Wide tracking on labels (`+0.18em`).
+
+**Borders:** `4px solid var(--ink)` universally. Footer top: `12px solid var(--ink)`.
+
+**Buttons:** Square corners, 4px ink border, hover inverts background ↔ text. `transition: none`. No shadows.
+
+**Decoration:** Ghost numerals (01, 02…) positioned absolute, ink at 8% opacity, aria-hidden. Slash accent `///` in terra color for brand marks.
+
+---
+
+## Required Sections (8 minimum — always include all)
+
+### 1. NAV
+Sticky or static header. Logo left (Brand `///` PRO pattern), nav links right. All caps, heavy weight, ink-on-white. Hover inverts to white-on-ink. Bottom border 4px.
+
+### 2. HERO — Asymmetric Split
+Left panel (≥55% width): one massive display headline, 3 punchy verbs stacked vertically, last word in an inverted highlight block (terra or ink bg, contrasting text). Right panel: two sub-sections stacked and bordered — upper gets gold fill with headline + body + primary CTA button; lower gets white fill with two stat numbers side by side. Min-height 85vh. Hard vertical border dividing panels.
+
+### 3. FEATURES — Numbered 3-Column
+Three equal cells, hard borders between. Each gets a ghost numeral (01/02/03) top-right, a bold feature headline, and a two-sentence body. Cell fills rotate: white → terra → gold. Content sits in the lower half of each cell, ghost numeral floats behind in upper half.
+
+### 4. SOCIAL PROOF — Logo or Metric Bar
+Full-width, white bg. Either: a row of company names in caps with slash separators, OR 4 stat blocks (large numeral + label) evenly spaced. Border top and bottom. No cards — this is a horizontal stripe.
+
+### 5. HOW IT WORKS — Process Steps
+Numbered 1–4 or 1–3. Two-column alternating layout: step number + label left, description right (or stacked). Hard border rows. One step gets ink inversion (white text on black). Demonstrates the product journey from problem to outcome.
+
+### 6. TESTIMONIALS — Quote Grid
+2–3 testimonials. Each is a bordered block with: a large decorative `"` in ghost ink, the quote body in bold, attribution below in label-caps. One testimonial block gets rose or gold fill. Others stay white. If 3 testimonials, use 3-col equal grid. Include a reviewer name and company/role.
+
+### 7. PRICING — Tiered Blocks
+2 or 3 tiers in equal columns. Hard borders. Middle/featured tier gets terra or ink fill (inversion). Each tier: name in caps, price in display size, feature list in label-caps with `—` bullets (no icons), CTA button at bottom. Ink-border separator between tiers.
+
+### 8. CTA / ENTERPRISE — Full-Width Inversion
+The page's single inversion section. Black background. Subtle grid-line overlay at ~10% white opacity (background-image: linear-gradient grid). One large display headline, colored accent word in gold or terra. Short subline. One ghost-style CTA button (white border/fill, inverts on hover to transparent white text).
+
+### 9. FAQ — Accordion Strip
+4–6 questions. Each is a bordered row: question in bold caps left, `+` icon right. Clicking expands the answer. All white bg. No hue fills. Border separates each row. Keeps the page heavy without visual complexity.
+
+### 10. FOOTER
+Logo + brand tagline left. Nav links right (Platform / Pricing / Docs / Company). Bottom sub-row: copyright left, Privacy / Terms right. Top border is 12px ink — the heaviest border on the page. White background throughout.
+
+---
+
+## Block Fill Assignment (per section)
+
+| Section | Fill |
+|---|---|
+| Nav | white |
+| Hero left | white |
+| Hero right upper | gold |
+| Hero right lower | white |
+| Feature 01 | white |
+| Feature 02 | terra |
+| Feature 03 | gold |
+| Social proof bar | white |
+| Process step (featured) | ink (inversion) |
+| Process others | white |
+| Testimonial (featured) | rose or gold |
+| Testimonial others | white |
+| Pricing (featured tier) | terra or ink |
+| Pricing others | white |
+| CTA section | ink (inversion) |
+| FAQ | white |
+| Footer | white |
+
+Never place two consecutive hue-fill blocks. Alternating white → hue → white maintains rhythm.
+
+---
+
+## Conversion Psychology
+
+**Emotion sequence the page must carry:**
+1. Shock of scale — hero type is overwhelmingly large. First impression is confidence.
+2. Specific promise — hero right panel delivers a concrete claim and immediate CTA.
+3. Feature proof — numbered cells show what makes this product distinct.
+4. Social validation — logos or metrics remove doubt.
+5. Process clarity — how it works removes friction.
+6. Peer voices — testimonials make it real.
+7. Investment framing — pricing tiers present choice, not just cost.
+8. Commitment moment — inversion CTA section is the emotional close.
+9. Objection handling — FAQ removes remaining resistance.
+
+**Urgency mechanisms (pick one per page):**
+- Version stamp in hero stats (`v24.0 / LATEST RELEASE`)
+- Metric claim (`99.9% UPTIME SLA`)
+- Scarcity in pricing (`LIMITED BETA ACCESS`)
+
+---
+
+## Copy Tone
+
+Brutal. Declarative. Metric-first. Every sentence earns its place or gets cut.
+
+```
+✅ "Built for brutal execution."
+✅ "Uncompromising tools. No fluff."
+✅ "Cut review cycles by 60%."
+❌ "We're passionate about helping you grow."
+❌ "Unlock the potential of your workflow."
+❌ "Seamlessly integrate with your existing tools."
+```
+
+Headline structure patterns:
+- `VERB. VERB. VERB.` — hero stacked verbs
+- `THE [SUPERLATIVE] FOR [AUDIENCE].` — hero right panel
+- `READY FOR [STAGE]?` — CTA inversion headline
+- `[NUMBER] [METRIC]` — stats always metric-first
+
+---
+
+## Responsive Rules
+
+On mobile (< 768px):
+- Hero split → stacked vertically, hero right below hero left
+- Feature 3-col → single column, borders become top/bottom only
+- Pricing tiers → single column, featured tier first
+- FAQ accordion stays accordion
+
+No horizontal scrolling permitted. Touch targets minimum 44×44px.
+
+---
+
+## Anti-Patterns
+
+| Do not | Because |
+|---|---|
+| Add `border-radius` to anything | Softness breaks the brutalist contract |
+| Use `box-shadow` for elevation | Borders define depth here, not shadows |
+| Apply gradient fills to cards | Brutalism is flat — one color, solid |
+| Smooth button transitions | `transition: none`; the snap IS the interaction |
+| Use `font-weight` below 700 in UI | Heavy weight is the typography system |
+| Put blur, frost, or glow on surfaces | Explicitly anti-brutalist |
+| More than 2 consecutive hue-fill sections | Destroys the white-hue-white rhythm |
+| Place text on low-contrast backgrounds | Verify all ink-on-color pairs at WCAG AA |
+| Use emoji as icons | Square bordered SVG containers only |
+| Skip the inversion section | It is the page's emotional anchor — required |
+
+---
+
+## QA Checklist
+
+- [ ] All 8+ required sections present and in order
+- [ ] Hero min-height 85vh, display type ≥ 6rem, `font-weight: 900`
+- [ ] Ghost numerals aria-hidden, pointer-events none
+- [ ] Slash accent `///` present in nav/logo
+- [ ] Inversion section (black bg) appears exactly once
+- [ ] CTA button: `border-radius: 0`, `transition: none`, hover inverts bg/text
+- [ ] Footer top border is visibly heavier than all other borders
+- [ ] No two adjacent hue fills
+- [ ] All hue-fill backgrounds use ink text (not white) — verify contrast
+- [ ] White-text-on-black (inversion panels) only
+- [ ] FAQ accordion functional with JS
+- [ ] Single `.html` file, no external CSS files
+- [ ] Mobile stacking verified for hero and feature grid
+- [ ] WCAG AA contrast on terra (#DD614C) with ink text — borderline, must verify
+- [ ] Focus rings present on all interactive elements "
+}
